@@ -1,30 +1,42 @@
-﻿namespace Core {
+﻿using CsvHelper.Configuration.Attributes;
+
+namespace Core {
     /// <summary>
-    /// Classe interna alla libreria core, necessaria come supporto per la libreria di parsing del CSV
+    /// Classe interna alla libreria core, necessaria come supporto per la libreria di parsing del CSV. La classe parser si occupa di convertire questa classe in LowRow
     /// </summary>
     internal class RawLogRow {
-        public DateOnly Date { get; private set; }
-        public TimeOnly Time { get; private set; }
-        public int Unit { get; private set; }
-        public int SubUnit { get; private set; }    
-        public string Code { get; private set; }
-        public string Description { get; private set; }
-        public bool Value { get; private set; }
-        public string Type { get; private set; }
-        public int Snapshot { get; private set; }
-        public string Color { get; private set; }
-    
-        public RawLogRow(DateOnly date, TimeOnly time, int unit, int subUnit, string code, string description, bool value, string type, int snapshot, string color) {
-            Date = date;
-            Time = time;
-            Unit = unit;
-            SubUnit = subUnit;
-            Code = code;
-            Description = description;
-            Value = value;
-            Type = type;
-            Snapshot = snapshot;
-            Color = color;
+        [Name("Date")]
+        public string Date { get;  set; }
+
+        [Name("Time")]
+        public string Time { get;  set; }
+
+        [Name("Unit")]
+        public int Unit { get;  set; }
+
+        [Name("SubUnit")]
+        public int SubUnit { get;  set; }
+
+        [Name("Code")]
+        public string Code { get;  set; }
+
+        [Name("Description")]
+        public string Description { get;  set; }
+
+        [Name("Value")]
+        public string Value { get;  set; }
+
+        [Name("Type/UM")] // Attributo per indicare alla libreria CsvHelper il nome del campo nel file
+        public string Type { get; set; }
+
+        [Name("Snapshot")]
+        public int Snapshot { get; set; }
+
+        [Name("Color")]
+        public string Color { get; set; }
+
+        public RawLogRow() {
+            Date = Time = Value = Color = Type = Description = Code = "";
         }
     }
 }

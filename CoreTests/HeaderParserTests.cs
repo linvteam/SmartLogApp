@@ -1,10 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Tests {
     [TestClass()]
@@ -70,7 +64,7 @@ namespace Core.Tests {
         }
 
         [TestMethod()]
-        [ExpectedException (typeof(ParsingException))]
+        [ExpectedException(typeof(ParsingException))]
         public void InvalidINIFileMissingVOnFirmwareVersion() {
             HeaderParser parser = new();
             TextReader reader = new StringReader("PC DateTime: 05.03.2022 08:47:18\r\nUPS DateTime: 05.03.2022 08:47:17\r\nINI File name :  MAPK_Unit_3_04_00.ini; Unit=0 - SubUnit=0");
@@ -133,6 +127,46 @@ namespace Core.Tests {
                 Assert.AreEqual(inifiles[i].Item2, header.INIFile[i].Item2);
                 Assert.AreEqual(inifiles[i].Item3, header.INIFile[i].Item3);
             }
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ParsingException))]
+        public void EmptyStream() {
+            HeaderParser headerParser = new();
+            TextReader reader = new StringReader("");
+            headerParser.Parse(reader);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ParsingException))]
+        public void OnlyPCDate() {
+            HeaderParser headerParser = new();
+            TextReader reader = new StringReader("PC DateTime: 05.03.2022 08:47:18");
+            headerParser.Parse(reader);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ParsingException))]
+        public void OnlyPCAndUPSTime() {
+            HeaderParser parser = new();
+            TextReader reader = new StringReader("PC DatedTime: 05.03.2022 08:47:18\r\nUPS DateTime: 05.03.2022 08:47:17");
+            parser.Parse(reader);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ParsingException))]
+        public void InvalidIniLine() {
+            HeaderParser parser = new();
+            TextReader reader = new StringReader("PC DatedTime: 05.03.2022 08:47:18\r\nUPS DateTime: 05.03.2022 08:47:17\r\nCiao");
+            parser.Parse(reader);
+        }
+
+        [TestMethod()]
+        public void PostParseStreamCheck() {
+            HeaderParser headerParser = new();
+            TextReader reader = new StringReader("PC DateTime: 05.03.2022 08:47:18\r\nUPS DateTime: 05.03.2022 08:47:17\r\nINI File name :  MAPK_Unit_v2_04_00.ini; Unit=0 - SubUnit=0\r\nINI File name :  MAPK_Unit_v2_04_00.ini; Unit=1 - SubUnit=0\r\nINI File name :  MAPK_Module_RD_IV_v2_04_00.ini; Unit=1 - SubUnit=1\r\nINI File name :  MAPK_ByPass_v2_04_00.ini; Unit=1 - SubUnit=14\r\nStringa di test");
+            headerParser.Parse(reader);
+            Assert.AreEqual("Stringa di test", reader.ReadLine());
         }
     }
 }

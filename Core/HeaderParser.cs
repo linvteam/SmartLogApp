@@ -96,26 +96,25 @@ namespace Core {
         /// <summary>
         /// Prova a leggere l'header di un file di log
         /// </summary>
-        /// <param name="reader">Stream di lettura del file</param>
+        /// <param name="stream">Stream di lettura del file</param>
         /// <returns>L'header del file di log</returns>
         public Header Parse(TextReader reader) {
 
             string? riga = reader.ReadLine();
             if(riga == null)
-                throw new ParsingException("Il file non contiene un header valido");
+                throw new ParsingException("Il file non contiene un header valido. Manca PC DateTime");
             DateTime pc = PCDateParse(riga);
 
             riga = reader.ReadLine();
             if(riga == null)
-                throw new ParsingException("Il file non contiene un header valido");
+                throw new ParsingException("Il file non contiene un header valido. Manca UPS DateTime");
             DateTime ups = UPSDateParse(riga);
-
-            if(reader.Peek() != 'I')
-                throw new ParsingException("Il file non contiene un header valido");
 
             List<Tuple<string, int, int>> inifiles = new();
             // Leggo la prima riga
             riga = reader.ReadLine();
+            if(riga == null)
+                throw new ParsingException("Il file non contiene un header valido. Mancano gli INI files");
             inifiles.Add(INIFileParse(riga));
 
             while(reader.Peek() == 'I') {
