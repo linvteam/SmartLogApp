@@ -22,8 +22,9 @@ namespace Core.Tests {
         public void HeaderNoData() {
             Parser parser = new();
             TextReader data = new StringReader("PC DateTime: 05.03.2022 08:47:18\r\nUPS DateTime: 05.03.2022 08:47:17\r\nINI File name :  MAPK_Unit_v2_04_00.ini; Unit=0 - SubUnit=0\r\nINI File name :  MAPK_Unit_v2_04_00.ini; Unit=1 - SubUnit=0\r\nDate ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot ; Color");
-            Log log = parser.Parse(data);
+            Log log = parser.Parse("FileDiLog.csv", data);
 
+            Assert.AreEqual("FileDiLog.csv", log.FileName);
             Assert.AreEqual(new DateTime(2022, 03, 05, 08, 47, 18), log.Header.PCDate);
             Assert.AreEqual(new DateTime(2022, 03, 05, 08, 47, 17), log.Header.UPSDate);
             Assert.AreEqual(new Tuple<string, int, int>("MAPK_Unit_v2_04_00.ini", 0, 0), log.Header.INIFile[0]);
@@ -36,15 +37,16 @@ namespace Core.Tests {
         public void NoHeader() {
             Parser parser = new();
             TextReader data = new StringReader("Date ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot ; Color\r\n05/03/2022 ; 08:46:55.807 ; 1 ; 0 ; AplCmdErrorUnitSubunit ; AplCmdErrorUnitSubunit ; 0x0000 ; Hex ; 0 ; 0xFFADFF2F\r\n05/03/2022 ; 08:46:55.807 ; 1 ; 0 ; AplCmdErrorIndex ; AplCmdErrorIndex ; 112 ; [-] ; 0 ; 0xFFADFF2F\r\n05/03/2022 ; 08:46:55.807 ; 1 ; 0 ; AplCmdErrorCode ; AplCmdErrorCode ; AplCmd_ErrCode_SysPermission ; [-] ; 0 ; 0xFFADFF2F\r\n05/03/2022 ; 08:38:21.719 ; 1 ; 0 ; S009 ; In Service mode ; ON ; BIN ; 0 ; 0xFFE0FFFF");
-            parser.Parse(data);
+            parser.Parse("FileDiLog.csv", data);
         }
 
         [TestMethod()]
         public void CorrectHeaderAndData() {
             Parser parser = new();
             TextReader data = new StringReader("PC DateTime: 05.03.2022 08:47:18\r\nUPS DateTime: 05.03.2022 08:47:17\r\nINI File name :  MAPK_Unit_v2_04_00.ini; Unit=0 - SubUnit=0\r\nINI File name :  MAPK_Unit_v2_04_00.ini; Unit=1 - SubUnit=0\r\nINI File name :  MAPK_Module_RD_IV_v2_04_00.ini; Unit=1 - SubUnit=1\r\nINI File name :  MAPK_ByPass_v2_04_00.ini; Unit=1 - SubUnit=14\r\nDate ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot ; Color\r\n05/03/2022 ; 08:46:55.807 ; 1 ; 0 ; AplCmdErrorUnitSubunit ; AplCmdErrorUnitSubunit ; 0x0000 ; Hex ; 0 ; 0xFFADFF2F\r\n05/03/2022 ; 08:46:55.807 ; 1 ; 0 ; AplCmdErrorIndex ; AplCmdErrorIndex ; 112 ; [-] ; 0 ; 0xFFADFF2F\r\n05/03/2022 ; 08:46:55.807 ; 1 ; 0 ; AplCmdErrorCode ; AplCmdErrorCode ; AplCmd_ErrCode_SysPermission ; [-] ; 0 ; 0xFFADFF2F\r\n05/03/2022 ; 08:38:21.719 ; 1 ; 0 ; S009 ; In Service mode ; ON ; BIN ; 0 ; 0xFFE0FFFF\r\n05/03/2022 ; 08:38:21.619 ; 1 ; 0 ; COMMAND (Ethernet) ; [-] ; Service Mode On ; [-] ; 0 ; 0xFFADFF2F\r\n05/03/2022 ; 08:36:29.618 ; 1 ; 0 ; S002 ; Load supplied by automatic Bypass ; OFF ; BIN ; 0 ; 0xFFE0FFFF\r\n05/03/2022 ; 08:36:29.618 ; 1 ; 0 ; S000 ; Load protected by inverter ; ON ; BIN ; 0 ; 0xFFE0FFFF\r\n05/03/2022 ; 08:36:29.238 ; 1 ; 14 ; ES047 ; Inverter contactor/relay is closed ; ON ; BIN ; 0 ; 0xFFE0FFFF\r\n05/03/2022 ; 08:36:29.238 ; 1 ; 14 ; ES026 ; Bypass Static Switch ON ; OFF ; BIN ; 0 ; 0xFFE0FFFF\r\n05/03/2022 ; 08:36:29.237 ; 1 ; 1 ; S053 ; Inverter switch ON ; ON ; BIN ; 0 ; 0xFFE0FFFF");
-            Log log = parser.Parse(data);
+            Log log = parser.Parse("FileDiLog.csv", data);
 
+            Assert.AreEqual("FileDiLog.csv", log.FileName);
             Assert.AreEqual(new DateTime(2022, 03, 05, 08, 47, 18), log.Header.PCDate);
             Assert.AreEqual(new DateTime(2022, 03, 05, 08, 47, 17), log.Header.UPSDate);
 
