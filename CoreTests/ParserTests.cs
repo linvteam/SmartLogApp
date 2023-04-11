@@ -13,11 +13,17 @@ namespace Core.Tests {
 
     [TestClass()]
     public class ParserTests {
+        /// <summary>
+        /// TUG-24 Test di istanziazione della classe Parser
+        /// </summary>
         [TestMethod()]
         public void Instantiation() {
             Assert.IsNotNull(new Parser());
         }
 
+        /// <summary>
+        /// TUG-25 Controllo parsing di un header valido e una tabella CSV senza dati
+        /// </summary>
         [TestMethod()]
         public void HeaderNoData() {
             Parser parser = new();
@@ -32,6 +38,9 @@ namespace Core.Tests {
             Assert.AreEqual(0, log.Events.Count);
         }
 
+        /// <summary>
+        /// TUG-26 Controllo header mancante
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void NoHeader() {
@@ -40,6 +49,9 @@ namespace Core.Tests {
             parser.Parse("FileDiLog.csv", data);
         }
 
+        /// <summary>
+        /// TUG-27 Controllo parsing di un file valido
+        /// </summary>
         [TestMethod()]
         public void CorrectHeaderAndData() {
             Parser parser = new();

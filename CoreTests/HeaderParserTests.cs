@@ -3,11 +3,17 @@
 namespace Core.Tests {
     [TestClass()]
     public class HeaderParserTests {
+        /// <summary>
+        /// TUG-11 Test di istanziazione della classe HeaderParser
+        /// </summary>
         [TestMethod()]
-        public void Instantiation() { // Questo test è potenzialmente inutile in quanto HeaderParse usa il costruttore di default
+        public void Instantiation() {
             Assert.IsNotNull(new HeaderParser());
         }
 
+        /// <summary>
+        /// TUG-12 Controllo che il parsing vada a buon fine
+        /// </summary>
         [TestMethod()]
         public void ParseOk() {
             HeaderParser parser = new();
@@ -26,7 +32,9 @@ namespace Core.Tests {
 
         }
 
-
+        /// <summary>
+        /// TUG-13 Controllo formato sul campo PC DateTime 
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void PCDateError() {
@@ -36,6 +44,9 @@ namespace Core.Tests {
             parser.Parse(reader);
         }
 
+        /// <summary>
+        /// TUG-14 Controllo su valori non validi di data/ora del campo PC DateTime
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void PCDateInvalidDateValues() {
@@ -45,6 +56,9 @@ namespace Core.Tests {
             parser.Parse(reader);
         }
 
+        /// <summary>
+        /// TUG-15 Controllo formato sul campo UPS DateTime
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void UPSDateError() {
@@ -54,6 +68,9 @@ namespace Core.Tests {
             parser.Parse(reader);
         }
 
+        /// <summary>
+        /// TUG-16 Controllo su valori non validi di data/ora del campo UPS DateTime
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void UPDateInvalidDateValues() {
@@ -63,6 +80,9 @@ namespace Core.Tests {
             parser.Parse(reader);
         }
 
+        /// <summary>
+        /// TUG-17 Controllo che il campo INI File name sia scritto nel formato corretto
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void InvalidINIFileMissingVOnFirmwareVersion() {
@@ -71,6 +91,9 @@ namespace Core.Tests {
             parser.Parse(reader);
         }
 
+        /// <summary>
+        /// TUG-17 Controllo che il campo INI File name sia scritto nel formato corretto
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void InvalidINIFileUsingLetters() {
@@ -79,6 +102,9 @@ namespace Core.Tests {
             parser.Parse(reader);
         }
 
+        /// <summary>
+        /// TUG-17 Controllo che il campo INI File name sia scritto nel formato corretto
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void InvalidINIFileMissingFirmwareExtension() {
@@ -87,6 +113,9 @@ namespace Core.Tests {
             parser.Parse(reader);
         }
 
+        /// <summary>
+        /// TUG-18 Controllo che il campo Unit sia nel formato corretto
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void InvalidINIFileInvalidUnit() {
@@ -95,6 +124,9 @@ namespace Core.Tests {
             parser.Parse(reader);
         }
 
+        /// <summary>
+        /// TUG-19 Controllo che il campo SubUnit sia nel formato corretto
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void InvalidINIFileInvalidSubUnit() {
@@ -103,6 +135,9 @@ namespace Core.Tests {
             parser.Parse(reader);
         }
 
+        /// <summary>
+        /// TUG-20 Controllo che il parsing di più INI File name avvenga correttamente
+        /// </summary>
         [TestMethod()]
         public void MultipleINIFiles() {
             HeaderParser headerParser = new();
@@ -129,6 +164,9 @@ namespace Core.Tests {
             }
         }
 
+        /// <summary>
+        /// TUG-21 Controllo per file vuoto
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void EmptyStream() {
@@ -137,6 +175,9 @@ namespace Core.Tests {
             headerParser.Parse(reader);
         }
 
+        /// <summary>
+        /// TUG-22 Controllo che l'header sia nel formato corretto
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void OnlyPCDate() {
@@ -145,6 +186,9 @@ namespace Core.Tests {
             headerParser.Parse(reader);
         }
 
+        /// <summary>
+        /// TUG-22 Controllo che l'header sia nel formato corretto
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void OnlyPCAndUPSTime() {
@@ -153,6 +197,9 @@ namespace Core.Tests {
             parser.Parse(reader);
         }
 
+        /// <summary>
+        /// TUG-22 Controllo che l'header sia nel formato corretto
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void InvalidIniLine() {
@@ -161,6 +208,9 @@ namespace Core.Tests {
             parser.Parse(reader);
         }
 
+        /// <summary>
+        /// TUG-23 Controllo di non consumazione della riga successiva degli INI File name
+        /// </summary>
         [TestMethod()]
         public void PostParseStreamCheck() {
             HeaderParser headerParser = new();

@@ -3,11 +3,17 @@
 namespace Core.Tests {
     [TestClass()]
     public class DataParserTests {
+        /// <summary>
+        /// TUG-1 Prova ad istanziare la classe
+        /// </summary>
         [TestMethod()]
         public void Instantiation() {
             Assert.IsNotNull(new DataParser());
         }
 
+        /// <summary>
+        /// TUG-2 Controllo errore per tabella CSV mancante
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void EmptyStream() {
@@ -16,6 +22,9 @@ namespace Core.Tests {
             dataParser.Parse(new StringReader(string.Empty));
         }
 
+        /// <summary>
+        /// TUG-3 Controllo parsing di una tabella CSV senza dati
+        /// </summary>
         [TestMethod()]
         public void HeaderWithoutData() {
             DataParser dataParser = new();
@@ -24,6 +33,9 @@ namespace Core.Tests {
             Assert.AreEqual(0, res.Count);
         }
 
+        /// <summary>
+        /// TUG-4 Controllo della lettura di una riga con tipo non binario
+        /// </summary>
         [TestMethod()]
         public void SingleLineOfLogTypeNotBIN() {
             DataParser dataParser = new();
@@ -32,15 +44,17 @@ namespace Core.Tests {
             Assert.AreEqual(0, res.Count);
         }
 
+        /// <summary>
+        /// TUG-5 Controllo della lettura di una riga con tipo binario e valore OFF
+        /// </summary>
         [TestMethod()]
-        public void SingleLineOfLogTypeBinOn() {
+        public void SingleLineOfLogTypeBinOff() {
             DataParser dataParser = new();
             TextReader data = new StringReader("Date ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot ; Color\r\n05/03/2022 ; 08:36:29.618 ; 1 ; 0 ; S002 ; Load supplied by automatic Bypass ; OFF ; BIN ; 0 ; 0xFFE0FFFF");
 
             List<LogRow > res = dataParser.Parse(data);
             Assert.AreEqual(1, res.Count);
             
-            // Asserts sui dati parsati
             LogRow logRow = res[0];
             Assert.AreEqual(new DateOnly(2022, 03, 05), logRow.Date);
             Assert.AreEqual(new TimeOnly(08, 36, 29, 618), logRow.Time);
@@ -52,15 +66,17 @@ namespace Core.Tests {
             Assert.AreEqual("0xFFE0FFFF", logRow.Color);
         }
 
+        /// <summary>
+        /// TUG-6 Controllo della lettura di una riga con tipo binario e valore ON
+        /// </summary>
         [TestMethod()]
-        public void SingleLineOfLogBinOff() {
+        public void SingleLineOfLogBinOn() {
             DataParser dataParser = new();
             TextReader data = new StringReader("Date ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot ; Color\r\n05/03/2022 ; 08:36:29.618 ; 1 ; 0 ; S002 ; Load supplied by automatic Bypass ; ON ; BIN ; 0 ; 0xFFE0FFFF");
 
             List<LogRow> res = dataParser.Parse(data);
             Assert.AreEqual(1, res.Count);
 
-            // Asserts sui dati parsati
             LogRow logRow = res[0];
             Assert.AreEqual(new DateOnly(2022, 03, 05), logRow.Date);
             Assert.AreEqual(new TimeOnly(08, 36, 29, 618), logRow.Time);
@@ -72,6 +88,9 @@ namespace Core.Tests {
             Assert.AreEqual("0xFFE0FFFF", logRow.Color);
         }
 
+        /// <summary>
+        /// TUG-7 Controllo per una riga di dati non valida
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void InvalidLogLine() {
@@ -80,6 +99,9 @@ namespace Core.Tests {
             dataParser.Parse(data);
         }
 
+        /// <summary>
+        /// TUG-8 Controllo data nel formato errato
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void InvalidDate() {
@@ -88,6 +110,9 @@ namespace Core.Tests {
             dataParser.Parse(data);
         }
 
+        /// <summary>
+        /// TUG-9 Controllo ora nel formato errato
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(ParsingException))]
         public void InvalidTime() {
@@ -96,6 +121,9 @@ namespace Core.Tests {
             dataParser.Parse(data);
         }
 
+        /// <summary>
+        /// TUG-10 Controllo che una tabella multi-linea venga letta e i dati filtrati correttamente
+        /// </summary>
         [TestMethod()]
         public void MultiLineLog() {
             DataParser dataParser = new();
