@@ -31,17 +31,17 @@ namespace Core {
                     csv.Read();
                     csv.ReadHeader();
                 } catch {
-                    throw new ParsingException("Impossibile parsare il file CSV, header non presente");
+                    throw new ParsingException("Impossibile parsare il file CSV, header non presente", ParsingException.Code.FormatoErrato);
                 }
                 while(csv.Read()) {
                     RawLogRow? row;
                     try {
                         row = csv.GetRecord<RawLogRow>();
                     } catch {
-                        throw new ParsingException("Impossibile parsare il contenuto del file CSV");
+                        throw new ParsingException("Impossibile parsare il contenuto del file CSV", ParsingException.Code.FormatoErrato);
                     }
                     if(row == null)
-                        throw new ParsingException("Impossibile leggere il CSV");
+                        throw new ParsingException("Impossibile leggere il CSV", ParsingException.Code.FormatoErrato);
 
                     LogRow? converted_row = Filter(row);
                     if(converted_row != null) {
@@ -71,7 +71,7 @@ namespace Core {
             Regex dateRegex = new Regex(@"(\d\d)/(\d\d)/(\d\d\d\d)");
             Match match = dateRegex.Match(row.Date);
             if(!match.Success) {
-                throw new ParsingException("Impossibile converire i dati");
+                throw new ParsingException("Impossibile converire i dati", ParsingException.Code.DatoErrato);
             }
             DateOnly data = new DateOnly(
                 int.Parse(match.Groups[3].Value),
@@ -82,7 +82,7 @@ namespace Core {
             Regex timeRegex = new Regex(@"(\d\d):(\d\d):(\d\d)\.(\d\d\d)");
             match = timeRegex.Match(row.Time);
             if(!match.Success) {
-                throw new ParsingException("Impossibile parsare i dati");
+                throw new ParsingException("Impossibile parsare i dati", ParsingException.Code.DatoErrato);
             }
 
             TimeOnly time = new TimeOnly(
