@@ -1,4 +1,7 @@
-﻿namespace Core {
+﻿using System.Runtime.Serialization;
+
+namespace Core {
+    [Serializable()]
     public class ParsingException: Exception {
 
         public enum Code {
@@ -27,6 +30,8 @@
         public ParsingException(string message, Code errorCode, Exception innerException) : base(message, innerException) {
             ErrorCode = (int)errorCode;
         }
+
+        protected ParsingException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
     }
 }
