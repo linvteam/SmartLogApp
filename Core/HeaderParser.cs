@@ -76,7 +76,7 @@ namespace Core {
         /// </summary>
         /// <param name="riga">La riga da leggere</param>
         /// <returns>Tupla con IniFileName, Unit e SubUnit</returns>
-        private Tuple<string, int, int> INIFileParse(string riga) {
+        private INIFile INIFileParse(string riga) {
             string pattern = @"INI File name :  ([\w_]+_v\d+_\d+_\d+.ini); Unit=(\d+) - SubUnit=(\d+)";
             Regex regex = new(pattern);
 
@@ -86,10 +86,7 @@ namespace Core {
             var groups = matches.Groups;
 
             // Questi int.Parse non possono lanciare una eccezione per nessun motivo in quanto è la regex che decide il formato.
-            return new Tuple<string, int, int>(
-                groups[1].Value,
-                int.Parse(groups[2].Value),
-                int.Parse(groups[3].Value));
+            return new INIFile(groups[1].Value, int.Parse(groups[2].Value), int.Parse(groups[3].Value));
 
         }
 
@@ -110,7 +107,7 @@ namespace Core {
                 throw new ParsingException("Il file non contiene un header valido. Manca UPS DateTime", ParsingException.Code.FormatoErrato);
             DateTime ups = UPSDateParse(riga);
 
-            List<Tuple<string, int, int>> inifiles = new();
+            List<INIFile> inifiles = new();
             // Leggo la prima riga
             riga = reader.ReadLine();
             if(riga == null)
