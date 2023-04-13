@@ -1,37 +1,34 @@
 ﻿using System.Runtime.Serialization;
 
 namespace Core {
-    [Serializable()]
     public class ParsingException: Exception {
 
-        public enum Code {
+        public enum ErrorCode {
             FormatoErrato = 1,
             DatoErrato = 2
         }
 
-        public int ErrorCode {
+        public int Code {
             get;
         }
 
         public ParsingException() : base() { }
 
-        public ParsingException(string message, Code errorCode): base(message) {
-            ErrorCode = (int)errorCode;
+        public ParsingException(string message, ErrorCode errorCode): base(message) {
+            Code = (int)errorCode;
         }
 
         public ParsingException(string message, int errorCode = 0) : base(message) {
-            ErrorCode = errorCode;
+            Code = errorCode;
         }
 
         public ParsingException(string message, int errorCode, Exception innerException) : base(message, innerException) {
-            ErrorCode = errorCode;
+            Code = errorCode;
         }
 
-        public ParsingException(string message, Code errorCode, Exception innerException) : base(message, innerException) {
-            ErrorCode = (int)errorCode;
+        public ParsingException(string message, ErrorCode errorCode, Exception innerException) : base(message, innerException) {
+            Code = (int)errorCode;
         }
-
-        protected ParsingException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
     }
 }

@@ -22,7 +22,7 @@ namespace Core {
 
             var matches = regex.Match(riga);
             if(matches.Captures.Count == 0) {
-                throw new ParsingException("Impossibile leggere la riga PC DateTime", ParsingException.Code.FormatoErrato);
+                throw new ParsingException("Impossibile fare il parsing della riga PC DateTime", ParsingException.ErrorCode.FormatoErrato);
             }
 
             var groups = matches.Groups;
@@ -36,7 +36,7 @@ namespace Core {
                     int.Parse(groups[5].Value),  // Minuti
                     int.Parse(groups[6].Value)); // Secondi
             } catch(Exception) {
-                throw new ParsingException("PCDateTime non valida", ParsingException.Code.DatoErrato);
+                throw new ParsingException("PCDateTime non valida", ParsingException.ErrorCode.DatoErrato);
             }
         }
 
@@ -52,7 +52,7 @@ namespace Core {
 
             var matches = regex.Match(riga);
             if(matches.Captures.Count == 0) {
-                throw new ParsingException("Impossibile parsare la riga UPS DateTime", ParsingException.Code.FormatoErrato);
+                throw new ParsingException("Impossibile fare il parsing la riga UPS DateTime", ParsingException.ErrorCode.FormatoErrato);
             }
 
             var groups = matches.Groups;
@@ -66,7 +66,7 @@ namespace Core {
                     int.Parse(groups[5].Value),  // Minuti
                     int.Parse(groups[6].Value)); // Secondi
             } catch(Exception) {
-                throw new ParsingException("UPSDateTime non valida", ParsingException.Code.DatoErrato);
+                throw new ParsingException("UPSDateTime non valida", ParsingException.ErrorCode.DatoErrato);
             }
 
         }
@@ -81,7 +81,7 @@ namespace Core {
             Regex regex = new(pattern);
 
             var matches = regex.Match(riga);
-            if(matches.Captures.Count == 0) { throw new ParsingException("Impossibile parsare una riga di INI File", ParsingException.Code.FormatoErrato); }
+            if(matches.Captures.Count == 0) { throw new ParsingException("Impossibile fare il parsing di una riga di INI File", ParsingException.ErrorCode.FormatoErrato); }
 
             var groups = matches.Groups;
 
@@ -99,19 +99,19 @@ namespace Core {
 
             string? riga = reader.ReadLine();
             if(riga == null)
-                throw new ParsingException("Il file non contiene un header valido. Manca PC DateTime", ParsingException.Code.FormatoErrato);
+                throw new ParsingException("Il file non contiene un header valido. Manca PC DateTime", ParsingException.ErrorCode.FormatoErrato);
             DateTime pc = PCDateParse(riga);
 
             riga = reader.ReadLine();
             if(riga == null)
-                throw new ParsingException("Il file non contiene un header valido. Manca UPS DateTime", ParsingException.Code.FormatoErrato);
+                throw new ParsingException("Il file non contiene un header valido. Manca UPS DateTime", ParsingException.ErrorCode.FormatoErrato);
             DateTime ups = UPSDateParse(riga);
 
             List<INIFile> inifiles = new();
             // Leggo la prima riga
             riga = reader.ReadLine();
             if(riga == null)
-                throw new ParsingException("Il file non contiene un header valido. Mancano gli INI files", ParsingException.Code.FormatoErrato);
+                throw new ParsingException("Il file non contiene un header valido. Mancano gli INI files", ParsingException.ErrorCode.FormatoErrato);
             inifiles.Add(INIFileParse(riga));
 
             while(reader.Peek() == 'I') {

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreTests", "CoreTests\Core
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartLogViewer", "SmartLogViewer\SmartLogViewer.csproj", "{F25528C4-1D7D-470D-8D79-D327E139426D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartLogViewerTests", "SmartLogViewerTests\SmartLogViewerTests.csproj", "{0D296CDC-9A76-4DCF-A20A-820E9942DCED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F25528C4-1D7D-470D-8D79-D327E139426D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F25528C4-1D7D-470D-8D79-D327E139426D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F25528C4-1D7D-470D-8D79-D327E139426D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D296CDC-9A76-4DCF-A20A-820E9942DCED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D296CDC-9A76-4DCF-A20A-820E9942DCED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D296CDC-9A76-4DCF-A20A-820E9942DCED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D296CDC-9A76-4DCF-A20A-820E9942DCED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
