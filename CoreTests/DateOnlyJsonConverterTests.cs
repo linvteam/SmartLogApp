@@ -16,6 +16,7 @@ namespace Core.Tests
         [TestMethod()]
         public void Read_ReturnsParsedDateOnly() {
             // Arrange
+            DateOnly expected = new DateOnly(2001, 05, 21);
             Utf8JsonReader reader = new Utf8JsonReader(Encoding.UTF8.GetBytes("{ \"date\" : \"21/05/2001\" }"));
             JsonSerializerOptions options = new JsonSerializerOptions();
             Type typeToConvert = typeof(DateOnly);
@@ -26,7 +27,7 @@ namespace Core.Tests
             DateOnly result = converter.Read(ref reader, typeToConvert, options);
 
             // Assert
-            Assert.AreEqual(new DateOnly(2001, 05, 21), result);
+            Assert.AreEqual(expected, result);
         }
         
         [TestMethod()]
@@ -55,6 +56,7 @@ namespace Core.Tests
             string serializationFormat = "dd/MM/yyyy";
             DateOnlyJsonConverter converter = new DateOnlyJsonConverter(serializationFormat);
 
+            string expected = $"\"{value.ToString(serializationFormat)}\"";
             // Act
             converter.Write(writer, value, options);
             
@@ -64,7 +66,7 @@ namespace Core.Tests
             string jsonString = Encoding.UTF8.GetString(result);
             
             // Assert
-            Assert.AreEqual($"\"{value.ToString(serializationFormat)}\"", jsonString);
+            Assert.AreEqual(expected, jsonString);
         }
     }
 }

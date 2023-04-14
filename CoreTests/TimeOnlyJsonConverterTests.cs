@@ -18,6 +18,7 @@ namespace Core.Tests {
         public void Read_ReturnsParsedTimeOnly()
         {
             // Arrange
+            TimeOnly expected = new TimeOnly(13, 30, 0);
             Utf8JsonReader reader = new Utf8JsonReader(Encoding.UTF8.GetBytes("{ \"time\" : \"13:30:00\" }"));
             JsonSerializerOptions options = new JsonSerializerOptions();
             Type typeToConvert = typeof(TimeOnly);
@@ -28,7 +29,7 @@ namespace Core.Tests {
             TimeOnly result = converter.Read(ref reader, typeToConvert, options);
 
             // Assert
-            Assert.AreEqual(new TimeOnly(13, 30, 0), result);
+            Assert.AreEqual(expected, result);
         }
         
         [TestMethod()]
@@ -57,6 +58,8 @@ namespace Core.Tests {
             TimeOnly value = new TimeOnly(10, 30);
             string serializationFormat = "hh:mm";
             TimeOnlyJsonConverter converter = new TimeOnlyJsonConverter(serializationFormat);
+            
+            string expected = $"\"{value.ToString(serializationFormat)}\"";
 
             // Act
             converter.Write(writer, value, options);
@@ -67,7 +70,7 @@ namespace Core.Tests {
             string jsonString = Encoding.UTF8.GetString(result);
             
             // Assert
-            Assert.AreEqual($"\"{value.ToString(serializationFormat)}\"", jsonString);
+            Assert.AreEqual(expected, jsonString);
         }
 
     }
