@@ -12,15 +12,15 @@ namespace Core
         /// <summary>
         /// Formato della data da serializzare
         /// </summary>
-        private readonly string serializationFormat;
+        private readonly string _serializationFormat;
 
         /// <summary>
         /// Costruisce un'istanza di DateOnlyJsonConverter
         /// </summary>
         /// <param name="serializationFormat">Il formato della data utilizzato</param>
-        public DateOnlyJsonConverter(string serializationFormat = "dd/MM/yyyy")
+        public DateOnlyJsonConverter(string serializationFormat = "yyyy/MM/dd")
         {
-            this.serializationFormat = serializationFormat;
+            this._serializationFormat = serializationFormat;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Core
                     value = reader.GetString();
                 }
             }
-            return DateOnly.Parse(value!);
+            return DateOnly.Parse(value);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Core
         /// <param name="value">La data da serializzare</param>
         /// <param name="options">Le opzioni di serializzazione JSON</param>
         public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options) {
-            writer.WriteStringValue(value.ToString(serializationFormat));
+            writer.WriteStringValue(value.ToString(_serializationFormat));
         }
     }
 }

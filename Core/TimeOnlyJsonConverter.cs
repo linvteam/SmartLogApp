@@ -40,7 +40,7 @@ namespace Core
                     value = reader.GetString();
                 }
             }
-            return TimeOnly.Parse(value!);
+            return TimeOnly.Parse(value);
         }
 
         /// <summary>

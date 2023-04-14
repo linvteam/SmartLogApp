@@ -17,7 +17,7 @@ namespace Core.Tests
         public void Read_ReturnsParsedDateOnly() {
             // Arrange
             DateOnly expected = new DateOnly(2001, 05, 21);
-            Utf8JsonReader reader = new Utf8JsonReader(Encoding.UTF8.GetBytes("{ \"date\" : \"21/05/2001\" }"));
+            Utf8JsonReader reader = new Utf8JsonReader(Encoding.UTF8.GetBytes("{ \"date\" : \"2001/05/21\" }"));
             JsonSerializerOptions options = new JsonSerializerOptions();
             Type typeToConvert = typeof(DateOnly);
 
@@ -34,7 +34,7 @@ namespace Core.Tests
         [ExpectedException(typeof(FormatException))]
         public void Read_WrongFormatDate() {
             // Arrange
-            Utf8JsonReader reader = new Utf8JsonReader(Encoding.UTF8.GetBytes("{  \"date\" : \"21/15/2001\"  }"));
+            Utf8JsonReader reader = new Utf8JsonReader(Encoding.UTF8.GetBytes("{  \"date\" : \"2001/15/21\"  }"));
             JsonSerializerOptions options = new JsonSerializerOptions();
             Type typeToConvert = typeof(DateOnly);
 
@@ -53,7 +53,7 @@ namespace Core.Tests
             JsonSerializerOptions options = new JsonSerializerOptions();
             
             DateOnly value = new DateOnly(2001,05,21);
-            string serializationFormat = "dd/MM/yyyy";
+            string serializationFormat = "yyyy/MM/dd";
             DateOnlyJsonConverter converter = new DateOnlyJsonConverter(serializationFormat);
 
             string expected = $"\"{value.ToString(serializationFormat)}\"";
