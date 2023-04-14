@@ -14,14 +14,14 @@ namespace SmartLogViewer.Controllers
         /// <summary>
         /// Oggetto di tipo Parser dedicato al parsing dei file di log
         /// </summary>
-        private readonly Parser _parser;
+        private readonly Parser _Parser;
 
         /// <summary>
         /// Crea una nuova istanza del controller
         /// </summary>
         /// <param name="parser">Parser per i file di log</param>
         public ParseController(Parser parser) {
-            _parser = parser;
+            _Parser = parser;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace SmartLogViewer.Controllers
             TextReader reader = new StreamReader(file.OpenReadStream());        // Stream di lettura
             try
             {
-                var log = _parser.Parse(filename, reader);
+                var log = _Parser.Parse(filename, reader);
                 reader.Close();
                 return StatusCode((int)HttpStatusCode.Created, log);
             }

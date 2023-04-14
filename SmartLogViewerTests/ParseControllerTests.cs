@@ -59,13 +59,13 @@ namespace SmartLogViewer.Tests{
             
             // Creazione dello stream di lettura per il parser
             byte[] bytes = Encoding.ASCII.GetBytes("PC DateTime: 05.03.2022 08:47:18\r\nUPS DateTime: 05.03.2022 08:47:17\r\nINI File name :  MAPK_Unit_v2_04_00.ini; Unit=0 - SubUnit=0\r\nINI File name :  MAPK_Unit_v2_04_00.ini; Unit=1 - SubUnit=0\r\nINI File name :  MAPK_Module_RD_IV_v2_04_00.ini; Unit=1 - SubUnit=1\r\nINI File name :  MAPK_ByPass_v2_04_00.ini; Unit=1 - SubUnit=14\r\nDate ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot ; Color\r\n05/03/2022 ; 08:36:29.618 ; 1 ; 0 ; S000 ; Load protected by inverter ; ON ; BIN ; 0 ; 0xFFE0FFFF\r\n05/03/2022 ; 08:36:29.238 ; 1 ; 14 ; ES047 ; Inverter contactor/relay is closed ; ON ; BIN ; 0 ; 0xFFE0FFFF");
-            IFormFile file = new FormFile(new MemoryStream(bytes), 0, bytes.Length, null, fileName);
+            FormFile file = new FormFile(new MemoryStream(bytes), 0, bytes.Length, null, fileName);
 
             // Metodo associato alla chiamata POST su endpoint api/parse
             ObjectResult result = (ObjectResult) controller.Upload(file);
 
             // Conversione del valore ritornato dalla chiamata POST
-            Log actual = (Log) result.Value;
+            var actual = (Log) result.Value;
 
             // Asserzione sul codice HTTP di ritorno della chiamata
             Assert.AreEqual(201, result.StatusCode);
@@ -110,7 +110,7 @@ namespace SmartLogViewer.Tests{
             
             // Creazione dello stream di lettura per il parser
             byte[] bytes = Encoding.ASCII.GetBytes("PC DateTime: 05.03.2022 08:47:18\r\nUPS DateTime: 05.03.2022 08:47:17\r\nINI File name :  MAPK_Unit_v2_04_00.ini; Unit=0 - SubUnit=0\r\nINI File name :  MAPK_Unit_v2_04_00.ini; Unit=1 - SubUnit=0\r\nINI File name :  MAPK_Module_RD_IV_v2_04_00.ini; Unit=1 - SubUnit=1\r\nINI File name :  MAPK_ByPass_v2_04_00.ini; Unit=1 - SubUnit=14\r\nDate ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot ; Color\r\n05/03/2022 ; 08:36:29.618 ; 1 ; 0 ; S000 ; Load protected by inverter ; ON ; BIN ; 0 ; 0xFFE0FFFF\r\n05/03/2022 ; 08:36:29.238 ; 1 ; 14 ; ES047 ; Inverter contactor/relay is closed ; ON ; BIN ; 0 ; 0xFFE0FFFF");
-            IFormFile file = new FormFile(new MemoryStream(bytes), 0, bytes.Length, null, fileName);
+            FormFile file = new FormFile(new MemoryStream(bytes), 0, bytes.Length, null, fileName);
 
             // Metodo associato alla chiamata POST su endpoint api/parse
             ObjectResult result = (ObjectResult)controller.Upload(file);

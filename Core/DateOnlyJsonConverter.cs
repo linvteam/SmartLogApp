@@ -32,8 +32,15 @@ namespace Core
         /// <returns>La data in formato DateOnly</returns>
         public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var value = reader.GetString();
-            return DateOnly.Parse(value!);
+            string value = "";
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.String)
+                {
+                    value = reader.GetString();
+                }
+            }
+            return DateOnly.Parse(value);
         }
 
         /// <summary>
@@ -42,8 +49,8 @@ namespace Core
         /// <param name="writer">Lo stream JSON su cui serializzare la data</param>
         /// <param name="value">La data da serializzare</param>
         /// <param name="options">Le opzioni di serializzazione JSON</param>
-        public override void Write(Utf8JsonWriter writer, DateOnly value,
-            JsonSerializerOptions options)
-            => writer.WriteStringValue(value.ToString(serializationFormat));
+        public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options) {
+            writer.WriteStringValue(value.ToString(serializationFormat));
+        }
     }
 }
