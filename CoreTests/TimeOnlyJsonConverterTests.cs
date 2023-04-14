@@ -1,24 +1,27 @@
-using System.Buffers;
 using System.Text;
 using System.Text.Json;
-using CsvHelper.TypeConversion;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 
 namespace Core.Tests {
     [TestClass()]
     public class TimeOnlyJsonConverterTests {
         
+        /// <summary>
+        /// TUG-28: Verifica che la classe venga istanziata correttamente
+        /// </summary>
         [TestMethod()]
         public void Instantiation() {
             Assert.IsNotNull(new TimeOnlyJsonConverter());
         }
 
+        /// <summary>
+        /// TUG-29: Verifica che l'orario venga de-serializzato correttamente in un oggetto di tipo TimeOnly
+        /// </summary>
         [TestMethod()]
         public void Read_ReturnsParsedTimeOnly()
         {
             // Arrange
-            TimeOnly expected = new TimeOnly(13, 30, 0);
+            TimeOnly expected = new TimeOnly(13, 30, 00);
             Utf8JsonReader reader = new Utf8JsonReader(Encoding.UTF8.GetBytes("{ \"time\" : \"13:30:00\" }"));
             JsonSerializerOptions options = new JsonSerializerOptions();
             Type typeToConvert = typeof(TimeOnly);
@@ -32,6 +35,9 @@ namespace Core.Tests {
             Assert.AreEqual(expected, result);
         }
         
+        /// <summary>
+        /// TUG-30: Verificare che l'orario abbia un formato corretto
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(FormatException))]
         public void Read_WrongFormatTime()
@@ -47,6 +53,9 @@ namespace Core.Tests {
             converter.Read(ref reader, typeToConvert, options);
         }
 
+        /// <summary>
+        /// TUG-31: Verifica che l'orario venga serializzato correttamente
+        /// </summary>
         [TestMethod()]
         public void Write_Correct() {
             

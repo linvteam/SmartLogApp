@@ -20,13 +20,18 @@ namespace SmartLogViewer.Tests{
     [TestClass()]
     public class ParseControllerTests
     {
-        
+        /// <summary>
+        /// TUV-1: Verifica che la classe venga istanziata correttamente
+        /// </summary>
         [TestMethod()]
         public void Instantiation() {
             Parser parser = new Parser();
             Assert.IsNotNull(new ParseController(parser));
         }
         
+        /// <summary>
+        /// TUV-2: Verifica che il JSON ritornato rappresenti correttamente un file di log ben strutturato 
+        /// </summary>
         [TestMethod()]
         public void CorrectRequest()
         {
@@ -94,6 +99,9 @@ namespace SmartLogViewer.Tests{
             }
         }
 
+        /// <summary>
+        /// TUV-3: Verificare che il JSON ritornato rappresenti correttamente l'errore dovuto ad un file di log avente errori di struttura/dominio
+        /// </summary>
         [TestMethod()]
         public void WrongRequest()
         {

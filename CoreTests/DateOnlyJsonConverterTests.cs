@@ -8,11 +8,17 @@ namespace Core.Tests
     public class DateOnlyJsonConverterTests
     {
 
+        /// <summary>
+        /// TUG-32: Verifica che la classe venga istanziata correttamente
+        /// </summary>
         [TestMethod()]
         public void Instantiation() {
             Assert.IsNotNull(new DateOnlyJsonConverter());
         }
 
+        /// <summary>
+        /// TUG-33: Verifica che la data venga de-serializzata correttamente in un oggetto di tipo DateOnly
+        /// </summary>
         [TestMethod()]
         public void Read_ReturnsParsedDateOnly() {
             // Arrange
@@ -30,6 +36,9 @@ namespace Core.Tests
             Assert.AreEqual(expected.ToString(), result.ToString());
         }
         
+        /// <summary>
+        /// TUG-34: Verificare che la data abbia un formato corretto
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(FormatException))]
         public void Read_WrongFormatDate() {
@@ -44,6 +53,9 @@ namespace Core.Tests
             converter.Read(ref reader, typeToConvert, options);
         }
         
+        /// <summary>
+        /// TUG-35: Verifica che la data venga serializzato correttamente
+        /// </summary>
         [TestMethod()]
         public void Write_Correct() {
             
