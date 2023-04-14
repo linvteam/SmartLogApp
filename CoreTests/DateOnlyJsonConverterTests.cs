@@ -14,7 +14,7 @@ namespace Core.Tests
         }
 
         [TestMethod()]
-        public void Read_ReturnsParsedTimeOnly()
+        public void Read_ReturnsParsedDateOnly()
         {
             // Arrange
             Utf8JsonReader reader = new Utf8JsonReader(Encoding.UTF8.GetBytes("{ \"date\" : \"21/05/2001\" }"));
