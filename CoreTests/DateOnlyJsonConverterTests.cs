@@ -27,7 +27,7 @@ namespace Core.Tests
             DateOnly result = converter.Read(ref reader, typeToConvert, options);
 
             // Assert
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expected.ToString(), result.ToString());
         }
         
         [TestMethod()]
