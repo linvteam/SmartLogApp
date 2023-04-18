@@ -1,3 +1,11 @@
+
+<div class="row">
+  <p>Piccola descrizione che occupi almeno un po' di spazio</p>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque quis luctus lacus. Fusce augue odio, condimentum vitae vehicula id, elementum imperdiet enim. Fusce faucibus mi non orci placerat egestas. Curabitur velit nulla, scelerisque ut semper at, cursus ac nisi. Suspendisse dictum lacus eget laoreet interdum. Ut libero massa, auctor nec diam sed, vulputate semper justo. Suspendisse potenti. Quisque pulvinar arcu sapien. Phasellus vulputate et mi quis sollicitudin. Donec eget sapien non lectus finibus mollis id eget dolor. In eleifend est id nisl dapibus ultricies. Nunc consectetur erat nunc, vestibulum porta tortor elementum vel. Nulla et porttitor ligula, non sagittis elit. Cras vel lobortis odio.
+  </p>
+</div>
+
 <div class="row">
     <div class="col-8">
       <label class="btn btn-default p-0">
@@ -27,11 +35,3 @@
 
   <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
 
-  <div class="card mt-3">
-    <div class="card-header">List of Files</div>
-    <ul class="list-group list-group-flush">
-      <li *ngFor="let file of fileInfos | async" class="list-group-item">
-        <a href="{{ file.url }}">{{ file.name }}</a>
-      </li>
-    </ul>
-  </div>
