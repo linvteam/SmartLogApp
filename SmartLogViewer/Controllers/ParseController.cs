@@ -34,6 +34,7 @@ namespace SmartLogViewer.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Upload(IFormFile file)
         {
+            Console.WriteLine("Richiesta arrivata");
             string filename = file.FileName;                                    // Nome del file
             TextReader reader = new StreamReader(file.OpenReadStream());        // Stream di lettura
             try
