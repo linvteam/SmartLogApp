@@ -1,17 +1,17 @@
 <div class="row">
     <div class="col-8">
       <label class="btn btn-default p-0">
-        <input type="file" (change)="selectFile($event)" />
+        <input type="file" (change)="selectFile($event)" accept="text/csv"/>
       </label>
     </div>
-  
+
     <div class="col-4">
       <button class="btn btn-success btn-sm" [disabled]="!selectedFiles" (click)="upload()">
         Upload
       </button>
     </div>
   </div>
-  
+
   <div *ngIf="currentFile" class="progress my-3">
     <div
       class="progress-bar progress-bar-info progress-bar-striped"
@@ -24,9 +24,9 @@
       {{ progress }}%
     </div>
   </div>
-  
+
   <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
-  
+
   <div class="card mt-3">
     <div class="card-header">List of Files</div>
     <ul class="list-group list-group-flush">
@@ -35,4 +35,3 @@
       </li>
     </ul>
   </div>
-  
