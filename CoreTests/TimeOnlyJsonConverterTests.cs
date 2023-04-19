@@ -65,10 +65,10 @@ namespace Core.Tests {
             JsonSerializerOptions options = new JsonSerializerOptions();
             
             TimeOnly value = new TimeOnly(10, 30);
-            string serializationFormat = "hh:mm";
-            TimeOnlyJsonConverter converter = new TimeOnlyJsonConverter(serializationFormat);
+            string SerializationFormat = "hh:mm";
+            TimeOnlyJsonConverter converter = new TimeOnlyJsonConverter(SerializationFormat);
             
-            string expected = $"\"{value.ToString(serializationFormat)}\"";
+            string expected = $"\"{value.ToString(SerializationFormat)}\"";
 
             // Act
             converter.Write(writer, value, options);

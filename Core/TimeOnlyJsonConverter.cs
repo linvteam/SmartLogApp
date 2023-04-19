@@ -12,15 +12,15 @@ namespace Core
         /// <summary>
         /// Formato dell'ora da serializzare
         /// </summary>
-        private readonly string serializationFormat;
+        private readonly string SerializationFormat;
 
         /// <summary>
         /// Costruisce un'istanza di TimeOnlyJsonConverter
         /// </summary>
-        /// <param name="serializationFormat">Il formato dell'ora utilizzato</param>
-        public TimeOnlyJsonConverter(string serializationFormat = "HH:mm:ss.fff")
+        /// <param name="SerializationFormat">Il formato dell'ora utilizzato</param>
+        public TimeOnlyJsonConverter(string SerializationFormat = "HH:mm:ss.fff")
         {
-            this.serializationFormat = serializationFormat;
+            this.SerializationFormat = SerializationFormat;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Core
         /// <param name="value">La data da serializzare</param>
         /// <param name="options">Le opzioni di serializzazione JSON</param>
         public override void Write(Utf8JsonWriter writer, TimeOnly value, JsonSerializerOptions options) {
-            writer.WriteStringValue(value.ToString(serializationFormat));
+            writer.WriteStringValue(value.ToString(SerializationFormat));
         }
     }
 }
