@@ -31,14 +31,14 @@ namespace Core {
                     csv.Read();
                     csv.ReadHeader();
                 } catch {
-                    throw new ParsingException("Impossibile eseguire il parsing del file CSV, header non presente", ParsingException.ErrorCode.FormatoErrato);
+                    throw new ParsingException("Impossibile analizzare il file CSV, header non presente", ParsingException.ErrorCode.FormatoErrato);
                 }
                 while(csv.Read()) {
                     RawLogRow? row;
                     try {
                         row = csv.GetRecord<RawLogRow>();
                     } catch {
-                        throw new ParsingException("Impossibile eseguire il parsing del contenuto del file CSV", ParsingException.ErrorCode.FormatoErrato);
+                        throw new ParsingException("Impossibile analizzare il contenuto del file CSV", ParsingException.ErrorCode.FormatoErrato);
                     }
                     if(row == null)
                         throw new ParsingException("Impossibile leggere il file CSV", ParsingException.ErrorCode.FormatoErrato);
@@ -82,7 +82,7 @@ namespace Core {
             Regex timeRegex = new Regex(@"(\d\d):(\d\d):(\d\d)\.(\d\d\d)");
             match = timeRegex.Match(row.Time);
             if(!match.Success) {
-                throw new ParsingException("Impossibile eseguire il parsing dei dati", ParsingException.ErrorCode.DatoErrato);
+                throw new ParsingException("Impossibile eseguire l'analisi dei dati", ParsingException.ErrorCode.DatoErrato);
             }
 
             TimeOnly time = new TimeOnly(

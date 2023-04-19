@@ -22,7 +22,7 @@ namespace Core {
 
             var matches = regex.Match(riga);
             if(matches.Captures.Count == 0) {
-                throw new ParsingException("Impossibile fare il parsing della riga PC DateTime", ParsingException.ErrorCode.FormatoErrato);
+                throw new ParsingException("Impossibile fare l'analisi della riga PC DateTime", ParsingException.ErrorCode.FormatoErrato);
             }
 
             var groups = matches.Groups;
@@ -52,7 +52,7 @@ namespace Core {
 
             var matches = regex.Match(riga);
             if(matches.Captures.Count == 0) {
-                throw new ParsingException("Impossibile fare il parsing la riga UPS DateTime", ParsingException.ErrorCode.FormatoErrato);
+                throw new ParsingException("Impossibile fare l'analisi della riga UPS DateTime", ParsingException.ErrorCode.FormatoErrato);
             }
 
             var groups = matches.Groups;
@@ -81,7 +81,7 @@ namespace Core {
             Regex regex = new(pattern);
 
             var matches = regex.Match(riga);
-            if(matches.Captures.Count == 0) { throw new ParsingException("Impossibile fare il parsing di una riga di INI File", ParsingException.ErrorCode.FormatoErrato); }
+            if(matches.Captures.Count == 0) { throw new ParsingException("Impossibile fare l'analisi di una riga di INI File", ParsingException.ErrorCode.FormatoErrato); }
 
             var groups = matches.Groups;
 
