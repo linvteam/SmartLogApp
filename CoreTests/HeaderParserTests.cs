@@ -26,9 +26,9 @@ namespace Core.Tests {
             Assert.IsNotNull(header);
             Assert.AreEqual(new DateTime(2022, 03, 05, 08, 47, 18), header.PCDate);
             Assert.AreEqual(new DateTime(2022, 03, 05, 08, 47, 17), header.UPSDate);
-            Assert.AreEqual("MAPK_Unit_v2_04_00.ini", header.INIFile[0].Item1); // INI File
-            Assert.AreEqual(0, header.INIFile[0].Item2); // Unit
-            Assert.AreEqual(0, header.INIFile[0].Item3); // SubUnit
+            Assert.AreEqual("MAPK_Unit_v2_04_00.ini", header.INIFile[0].FileName);
+            Assert.AreEqual(0, header.INIFile[0].Unit);
+            Assert.AreEqual(0, header.INIFile[0].SubUnit);
 
         }
 
@@ -149,18 +149,18 @@ namespace Core.Tests {
             Assert.AreEqual(new DateTime(2022, 03, 05, 08, 47, 17), header.UPSDate);
 
             // Oracolo
-            List<Tuple<string, int, int>> inifiles = new List<Tuple<string, int, int>>{
-                new Tuple<string, int, int>("MAPK_Unit_v2_04_00.ini", 0, 0),
-                new Tuple<string, int, int>("MAPK_Unit_v2_04_00.ini", 1, 0),
-                new Tuple<string, int, int>("MAPK_Module_RD_IV_v2_04_00.ini", 1, 1),
-                new Tuple<string, int, int>("MAPK_ByPass_v2_04_00.ini", 1, 14)
+            List<INIFile> inifiles = new List<INIFile>{
+                new INIFile("MAPK_Unit_v2_04_00.ini", 0, 0),
+                new INIFile("MAPK_Unit_v2_04_00.ini", 1, 0),
+                new INIFile("MAPK_Module_RD_IV_v2_04_00.ini", 1, 1),
+                new INIFile("MAPK_ByPass_v2_04_00.ini", 1, 14)
             };
 
             Assert.AreEqual(inifiles.Count, inifiles.Count);
             for(int i = 0; i < inifiles.Count; i++) {
-                Assert.AreEqual(inifiles[i].Item1, header.INIFile[i].Item1);
-                Assert.AreEqual(inifiles[i].Item2, header.INIFile[i].Item2);
-                Assert.AreEqual(inifiles[i].Item3, header.INIFile[i].Item3);
+                Assert.AreEqual(inifiles[i].FileName, header.INIFile[i].FileName);
+                Assert.AreEqual(inifiles[i].Unit, header.INIFile[i].Unit);
+                Assert.AreEqual(inifiles[i].SubUnit, header.INIFile[i].SubUnit);
             }
         }
 

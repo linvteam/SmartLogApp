@@ -33,8 +33,12 @@ namespace Core.Tests {
             Assert.AreEqual("FileDiLog.csv", log.FileName);
             Assert.AreEqual(new DateTime(2022, 03, 05, 08, 47, 18), log.Header.PCDate);
             Assert.AreEqual(new DateTime(2022, 03, 05, 08, 47, 17), log.Header.UPSDate);
-            Assert.AreEqual(new Tuple<string, int, int>("MAPK_Unit_v2_04_00.ini", 0, 0), log.Header.INIFile[0]);
-            Assert.AreEqual(new Tuple<string, int, int>("MAPK_Unit_v2_04_00.ini", 1, 0), log.Header.INIFile[1]);
+            Assert.AreEqual("MAPK_Unit_v2_04_00.ini", log.Header.INIFile[0].FileName);
+            Assert.AreEqual(0, log.Header.INIFile[0].Unit);
+            Assert.AreEqual(0, log.Header.INIFile[0].SubUnit);
+            Assert.AreEqual("MAPK_Unit_v2_04_00.ini", log.Header.INIFile[1].FileName);
+            Assert.AreEqual(1, log.Header.INIFile[1].Unit);
+            Assert.AreEqual(0, log.Header.INIFile[1].SubUnit);
             Assert.AreEqual(0, log.Events.Count);
         }
 
@@ -62,15 +66,17 @@ namespace Core.Tests {
             Assert.AreEqual(new DateTime(2022, 03, 05, 08, 47, 18), log.Header.PCDate);
             Assert.AreEqual(new DateTime(2022, 03, 05, 08, 47, 17), log.Header.UPSDate);
 
-            List<Tuple<string, int, int>> inifiles = new() {
-                new Tuple<string, int, int>("MAPK_Unit_v2_04_00.ini", 0, 0),
-                new Tuple<string, int, int>("MAPK_Unit_v2_04_00.ini", 1, 0),
-                new Tuple<string, int, int>("MAPK_Module_RD_IV_v2_04_00.ini", 1, 1),
-                new Tuple<string, int, int>("MAPK_ByPass_v2_04_00.ini", 1, 14)
+            List<INIFile> inifiles = new() {
+                new INIFile("MAPK_Unit_v2_04_00.ini", 0, 0),
+                new INIFile("MAPK_Unit_v2_04_00.ini", 1, 0),
+                new INIFile("MAPK_Module_RD_IV_v2_04_00.ini", 1, 1),
+                new INIFile("MAPK_ByPass_v2_04_00.ini", 1, 14)
             };
 
             for(int i = 0; i < inifiles.Count; i++) {
-                Assert.AreEqual(inifiles[i], log.Header.INIFile[i]);
+                Assert.AreEqual(inifiles[i].FileName, log.Header.INIFile[i].FileName);
+                Assert.AreEqual(inifiles[i].Unit, log.Header.INIFile[i].Unit);
+                Assert.AreEqual(inifiles[i].SubUnit, log.Header.INIFile[i].SubUnit);
             }
 
             List<LogRow> expectedValues = new() {

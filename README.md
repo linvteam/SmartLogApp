@@ -14,7 +14,7 @@ dotnet build
 
 Run tests:
 ```bash
-dotnet test --coverage:"XPlat Test Coverage"
+dotnet test /p:ExcludeByFile="**/Program.cs" --coverage:"XPlat Test Coverage"
 ```
 
 Get test report:
