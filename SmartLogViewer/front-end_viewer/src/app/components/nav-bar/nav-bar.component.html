@@ -1,1 +1,21 @@
-<p>nav-bar works!</p>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
+        <!--<ul class="navbar-nav mr-auto">
+            
+            <li *ngFor="let items of menuItems" class="nav-item">
+                <a class="nav-link" href="{{items.linkUrl}}">{{items.linkName}}<span class="sr-only">(current)</span></a>
+            </li>
+        </ul>-->
+        <ul class="navbar-nav mr-auto">
+            <li [routerLinkActive]="['active']"> <a class="nav-link" [routerLink]="['file-upload']">Carica un File</a></li>
+            <li [routerLinkActive]="['active']"> <a class="nav-link" [routerLink]="['table']">Visualizza tabella</a></li>
+            <li [routerLinkActive]="['active']"> <a class="nav-link" [routerLink]="['chart']">Visualizza grafico</a></li>
+        </ul>
+
+    </div>
+</nav>
+

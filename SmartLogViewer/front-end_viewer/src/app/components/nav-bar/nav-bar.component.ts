@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent {
+    public isCollapsed = true;
 
+    ///è da aggiungere il costruttore?
 }

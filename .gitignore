@@ -371,3 +371,7 @@ MigrationBackup/
 FodyWeavers.xsd
 /TestReport
 /.idea/.idea.SmartLog/.idea
+
+# Angular cache
+
+.angular
