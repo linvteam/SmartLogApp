@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import {ColDef} from 'ag-grid-community';
+import { Log } from 'src/app/log.classes';
+import { LogService } from 'src/app/services/log.service';
 
 @Component({
   selector: 'app-table',
@@ -7,6 +9,8 @@ import {ColDef} from 'ag-grid-community';
   styleUrls: ['./table.component.css']
 })
 export class TableComponent {
+
+  constructor(private logService: LogService) {}
   
   columnDefs = [
     { field: 'date' },
@@ -23,7 +27,9 @@ export class TableComponent {
     sortable: true, filter: true, resizable: true, suppressSizeToFit: true
   }
 
-  rowData = [{
+  rowData = this.logService.getLog().Events;
+
+/*  rowData = [{
     "date": "2022/10/20",
     "time": "06:31:24.882",
     "unit": 1,
@@ -29444,5 +29450,5 @@ export class TableComponent {
       "color": "0xFFE0FFFF"
     }
   ];
-  
-}
+  */
+} 

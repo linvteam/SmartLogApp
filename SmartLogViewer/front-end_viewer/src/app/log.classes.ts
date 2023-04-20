@@ -31,7 +31,7 @@ export class Header {
 
     constructor(header: Header){
 
-        this.pcDate=new Date(header.pcDate.toString());
+        this.pcDate=new Date(header.pcDate);
         this.upsDate=new Date(header.upsDate);
         header.iniFile.forEach( x => this.iniFile.push(new INIFile(x)));
     }
