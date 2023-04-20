@@ -1,61 +1,130 @@
-import { Time } from "@angular/common"
-
 export class INIFile {
-constructor(fileName: string, unit: number, subUnit: number){
-    this.fileName=fileName;
-    this.unit=unit;
-    this.subUnit=subUnit;
-}
 
-    fileName: string;
-    unit: number;
-    subUnit: number;
+    private fileName: string;
+    private unit: number;
+    private subUnit: number;
+
+    constructor(files: INIFile){
+        this.fileName=files.fileName;
+        this.unit=files.unit;
+        this.subUnit=files.subUnit;
+    }
+
+    public get FileName() {
+        return this.fileName;
+    }
+
+    public get Unit() {
+        return this.unit;
+    }
+
+    public get SubUnit() {
+        return this.subUnit;
+    }
 }
 
 export class Header {
-constructor(pcDateTime: Date, upsDate: Date, iniFile: INIFile[]){
-    this.pcDateTime=pcDateTime;
-    this.upsDate=upsDate;
-    this.iniFile=iniFile;
-}
 
-    pcDateTime: Date;
-    upsDate: Date; 
-    iniFile: INIFile[]
+    private pcDate: Date;
+    private upsDate: Date; 
+    private iniFile: INIFile[] = [];
+
+    constructor(header: Header){
+
+        this.pcDate=new Date(header.pcDate.toString());
+        this.upsDate=new Date(header.upsDate);
+        header.iniFile.forEach( x => this.iniFile.push(new INIFile(x)));
+    }
+
+    public get PCDate() {
+        return this.pcDate;
+    }
+
+    public get UPSDate() {
+        return this.upsDate;
+    }
+
+    public get INIFile() {
+        return this.iniFile;
+    }
   }
 
 export class LogRow {
 
-    constructor(date: Date, time: Date, unit: number, subUnit: number, code: string, description: string, value: boolean, color: string) {
-        this.date=date;
-        this.time=time;
-        this.unit=unit;
-        this.subUnit=subUnit;
-        this.code=code;
-        this.description=description;
-        this.value=value;
-        this.color=color;
+    private date: Date;
+    private time: Date;
+    private unit: number;
+    private subUnit: number;
+    private code: string;
+    private description: string;
+    private value: boolean;
+    private color: string;
+
+    constructor(row: LogRow) {
+        this.date=row.date;
+        this.time=row.time;
+        this.unit=row.unit;
+        this.subUnit=row.subUnit;
+        this.code=row.code;
+        this.description=row.description;
+        this.value=row.value;
+        this.color=row.color;
     }
 
-    date: Date;
-    time: Date;
-    unit: number;
-    subUnit: number;
-    code: string;
-    description: string;
-    value: boolean;
-    color: string
+    public get Date() {
+        return this.date;
+    }
+
+    public get Time() {
+        return this.time;
+    }
+
+    public get Unit() {
+        return this.unit;
+    }
+
+    public get SubUnit() {
+        return this.subUnit;
+    }
+
+    public get Code() {
+        return this.code;
+    }
+
+    public get Description() {
+        return this.description;
+    }
+
+    public get Value() {
+        return this.value;
+    }
+
+    public get Color() {
+        return this.color;
+    }
 }
 
 export class Log {
 
-    constructor(header: Header, events: LogRow[], fileName: string) {
-        this.header=header;
-        this.events=events;
-        this.fileName=fileName;
+    private header: Header;
+    private events: LogRow[] = [];
+    private fileName: string;
+
+    constructor(log : Log) {
+        this.header=new Header(log.header);
+        this.fileName=log.fileName;
+        log.events.forEach( x => this.events.push(new LogRow(x)));
     }
 
-    header: Header;
-    events: LogRow[];
-    fileName: string
+    public get Header() {
+        return this.header;
+    }
+
+    public get Events() {
+        return this.events;
+    }
+
+    public get FileName() {
+        return this.fileName;
+    }
 }
