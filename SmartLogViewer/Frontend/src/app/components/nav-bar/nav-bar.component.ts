@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 })
 export class NavBarComponent {
     public isCollapsed = true;
-
-    ///è da aggiungere il costruttore?
+    public Collapse(){
+        this.isCollapsed = !this.isCollapsed;
+    }
 }
