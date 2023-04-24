@@ -45,7 +45,6 @@ export class FileUploadComponent {
               let log = this.logService.getLog();
               
               this.message = "File caricato: " + log.FileName;
-              console.log(log);
             }
           },
           error: (err: any) => {
