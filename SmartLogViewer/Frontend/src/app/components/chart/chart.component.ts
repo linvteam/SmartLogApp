@@ -63,36 +63,49 @@ export class ChartComponent {
         }));
 
         this.d = d3.map(logService.getLog().Events, (_, i) => !(this.x[i]) && !(this.y[i]));
-
+        
+        // this.x.reverse();
+        // this.y.reverse();
+        // this.z.reverse();
+        // this.d.reverse();
+        
         this.xDomain = d3.extent(this.x);
+        console.log(this.xDomain);
         this.zDomain = new d3.InternSet(this.z);
 
         
     }
     
     private ngOnInit(){
-        console.log(this.x);
-        console.log(this.y);
-        console.log(this.z);
+        // console.log(this.x);
+        // console.log(this.y);
+        // console.log(this.z);
         
         const I = d3.range(this.x.length).filter(i => this.zDomain.has(this.z[i]));
         
         const height = this.zDomain.size * this.Size + this.MarginTop + this.MarginBottom;
 
-        const xScale = d3.scaleUtc(this.xDomain as Array<Date>, this.xRange);
+        // const xScale = d3.scaleUtc(this.xDomain as Array<Date>, this.xRange);
+        const xScale = d3.scaleTime(this.xDomain as Array<Date>, this.xRange);
         const yScale = d3.scaleLinear(this.yDomain, this.yRange);
         const xAxis = d3.axisTop(xScale).ticks(this.width / 80).tickSizeOuter(0);
 
+
+        let newx=[];
+        for (let i =0; i<this.x.length; i++) newx.push(xScale(this.x[i]))
+        console.log(d3.extent(newx))
+        
+        
         const uid = `O-${Math.random().toString(16).slice(2)}`;
 
-        const area = d3.area()
-            .defined((_,i) => this.d[i])
+        let area = d3.area()
+            // .defined((_,i) => this.d[i])
             .curve(d3.curveStepAfter)
-            .x((_, i) => xScale(this.x[i]))
+            // .x((_, i) => xScale(this.x[i]))
             .y0(yScale(0))
             .y1((_, i) => yScale(this.y[i]));
 
-        const svg = d3.select("figure")
+        const svg = d3.select("figure#horizon-chart")
             .insert("svg")
             .attr("width", this.width)
             .attr("height", height)
@@ -121,9 +134,43 @@ export class ChartComponent {
         
         defs.append("path")
             .attr("id", (_, i) => `${uid}-path-${i}`)
-            .attr("d", (gino) => {
-                // console.log(gino);
-                return "";
+            .attr("d", ([d, I], i) => {
+                let dati: [number, number][] =[];
+                // console.log("path:" + d)
+                
+                
+                
+                
+                
+                for(let i=0; i<I.length; i++){
+                    // console.log(this.x[I[i]]);
+                    // console.log(this.y[I[i]]);
+                    //
+                    dati.push([xScale(this.x[I[i]]), this.y[I[i]]]);
+                    // dati.push([i, this.y[i]]);
+                    
+                    // if(i==0){
+                    //     dati=[
+                    //         [0,0],
+                    //         [100,1],
+                    //         [200,0],
+                    //         [500,1],
+                    //         [600,0]
+                    //     ]
+                    // }else{
+                    //     dati=[
+                    //         [0,0],
+                    //         [100,1],
+                    //         [200,0],
+                    //         [500,1],
+                    //         [600,0]
+                    //     ]
+                    // }
+                }
+                console.log(dati)
+                
+                return area(dati);
+                return "null";
             });
 
         const Bandscolors = d3.schemeGreys[Math.max(3, 1)]                  //questo è inutile perchè bends è 1
@@ -131,7 +178,8 @@ export class ChartComponent {
             .selectAll("use")                                               //
             .data((d, i) => new Array(1).fill(i))                           //
             .join("use")                                                    //
-            .attr("fill", (d, i) => Bandscolors[i + Math.max(0, 3 - 1)])    //
+            .attr("fill", "purple")    //
+            .attr("stroke", "green")    //
             .attr("transform", (_, i) => `translate(0,${i * this.Size})`)   //
             .attr("xlink:href", (i) => `#${uid}-path-${i}`);                //
 
@@ -151,6 +199,38 @@ export class ChartComponent {
                 .remove())
             .call(g => g.select(".domain").remove());
 
+
+        // var data: [number,number][] = [
+        //     [ 0, 10 ],
+        //     [ 10, 30 ],
+        //     [ 20, 150 ],
+        //     [ 50, 10 ],
+        //     [ 60, 150 ],
+        //     [ 70, 50 ],
+        //     [ 80, 190 ]];
+
+        // data.sort((a, b) => a[1] - b[1]);
+
+        // var xScale = d3.scaleLinear()
+        //     .domain([0, 8])
+        //     .range([25, 200]);
+        // var yScale = d3.scaleLinear()
+        //     .domain([0, 20])
+        //     .range([200, 25]);
+        //
+        // // Using area() function to
+        // // generate area
+        // var Gen = d3.area()
+        //     .curve(d3.curveStepAfter)
+        //     .x((p) => p[0])
+        //     .y0((p) => 0)
+        //     .y1((p) => p[1]);
+        //
+        // d3.select("svg#horizon-chart")
+        //     .append("path")
+        //     .attr("d", Gen(data))
+        //     .attr("fill", "green")
+        //     .attr("stroke", "black");
     }
 }
 
