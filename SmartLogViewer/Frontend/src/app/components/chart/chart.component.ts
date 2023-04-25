@@ -46,24 +46,37 @@ export class ChartComponent {
     private yDomain = [0,1]; // [ymin, ymax]
     private yRange = [this.Size, this.Padding]; // [bottom, top]
     private zDomain : d3.InternSet<string|undefined>; // array of z-values
-
+    
+    private x;
+    private y;
+    private z;
+    private d;
+    private colors;
     constructor(private logService: LogService) {
         
 
-        const x = d3.map(logService.getLog().Events, e => new Date([e.Date,e.Time].join(' ')));
-        const y = d3.map(logService.getLog().Events, e => e.Value ? 1 : 0);
-        const z = d3.map(logService.getLog().Events, e => e.Code);
-        const colors = new Set(logService.getLog().Events.map( (e : LogRow) => {
+        this.x = d3.map(logService.getLog().Events, e => new Date([e.Date,e.Time].join(' ')));
+        this.y = d3.map(logService.getLog().Events, e => e.Value ? 1 : 0);
+        this.z = d3.map(logService.getLog().Events, e => e.Code);
+        this.colors = new Set(logService.getLog().Events.map( (e : LogRow) => {
             return {Code:e.Code,Color: e.Color}
         }));
 
-        const d = d3.map(logService.getLog().Events, (_, i) => !(x[i]) && !(y[i]));
+        this.d = d3.map(logService.getLog().Events, (_, i) => !(this.x[i]) && !(this.y[i]));
 
-        this.xDomain = d3.extent(x);
-        this.zDomain = new d3.InternSet(z);
+        this.xDomain = d3.extent(this.x);
+        this.zDomain = new d3.InternSet(this.z);
 
-        const I = d3.range(x.length).filter(i => this.zDomain.has(z[i]));
-
+        
+    }
+    
+    private ngOnInit(){
+        console.log(this.x);
+        console.log(this.y);
+        console.log(this.z);
+        
+        const I = d3.range(this.x.length).filter(i => this.zDomain.has(this.z[i]));
+        
         const height = this.zDomain.size * this.Size + this.MarginTop + this.MarginBottom;
 
         const xScale = d3.scaleUtc(this.xDomain as Array<Date>, this.xRange);
@@ -73,13 +86,14 @@ export class ChartComponent {
         const uid = `O-${Math.random().toString(16).slice(2)}`;
 
         const area = d3.area()
-            .defined((_,i) => d[i])
+            .defined((_,i) => this.d[i])
             .curve(d3.curveStepAfter)
-            .x((_, i) => xScale(x[i]))
+            .x((_, i) => xScale(this.x[i]))
             .y0(yScale(0))
-            .y1((_, i) => yScale(y[i]));
+            .y1((_, i) => yScale(this.y[i]));
 
-        const svg = d3.create("svg")
+        const svg = d3.select("figure")
+            .insert("svg")
             .attr("width", this.width)
             .attr("height", height)
             .attr("viewBox", [0, 0, this.width, height])
@@ -88,7 +102,7 @@ export class ChartComponent {
             .attr("font-size", 10);
 
         const g = svg.selectAll("g")
-            .data(d3.group(I, i => z[i]))
+            .data(d3.group(I, i => this.z[i]))
             .join("g")
             .attr("transform", (_, i) => `translate(0,${i * this.Size + this.MarginTop})`);
 
@@ -101,9 +115,16 @@ export class ChartComponent {
             .attr("width", this.width)
             .attr("height", this.Size - this.Padding);
 
+        // defs.append("path")
+        //     .attr("id", (_, i) => `${uid}-path-${i}`)
+        //     .attr("d", ([,I]) => area(I));
+        
         defs.append("path")
             .attr("id", (_, i) => `${uid}-path-${i}`)
-            .attr("d", ([,I]) => area(I));
+            .attr("d", (gino) => {
+                // console.log(gino);
+                return "";
+            });
 
         const Bandscolors = d3.schemeGreys[Math.max(3, 1)]                  //questo è inutile perchè bends è 1
         g.attr("clip-path", (_, i) => `#${uid}-clip-${i}`)                  //
@@ -129,7 +150,6 @@ export class ChartComponent {
                 .filter(d => xScale(d as Date) < 10 || xScale(d as Date) > this.width - 10)
                 .remove())
             .call(g => g.select(".domain").remove());
-
 
     }
 }
