@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import { HttpClient, HttpRequest, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {BaseURL} from "../connection-info";
@@ -8,7 +8,7 @@ import {BaseURL} from "../connection-info";
 })
 export class FileUploadService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, @Inject(BaseURL) private ConnectionURL: string) { }
 
   upload(file: File): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
@@ -18,7 +18,7 @@ export class FileUploadService {
     const headers = new HttpHeaders({
       accept: '*/*'});
 
-    const req = new HttpRequest('POST', `${BaseURL}/api/parse`, formData, {
+    const req = new HttpRequest('POST', `${this.ConnectionURL}/api/parse`, formData, {
       headers: headers,
       reportProgress: true,
       responseType: 'json'

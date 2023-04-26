@@ -12,6 +12,7 @@ import { ChartComponent } from './components/chart/chart.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { HttpClientModule } from '@angular/common/http';
 import {AgGridModule} from "ag-grid-angular";
+import {BaseURL} from "./connection-info";
 
 @NgModule({
   declarations: [
@@ -30,7 +31,9 @@ import {AgGridModule} from "ag-grid-angular";
     NgbModule,
     AgGridModule
   ],
-  providers: [],
+  providers: [
+    { provide: BaseURL, useValue: 'https://localhost:7210' }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
