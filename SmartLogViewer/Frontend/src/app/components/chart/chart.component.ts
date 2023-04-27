@@ -14,28 +14,10 @@ import { LogRow } from '../../log.classes';
 
 export class ChartComponent {
 
-    /*private svg: any;
-    private margin = 50;
-    private width = 750 - (this.margin * 2);
-    private height = 400 - (this.margin * 2);
-    private createSvg(): void {
-        this.svg = d3.select("figure#chart")
-            .append("svg")
-            .attr("width", this.width + (this.margin * 2))
-            .attr("height", this.height + (this.margin * 2))
-            .append("g")
-            .attr("transform", "translate(" + this.margin + "," + this.margin + ")");
-    }
-
-    ngOnInit(): void {
-        this.createSvg();
-        ;
-    }*/
-
     private readonly MarginTop = 20;
-    private readonly MarginRight = 0;
+    private readonly MarginRight = 50;
     private readonly MarginBottom = 0;
-    private readonly MarginLeft = 0;
+    private readonly MarginLeft = 50;
 
     private readonly Size = 25;
     private readonly Padding = 1;
@@ -51,63 +33,77 @@ export class ChartComponent {
     private y;
     private z;
     // private d;
+    //private colors: Map<string, string>;
     private colors;
+    private roba;
     constructor(private logService: LogService) {
         
 
         this.x = d3.map(logService.getLog().Events, e => {
-            console.log("Date: " + e.Date + "    Time:" + e.Time);
-            console.log(new Date([e.Date, e.Time].join('T').replaceAll("/","-") + "Z"));
+            //console.log("Date: " + e.Date + "    Time:" + e.Time);
+            //console.log(new Date([e.Date, e.Time].join('T').replaceAll("/","-") + "Z"));
             return new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z");
-            //console.log("X: " + new Date(e.Date.getTime() + e.Time.getTime()));
-            /*try {
-                return new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z");
-            } catch (error) {
-                console.error(error);
-                return new Date();
-            }*/
         });
-        //this.x = d3.map(logService.getLog().Events, e => new Date([e.Date, e.Time].join('T')));
-
+        
         this.y = d3.map(logService.getLog().Events, e => e.Value ? 1 : 0);
         this.z = d3.map(logService.getLog().Events, e => e.Code);
-        this.colors = new Set(logService.getLog().Events.map( (e : LogRow) => {
+        //this.colors = new Map<string, string>();
+        this.colors = d3.map(logService.getLog().Events, ((e: LogRow) => { return { Code: e.Code, Color: e.Color } }));
+        
+
+        for (let i = 0; i < this.colors.length; i++) {
+            console.log("Code: " + this.colors[i].Code + "   Color:" + this.colors[i].Color);
+        }
+        this.roba = [];
+        for (let i = 0; i < this.colors.length; i++) {
+            let doppio = false;
+            for (let j = 0; j < this.roba.length; j++) {
+                if (this.roba[j].Code == this.colors[i].Code) {
+                    doppio= true
+                }
+            }
+            if (!doppio) {
+                this.roba.push(this.colors[i]);
+            }
+        }
+
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        
+        for (let i = 0; i < this.roba.length; i++) {
+            console.log("Code: " + this.roba[i].Code + "   Color:" + this.roba[i].Color);
+        }
+
+
+        /*this.colors = new Set(logService.getLog().Events.map( (e : LogRow) => {
             return {Code:e.Code,Color: e.Color}
-        }));
+        }));*/
 
         // this.d = d3.map(logService.getLog().Events, (_, i) => !(this.x[i]) && !(this.y[i]));
         
         this.x.reverse();
         this.y.reverse();
         this.z.reverse();
+        this.colors.reverse();
         // this.d.reverse();
         
-        this.xDomain = d3.extent(this.x);
-        console.log(this.xDomain);
+        this.xDomain = d3.extent(this.x);   
+        //console.log(this.xDomain);
         this.zDomain = new d3.InternSet(this.z);
 
         
     }
     
     private ngOnInit(){
-        // console.log(this.x);
-        // console.log(this.y);
-        // console.log(this.z);
         
         const I = d3.range(this.x.length).filter(i => this.zDomain.has(this.z[i]));
         
         const height = this.zDomain.size * this.Size + this.MarginTop + this.MarginBottom;
 
-        // const xScale = d3.scaleUtc(this.xDomain as Array<Date>, this.xRange);
         const xScale = d3.scaleTime(this.xDomain as Array<Date>, this.xRange);
         const yScale = d3.scaleOrdinal(this.yDomain, this.yRange);
         const xAxis = d3.axisTop(xScale).ticks(this.width / 80).tickSizeOuter(0);
 
 
-        let newx=[];
-        for (let i =0; i<this.x.length; i++) newx.push(xScale(this.x[i]))
-        console.log(d3.extent(newx))
-        
         
         const uid = `O-${Math.random().toString(16).slice(2)}`;
 
@@ -141,47 +137,38 @@ export class ChartComponent {
             .attr("width", this.width)
             .attr("height", this.Size - this.Padding);
 
-        // defs.append("path")
-        //     .attr("id", (_, i) => `${uid}-path-${i}`)
-        //     .attr("d", ([,I]) => area(I));
         
         defs.append("path")
             .attr("id", (_, i) => `${uid}-path-${i}`)
             .attr("d", ([d, I], i) => {
                 let dati: [number, number][] =[];
-                // console.log("path:" + d)
-                
-                
-                
-                
-                console.log("I:" + I);
+                //console.log("I:" + I);
                 for(let i=0; i<I.length; i++){
-                     console.log(this.x[I[i]]);
-                     console.log(this.y[I[i]]);
-                    //
+                     //console.log(this.x[I[i]]);
+                     //console.log(this.y[I[i]]);
                     dati.push([xScale(this.x[I[i]]), this.y[I[i]]]);
-                    // dati.push([i, this.y[i]]);
                 }
                 dati.unshift([xScale(this.xDomain[0] as Date), this.y[I[0]]  == 1 ? 0 : 1]);
                 dati.push([xScale(this.xDomain[1] as Date), this.y[I[I.length-1]]]);
-                console.log(dati)
-                
+                //console.log(dati)
                 return area(dati);
-                return "null";
             });
 
-        const Bandscolors = d3.schemeGreys[Math.max(3, 1)]                  //questo è inutile perchè bends è 1
-        g.attr("clip-path", (_, i) => `#${uid}-clip-${i}`)                  //
-            .selectAll("use")                                               //
-            .data((d, i) => new Array(1).fill(i))                           //
-            .join("use")                                                    //
-            .attr("fill", "purple")    //
-            .attr("stroke", "green")    //
-            .attr("transform", (_, i) => `translate(0,${i * this.Size})`)   //
-            .attr("xlink:href", (i) => `#${uid}-path-${i}`);                //
+        const Bandscolors = d3.schemeGreys[Math.max(3, 1)]             
+        g.attr("clip-path", (_, i) => `#${uid}-clip-${i}`)
+            .selectAll("use")
+            .data((d, i) => new Array(1).fill(i))
+            .join("use")
+            .attr("fill", (d, i) => {
+                console.log("i", i);
+                return this.roba[d].Color.replace("0x", "#");
+            })
+            .attr("stroke", "black")                                        
+            .attr("transform", (_, i) => `translate(0,${i * this.Size})`)   
+            .attr("xlink:href", (i) => `#${uid}-path-${i}`);                
 
         g.append("text")
-            .attr("x", this.MarginLeft)
+            .attr("x", this.MarginLeft - 50)
             .attr("y", (this.Size + this.Padding) / 2)
             .attr("dy", "0.35em")
             .text(([z]) => z);
@@ -195,39 +182,6 @@ export class ChartComponent {
                 .filter(d => xScale(d as Date) < 10 || xScale(d as Date) > this.width - 10)
                 .remove())
             .call(g => g.select(".domain").remove());
-
-
-        // var data: [number,number][] = [
-        //     [ 0, 10 ],
-        //     [ 10, 30 ],
-        //     [ 20, 150 ],
-        //     [ 50, 10 ],
-        //     [ 60, 150 ],
-        //     [ 70, 50 ],
-        //     [ 80, 190 ]];
-
-        // data.sort((a, b) => a[1] - b[1]);
-
-        // var xScale = d3.scaleLinear()
-        //     .domain([0, 8])
-        //     .range([25, 200]);
-        // var yScale = d3.scaleLinear()
-        //     .domain([0, 20])
-        //     .range([200, 25]);
-        //
-        // // Using area() function to
-        // // generate area
-        // var Gen = d3.area()
-        //     .curve(d3.curveStepAfter)
-        //     .x((p) => p[0])
-        //     .y0((p) => 0)
-        //     .y1((p) => p[1]);
-        //
-        // d3.select("svg#horizon-chart")
-        //     .append("path")
-        //     .attr("d", Gen(data))
-        //     .attr("fill", "green")
-        //     .attr("stroke", "black");
     }
 }
 
