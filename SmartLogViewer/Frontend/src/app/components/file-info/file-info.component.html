@@ -1,10 +1,19 @@
-<div>
-    <ul>
-        <li>PC DateTime: 20.10.2022 08:08:17</li>
-        <li>UPS DateTime: 20.10.2022 06:37:18</li>
-        <li>INI File name :  MAPK_Unit_v1_7_8.ini; Unit=0 - SubUnit=0</li>
-        <li>INI File name :  MAPK_Unit_v1_7_8.ini; Unit=1 - SubUnit=0</li>
-        <li>INI File name :  MAPK_Module_RD_IV_v1_7_8.ini; Unit=1 - SubUnit=1</li>
-        <li>INI File name :  MAPK_ByPass_v1_7_8.ini; Unit=1 - SubUnit=14</li>
-    </ul>
+
+<div style=" width: 500px; height: 250px; padding: 2em">
+    <div *ngIf="pcDate">
+        {{pcDate}}
+    </div>
+    <div *ngIf="upsDate">
+        {{upsDate}}
+    </div>
+    <ag-grid-angular
+            style="width: 100%; height: 200px;"
+            class="ag-theme-alpine"
+            [rowData]="iniFiles"
+            [columnDefs]="columnDefs"
+            [defaultColDef]="defaultColDef"
+            [rowSelection]="'multiple'"
+            [animateRows]="true"
+    >
+    </ag-grid-angular>
 </div>
