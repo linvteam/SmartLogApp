@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LogService } from '../../services/log.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -6,6 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent {
+
+    constructor(public logService: LogService) { }
+
     public isCollapsed = true;
     public Collapse(){
         this.isCollapsed = !this.isCollapsed;

@@ -6,8 +6,8 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
         <ul class="navbar-nav mr-auto">
             <li [routerLinkActive]="['active']"> <a class="nav-link" [routerLink]="['file-upload']">Carica un File</a></li>
-            <li [routerLinkActive]="['active']"> <a class="nav-link" [routerLink]="['table']">Visualizza tabella</a></li>
-            <li [routerLinkActive]="['active']"> <a class="nav-link" [routerLink]="['chart']">Visualizza grafico</a></li>
+            <li *ngIf="logService.validLog()" [routerLinkActive]="['active']"> <a class="nav-link" [routerLink]="['table']">Visualizza tabella</a></li>
+            <li *ngIf="logService.validLog()" [routerLinkActive]="['active']"> <a class="nav-link" [routerLink]="['chart']">Visualizza grafico</a></li>
         </ul>
 
     </div>
