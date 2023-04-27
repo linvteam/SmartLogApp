@@ -40,7 +40,7 @@ export class ChartComponent {
     private readonly Size = 25;
     private readonly Padding = 1;
 
-    private width = 640;
+    private width = 1280;
     private xDomain : Array<Date|undefined>;// [xmin, xmax]
     private xRange = [this.MarginLeft, this.width - this.MarginRight]; // [left, right]
     private yDomain = [0,1]; // [ymin, ymax]
@@ -50,7 +50,7 @@ export class ChartComponent {
     private x;
     private y;
     private z;
-    private d;
+    // private d;
     private colors;
     constructor(private logService: LogService) {
         
@@ -75,11 +75,11 @@ export class ChartComponent {
             return {Code:e.Code,Color: e.Color}
         }));
 
-        this.d = d3.map(logService.getLog().Events, (_, i) => !(this.x[i]) && !(this.y[i]));
+        // this.d = d3.map(logService.getLog().Events, (_, i) => !(this.x[i]) && !(this.y[i]));
         
-        // this.x.reverse();
-        // this.y.reverse();
-        // this.z.reverse();
+        this.x.reverse();
+        this.y.reverse();
+        this.z.reverse();
         // this.d.reverse();
         
         this.xDomain = d3.extent(this.x);
@@ -100,7 +100,7 @@ export class ChartComponent {
 
         // const xScale = d3.scaleUtc(this.xDomain as Array<Date>, this.xRange);
         const xScale = d3.scaleTime(this.xDomain as Array<Date>, this.xRange);
-        const yScale = d3.scaleLinear(this.yDomain, this.yRange);
+        const yScale = d3.scaleOrdinal(this.yDomain, this.yRange);
         const xAxis = d3.axisTop(xScale).ticks(this.width / 80).tickSizeOuter(0);
 
 
@@ -114,9 +114,9 @@ export class ChartComponent {
         let area = d3.area()
             // .defined((_,i) => this.d[i])
             .curve(d3.curveStepAfter)
-            // .x((_, i) => xScale(this.x[i]))
+            // .x((_, i) => xScale(this.x[i])) Non so perché sia sbagliato ma rompe tutto
             .y0(yScale(0))
-            .y1((_, i) => yScale(this.y[i]));
+            .y1((realData, i) => yScale(realData[1]));
 
         const svg = d3.select("figure#horizon-chart")
             .insert("svg")
@@ -161,25 +161,9 @@ export class ChartComponent {
                     //
                     dati.push([xScale(this.x[I[i]]), this.y[I[i]]]);
                     // dati.push([i, this.y[i]]);
-                    
-                    // if(i==0){
-                    //     dati=[
-                    //         [0,0],
-                    //         [100,1],
-                    //         [200,0],
-                    //         [500,1],
-                    //         [600,0]
-                    //     ]
-                    // }else{
-                    //     dati=[
-                    //         [0,0],
-                    //         [100,1],
-                    //         [200,0],
-                    //         [500,1],
-                    //         [600,0]
-                    //     ]
-                    // }
                 }
+                dati.unshift([xScale(this.xDomain[0] as Date), this.y[I[0]]  == 1 ? 0 : 1]);
+                dati.push([xScale(this.xDomain[1] as Date), this.y[I[I.length-1]]]);
                 console.log(dati)
                 
                 return area(dati);
