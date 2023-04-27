@@ -7,4 +7,13 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
 
+  isVisible : boolean;
+  
+  constructor() {
+    this.isVisible = true;
+  }
+  
+  toggleInfoHeader() : void {
+    this.isVisible = !this.isVisible;
+  }
 }
