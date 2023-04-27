@@ -55,7 +55,20 @@ export class ChartComponent {
     constructor(private logService: LogService) {
         
 
-        this.x = d3.map(logService.getLog().Events, e => new Date([e.Date,e.Time].join(' ')));
+        this.x = d3.map(logService.getLog().Events, e => {
+            console.log("Date: " + e.Date + "    Time:" + e.Time);
+
+            //console.log("X: " + new Date(e.Date.getTime() + e.Time.getTime()));
+            try {
+                return new Date((e.Date as Date).getTime() + e.Time.getTime());
+            } catch (error) {
+                console.error(error);
+                return new Date();
+            }
+            
+        });
+        //this.x = d3.map(logService.getLog().Events, e => new Date([e.Date, e.Time].join(' ')));
+
         this.y = d3.map(logService.getLog().Events, e => e.Value ? 1 : 0);
         this.z = d3.map(logService.getLog().Events, e => e.Code);
         this.colors = new Set(logService.getLog().Events.map( (e : LogRow) => {
@@ -141,10 +154,10 @@ export class ChartComponent {
                 
                 
                 
-                
+                console.log("I:" + I);
                 for(let i=0; i<I.length; i++){
-                    // console.log(this.x[I[i]]);
-                    // console.log(this.y[I[i]]);
+                     console.log(this.x[I[i]]);
+                     console.log(this.y[I[i]]);
                     //
                     dati.push([xScale(this.x[I[i]]), this.y[I[i]]]);
                     // dati.push([i, this.y[i]]);
