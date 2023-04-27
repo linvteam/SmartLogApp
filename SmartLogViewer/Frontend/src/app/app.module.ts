@@ -13,6 +13,7 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { HttpClientModule } from '@angular/common/http';
 import {AgGridModule} from "ag-grid-angular";
 import {BaseURL} from "./connection-info";
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {BaseURL} from "./connection-info";
     SearchComponent,
     TableComponent,
     ChartComponent,
-    FileUploadComponent
+    FileUploadComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
