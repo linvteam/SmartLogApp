@@ -16,3 +16,6 @@
 #file-info-and-search div {
     background-color: #f8f9fa;
 }
+app-root div{
+    max-width: 1500px !important;
+}

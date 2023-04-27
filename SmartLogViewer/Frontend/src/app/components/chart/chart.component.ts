@@ -15,14 +15,14 @@ import { LogRow } from '../../log.classes';
 export class ChartComponent {
 
     private readonly MarginTop = 20;
-    private readonly MarginRight = 50;
+    private readonly MarginRight = 0;
     private readonly MarginBottom = 0;
-    private readonly MarginLeft = 50;
+    private readonly MarginLeft = 100;
 
-    private readonly Size = 25;
-    private readonly Padding = 1;
+    private readonly Size = 35;
+    private readonly Padding = 5;
 
-    private width = 1280;
+    private width = 1500;
     private xDomain : Array<Date|undefined>;// [xmin, xmax]
     private xRange = [this.MarginLeft, this.width - this.MarginRight]; // [left, right]
     private yDomain = [0,1]; // [ymin, ymax]
@@ -32,45 +32,36 @@ export class ChartComponent {
     private x;
     private y;
     private z;
-    // private d;
     private colors;
-    private CodeColors;
+    private codeColors;
     constructor(private logService: LogService) {
         
-
-        this.x = d3.map(logService.getLog().Events, e => {
-            //console.log("Date: " + e.Date + "    Time:" + e.Time);
-            //console.log(new Date([e.Date, e.Time].join('T').replaceAll("/","-") + "Z"));
-            return new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z");
-        });
-        
+        // La data va messa nel formato YYYY-MM-DDThh:mm:ss.mmmZ
+        this.x = d3.map(logService.getLog().Events, e => new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z"));
         this.y = d3.map(logService.getLog().Events, e => e.Value ? 1 : 0);
         this.z = d3.map(logService.getLog().Events, e => e.Code);
         this.colors = d3.map(logService.getLog().Events, ((e: LogRow) => { return { Code: e.Code, Color: e.Color } }));
         
         this.colors.reverse();
-        this.CodeColors = [];
-        for (let i = 0; i < this.colors.length; i++) {
+        this.codeColors = [];
+        for (let i = 0; i < this.colors.length; i++) {  //crea l'array codeColors con tuple di code e Colors non ripetuti
             let doppio = false;
-            for (let j = 0; j < this.CodeColors.length; j++) {
-                if (this.CodeColors[j].Code == this.colors[i].Code) {
+            for (let j = 0; j < this.codeColors.length; j++) {
+                if (this.codeColors[j].Code == this.colors[i].Code) {
                     doppio= true
                 }
             }
             if (!doppio) {
-                this.CodeColors.push(this.colors[i]);
+                this.codeColors.push(this.colors[i]);
             }
         }
 
-        // this.d = d3.map(logService.getLog().Events, (_, i) => !(this.x[i]) && !(this.y[i]));
-        
+        //vengono invertite le variabili in maniera da avere i valori in ordine crescente
         this.x.reverse();
         this.y.reverse();
         this.z.reverse();
-        // this.d.reverse();
         
-        this.xDomain = d3.extent(this.x);   
-        //console.log(this.xDomain);
+        this.xDomain = d3.extent(this.x);  
         this.zDomain = new d3.InternSet(this.z);
 
         
@@ -91,7 +82,6 @@ export class ChartComponent {
         const uid = `O-${Math.random().toString(16).slice(2)}`;
 
         let area = d3.area()
-            // .defined((_,i) => this.d[i])
             .curve(d3.curveStepAfter)
             // .x((_, i) => xScale(this.x[i])) Non so perché sia sbagliato ma rompe tutto
             .y0(yScale(0))
@@ -125,15 +115,11 @@ export class ChartComponent {
             .attr("id", (_, i) => `${uid}-path-${i}`)
             .attr("d", ([d, I], i) => {
                 let dati: [number, number][] =[];
-                //console.log("I:" + I);
                 for(let i=0; i<I.length; i++){
-                     //console.log(this.x[I[i]]);
-                     //console.log(this.y[I[i]]);
                     dati.push([xScale(this.x[I[i]]), this.y[I[i]]]);
                 }
-                dati.unshift([xScale(this.xDomain[0] as Date), this.y[I[0]]  == 1 ? 0 : 1]);
-                dati.push([xScale(this.xDomain[1] as Date), this.y[I[I.length-1]]]);
-                //console.log(dati)
+                dati.unshift([xScale(this.xDomain[0] as Date), this.y[I[0]]  == 1 ? 0 : 1]);    //aggiunge a sinistra dei dati un punto con il valore opposto rispetto al primo elemento
+                dati.push([xScale(this.xDomain[1] as Date), this.y[I[I.length - 1]]]);    //aggiunge a destra dei dati un punto con lo stesso valore dell'ultimo dato
                 return area(dati);
             });
 
@@ -142,13 +128,14 @@ export class ChartComponent {
             .selectAll("use")
             .data((d, i) => new Array(1).fill(i))
             .join("use")
-            .attr("fill", (d, i) => this.CodeColors[d].Color.replace("0x", "#"))
+            .attr("fill", (d, i) => this.codeColors[d].Color.replace("0xFF", "#"))    //imposta il colore del campo Code
             .attr("stroke", "black")                                        
             .attr("transform", (_, i) => `translate(0,${i * this.Size})`)   
             .attr("xlink:href", (i) => `#${uid}-path-${i}`);                
 
         g.append("text")
-            .attr("x", this.MarginLeft - 50)
+            .attr("font-size", "1.5em")
+            .attr("x", this.MarginLeft - 100)
             .attr("y", (this.Size + this.Padding) / 2)
             .attr("dy", "0.35em")
             .text(([z]) => z);
