@@ -9,9 +9,6 @@ import { LogRow } from '../../log.classes';
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
 })
-
-
-
 export class ChartComponent {
 
     private readonly MarginTop = 20;
@@ -44,15 +41,9 @@ export class ChartComponent {
         
         this.colors.reverse();
         this.codeColors = [];
-        for (let i = 0; i < this.colors.length; i++) {  //crea l'array codeColors con tuple di code e Colors non ripetuti
-            let doppio = false;
-            for (let j = 0; j < this.codeColors.length; j++) {
-                if (this.codeColors[j].Code == this.colors[i].Code) {
-                    doppio= true
-                }
-            }
-            if (!doppio) {
-                this.codeColors.push(this.colors[i]);
+        for (let i of this.colors) {  //crea l'array codeColors con tuple di code e Colors non ripetuti
+            if (this.codeColors.indexOf(i) == -1) {
+                this.codeColors.push(i);
             }
         }
 
@@ -83,7 +74,6 @@ export class ChartComponent {
 
         let area = d3.area()
             .curve(d3.curveStepAfter)
-            // .x((_, i) => xScale(this.x[i])) Non so perché sia sbagliato ma rompe tutto
             .y0(yScale(0))
             .y1((realData, i) => yScale(realData[1]));
 
@@ -115,15 +105,14 @@ export class ChartComponent {
             .attr("id", (_, i) => `${uid}-path-${i}`)
             .attr("d", ([d, I], i) => {
                 let dati: [number, number][] =[];
-                for(let i=0; i<I.length; i++){
-                    dati.push([xScale(this.x[I[i]]), this.y[I[i]]]);
+                for(let i of I){
+                    dati.push([xScale(this.x[i]), this.y[i]]);
                 }
                 dati.unshift([xScale(this.xDomain[0] as Date), this.y[I[0]]  == 1 ? 0 : 1]);    //aggiunge a sinistra dei dati un punto con il valore opposto rispetto al primo elemento
                 dati.push([xScale(this.xDomain[1] as Date), this.y[I[I.length - 1]]]);    //aggiunge a destra dei dati un punto con lo stesso valore dell'ultimo dato
                 return area(dati);
             });
 
-        const Bandscolors = d3.schemeGreys[Math.max(3, 1)]             
         g.attr("clip-path", (_, i) => `#${uid}-clip-${i}`)
             .selectAll("use")
             .data((d, i) => new Array(1).fill(i))
@@ -140,7 +129,7 @@ export class ChartComponent {
             .attr("dy", "0.35em")
             .text(([z]) => z);
 
-        // Since there are normally no left or right margins, don’t show ticks that
+        // Since there are normally no left or right margins, donâ€™t show ticks that
         // are close to the edge of the chart, as these ticks are likely to be clipped.
         svg.append("g")
             .attr("transform", `translate(0,${this.MarginTop})`)
