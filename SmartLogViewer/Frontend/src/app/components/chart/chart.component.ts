@@ -57,17 +57,17 @@ export class ChartComponent {
 
         this.x = d3.map(logService.getLog().Events, e => {
             console.log("Date: " + e.Date + "    Time:" + e.Time);
-
+            console.log(new Date([e.Date, e.Time].join('T').replaceAll("/","-") + "Z"));
+            return new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z");
             //console.log("X: " + new Date(e.Date.getTime() + e.Time.getTime()));
-            try {
-                return new Date((e.Date as Date).getTime() + e.Time.getTime());
+            /*try {
+                return new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z");
             } catch (error) {
                 console.error(error);
                 return new Date();
-            }
-            
+            }*/
         });
-        //this.x = d3.map(logService.getLog().Events, e => new Date([e.Date, e.Time].join(' ')));
+        //this.x = d3.map(logService.getLog().Events, e => new Date([e.Date, e.Time].join('T')));
 
         this.y = d3.map(logService.getLog().Events, e => e.Value ? 1 : 0);
         this.z = d3.map(logService.getLog().Events, e => e.Code);
