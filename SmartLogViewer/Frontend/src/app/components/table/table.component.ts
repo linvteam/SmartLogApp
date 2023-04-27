@@ -15,7 +15,7 @@ export class TableComponent {
   columnDefs = [
     { field: 'date', hide: true },
     { field: 'time', hide: true },
-    { headerName: 'Date-Time', valueGetter: 'return data.date + " - " + data.time', field: 'colonnaCombinata'},
+    { headerName: 'Date-Time', valueGetter: 'return data.date + " - " + data.time', field: 'DateTime'},
     { field: 'unit' },
     { field: 'subUnit' },
     { field: 'code' },
