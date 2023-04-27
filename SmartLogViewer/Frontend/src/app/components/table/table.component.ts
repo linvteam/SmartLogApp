@@ -13,8 +13,9 @@ export class TableComponent {
   constructor(private logService: LogService) {}
   
   columnDefs = [
-    { field: 'date' },
-    { field: 'time' },
+    { field: 'date', hide: true },
+    { field: 'time', hide: true },
+    { headerName: 'Date-Time', valueGetter: 'return data.date + " - " + data.time', field: 'DateTime'},
     { field: 'unit' },
     { field: 'subUnit' },
     { field: 'code' },
