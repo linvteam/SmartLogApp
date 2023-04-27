@@ -24,4 +24,8 @@ export class LogService {
         return this.actualLog != undefined;
     }
 
+    public clean(): void {
+        this.actualLog = undefined;
+    }
+
 }
