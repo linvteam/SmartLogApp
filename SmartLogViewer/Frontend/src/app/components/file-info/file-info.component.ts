@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {ColDef} from 'ag-grid-community';
+import {ColDef, GridOptions} from 'ag-grid-community';
 import { LogService } from 'src/app/services/log.service';
 import {INIFile, Log} from "../../log.classes";
 import localeIT from "@angular/common/locales/it"
@@ -14,12 +14,12 @@ registerLocaleData(localeIT, "it");
 export class FileInfoComponent {
   
   iniFiles: INIFile[];
-  headerDateTimes: string[];
   columnDefs: ColDef[];
   columnDefsHeader: ColDef[];
   defaultColDef: ColDef;
   defaultColDefHeader: ColDef;
-  
+  pcDate: string;
+  upsDate: string;
 
   constructor(private logService: LogService) {
     
@@ -28,12 +28,8 @@ export class FileInfoComponent {
     let upsDateToConvert = this.logService.getLog().Header.UPSDate;
     const locale = 'it-IT';
     
-    let pcDate = formatDate(pcDateToConvert, format, locale);
-    let upsDate = formatDate(upsDateToConvert, format, locale)
-    
-    this.headerDateTimes = [];
-    this.headerDateTimes.push(pcDate);
-    this.headerDateTimes.push(upsDate);
+    this.pcDate = formatDate(pcDateToConvert, format, locale);
+    this.upsDate = formatDate(upsDateToConvert, format, locale)
     
     this.columnDefs = [
       { field: 'fileName' },
