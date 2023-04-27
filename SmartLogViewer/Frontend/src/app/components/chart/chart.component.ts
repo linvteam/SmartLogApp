@@ -33,9 +33,8 @@ export class ChartComponent {
     private y;
     private z;
     // private d;
-    //private colors: Map<string, string>;
     private colors;
-    private roba;
+    private CodeColors;
     constructor(private logService: LogService) {
         
 
@@ -47,43 +46,27 @@ export class ChartComponent {
         
         this.y = d3.map(logService.getLog().Events, e => e.Value ? 1 : 0);
         this.z = d3.map(logService.getLog().Events, e => e.Code);
-        //this.colors = new Map<string, string>();
         this.colors = d3.map(logService.getLog().Events, ((e: LogRow) => { return { Code: e.Code, Color: e.Color } }));
         
-
-        for (let i = 0; i < this.colors.length; i++) {
-            console.log("Code: " + this.colors[i].Code + "   Color:" + this.colors[i].Color);
-        }
-        this.roba = [];
+        this.colors.reverse();
+        this.CodeColors = [];
         for (let i = 0; i < this.colors.length; i++) {
             let doppio = false;
-            for (let j = 0; j < this.roba.length; j++) {
-                if (this.roba[j].Code == this.colors[i].Code) {
+            for (let j = 0; j < this.CodeColors.length; j++) {
+                if (this.CodeColors[j].Code == this.colors[i].Code) {
                     doppio= true
                 }
             }
             if (!doppio) {
-                this.roba.push(this.colors[i]);
+                this.CodeColors.push(this.colors[i]);
             }
         }
-
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        
-        for (let i = 0; i < this.roba.length; i++) {
-            console.log("Code: " + this.roba[i].Code + "   Color:" + this.roba[i].Color);
-        }
-
-
-        /*this.colors = new Set(logService.getLog().Events.map( (e : LogRow) => {
-            return {Code:e.Code,Color: e.Color}
-        }));*/
 
         // this.d = d3.map(logService.getLog().Events, (_, i) => !(this.x[i]) && !(this.y[i]));
         
         this.x.reverse();
         this.y.reverse();
         this.z.reverse();
-        this.colors.reverse();
         // this.d.reverse();
         
         this.xDomain = d3.extent(this.x);   
@@ -159,10 +142,7 @@ export class ChartComponent {
             .selectAll("use")
             .data((d, i) => new Array(1).fill(i))
             .join("use")
-            .attr("fill", (d, i) => {
-                console.log("i", i);
-                return this.roba[d].Color.replace("0x", "#");
-            })
+            .attr("fill", (d, i) => this.CodeColors[d].Color.replace("0x", "#"))
             .attr("stroke", "black")                                        
             .attr("transform", (_, i) => `translate(0,${i * this.Size})`)   
             .attr("xlink:href", (i) => `#${uid}-path-${i}`);                
