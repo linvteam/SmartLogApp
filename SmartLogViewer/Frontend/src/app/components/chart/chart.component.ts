@@ -20,6 +20,7 @@ export class ChartComponent {
     private readonly Padding = 5;
 
     private width = 1500;
+    private height;
     private xDomain : Array<Date|undefined>;// [xmin, xmax]
     private xRange = [this.MarginLeft, this.width - this.MarginRight]; // [left, right]
     private yDomain = [0,1]; // [ymin, ymax]
@@ -31,6 +32,14 @@ export class ChartComponent {
     private z;
     private colors;
     private codeColors;
+
+    private xScale;
+    private yScale;
+    private xAxis;
+    private svg: any;
+    private g: any;//: d3.Selection<d3.BaseType,unknown,SVGSVGElement,unknown>;
+    private plot: any;
+    private gXAxis : any;
     constructor(private logService: LogService) {
         
         // La data va messa nel formato YYYY-MM-DDThh:mm:ss.mmmZ
@@ -55,89 +64,132 @@ export class ChartComponent {
         this.xDomain = d3.extent(this.x);  
         this.zDomain = new d3.InternSet(this.z);
 
-        
+        this.height = this.zDomain.size * this.Size + this.MarginTop + this.MarginBottom;
+        this.xScale = d3.scaleTime(this.xDomain as Array<Date>, this.xRange);
+        this.yScale = d3.scaleOrdinal(this.yDomain, this.yRange);
+        this.xAxis = d3.axisTop(this.xScale).ticks(this.width / 80).tickSizeOuter(0);
+
     }
     
-    private ngOnInit(){
-        
+    private ngOnInit() {
+
         const I = d3.range(this.x.length).filter(i => this.zDomain.has(this.z[i]));
-        
-        const height = this.zDomain.size * this.Size + this.MarginTop + this.MarginBottom;
 
-        const xScale = d3.scaleTime(this.xDomain as Array<Date>, this.xRange);
-        const yScale = d3.scaleOrdinal(this.yDomain, this.yRange);
-        const xAxis = d3.axisTop(xScale).ticks(this.width / 80).tickSizeOuter(0);
-
-
-        
         const uid = `O-${Math.random().toString(16).slice(2)}`;
 
         let area = d3.area()
             .curve(d3.curveStepAfter)
-            .y0(yScale(0))
-            .y1((realData, i) => yScale(realData[1]));
+            .y0(this.yScale(0))
+            .y1((realData, i) => this.yScale(realData[1]));
 
-        const svg = d3.select("figure#horizon-chart")
+        this.svg = d3.select("figure#horizon-chart")
             .insert("svg")
             .attr("width", this.width)
-            .attr("height", height)
-            .attr("viewBox", [0, 0, this.width, height])
+            .attr("height", this.height)
+            .attr("viewBox", [0, 0, this.width, this.height])
             .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
             .attr("font-family", "sans-serif")
-            .attr("font-size", 10);
+            .attr("font-size", 10)
+            .call((svg: any) => this.zoom(svg, this.xScale, this.yScale));
 
-        const g = svg.selectAll("g")
+        this.g = this.svg.selectAll("g")
             .data(d3.group(I, i => this.z[i]))
             .join("g")
-            .attr("transform", (_, i) => `translate(0,${i * this.Size + this.MarginTop})`);
+            .attr("transform", (_ : any, i : any) => `translate(0,${i * this.Size + this.MarginTop})`);
 
-        const defs = g.append("defs");
+        const defs = this.g.append("defs");
 
         defs.append("clipPath")
-            .attr("id", (_, i) => `${uid}-clip-${i}`)
+            .attr("id", (_: any, i: any) => `${uid}-clip-${i}`)
             .append("rect")
             .attr("y", this.Padding)
             .attr("width", this.width)
             .attr("height", this.Size - this.Padding);
 
-        
-        defs.append("path")
-            .attr("id", (_, i) => `${uid}-path-${i}`)
-            .attr("d", ([d, I], i) => {
-                let dati: [number, number][] =[];
-                for(let i of I){
-                    dati.push([xScale(this.x[i]), this.y[i]]);
+        this.createClipRect();
+
+        this.plot = defs.append("path")
+            .attr("id", (_: any, i: any) => `${uid}-path-${i}`)
+            .attr("d", ([d, I]: any, i: any) => {
+                let dati: [number, number][] = [];
+                for (let i of I) {
+                    dati.push([this.xScale(this.x[i]), this.y[i]]);
                 }
-                dati.unshift([xScale(this.xDomain[0] as Date), this.y[I[0]]  == 1 ? 0 : 1]);    //aggiunge a sinistra dei dati un punto con il valore opposto rispetto al primo elemento
-                dati.push([xScale(this.xDomain[1] as Date), this.y[I[I.length - 1]]]);    //aggiunge a destra dei dati un punto con lo stesso valore dell'ultimo dato
+                dati.unshift([this.xScale(this.xDomain[0] as Date), this.y[I[0]] == 1 ? 0 : 1]);    //aggiunge a sinistra dei dati un punto con il valore opposto rispetto al primo elemento
+                dati.push([this.xScale(this.xDomain[1] as Date), this.y[I[I.length - 1]]]);    //aggiunge a destra dei dati un punto con lo stesso valore dell'ultimo dato
                 return area(dati);
             });
 
-        g.attr("clip-path", (_, i) => `#${uid}-clip-${i}`)
+        this.g.attr("clip-path", (_: any, i: any) => `#${uid}-clip-${i}`)
             .selectAll("use")
-            .data((d, i) => new Array(1).fill(i))
+            .data((d: any, i: any) => new Array(1).fill(i))
             .join("use")
-            .attr("fill", (d, i) => this.codeColors[d].Color.replace("0xFF", "#"))    //imposta il colore del campo Code
-            .attr("stroke", "black")                                        
-            .attr("transform", (_, i) => `translate(0,${i * this.Size})`)   
-            .attr("xlink:href", (i) => `#${uid}-path-${i}`);                
+            .attr("clip-path", "url(#clip)")
+            .attr("fill", (d: any, i: any) => this.codeColors[d].Color.replace("0xFF", "#"))    //imposta il colore del campo Code
+            .attr("stroke", "black")
+            .attr("transform", (_: any, i: any) => `translate(0,${i * this.Size})`)
+            .attr("xlink:href", (i: any) => `#${uid}-path-${i}`);
 
-        g.append("text")
+        this.g.append("text")
             .attr("font-size", "1.5em")
             .attr("x", this.MarginLeft - 100)
             .attr("y", (this.Size + this.Padding) / 2)
             .attr("dy", "0.35em")
-            .text(([z]) => z);
+            .text(([z]: any) => z);
 
         // Since there are normally no left or right margins, don’t show ticks that
         // are close to the edge of the chart, as these ticks are likely to be clipped.
-        svg.append("g")
+        this.gXAxis = this.svg.append("g")
             .attr("transform", `translate(0,${this.MarginTop})`)
-            .call(xAxis)
-            .call(g => g.selectAll(".tick")
-                .filter(d => xScale(d as Date) < 10 || xScale(d as Date) > this.width - 10)
+            .call(this.xAxis)
+            .call((g: any) => g.selectAll(".tick")
+                .filter((d: any) => this.xScale(d as Date) < 10 || this.xScale(d as Date) > this.width - 10)
                 .remove())
-            .call(g => g.select(".domain").remove());
+            .call((g: any) => g.select(".domain").remove());
+        
+    }
+    
+    private zoom(svg: any, x: any, y: any) {
+    svg.call(d3.zoom()
+        //limiti del moltiplicatore di zoom/de-zoom, da 0x a infinito
+        //quindi de-zoom infinito e zoom infinito
+        .scaleExtent([1, Infinity])
+        //operazione da eseguire quando si effettua lo zoom/trascinamento
+        .on("zoom", (event: any) => this.zoomed(event, y, x)));
+    }
+
+    private zoomed(event: any, y: any, x: any) {
+
+        //assex viene scalato con le nuove dimensioni dopo zoom o scroll
+
+        let new_xScale = event.transform.rescaleX(x);
+        this.gXAxis.call(d3.axisTop(new_xScale));
+
+        //ridò la definizione di come dev'essere creata la linea con la nuova scala
+        //riplotto il grafico
+        let area = d3.area()
+            .curve(d3.curveStepAfter)
+            .y0(this.yScale(0))
+            .y1((realData, i) => this.yScale(realData[1]));
+
+        this.plot.attr("d", ([d, I]: any, i: any) => {
+            let dati: [number, number][] = [];
+            for (let i of I) {
+            dati.push([new_xScale(this.x[i]), this.y[i]]);
+            }
+            dati.unshift([new_xScale(this.xDomain[0] as Date), this.y[I[0]] == 1 ? 0 : 1]);    //aggiunge a sinistra dei dati un punto con il valore opposto rispetto al primo elemento
+            dati.push([new_xScale(this.xDomain[1] as Date), this.y[I[I.length - 1]]]);    //aggiunge a destra dei dati un punto con lo stesso valore dell'ultimo dato
+            return area(dati);
+        });
+    }
+
+    private createClipRect(): any {
+        const defs: any = this.svg.append("defs");
+        const clipTag: any = defs.append("clipPath").attr("id", "clip");
+        return clipTag.append("rect")
+            .attr("x", this.MarginLeft)
+            .attr("width", this.width - this.MarginLeft)
+            .attr("height", this.height)
     }
 }
 
