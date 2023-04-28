@@ -131,59 +131,46 @@ export class ChartComponent {
                 dati.push([this.xScale(this.xDomain[1] as Date), this.y[I[I.length - 1]]]);    //aggiunge a destra dei dati un punto con lo stesso valore dell'ultimo dato
                 return area(dati);
             });
+
          this.g.on("mousemove", (e: any,[code, I]: [string, [number]]) => {
-                this.hovering = true;
-                let xPointer = d3.pointer(e)[0];
-                let yPointerRel = d3.pointer(e)[1];
+            this.hovering = true;
+            let xPointer = d3.pointer(e)[0];
+            let yPointerRel = d3.pointer(e)[1];
+            
+            let datetime = this.xScale.invert(xPointer);
+            let start: Date = this.xDomain[0] as Date;
+            let end: Date = this.xDomain[1] as Date;
 
-                /*let firefox = true;
-                if (firefox) {
-                    xPointer = e.offsetX;
-                    console.log(e.offseX);
-                    yPointerRel = e.offsetY;
-                }*/
-                    
-                let datetime = this.xScale.invert(xPointer);
-                let start: Date = this.xDomain[0] as Date;
-                let end: Date = this.xDomain[1] as Date;
-
-                for (let i = 0; i < I.length; i++) {
-                    if (this.x[I[i]] >= datetime) {
-                        end = this.x[I[i]];
-                        if (i > 0) {
-                            start = this.x[I[i - 1]]
-                        }
-                        break;
+            //  Imposta la data dell'evendo precedente e successiva dell'intervallo che si stà osservando
+            for (let i = 0; i < I.length; i++) {    
+                if (this.x[I[i]] >= datetime) {
+                    end = this.x[I[i]];
+                    if (i > 0) {
+                        start = this.x[I[i - 1]]
                     }
+                    break;
                 }
-                let codePosition: number = 0;
-                let codeList: any[] = Array.from(this.zDomain);
-                for (let i = 0; i < this.zDomain.size; i++) {
-                    if (code == codeList[i]) {
-                        codePosition = i;
-                        break;
-                    }
+            }
+            // trova il numero della riga su cui stai facendo hover
+            let codePosition: number = 0;
+            let codeList: any[] = Array.from(this.zDomain);
+            for (let i = 0; i < this.zDomain.size; i++) {
+                if (code == codeList[i]) {
+                    codePosition = i;
+                    break;
                 }
-
-                // xPointer *= 0.9375;
-                let yPointer = (yPointerRel + codePosition * (this.Size)) * 0.9375;
-                let absoluteX = e.clientX;
-                let absoluteY = e.clientY;
-                this.setTooltipInfo(start, end, code, this.units[I[0]], this.subUnits[I[0]], this.descriptions[I[0]]);
-                this.moveTooltip(absoluteX, absoluteY);
-
-                // for(let i in I){
-                //     if(this.x[i] <= datetime){
-                //         start = this.x[i];
-                //     }
-                // }
+            }
+            let absoluteX = e.clientX;
+            let absoluteY = e.clientY;
+            this.setTooltipInfo(start, end, code, this.units[I[0]], this.subUnits[I[0]], this.descriptions[I[0]]);
+            this.moveTooltip(absoluteX, absoluteY);
             })
             .on("mouseleave", (e: any) => {
                 console.log("adsadas part 2")
-                this.hovering = false;
+                this.hovering = false; //rende invisibile il tooltip
             });
-
-        this.g.attr("clip-path", (_: any, i: any) => `#${uid}-clip-${i}`)
+         
+         this.g.attr("clip-path", (_: any, i: any) => `#${uid}-clip-${i}`)
             .selectAll("use")
             .data((d: any, i: any) => new Array(1).fill(i))
             .join("use")
@@ -222,9 +209,7 @@ export class ChartComponent {
     }
 
     private zoomed(event: any, y: any, x: any) {
-
         //assex viene scalato con le nuove dimensioni dopo zoom o scroll
-
         this.xScale = event.transform.rescaleX(x);
         this.gXAxis.call(d3.axisTop(this.xScale));
 
@@ -238,7 +223,7 @@ export class ChartComponent {
         this.plot.attr("d", ([d, I]: any, i: any) => {
             let dati: [number, number][] = [];
             for (let i of I) {
-            dati.push([this.xScale(this.x[i]), this.y[i]]);
+                dati.push([this.xScale(this.x[i]), this.y[i]]);
             }
             dati.unshift([this.xScale(this.xDomain[0] as Date), this.y[I[0]] == 1 ? 0 : 1]);    //aggiunge a sinistra dei dati un punto con il valore opposto rispetto al primo elemento
             dati.push([this.xScale(this.xDomain[1] as Date), this.y[I[I.length - 1]]]);    //aggiunge a destra dei dati un punto con lo stesso valore dell'ultimo dato
@@ -258,6 +243,7 @@ export class ChartComponent {
     private setTooltipInfo(start: Date, end: Date, code: string, unit: number, subUnit: number, description: string){
         const format = 'yyyy/MM/dd - HH:mm:ss.SSS';
         const locale = "it-IT";
+        //aggiorna il tooltip con i dati nuovi
         d3.select("div div#tooltip p span#code").text(code)
         d3.select("div div#tooltip p span#start").text(formatDate(start, format, locale));
         d3.select("div div#tooltip p span#end").text(formatDate(end, format, locale));
@@ -267,15 +253,12 @@ export class ChartComponent {
     }
     
     private moveTooltip(x: number, y: number){
-        
-        if(x>1100){
+        if(x>1100){ //se è troppo a destra lo sposta a sinistra del mouse
             x-=360;
         }
-
-        if(y>700){
+        if (y > 650) {  //se è troppo in basso lo sposta in sopra al mouse
             y-=250;
         }
-        
         d3.select("div div#tooltip")
             .style("left", x + "px")
             .style("top", y + "px");

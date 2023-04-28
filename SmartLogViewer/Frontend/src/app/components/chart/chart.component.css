@@ -9,9 +9,12 @@
     border-radius: 5px;
     background-color: white;
     transform: translate(40px);
-    width: 280px;
+    width: 290px;
     padding: 3px;
-    pointer-events: none;
+}
+
+#horizon-chart{
+    background-color: #f8f9fa;
 }
 
 #tooltip p {
