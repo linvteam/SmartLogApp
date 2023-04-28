@@ -6,16 +6,26 @@ import { Log } from '../log.classes';
 })
 export class LogService {
 
-  constructor() { }
+    constructor() {
+        this.actualLog = undefined;
+    }
 
-  private actualLog?: Log;
+    private actualLog?: Log;
 
-  public set Log (log: Log) {
-    this.actualLog = log;
-  }
+    public set Log (log: Log) {
+        this.actualLog = log;
+    }
 
-  public getLog() : Log {
-    return (this.actualLog) as Log;
-  }
+    public getLog() : Log {
+        return (this.actualLog) as Log;
+    }
+
+    public validLog(): boolean {
+        return this.actualLog != undefined;
+    }
+
+    public clean(): void {
+        this.actualLog = undefined;
+    }
 
 }

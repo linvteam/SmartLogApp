@@ -1,0 +1,12 @@
+<button class="toggle" type="button" (click)="toggleInfoHeader()" *ngIf="isVisible; else elseBlock" title="Mostra ulteriori informazioni">
+    Nascondi informazioni
+</button>
+<ng-template #elseBlock> 
+    <button class="toggle" type="button" (click)="toggleInfoHeader()" title="Nascondi le informazioni">
+        Ulteriori informazioni
+    </button> 
+</ng-template>
+<div id="file-info-and-search" *ngIf="isVisible" >
+    <app-file-info id="file-info"></app-file-info>
+    <app-search id="search"></app-search>
+</div>
