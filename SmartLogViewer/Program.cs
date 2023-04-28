@@ -3,6 +3,7 @@ using SmartLogViewer;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<Parser>();
+builder.Services.AddSingleton<SmartLogViewer.Model.SequencesManager>();
 // Add services to the container.
 
 builder.Services.AddControllers().AddJsonOptions(options =>
