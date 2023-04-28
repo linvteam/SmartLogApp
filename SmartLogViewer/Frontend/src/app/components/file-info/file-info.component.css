@@ -33,5 +33,9 @@
 }
 
 #pcDate {
+    border-bottom: 1px solid #dde2eb;
+}
+
+#upsDate {
     background-color: #fcfcfc;
 }
