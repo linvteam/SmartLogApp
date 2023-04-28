@@ -1,0 +1,17 @@
+#chart-container{
+    position: relative;
+}
+
+#tooltip {
+    position: fixed;
+    left: -100%;
+    border: solid 2px black;
+    border-radius: 5px;
+    background-color: white;
+    transform: translate(40px);
+    width: 280px;
+}
+
+#tooltip p {
+    display: block;
+}

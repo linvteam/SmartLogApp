@@ -4,6 +4,16 @@
     <app-search></app-search>
 </div>
 
-<div>
-    <figure id="horizon-chart"></figure>
+<div id="chart-container">
+    <figure id="horizon-chart">
+        <div *ngIf="hovering" id="tooltip">
+            <p id="code"></p>
+            <p id="start"></p>
+            <p id="end"></p>
+            <p id="unit"></p>
+            <p id="subunit"></p>
+            <p id="description"></p>
+        </div>
+    </figure>
+    
 </div>

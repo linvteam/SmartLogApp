@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LogService } from 'src/app/services/log.service';
+import { formatDate, registerLocaleData } from "@angular/common";
+import localeIT from "@angular/common/locales/it"
+registerLocaleData(localeIT, "it");
 
 import * as d3 from 'd3';
 import { LogRow } from '../../log.classes';
@@ -30,8 +33,10 @@ export class ChartComponent {
     private x;
     private y;
     private z;
-    private colors;
     private codeColors;
+    private descriptions;
+    private units;
+    private subUnits;
 
     private xScale;
     private yScale;
@@ -40,17 +45,19 @@ export class ChartComponent {
     private g: any;//: d3.Selection<d3.BaseType,unknown,SVGSVGElement,unknown>;
     private plot: any;
     private gXAxis : any;
+    
+    public hovering: boolean= false;
     constructor(private logService: LogService) {
         
         // La data va messa nel formato YYYY-MM-DDThh:mm:ss.mmmZ
         this.x = d3.map(logService.getLog().Events, e => new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z"));
         this.y = d3.map(logService.getLog().Events, e => e.Value ? 1 : 0);
         this.z = d3.map(logService.getLog().Events, e => e.Code);
-        this.colors = d3.map(logService.getLog().Events, ((e: LogRow) => { return { Code: e.Code, Color: e.Color } }));
+        let colors = d3.map(logService.getLog().Events, ((e: LogRow) => { return { Code: e.Code, Color: e.Color } }));
         
-        this.colors.reverse();
+        colors.reverse();
         this.codeColors = [];
-        for (let i of this.colors) {  //crea l'array codeColors con tuple di code e Colors non ripetuti
+        for (let i of colors) {  //crea l'array codeColors con tuple di code e Colors non ripetuti
             if (this.codeColors.indexOf(i) == -1) {
                 this.codeColors.push(i);
             }
@@ -69,6 +76,11 @@ export class ChartComponent {
         this.yScale = d3.scaleOrdinal(this.yDomain, this.yRange);
         this.xAxis = d3.axisTop(this.xScale).ticks(this.width / 80).tickSizeOuter(0);
 
+        
+        //getValori per il tooltip
+        this.descriptions = d3.map(logService.getLog().Events, e => e.Description);
+        this.units = d3.map(logService.getLog().Events, e => e.Unit);
+        this.subUnits = d3.map(logService.getLog().Events, e => e.SubUnit);
     }
     
     private ngOnInit() {
@@ -120,7 +132,9 @@ export class ChartComponent {
                 return area(dati);
                 })
             .on("mousemove", (e: any, [code, I]: [string, [number]]) => {
+                this.hovering=true;
                 let xPointer = d3.pointer(e)[0];
+                let yPointerRel = d3.pointer(e)[1];
                 let datetime=this.xScale.invert(xPointer);
                 let start: Date = this.xDomain[0] as Date;
                 let end: Date = this.xDomain[1] as Date;
@@ -128,21 +142,36 @@ export class ChartComponent {
                 for (let i =0; i<I.length; i++){
                     if(this.x[I[i]] >= datetime){
                         end = this.x[I[i]];
-                        start = this.x[I[i-1]]
+                        if(i>0){
+                            start = this.x[I[i-1]]
+                        }
                         break;
                     }
-                    
                 }
+                let codePosition:number=0;
+                let codeList: any[] = Array.from(this.zDomain);
+                for(let i =0; i<this.zDomain.size; i++){
+                    if(code==codeList[i]){
+                        codePosition=i;
+                        break;
+                    }
+                }
+                
+                // xPointer *= 0.9375;
+                let yPointer= (yPointerRel+codePosition*(this.Size)) * 0.9375;
+                let absoluteX = e.clientX;
+                let absoluteY = e.clientY;
+                this.setTooltipInfo(start, end, code, this.units[I[0]], this.subUnits[I[0]], this.descriptions[I[0]]);
+                this.moveTooltip(absoluteX, absoluteY);
                 
                 // for(let i in I){
                 //     if(this.x[i] <= datetime){
                 //         start = this.x[i];
                 //     }
                 // }
-                console.log("------------------------------")
-                console.log("start", start);
-                console.log("end", end);
-                console.log("------------------------------")
+            })
+            .on("mouseleave", (e: any) => {
+                this.hovering = false;
             });
 
         this.g.attr("clip-path", (_: any, i: any) => `#${uid}-clip-${i}`)
@@ -187,8 +216,8 @@ export class ChartComponent {
 
         //assex viene scalato con le nuove dimensioni dopo zoom o scroll
 
-        let new_xScale = event.transform.rescaleX(x);
-        this.gXAxis.call(d3.axisTop(new_xScale));
+        this.xScale = event.transform.rescaleX(x);
+        this.gXAxis.call(d3.axisTop(this.xScale));
 
         //ridò la definizione di come dev'essere creata la linea con la nuova scala
         //riplotto il grafico
@@ -200,10 +229,10 @@ export class ChartComponent {
         this.plot.attr("d", ([d, I]: any, i: any) => {
             let dati: [number, number][] = [];
             for (let i of I) {
-            dati.push([new_xScale(this.x[i]), this.y[i]]);
+            dati.push([this.xScale(this.x[i]), this.y[i]]);
             }
-            dati.unshift([new_xScale(this.xDomain[0] as Date), this.y[I[0]] == 1 ? 0 : 1]);    //aggiunge a sinistra dei dati un punto con il valore opposto rispetto al primo elemento
-            dati.push([new_xScale(this.xDomain[1] as Date), this.y[I[I.length - 1]]]);    //aggiunge a destra dei dati un punto con lo stesso valore dell'ultimo dato
+            dati.unshift([this.xScale(this.xDomain[0] as Date), this.y[I[0]] == 1 ? 0 : 1]);    //aggiunge a sinistra dei dati un punto con il valore opposto rispetto al primo elemento
+            dati.push([this.xScale(this.xDomain[1] as Date), this.y[I[I.length - 1]]]);    //aggiunge a destra dei dati un punto con lo stesso valore dell'ultimo dato
             return area(dati);
         });
     }
@@ -215,6 +244,32 @@ export class ChartComponent {
             .attr("x", this.MarginLeft)
             .attr("width", this.width - this.MarginLeft)
             .attr("height", this.height)
+    }
+    
+    private setTooltipInfo(start: Date, end: Date, code: string, unit: number, subUnit: number, description: string){
+        const format = 'yyyy/MM/dd - HH:mm:ss.SSS';
+        const locale = "it-IT";
+        d3.select("div div#tooltip p#code").text("Code: " + code)
+        d3.select("div div#tooltip p#start").text("Data inizio: " + formatDate(start, format, locale));
+        d3.select("div div#tooltip p#end").text("Data fine: " + formatDate(end, format, locale));
+        d3.select("div div#tooltip p#unit").text("Unit: " + unit);
+        d3.select("div div#tooltip p#subunit").text("SubUnit: " + subUnit);
+        d3.select("div div#tooltip p#description").text("Descrizione: " + description);
+    }
+    
+    private moveTooltip(x: number, y: number){
+        
+        if(x>1100){
+            x-=360;
+        }
+
+        if(y>700){
+            y-=250;
+        }
+        
+        d3.select("div div#tooltip")
+            .style("left", x + "px")
+            .style("top", y + "px")
     }
 }
 
