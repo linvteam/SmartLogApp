@@ -1,7 +1,12 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 @import 'ag-grid-community/dist/styles/ag-grid.css';
-/*tema chiaro*/
 @import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-/*tema scuro*/
-/*@import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';*/
 
+
+html, body{
+    height: 100%;
+}
+
+app-root > div{
+    width: 85% !important;
+}
