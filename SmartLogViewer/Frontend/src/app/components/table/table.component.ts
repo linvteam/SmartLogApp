@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {ColDef, ColumnApi, ColumnResizedEvent, GridApi, GridReadyEvent,} from 'ag-grid-community';
+import { ColDef } from 'ag-grid-community';
 import { LogService } from 'src/app/services/log.service';
 
 @Component({
