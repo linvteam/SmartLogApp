@@ -32,9 +32,9 @@ export class FileInfoComponent {
     this.upsDate = formatDate(upsDateToConvert, format, locale)
     
     this.columnDefs = [
-      { field: 'fileName' },
-      { field: 'unit' },
-      { field: 'subUnit' },
+      { field: 'fileName', width: 298 },
+      { field: 'unit', width: 100 },
+      { field: 'subUnit', width: 150 },
     ];
 
     this.columnDefsHeader = [

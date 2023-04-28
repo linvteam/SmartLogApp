@@ -6,14 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-
-  isVisible : boolean;
   
-  constructor() {
-    this.isVisible = true;
-  }
-  
-  toggleInfoHeader() : void {
-    this.isVisible = !this.isVisible;
-  }
 }

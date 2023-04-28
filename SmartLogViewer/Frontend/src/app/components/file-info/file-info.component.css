@@ -2,6 +2,7 @@
     border: 1px solid #babfc7;
     border-bottom: none;
     border-collapse: collapse;
+    width: 100%;
 }
 
 #datetime-header th {
@@ -20,7 +21,7 @@
 }
 
 #header {
-    width: 500px; 
+    width: 550px; 
     height: 250px; 
     margin: 2em;
     margin-left: 0em;

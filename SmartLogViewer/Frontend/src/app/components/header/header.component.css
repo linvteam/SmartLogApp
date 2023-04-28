@@ -6,22 +6,6 @@
     flex: 1 1 auto;
 }
 
-.hide-info{
-    grid-gap: 0.5em;
-    opacity: 0;
-    margin: 0;
-    max-height: 1px;
-    overflow-y: hidden;
-    transition: opacity 0.5s ease-out;
-}
-
-.show-info{
-    max-height: 100%;
-    opacity: 1;
-    grid-row: 2;
-    grid-column: 1/4;
-}
-
-.toggle {
+.accordion-button {
     width: 100%;
 }
