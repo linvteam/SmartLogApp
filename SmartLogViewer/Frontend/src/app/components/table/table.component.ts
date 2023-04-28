@@ -16,12 +16,12 @@ export class TableComponent {
     { field: 'date', hide: true },
     { field: 'time', hide: true },
     { headerName: 'Date-Time', valueGetter: 'return data.date + " - " + data.time', field: 'DateTime', sortable: true, filter: true, width: 250},
-    { field: 'unit', sortable: true, filter: true, width: 150 },
-    { field: 'subUnit', sortable: true, filter: true, width: 150 },
-    { field: 'code', sortable: true, filter: true, width: 200 },
-    { field: 'description', width: 400 },
+    { field: 'unit', sortable: true, filter: true, width: 100 },
+    { field: 'subUnit', sortable: true, filter: true, width: 125 },
+    { field: 'code', sortable: true, filter: true, width: 150 },
+    { field: 'description', width: 355 },
     { field: 'value', width: 100 },
-    { field: 'color', width: 200 },
+    { field: 'color', width: 150 },
   ];
 
   defaultColDef: ColDef ={
