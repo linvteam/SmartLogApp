@@ -9,7 +9,9 @@
 
 .accordion-button {
     width: 100%;
+    border: 1px solid #dde2eb;
 }
+
 
 #accordionFlushExample {
     margin-bottom: 1em;

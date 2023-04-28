@@ -18,6 +18,7 @@
             [defaultColDef]="defaultColDef"
             [rowSelection]="'multiple'"
             [animateRows]="true"
+            (gridReady)="onGridReady($event)"
     >
     </ag-grid-angular>
 </div>

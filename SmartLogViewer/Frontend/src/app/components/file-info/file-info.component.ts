@@ -15,9 +15,7 @@ export class FileInfoComponent {
   
   iniFiles: INIFile[];
   columnDefs: ColDef[];
-  columnDefsHeader: ColDef[];
   defaultColDef: ColDef;
-  defaultColDefHeader: ColDef;
   pcDate: string;
   upsDate: string;
 
@@ -32,25 +30,20 @@ export class FileInfoComponent {
     this.upsDate = formatDate(upsDateToConvert, format, locale)
     
     this.columnDefs = [
-      { field: 'fileName', width: 298 },
+      { field: 'fileName', width: 292 },
       { field: 'unit', width: 100 },
       { field: 'subUnit', width: 150 },
     ];
-
-    this.columnDefsHeader = [
-      { field: 'pcDateTime' },
-      { field: 'upsDateTime' },
-    ];
     
     this.defaultColDef ={
-      sortable: true, filter: true, resizable: true, suppressSizeToFit: true
-    };
-
-    this.defaultColDefHeader ={
-      sortable: true, filter: true, resizable: true, suppressSizeToFit: true
+      sortable: true, filter: true, resizable: true
     };
     
     this.iniFiles = this.logService.getLog().Header.INIFile;
+  }
+
+  onGridReady(params : any) {
+    params.api.sizeColumnsToFit();
   }
   
 }
