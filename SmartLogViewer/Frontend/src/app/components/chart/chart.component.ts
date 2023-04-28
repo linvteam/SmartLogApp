@@ -118,6 +118,31 @@ export class ChartComponent {
                 dati.unshift([this.xScale(this.xDomain[0] as Date), this.y[I[0]] == 1 ? 0 : 1]);    //aggiunge a sinistra dei dati un punto con il valore opposto rispetto al primo elemento
                 dati.push([this.xScale(this.xDomain[1] as Date), this.y[I[I.length - 1]]]);    //aggiunge a destra dei dati un punto con lo stesso valore dell'ultimo dato
                 return area(dati);
+                })
+            .on("mousemove", (e: any, [code, I]: [string, [number]]) => {
+                let xPointer = d3.pointer(e)[0];
+                let datetime=this.xScale.invert(xPointer);
+                let start: Date = this.xDomain[0] as Date;
+                let end: Date = this.xDomain[1] as Date;
+                
+                for (let i =0; i<I.length; i++){
+                    if(this.x[I[i]] >= datetime){
+                        end = this.x[I[i]];
+                        start = this.x[I[i-1]]
+                        break;
+                    }
+                    
+                }
+                
+                // for(let i in I){
+                //     if(this.x[i] <= datetime){
+                //         start = this.x[i];
+                //     }
+                // }
+                console.log("------------------------------")
+                console.log("start", start);
+                console.log("end", end);
+                console.log("------------------------------")
             });
 
         this.g.attr("clip-path", (_: any, i: any) => `#${uid}-clip-${i}`)
