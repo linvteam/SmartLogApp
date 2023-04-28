@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,14 +31,17 @@ import { EventGroupingComponent } from './components/event-grouping/event-groupi
     HeaderComponent,
     EventSearchComponent,
     SequenceSearchComponent,
-    EventGroupingComponent
+    EventGroupingComponent,
+
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     NgbModule,
-    AgGridModule
+    AgGridModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     { provide: BaseURL, useValue: 'https://localhost:7210' }

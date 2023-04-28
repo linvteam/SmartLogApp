@@ -1,8 +1,8 @@
-<form class="row gy-2 gx-3 align-items-center col-auto">
+<form class="row gy-2 gx-3 align-items-center col-auto" [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
     <div class="row">
         <div class="col">
             <label class="visually-hidden" for="autoSizingInputEvent">Evento</label>
-            <input type="text" class="form-control" id="autoSizingInputEvent">
+            <input type="text" name="q" class="form-control" id="autoSizingInputEvent" placeholder="Immetti la stringa di ricerca" formControlName="q">
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-primary form-control">Cerca</button>
