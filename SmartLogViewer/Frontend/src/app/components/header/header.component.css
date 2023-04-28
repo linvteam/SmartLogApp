@@ -4,8 +4,13 @@
     align-items: center;
     justify-content: space-between;
     flex: 1 1 auto;
+    background-color: #f8f9fa;
 }
 
 .accordion-button {
     width: 100%;
+}
+
+#accordionFlushExample {
+    margin-bottom: 1em;
 }
