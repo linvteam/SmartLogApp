@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FileUploadService } from 'src/app/services/file-upload.service';
@@ -7,75 +7,82 @@ import { LogService } from 'src/app/services/log.service';
 
 
 @Component({
-  selector: 'app-file-upload',
-  templateUrl: './file-upload.component.html',
-  styleUrls: ['./file-upload.component.css']
+    selector: 'app-file-upload',
+    templateUrl: './file-upload.component.html',
+    styleUrls: ['./file-upload.component.css']
 })
 export class FileUploadComponent {
 
-  selectedFiles?: FileList;
-  currentFile?: File;
-  progress = 0;
-  message = '';
+    selectedFiles?: FileList;
+    currentFile?: File;
+    progress = 0;
+    message = '';
 
-  fileInfos?: Observable<any>;
+    @ViewChild("fileSelector") fileSelector: any;
 
-  constructor(private uploadService: FileUploadService, private logService: LogService) { }
+    fileInfos?: Observable<any>;
 
-  selectFile(event: any): void {
-    this.selectedFiles = event.target.files;
-  }
+    constructor(private uploadService: FileUploadService, private logService: LogService) { }
 
-  upload(): void {
-    this.progress = 0;
+    selectFile(event: any): void {
+        this.selectedFiles = event.target.files;
+    }
 
-    if (this.selectedFiles) {
-      const file: File | null = this.selectedFiles.item(0);
-
-      if (file) {
-        this.currentFile = file;
-
-        this.uploadService.upload(this.currentFile).subscribe({
-          next: (event: any) => {
-            
+    private eventHandler(): any {
+        return (event: any) => {
             if (event.type === HttpEventType.UploadProgress) {
-              this.progress = Math.round(100 * event.loaded / event.total);
+                this.progress = Math.round(100 * event.loaded / event.total);
             } else if (event instanceof HttpResponse<Log>) {
-              this.logService.Log = new Log ((event.body) as Log);
-              let log = this.logService.getLog();
-              
-              this.message = "File caricato: " + log.FileName;
+                this.logService.Log = new Log((event.body) as Log);
+                let log = this.logService.getLog();
+
+                this.message = "File caricato: " + log.FileName;
             }
-          },
-          error: (err: any) => {
+        };
+    }
+
+    
+    private errorHandler(): any {
+        return (err: any) => {
             this.progress = 0;
 
-            if (err.error && err.error.message) {
-              switch(err.error.code)
-              {
-                case 1:
-                  this.message = "Formato non valido: ";
-                  break;
+            this.selectedFiles = undefined;
+            this.currentFile = undefined;
 
-                case 2:
-                  this.message = "Dati non validi: ";
-                  break;
-                
-                default:
-              }
-              this.message = this.message.concat(err.error.message);
+            if (err.error && err.error.message) {
+                if(err.error.code == 1)
+                    this.message = "Formato non valido: ";
+                else if (err.error.code == 2)
+                    this.message = "Dati non validi: ";
+
+                this.message = this.message.concat(err.error.message);
             } else {
-              this.message = 'Impossibile caricare il file!';
+                this.message = 'Impossibile caricare il file!';
             }
 
-            this.currentFile = undefined;
-          }
-        });
-      }
-
-      this.selectedFiles = undefined;
+            this.fileSelector.nativeElement.value = null;
+        }
     }
-  
-  }
-  
+
+    upload(): void {
+        this.progress = 0;
+        this.logService.clean();
+
+        if (this.selectedFiles) {
+            const file: File | null = this.selectedFiles.item(0);
+
+            if (file) {
+                this.currentFile = file;
+
+                this.uploadService.upload(this.currentFile).subscribe({
+                    next: this.eventHandler(),
+                    error: this.errorHandler()
+                });
+            }
+
+            this.selectedFiles = undefined;
+        }
+
+    }
+
 }
