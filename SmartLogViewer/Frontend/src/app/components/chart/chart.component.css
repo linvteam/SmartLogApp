@@ -10,8 +10,13 @@
     background-color: white;
     transform: translate(40px);
     width: 280px;
+    padding: 3px;
 }
 
 #tooltip p {
     display: block;
+}
+
+.infoName{
+    font-weight: bold;
 }

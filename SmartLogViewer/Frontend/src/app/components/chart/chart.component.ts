@@ -249,12 +249,12 @@ export class ChartComponent {
     private setTooltipInfo(start: Date, end: Date, code: string, unit: number, subUnit: number, description: string){
         const format = 'yyyy/MM/dd - HH:mm:ss.SSS';
         const locale = "it-IT";
-        d3.select("div div#tooltip p#code").text("Code: " + code)
-        d3.select("div div#tooltip p#start").text("Data inizio: " + formatDate(start, format, locale));
-        d3.select("div div#tooltip p#end").text("Data fine: " + formatDate(end, format, locale));
-        d3.select("div div#tooltip p#unit").text("Unit: " + unit);
-        d3.select("div div#tooltip p#subunit").text("SubUnit: " + subUnit);
-        d3.select("div div#tooltip p#description").text("Descrizione: " + description);
+        d3.select("div div#tooltip p span#code").text(code)
+        d3.select("div div#tooltip p span#start").text(formatDate(start, format, locale));
+        d3.select("div div#tooltip p span#end").text(formatDate(end, format, locale));
+        d3.select("div div#tooltip p span#unit").text(unit);
+        d3.select("div div#tooltip p span#subunit").text(subUnit);
+        d3.select("div div#tooltip p span#description").text(description);
     }
     
     private moveTooltip(x: number, y: number){
