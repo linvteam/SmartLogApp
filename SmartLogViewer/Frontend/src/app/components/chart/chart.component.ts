@@ -46,7 +46,7 @@ export class ChartComponent {
     private plot: any;
     private gXAxis : any;
     
-    public hovering: boolean= false;
+    public hovering: boolean= true;
     constructor(private logService: LogService) {
         
         // La data va messa nel formato YYYY-MM-DDThh:mm:ss.mmmZ
@@ -130,40 +130,48 @@ export class ChartComponent {
                 dati.unshift([this.xScale(this.xDomain[0] as Date), this.y[I[0]] == 1 ? 0 : 1]);    //aggiunge a sinistra dei dati un punto con il valore opposto rispetto al primo elemento
                 dati.push([this.xScale(this.xDomain[1] as Date), this.y[I[I.length - 1]]]);    //aggiunge a destra dei dati un punto con lo stesso valore dell'ultimo dato
                 return area(dati);
-                })
-            .on("mousemove", (e: any, [code, I]: [string, [number]]) => {
-                this.hovering=true;
+            });
+         this.g.on("mousemove", (e: any,[code, I]: [string, [number]]) => {
+                this.hovering = true;
                 let xPointer = d3.pointer(e)[0];
                 let yPointerRel = d3.pointer(e)[1];
-                let datetime=this.xScale.invert(xPointer);
+
+                /*let firefox = true;
+                if (firefox) {
+                    xPointer = e.offsetX;
+                    console.log(e.offseX);
+                    yPointerRel = e.offsetY;
+                }*/
+                    
+                let datetime = this.xScale.invert(xPointer);
                 let start: Date = this.xDomain[0] as Date;
                 let end: Date = this.xDomain[1] as Date;
-                
-                for (let i =0; i<I.length; i++){
-                    if(this.x[I[i]] >= datetime){
+
+                for (let i = 0; i < I.length; i++) {
+                    if (this.x[I[i]] >= datetime) {
                         end = this.x[I[i]];
-                        if(i>0){
-                            start = this.x[I[i-1]]
+                        if (i > 0) {
+                            start = this.x[I[i - 1]]
                         }
                         break;
                     }
                 }
-                let codePosition:number=0;
+                let codePosition: number = 0;
                 let codeList: any[] = Array.from(this.zDomain);
-                for(let i =0; i<this.zDomain.size; i++){
-                    if(code==codeList[i]){
-                        codePosition=i;
+                for (let i = 0; i < this.zDomain.size; i++) {
+                    if (code == codeList[i]) {
+                        codePosition = i;
                         break;
                     }
                 }
-                
+
                 // xPointer *= 0.9375;
-                let yPointer= (yPointerRel+codePosition*(this.Size)) * 0.9375;
+                let yPointer = (yPointerRel + codePosition * (this.Size)) * 0.9375;
                 let absoluteX = e.clientX;
                 let absoluteY = e.clientY;
                 this.setTooltipInfo(start, end, code, this.units[I[0]], this.subUnits[I[0]], this.descriptions[I[0]]);
                 this.moveTooltip(absoluteX, absoluteY);
-                
+
                 // for(let i in I){
                 //     if(this.x[i] <= datetime){
                 //         start = this.x[i];
@@ -171,6 +179,7 @@ export class ChartComponent {
                 // }
             })
             .on("mouseleave", (e: any) => {
+                console.log("adsadas part 2")
                 this.hovering = false;
             });
 
@@ -269,7 +278,7 @@ export class ChartComponent {
         
         d3.select("div div#tooltip")
             .style("left", x + "px")
-            .style("top", y + "px")
+            .style("top", y + "px");
     }
 }
 
