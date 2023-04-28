@@ -65,10 +65,10 @@ namespace Core.Tests
             JsonSerializerOptions options = new JsonSerializerOptions();
             
             DateOnly value = new DateOnly(2001,05,21);
-            string serializationFormat = "yyyy/MM/dd";
-            DateOnlyJsonConverter converter = new DateOnlyJsonConverter(serializationFormat);
+            string SerializationFormat = "yyyy/MM/dd";
+            DateOnlyJsonConverter converter = new DateOnlyJsonConverter(SerializationFormat);
 
-            string expected = $"\"{value.ToString(serializationFormat)}\"";
+            string expected = $"\"{value.ToString(SerializationFormat)}\"";
             // Act
             converter.Write(writer, value, options);
             
