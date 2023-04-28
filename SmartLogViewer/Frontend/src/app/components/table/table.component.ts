@@ -15,17 +15,17 @@ export class TableComponent {
   columnDefs = [
     { field: 'date', hide: true },
     { field: 'time', hide: true },
-    { headerName: 'Date-Time', valueGetter: 'return data.date + " - " + data.time', field: 'DateTime'},
-    { field: 'unit' },
-    { field: 'subUnit' },
-    { field: 'code' },
-    { field: 'description' },
-    { field: 'value' },
-    { field: 'color' },
+    { headerName: 'Date-Time', valueGetter: 'return data.date + " - " + data.time', field: 'DateTime', sortable: true, filter: true, width: 250},
+    { field: 'unit', sortable: true, filter: true, width: 150 },
+    { field: 'subUnit', sortable: true, filter: true, width: 150 },
+    { field: 'code', sortable: true, filter: true, width: 200 },
+    { field: 'description', width: 400 },
+    { field: 'value', width: 100 },
+    { field: 'color', width: 200 },
   ];
 
   defaultColDef: ColDef ={
-    sortable: true, filter: true, resizable: true, suppressSizeToFit: true
+    resizable: true, suppressSizeToFit: true
   }
 
   rowData = this.logService.getLog().Events;
