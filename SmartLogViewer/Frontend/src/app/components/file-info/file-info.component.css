@@ -2,6 +2,7 @@
     border: 1px solid #babfc7;
     border-bottom: none;
     border-collapse: collapse;
+    width: 100%;
 }
 
 #datetime-header th {
@@ -13,15 +14,28 @@
     padding: 1em;
 }
 
+.textCenter {
+    text-align: center;
+}
+
 #inifile-header {
-    margin-bottom: 8px;
     width: 100%; 
-    height: 175px;
+    height: 13.5em;
 }
 
 #header {
-    width: 500px; 
-    height: 250px; 
-    margin: 2em;
-    margin-left: 0em;
+    width: 34em; 
+    height: 15em; 
+}
+
+#pcDateHeader {
+    border-bottom: 1px solid #babfc7;
+}
+
+#pcDate {
+    border-bottom: 1px solid #dde2eb;
+}
+
+#upsDate {
+    background-color: #fcfcfc;
 }

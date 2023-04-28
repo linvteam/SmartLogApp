@@ -1,13 +1,13 @@
 
 <div id="header">
-    <table class="ag-theme-alpine" id="datetime-header">
+    <table class="ag-theme-alpine textCenter" id="datetime-header">
         <tr>
-            <th>PCDate</th>
-            <td>{{pcDate}}</td>
+            <th id="pcDateHeader">PCDate</th>
+            <td id="pcDate">{{pcDate}}</td>
         </tr>
         <tr>
             <th>UPSDate</th>
-            <td>{{upsDate}}</td>
+            <td id="upsDate" >{{upsDate}}</td>
         </tr>
     </table>
     <ag-grid-angular
@@ -18,6 +18,7 @@
             [defaultColDef]="defaultColDef"
             [rowSelection]="'multiple'"
             [animateRows]="true"
+            (gridReady)="onGridReady($event)"
     >
     </ag-grid-angular>
 </div>
