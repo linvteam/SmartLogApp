@@ -14,6 +14,9 @@ import { HttpClientModule } from '@angular/common/http';
 import {AgGridModule} from "ag-grid-angular";
 import {BaseURL} from "./connection-info";
 import { HeaderComponent } from './components/header/header.component';
+import { EventSearchComponent } from './components/event-search/event-search.component';
+import { SequenceSearchComponent } from './components/sequence-search/sequence-search.component';
+import { EventGroupingComponent } from './components/event-grouping/event-grouping.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { HeaderComponent } from './components/header/header.component';
     TableComponent,
     ChartComponent,
     FileUploadComponent,
-    HeaderComponent
+    HeaderComponent,
+    EventSearchComponent,
+    SequenceSearchComponent,
+    EventGroupingComponent
   ],
   imports: [
     BrowserModule,
