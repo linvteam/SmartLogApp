@@ -5,17 +5,3 @@
 /*tema scuro*/
 /*@import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';*/
 
-#file-info-and-search{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    flex: 1 1 0px;
-}
-
-#file-info-and-search div {
-    background-color: #f8f9fa;
-}
-app-root div{
-    max-width: 1500px !important;
-}
