@@ -102,6 +102,16 @@ export class LogRow {
     public get Color() {
         return this.color;
     }
+
+    public search(searchString: RegExp): boolean {
+
+        //if (searchString.test(this.Date.toUTCString())) return true;
+        //if (searchString.test(this.time.toUTCString())) return true;
+        if (searchString.test(this.code)) return true;
+        if (searchString.test(this.description)) return true;
+
+        return false;
+    }
 }
 
 export class Log {
@@ -122,6 +132,10 @@ export class Log {
 
     public get Events() {
         return this.events;
+    }
+
+    public set Events(events: LogRow[]) {
+        this.events = events
     }
 
     public get FileName() {

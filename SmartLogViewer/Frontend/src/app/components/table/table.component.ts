@@ -26,7 +26,7 @@ export class TableComponent {
     resizable: true
   }
 
-  rowData = this.logService.getLog().Events;
+  rowData = this.logService.getDisplayLog().Events;
 
   onGridReady(params : any) {
     params.api.sizeColumnsToFit();

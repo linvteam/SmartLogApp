@@ -31,8 +31,7 @@ import { EventGroupingComponent } from './components/event-grouping/event-groupi
     HeaderComponent,
     EventSearchComponent,
     SequenceSearchComponent,
-    EventGroupingComponent,
-
+    EventGroupingComponent
   ],
   imports: [
     BrowserModule,
