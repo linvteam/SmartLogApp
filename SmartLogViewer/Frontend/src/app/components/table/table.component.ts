@@ -1,16 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ColDef } from 'ag-grid-community';
 import { LogService } from 'src/app/services/log.service';
+import { LogMessageService } from 'src/app/services/log-message.service';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent {
-  
-  constructor(private logService: LogService) {}
-  
+export class TableComponent implements OnInit {
+
+    rowData!: any[];
+    constructor(private logService: LogService, private logMessageService: LogMessageService) {
+        this.rowData = this.logService.getLog().Events
+        console.log('**** COSTRUTTORE ****\n >>> %d <<<', this.rowData.length)
+    }
+
+    ngOnInit() {
+        this.logMessageService.currentValue.subscribe(value => this.filterEvents(value));
+    }
+
   columnDefs = [
     { field: 'date', hide: true },
     { field: 'time', hide: true },
@@ -24,9 +33,24 @@ export class TableComponent {
 
   defaultColDef: ColDef ={
     resizable: true
-  }
+    }
 
-  rowData = this.logService.getDisplayLog().Events;
+    public filterEvents(searchString: any): void {
+
+        this.rowData = [...this.logService.getLog().Events]
+        if (searchString == undefined || searchString == null) return;
+
+        console.log(new RegExp(searchString))
+        for (let i = 0; i < this.rowData.length; i++) {
+            if (!this.rowData[i].search(new RegExp(searchString))) {
+                this.rowData.splice(i, 1);
+                i--;
+            }
+
+        }
+
+        console.log('**** ARRAY LENGTH ****\n >>> %d <<<', this.rowData.length)
+    }
 
   onGridReady(params : any) {
     params.api.sizeColumnsToFit();

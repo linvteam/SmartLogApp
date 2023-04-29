@@ -10,7 +10,8 @@ export class LogService {
     constructor() {
         this.actualLog = undefined;
         this.displayLog = undefined;
-    }
+    } 
+
 
     private actualLog?: Log;
     private displayLog?: Log;
@@ -32,29 +33,6 @@ export class LogService {
         if (this.validLog()) {
             this.displayLog = new Log(this.actualLog as Log)
         }
-    }
-
-    public filterEvents(searchString: any): void {
-
-        this.resetDisplayLog();
-
-        if (this.displayLog == undefined || searchString == undefined || searchString == null) return;
-
-        const events = this.displayLog.Events;
-
-        console.log(new RegExp(searchString))
-        for (let i = 0; i < events.length; i++) {
-            if (!events[i].search(new RegExp(searchString))) {
-                events.splice(i, 1);
-                i--;
-            }
-
-        }
-
-
-        this.displayLog.Events = events;
-
-        console.log('**** ARRAY LENGTH ****\n >>> %d <<<', this.displayLog.Events.length)
     }
 
     public validLog(): boolean {
