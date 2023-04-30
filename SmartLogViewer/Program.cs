@@ -1,9 +1,12 @@
 using Core;
 using SmartLogViewer;
+using SmartLogViewer.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<Parser>();
-builder.Services.AddSingleton<SmartLogViewer.Model.SequencesManager>();
+builder.Services.AddSingleton<SequenceFileReader>(); // Configurazione del SequencesManager
+builder.Services.AddSingleton<SequencesManager>();
+
 // Add services to the container.
 
 builder.Services.AddControllers().AddJsonOptions(options =>

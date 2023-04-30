@@ -3,7 +3,7 @@ using System.Net;
 
 
 namespace SmartLogViewer.Controllers {
-    [Route("/api/sequence")]
+    [Route("/api/sequences")]
     [ApiController]
     public class EventSequenceController: Controller {
 
