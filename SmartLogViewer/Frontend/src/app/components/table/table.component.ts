@@ -12,12 +12,12 @@ export class TableComponent implements OnInit {
 
     rowData!: any[];
     constructor(private logService: LogService, private logMessageService: LogMessageService) {
-        this.rowData = this.logService.getLog().Events
-        console.log('**** COSTRUTTORE ****\n >>> %d <<<', this.rowData.length)
+        console.log('**** COSTRUTTORE ****\n')
     }
 
     ngOnInit() {
         this.logMessageService.currentValue.subscribe(value => this.filterEvents(value));
+        this.rowData = [...this.logService.getLog().Events]
     }
 
   columnDefs = [
