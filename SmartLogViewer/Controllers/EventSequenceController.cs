@@ -3,7 +3,6 @@ using System.Net;
 
 
 namespace SmartLogViewer.Controllers {
-    [Route("/api/sequences")]
     [ApiController]
     public class EventSequenceController: Controller {
 
@@ -14,7 +13,7 @@ namespace SmartLogViewer.Controllers {
         }
 
         [HttpGet]
-        [Route("/names")]
+        [Route("/api/sequences/")]
         public IActionResult GetSequenceNames() {
             if(sequencesManager.ParsingError)
                 return BadRequest(HttpStatusCode.InternalServerError);
@@ -23,7 +22,7 @@ namespace SmartLogViewer.Controllers {
         }
 
         [HttpGet]
-        [Route("/parameters")]
+        [Route("/api/sequences/{sequenceName}")]
         public IActionResult GetSequenceParameters(string sequenceName) {
             if(sequencesManager.ParsingError)
                 return BadRequest(HttpStatusCode.InternalServerError);
