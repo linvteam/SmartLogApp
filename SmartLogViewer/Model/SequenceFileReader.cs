@@ -9,7 +9,7 @@ namespace SmartLogViewer.Model {
         /// Ritorna uno stream contenente il json di configurazione di tutte le sequenze note
         /// </summary>
         /// <returns>Stream di lettura del file con le sequenze</returns>
-        public StreamReader StreamReader() {
+        public virtual StreamReader StreamReader() {
             return new StreamReader("sequences.json");
         }
     }
