@@ -12,7 +12,6 @@ export class TableComponent implements OnInit {
 
     rowData!: any[];
     constructor(private logService: LogService, private logMessageService: LogMessageService) {
-        console.log('**** COSTRUTTORE ****\n')
     }
 
     ngOnInit() {
@@ -35,19 +34,27 @@ export class TableComponent implements OnInit {
     resizable: true
     }
 
-    public filterEvents(searchString: any): void {
+    public filterEvents(searchString: string): void {
 
         this.rowData = [...this.logService.getLog().Events]
         if (searchString == undefined || searchString == null) return;
 
-        console.log(new RegExp(searchString))
-        for (let i = 0; i < this.rowData.length; i++) {
-            if (!this.rowData[i].search(new RegExp(searchString))) {
-                this.rowData.splice(i, 1);
-                i--;
-            }
+        const stringList1 = searchString.match(/\'(.*?)\'/g)?.map(str => str.replace(/["']/g, ""))
 
+        const stringList2 = searchString.replace(/\'(.*?)\'/g, "").split(" ").filter(entry => /\S/.test(entry));
+
+        let stringList = [];
+
+        if (stringList1 != undefined) {
+            stringList = stringList1.concat(stringList2);
         }
+        else
+            stringList = stringList2
+
+        for (let s of stringList) {
+               this.rowData = this.rowData.filter(logRow => logRow.search(new RegExp(s)));
+        }
+
 
         console.log('**** ARRAY LENGTH ****\n >>> %d <<<', this.rowData.length)
     }
