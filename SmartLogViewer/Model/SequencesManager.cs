@@ -4,6 +4,9 @@ namespace SmartLogViewer.Model {
     public class SequencesManager {
 
         private readonly List<Sequence> sequences;
+        
+        private readonly ILogger<SequencesManager> _logger;
+        
         /// <summary>
         /// Indica se il parsing delle sequenze ha scatenato degli errori
         /// </summary>
@@ -14,8 +17,9 @@ namespace SmartLogViewer.Model {
         /// </summary>
         /// <param name="logger">Default logger</param>
         /// <param name="fileReader">Classe che codifica la configurazione di lettura del file</param>
-        public SequencesManager(ILogger logger, SequenceFileReader fileReader) {
+        public SequencesManager(ILogger<SequencesManager> logger, SequenceFileReader fileReader) {
             sequences = new();
+            _logger = logger;
             ParsingError = true;
 
             // Leggo il file di configurazione delle sequenze
@@ -27,7 +31,7 @@ namespace SmartLogViewer.Model {
                     MissingMemberHandling = MissingMemberHandling.Error
                 });
                 if(array == null) {
-                    logger.LogError("Impossibile leggere il file delle sequenze");
+                    _logger.LogError("Impossibile leggere il file delle sequenze");
                 } else {
                     foreach (var item in array) {
                         // Devo estrarre e convertire correttamente tutti i valori dell'oggetto (i dynamics sono un po' particolari da usare)
@@ -64,8 +68,8 @@ namespace SmartLogViewer.Model {
                 }
             } catch(Exception e) {
                 sequences.Clear();
-                logger.LogError("Impossibile leggere il file delle sequenze");
-                logger.LogError(e.Message);
+                _logger.LogError("Impossibile leggere il file delle sequenze");
+                _logger.LogError(e.Message);
             }
 
         }
