@@ -8,14 +8,14 @@ import { EventGroupingService } from "../../services/event-grouping.service";
 })
 export class EventGroupingComponent implements OnInit{
 
-  value:number;
+  regroupTime : number;
   
   constructor(private data: EventGroupingService) { 
-    this.value = 0; 
+    this.regroupTime = 0; 
   }
   
   ngOnInit() {
-    this.data.currentValue.subscribe(value => this.value = value)
+    this.data.currentValue.subscribe(regroupTime => this.regroupTime = regroupTime)
   }
 
   getFormValues(values : any){
@@ -30,6 +30,14 @@ export class EventGroupingComponent implements OnInit{
       }
       case "3": {
         this.data.changeValue(values.valore * 60000);
+        break;
+      }
+      case "4": {
+        this.data.changeValue(values.valore * 3600000);
+        break;
+      }
+      case "5": {
+        this.data.changeValue(values.valore * 86400000);
         break;
       }
       default: {
