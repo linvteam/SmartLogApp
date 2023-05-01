@@ -3,6 +3,25 @@
 
 <div>
     {{value}}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination" >
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" *ngFor="let index of arrayOfNumberOfTables">
+                <button class="page-link" (click)="showTable(index)">{{index}}</button>
+            </li>
+            <!--<li class="page-item" *ngFor='let in of [].constructor(numberOfTables) ;let i = index'>{{i}}</li>-->
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+        
+    </nav>
     <ag-grid-angular
             class="ag-theme-alpine"
             [rowData]="rowData"
