@@ -27,7 +27,6 @@ namespace SmartLogViewer.Controllers {
         /// <response code="200">Ritorna la lista di nomi</response>
         /// <response code="500">Se c'è stato un errore nella lettura del file delle sequenze</response>
         [HttpGet]
-        [Route("names")]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
         [Produces("application/json")]
@@ -47,7 +46,7 @@ namespace SmartLogViewer.Controllers {
         /// <response code="404">Se il nome dato non è presente tra le sequenze disponibili</response>
         /// <response code="500">Se c'è stato un errore durante la lettura del file delle sequenze</response>
         [HttpGet]
-        [Route("parameters/{sequenceName}")]
+        [Route("{sequenceName}")]
         [ProducesResponseType(typeof(Sequence), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
