@@ -17,8 +17,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { EventSearchComponent } from './components/event-search/event-search.component';
 import { SequenceSearchComponent } from './components/sequence-search/sequence-search.component';
 import { EventGroupingComponent } from './components/event-grouping/event-grouping.component';
-import { FormsModule }   from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -44,7 +43,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule
   ],
   providers: [
-    { provide: BaseURL, useValue: 'https://localhost:7210' }
+    { provide: BaseURL, useValue: 'https://localhost:7210/api' }
   ],
   bootstrap: [AppComponent]
 })

@@ -1,12 +1,12 @@
-<form class="row gy-2 gx-3 align-items-center col-auto">
+<form class="row gy-2 gx-3 align-items-center col-auto" [formGroup]="sequenceForm" (ngSubmit)="onFormSubmit()">
     <div class="row">
         <div class="col">
             <label class="visually-hidden" for="autoSizingInputSequence">Sequenze</label>
-            <select class="custom-select my-1 mr-sm-2 form-control" id="autoSizingInputSequence">
-                <option selected>Choose...</option>
-                <option value="1">Prima</option>
-                <option value="2">Seconda</option>
-                <option value="3">Terza</option>
+            <select class="custom-select my-1 mr-sm-2 form-control" id="autoSizingInputSequence" formControlName="sequence" required>
+                    <option [ngValue]="null" disabled>Scegli la sequenza</option>
+                    <option *ngFor="let sequence of sequences" [ngValue]="sequence">
+                        {{ sequence }}
+                    </option>
             </select>
         </div>
         <div class="col-auto">

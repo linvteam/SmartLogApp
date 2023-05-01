@@ -6,11 +6,11 @@ import { Log } from '../log.classes';
 })
 export class LogService {
 
+    private actualLog?: Log;
+
     constructor() {
         this.actualLog = undefined;
     }
-
-    private actualLog?: Log;
 
     public set Log (log: Log) {
         this.actualLog = log;

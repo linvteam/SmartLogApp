@@ -9,8 +9,7 @@ namespace SmartLogViewer.Controllers
     /// </summary>
     [Route("api/parse")]
     [ApiController]
-    public class ParseController : ControllerBase
-    {
+    public class ParseController: ControllerBase {
         /// <summary>
         /// Oggetto di tipo Parser dedicato al parsing dei file di log
         /// </summary>
@@ -25,13 +24,23 @@ namespace SmartLogViewer.Controllers
         }
 
         /// <summary>
+        /// Messaggio di errore del parsing
+        /// </summary>
+        /// <param name="Code">Codice di errore</param>
+        /// <param name="Message">Messaggio che descrive l'errore</param>
+        internal record ParseError(int Code, string Message);
+
+        /// <summary>
         /// Ritorna un JSON che rappresenta il file di log in ingresso (dopo essere stato filtrato)
         /// </summary>
         /// <param name="file">File di cui deve essere eseguito il parsing</param>
         /// <returns>Esito della chiamata POST, può essere un file JSON che rappresenta il file di log o un'eccezione dovuta al parsing del file</returns>
+        /// <response code="201">Ritorna il file convertito</response>
+        /// <response code="400">Se c'è stato un errore nella conversione</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Log), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ParseError), StatusCodes.Status400BadRequest)]
+        [Produces("application/json")]
         public IActionResult Upload(IFormFile file)
         {
             string filename = file.FileName;                                    // Nome del file
@@ -45,9 +54,11 @@ namespace SmartLogViewer.Controllers
             catch (ParsingException e)
             {
                 reader.Close();
-                return StatusCode((int)HttpStatusCode.BadRequest, new { e.Code, e.Message });
+                return StatusCode((int)HttpStatusCode.BadRequest, new ParseError(e.Code, e.Message));
             }
         }
+
+        
     }
 }
 
