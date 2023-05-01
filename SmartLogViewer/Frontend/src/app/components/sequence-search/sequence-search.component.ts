@@ -2,28 +2,30 @@ import {Component, OnInit} from '@angular/core';
 import {SequencesService} from "../../services/sequences.service";
 import {Sequence} from "../../sequence.classes";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {sequence} from "@angular/animations";
+import {SequenceFetchService} from "../../services/sequence-fetch.service";
 
 @Component({
   selector: 'app-sequence-search',
   templateUrl: './sequence-search.component.html',
   styleUrls: ['./sequence-search.component.css']
 })
-export class SequenceSearchComponent implements OnInit{
+export class SequenceSearchComponent{
 
   sequences: string[] = [];
   isValidFormSubmitted: boolean;
   sequenceForm: FormGroup;
-  constructor(private formBuilder: FormBuilder, private sequencesService: SequencesService) {
+  constructor(private formBuilder: FormBuilder, private sequenceFetchService: SequenceFetchService, private sequencesService: SequencesService) {
     this.isValidFormSubmitted = false;
     this.sequenceForm = this.formBuilder.group(
         {
           sequence: [null, [Validators.required]],
         });
-  }
-
-  ngOnInit(): void {
-    this.getSequencesNames();
+    if (this.sequencesService.Sequences == undefined || this.sequencesService.Sequences.length == 0) {
+      this.getSequencesNames();
+    } else {
+      this.sequencesService.Sequences.forEach((sequence) => this.sequences.push(sequence), [this]);
+    }
+    
   }
 
   onFormSubmit() {
@@ -38,20 +40,19 @@ export class SequenceSearchComponent implements OnInit{
   get sequence() {
     return this.sequenceForm.get('sequence');
   }
-  
-  onSequenceChange() {
-    console.log((<string>this.sequence?.value));
-  }
 
   // Event handlers
   private namesHandler(): any {
     return (fetchedSequences: string[]) => {
       fetchedSequences.forEach((sequence) => this.sequences.push(sequence), [this]);
+      this.sequencesService.Sequences = fetchedSequences;
+      console.log(fetchedSequences);
     };
   }
 
   private sequencesHandler(): any {
     return (fetchedSequence: Sequence) => {
+      this.sequencesService.ChosenSequence = fetchedSequence;
       console.log(fetchedSequence);
     };
   }
@@ -60,20 +61,19 @@ export class SequenceSearchComponent implements OnInit{
   // Error handlers
   private errorNamesHandler(): any {
     return (err: string) => {
-      this.sequences.push("Non disponibile");
+      console.log("Non disponibile");
     }
   }
 
   private errorSequenceHandler(): any {
     return (errorSequence: any) => {
-      this.sequences.push(`La sequenza ${errorSequence} non è disponibile!`);
+      console.log(`La sequenza ${errorSequence} non è disponibile!`);
     }
   }
   
   // Metodi di fetch HTTP
   getSequencesNames() : void {
-    this.sequences.splice(0);
-    this.sequencesService.getSequences().subscribe(
+    this.sequenceFetchService.getSequences().subscribe(
             {
               next: this.namesHandler(),
               error: this.errorNamesHandler()
@@ -82,7 +82,7 @@ export class SequenceSearchComponent implements OnInit{
   }
   
   getSequence(name: string) : void {
-    this.sequencesService.getSequenceInformation(name).subscribe({
+    this.sequenceFetchService.getSequenceInformation(name).subscribe({
       next: this.sequencesHandler(),
       error: this.errorSequenceHandler()
     })

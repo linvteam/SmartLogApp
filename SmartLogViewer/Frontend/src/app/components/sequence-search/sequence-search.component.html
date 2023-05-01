@@ -2,21 +2,15 @@
     <div class="row">
         <div class="col">
             <label class="visually-hidden" for="autoSizingInputSequence">Sequenze</label>
-            <select class="custom-select my-1 mr-sm-2 form-control" id="autoSizingInputSequence" formControlName="sequence" required (change)="onSequenceChange()">
+            <select class="custom-select my-1 mr-sm-2 form-control" id="autoSizingInputSequence" formControlName="sequence" required>
                     <option [ngValue]="null" disabled>Scegli la sequenza</option>
                     <option *ngFor="let sequence of sequences" [ngValue]="sequence">
                         {{ sequence }}
                     </option>
             </select>
-            <div *ngIf="sequenceForm.dirty && sequence?.invalid" class="error">
-                Sequenza richiesta.
-            </div>
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-primary form-control">Submit</button>
         </div>
     </div>
-    <p *ngIf="isValidFormSubmitted" class="success">
-        Form submitted successfully.
-    </p>
 </form>
