@@ -15,7 +15,7 @@ export class TableComponent implements OnInit{
   arrayOfNumberOfTables:number[];
   constructor(private logService: LogService, private data: DialogService) {
     this.value = 0;
-    this.numberOfTables = 10;
+    this.numberOfTables = 20;
     this.arrayOfNumberOfTables=Array(this.numberOfTables).fill(1).map((x, i) => i + 1);
   }
   
