@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { ColDef } from 'ag-grid-community';
 import { LogService } from 'src/app/services/log.service';
-import { DialogService } from "../../services/dialog.service";
+import { EventGroupingService } from "../../services/event-grouping.service";
 
 @Component({
   selector: 'app-table',
@@ -13,7 +13,7 @@ export class TableComponent implements OnInit{
   value:number;
   numberOfTables:number;
   arrayOfNumberOfTables:number[];
-  constructor(private logService: LogService, private data: DialogService) {
+  constructor(private logService: LogService, private data: EventGroupingService) {
     this.value = 0;
     this.numberOfTables = 20;
     this.arrayOfNumberOfTables=Array(this.numberOfTables).fill(1).map((x, i) => i + 1);

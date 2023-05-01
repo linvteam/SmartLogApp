@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {DialogService} from "../../services/dialog.service";
+import { Component, OnInit } from '@angular/core';
+import { EventGroupingService } from "../../services/event-grouping.service";
 
 @Component({
   selector: 'app-event-grouping',
@@ -10,7 +10,7 @@ export class EventGroupingComponent implements OnInit{
 
   value:number;
   
-  constructor(private data: DialogService) { 
+  constructor(private data: EventGroupingService) { 
     this.value = 0; 
   }
   

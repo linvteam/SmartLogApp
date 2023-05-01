@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DialogService } from './dialog.service';
+import { EventGroupingService } from './event-grouping.service';
 
-describe('DialogService', () => {
-  let service: DialogService;
+describe('EventGroupingService', () => {
+  let service: EventGroupingService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(DialogService);
+    service = TestBed.inject(EventGroupingService);
   });
 
   it('should be created', () => {
