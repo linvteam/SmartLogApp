@@ -1,5 +1,5 @@
 import {Inject, Injectable} from '@angular/core';
-import { HttpClient, HttpRequest, HttpEvent, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {BaseURL} from "../connection-info";
 import {Sequence} from "../sequence.classes";
@@ -7,15 +7,24 @@ import {Sequence} from "../sequence.classes";
   providedIn: 'root'
 })
 export class SequencesService {
-
-  constructor(private http: HttpClient, @Inject(BaseURL) private ConnectionURL: string) { }
   
-  getSequences(): Observable<any> {
-    return this.http.request('GET', `${this.ConnectionURL}/sequences`);
+  private sequences: string[] = [];
+  private chosenSequence?: Sequence;
+  
+  constructor() {
+    this.chosenSequence = undefined;
   }
   
-  getSequenceInformation(sequenceName: string ): Observable<Sequence> {
-    return this.http.request<Sequence>('GET', `${this.ConnectionURL}/sequences/${sequenceName}`);
+  public set Sequences(sequences: string[]) {
+    sequences.forEach((sequence) => this.sequences.push(sequence), [this]);
+  }
+  
+  public set ChosenSequence(sequence: Sequence) {
+    this.chosenSequence = new Sequence(sequence);
+  }
+  
+  public get Sequences() {
+    return this.sequences;
   }
   
 }
