@@ -1,15 +1,23 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { ColDef } from 'ag-grid-community';
 import { LogService } from 'src/app/services/log.service';
+import { DialogService } from "../../services/dialog.service";
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent {
-  
-  constructor(private logService: LogService) {}
+export class TableComponent implements OnInit{
+
+  value:number;
+  numberOfTables:number;
+  arrayOfNumberOfTables:number[];
+  constructor(private logService: LogService, private data: DialogService) {
+    this.value = 0;
+    this.numberOfTables = 20;
+    this.arrayOfNumberOfTables=Array(this.numberOfTables).fill(1).map((x, i) => i + 1);
+  }
   
   columnDefs = [
     { field: 'date', hide: true },
@@ -30,6 +38,15 @@ export class TableComponent {
 
   onGridReady(params : any) {
     params.api.sizeColumnsToFit();
+  }
+
+  ngOnInit() {
+    this.data.currentValue.subscribe(value => this.value = value);
+  }
+
+  showTable(index : number){
+    console.log(index);
+    this.rowData = this.logService.getLog().Events.slice(0,index);
   }
   
 } 
