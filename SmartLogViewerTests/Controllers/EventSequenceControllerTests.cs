@@ -44,12 +44,10 @@ namespace SmartLogViewer.Controllers.Tests {
             manager.Setup(x => x.Sequence(It.Is<string>(x => "Sequenza1" == x)))
                 .Returns(new Sequence(
                     "Sequenza1", 
-                    "E01",
-                    true, 
-                    new List<int> { 1, 2, 3},
-                    "E02",
-                    false,
-                    new List<int> { 1, 3, 4},
+                    new List<Sequence.Event> { new Sequence.Event("E01", true) },
+                    new List<int> { 1, 2, 3 },
+                    new List<Sequence.Event> { new Sequence.Event("E02", false) },
+                    new List<int> { 1, 3, 4 },
                     5000
                 ));
 

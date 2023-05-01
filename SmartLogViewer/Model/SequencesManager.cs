@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc.Routing;
+using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace SmartLogViewer.Model {
     /// <summary>
@@ -39,18 +41,29 @@ namespace SmartLogViewer.Model {
                     foreach(var item in array) {
                         // Devo estrarre e convertire correttamente tutti i valori dell'oggetto (i dynamics sono un po' particolari da usare)
                         string Name = item.Name;
-                        string StartEvent = item.StartEvent;
-                        bool StartEventState = item.StartEventState;
-                        List<int> StartEventAvailableSubUnit = new();
-                        // Questo ciclo è stata la parte tribbolo del parsing :(
-                        foreach(var subunit in item.StartEventAvalilableSubUnits)
-                            StartEventAvailableSubUnit.Add((int)subunit.Value);
+                        List<Model.Sequence.Event> StartEvents = new();
+                        foreach(var startEvent in item.StartEvents) {
+                            string code= startEvent.Code;
+                            bool status = startEvent.Status;
+                            StartEvents.Add(new Model.Sequence.Event(code, status));
+                        }
 
-                        string EndEvent = item.EndEvent;
-                        bool EndEventState = item.EndEventState;
-                        List<int> EndEventAvailableSubUnit = new();
-                        foreach(var subunit in item.EndEventAvalilableSubUnits)
-                            EndEventAvailableSubUnit.Add((int)subunit.Value);
+                        List<int> StartEventsAvailableSubUnits = new();
+                        // Questo ciclo è stata la parte tribbolo del parsing :(
+                        foreach(var subunit in item.StartEventsAvailableSubUnits)
+                            StartEventsAvailableSubUnits.Add((int)subunit.Value);
+
+
+                        List<Model.Sequence.Event> EndEvents = new();
+                        foreach(var endEvent in item.EndEvents) {
+                            string code = endEvent.Code;
+                            bool status = endEvent.Status;
+                            EndEvents.Add(new Model.Sequence.Event(code, status));
+                        }
+
+                        List<int> EndEventsAvailableSubUnits = new();
+                        foreach(var subunit in item.EndEventsAvailableSubUnits)
+                            EndEventsAvailableSubUnits.Add((int)subunit.Value);
 
                         int MaxDuration = item.MaxDuration;
 
@@ -58,12 +71,10 @@ namespace SmartLogViewer.Model {
                         // Quando si scatena un errore qualsiasi viene lanciata una eccezione 
                         sequences.Add(new Sequence(
                                 Name,
-                                StartEvent,
-                                StartEventState,
-                                StartEventAvailableSubUnit,
-                                EndEvent,
-                                EndEventState,
-                                EndEventAvailableSubUnit,
+                                StartEvents,
+                                StartEventsAvailableSubUnits,
+                                EndEvents,
+                                EndEventsAvailableSubUnits,
                                 MaxDuration)
                             );
                     }

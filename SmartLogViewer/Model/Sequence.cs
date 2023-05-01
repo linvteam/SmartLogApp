@@ -5,6 +5,13 @@
     public class Sequence {
 
         /// <summary>
+        /// Costruisce un evento con il suo relativo stato
+        /// </summary>
+        /// <param name="Code">Codice dell'evento</param>
+        /// <param name="Status">Stato dell'evento</param>
+        public record Event(string Code, bool Status);
+
+        /// <summary>
         /// Il nome della sequenza
         /// </summary>
         public string Name { get; private set; }
@@ -12,32 +19,22 @@
         /// <summary>
         /// Lista delle possibili subunit sul quale può scatenarsi l'evento di inizio
         /// </summary>
-        public List<int> StartEventAvailableSubUnits { get; private set; }
+        public List<int> StartEventsAvailableSubUnits { get; private set; }
         
         /// <summary>
-        /// L'evento di inizio della sequenza
+        /// Gli eventi di inizio della sequenza
         /// </summary>
-        public string StartEvent { get; private set; }
-
-        /// <summary>
-        /// Lo stato dell'evento di inizio
-        /// </summary>
-        public bool StartEventState { get; private set; }
+        public List<Event> StartEvents { get; private set; }
 
         /// <summary>
         /// Lista delle possibili subunit sul quale può scatenarsi l'evento di fine
         /// </summary>
-        public List<int> EndEventAvailableSubUnits { get; private set; }
+        public List<int> EndEventsAvailableSubUnits { get; private set; }
 
         /// <summary>
-        /// L'evento di fine della sequenza
+        /// Gli eventi di fine della sequenza
         /// </summary>
-        public string EndEvent { get; private set; }
-
-        /// <summary>
-        /// Lo stato dell'evento di fine
-        /// </summary>
-        public bool EndEventState { get; private set; }
+        public List<Event> EndEvents { get; private set; }
 
         /// <summary>
         /// La durata massima dell'esecuzione di una sequenza in millisecondi
@@ -48,21 +45,17 @@
         /// Crea una nuova istanza di Sequence
         /// </summary>
         /// <param name="name">Nome della sequenza</param>
-        /// <param name="startEvent">Evento di inizo della sequenza</param>
-        /// <param name="startEventState">Stato dell'evento di inizio</param>
+        /// <param name="startEvents">Eventi di inizo della sequenza</param>
         /// <param name="startEventSubunit">Lista di subunit sul quale può scatenarsi l'evento di partenza</param>
-        /// <param name="endEvent">Evento di fine della sequenza</param>
-        /// <param name="endEventState">Stato dell'evento di fine</param>
+        /// <param name="endEvents">Eventi di fine della sequenza</param>
         /// <param name="endEventSubunit">Lista delle subunit sul quale può scatenarsi l'evento di fine</param>
         /// <param name="maxDuration">Durata massima dell'esecuzione della sequenza in millisecondi</param>
-        public Sequence(string name, string startEvent, bool startEventState, List<int> startEventSubunit, string endEvent, bool endEventState, List<int> endEventSubunit, int maxDuration) {
+        public Sequence(string name, List<Event> startEvents, List<int> startEventSubunit, List<Event> endEvents, List<int> endEventSubunit, int maxDuration) {
             Name = name;
-            StartEventAvailableSubUnits = startEventSubunit;
-            StartEvent = startEvent;
-            StartEventState = startEventState;
-            EndEventAvailableSubUnits = endEventSubunit;
-            EndEvent = endEvent;
-            EndEventState = endEventState;
+            StartEventsAvailableSubUnits = startEventSubunit;
+            StartEvents = startEvents;
+            EndEventsAvailableSubUnits = endEventSubunit;
+            EndEvents = endEvents;
             MaxDuration = maxDuration;
         }
 

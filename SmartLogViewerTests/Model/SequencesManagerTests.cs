@@ -89,7 +89,7 @@ namespace SmartLogViewer.Model.Tests {
 
             Assert.AreEqual(0, manager.SequenceNames().Count);
             Assert.IsTrue(manager.ParsingError);
-            
+
         }
 
         [TestMethod()]
@@ -98,12 +98,12 @@ namespace SmartLogViewer.Model.Tests {
             reader.Setup(x => x.StreamReader()).Returns(
                 new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes("{" +
                 "\"Name\": \"TestSequence\"," +
-                "\"StartEvent\": \"E01\"," +
-                "\"StartEventState\": true," +
-                "\"StartEventAvalilableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
-                "\"EndEvent\": \"E02\"," +
-                "\"EndEventState\": false," +
-                "\"EndEventAvalilableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
+                "\"StartEvents\": [{ \"Code\": \"E01\"," +
+                "\"Status\": true }]," +
+                "\"StartEventsAvalilableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
+                "\"EndEvents\": [{ \"Code\": \"E02\"," +
+                "\"Status\": false }]," +
+                "\"EndEventsAvailableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
                 "\"MaxDuration\": 5000" +
                 "}"))));
 
@@ -118,12 +118,12 @@ namespace SmartLogViewer.Model.Tests {
             reader.Setup(x => x.StreamReader()).Returns(
                 new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes("[{" +
                 "\"Name\": \"TestSequence\"," +
-                "\"StartEvent\": \"E01\"," +
-                "\"StartEventState\": true," +
-                "\"StartEventAvalilableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
-                "\"EndEvent\": \"E02\"," +
-                "\"EndEventState\": false," +
-                "\"EndEventAvalilableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
+                "\"StartEvents\": [{\"Code\": \"E01\"," +
+                "\"Status\": true}]," +
+                "\"StartEventsAvailableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
+                "\"EndEvents\": [{\"Code\": \"E02\"," +
+                "\"Status\": false }]," +
+                "\"EndEventsAvailableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
                 "\"MaxDuration\": 5000" +
                 "}]"))));
 
@@ -136,15 +136,15 @@ namespace SmartLogViewer.Model.Tests {
             Sequence? testSequence = manager.Sequence("TestSequence");
             Assert.IsNotNull(testSequence);
             Assert.AreEqual("TestSequence", testSequence.Name);
-            Assert.AreEqual("E01", testSequence.StartEvent);
-            Assert.AreEqual("E02", testSequence.EndEvent);
-            Assert.IsTrue(testSequence.StartEventState);
-            Assert.IsFalse(testSequence.EndEventState);
+            Assert.AreEqual("E01", testSequence.StartEvents[0].Code);
+            Assert.AreEqual("E02", testSequence.EndEvents[0].Code);
+            Assert.IsTrue(testSequence.StartEvents[0].Status);
+            Assert.IsFalse(testSequence.EndEvents[0].Status);
             Assert.AreEqual(5000, testSequence.MaxDuration);
-            
+
             for(int i = 1; i <= 8; i++) {
-                Assert.IsTrue(testSequence.StartEventAvailableSubUnits.Contains(i));
-                Assert.IsTrue(testSequence.EndEventAvailableSubUnits.Contains(i));
+                Assert.IsTrue(testSequence.StartEventsAvailableSubUnits.Contains(i));
+                Assert.IsTrue(testSequence.EndEventsAvailableSubUnits.Contains(i));
             }
         }
 
@@ -154,21 +154,21 @@ namespace SmartLogViewer.Model.Tests {
             reader.Setup(x => x.StreamReader()).Returns(
                 new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes("[{" +
                     "\"Name\": \"TestSequence\"," +
-                    "\"StartEvent\": \"E01\"," +
-                    "\"StartEventState\": true," +
-                    "\"StartEventAvalilableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
-                    "\"EndEvent\": \"E02\"," +
-                    "\"EndEventState\": false," +
-                    "\"EndEventAvalilableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
+                    "\"StartEvents\": [{\"Code\": \"E01\"," +
+                    "\"Status\": true }]," +
+                    "\"StartEventsAvailableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
+                    "\"EndEvents\": [{\"Code\": \"E02\"," +
+                    "\"Status\": false}]," +
+                    "\"EndEventsAvailableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
                     "\"MaxDuration\": 5000" +
                     "},{" +
                     "\"Name\": \"TestSequence2\"," +
-                    "\"StartEvent\": \"E11\"," +
-                    "\"StartEventState\": false," +
-                    "\"StartEventAvalilableSubUnits\": [5, 6, 7, 8]," +
-                    "\"EndEvent\": \"E12\"," +
-                    "\"EndEventState\": true," +
-                    "\"EndEventAvalilableSubUnits\": [5, 6, 7, 8]," +
+                    "\"StartEvents\": [{\"Code\": \"E11\"," +
+                    "\"Status\": false }]," +
+                    "\"StartEventsAvailableSubUnits\": [5, 6, 7, 8]," +
+                    "\"EndEvents\": [{ \"Code\": \"E12\"," +
+                    "\"Status\": true }]," +
+                    "\"EndEventsAvailableSubUnits\": [5, 6, 7, 8]," +
                     "\"MaxDuration\": 50" +
                     "}]"))));
 
@@ -182,12 +182,12 @@ namespace SmartLogViewer.Model.Tests {
             Sequence? sequence = manager.Sequence("TestSequence2");
             Assert.IsNotNull(sequence);
 
-            Assert.AreEqual("E11", sequence.StartEvent);
-            Assert.AreEqual(4, sequence.StartEventAvailableSubUnits.Count);
-            Assert.IsTrue(sequence.StartEventAvailableSubUnits.Contains(5));
-            Assert.IsTrue(sequence.StartEventAvailableSubUnits.Contains(6));
-            Assert.IsTrue(sequence.StartEventAvailableSubUnits.Contains(7));
-            Assert.IsTrue(sequence.StartEventAvailableSubUnits.Contains(8));
+            Assert.AreEqual("E11", sequence.StartEvents[0].Code);
+            Assert.AreEqual(4, sequence.StartEventsAvailableSubUnits.Count);
+            Assert.IsTrue(sequence.StartEventsAvailableSubUnits.Contains(5));
+            Assert.IsTrue(sequence.StartEventsAvailableSubUnits.Contains(6));
+            Assert.IsTrue(sequence.StartEventsAvailableSubUnits.Contains(7));
+            Assert.IsTrue(sequence.StartEventsAvailableSubUnits.Contains(8));
         }
 
         [TestMethod()]
@@ -196,21 +196,20 @@ namespace SmartLogViewer.Model.Tests {
             reader.Setup(x => x.StreamReader()).Returns(
                 new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes("[{" +
                     "\"Name\": \"TestSequence\"," +
-                    "\"StartEvent\": \"E01\"," +
-                    "\"StartEventState\": true," +
-                    "\"StartEventAvalilableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
-                    "\"EndEvent\": \"E02\"," +
-                    "\"EndEventState\": false," +
-                    "\"EndEventAvalilableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
+                    "\"StartEvents\": [{\"Code\": \"E01\"," +
+                    "\"Status\": true }]," +
+                    "\"StartEventsAvalilableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
+                    "\"EndEvents\": [{\"Code\": \"E02\"," +
+                    "\"Status\": false }]," +
+                    "\"EndEventsAvailableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
                     "\"MaxDuration\": 5000" +
                     "},{" +
                     "\"Name\": \"TestSequence2\"," +
-                    "\"StartEvent\": \"E11\"," +
-                    "\"StartEventState\": false," +
-                    "\"StartEventAvalilableSubUnits\": \"ciao\"," +
-                    "\"EndEvent\": \"E12\"," +
-                    "\"EndEventState\": true," +
-                    "\"EndEventAvalilableSubUnits\": [5, 6, 7, 8]," +
+                    "\"StartEvents\": \"E11\"," +
+                    "\"StartEventsAvalilableSubUnits\": \"ciao\"," +
+                    "\"EndEvents\": [{ \"Code\": \"E12\"," +
+                    "\"Status\": true }]," +
+                    "\"EndEventsAvailableSubUnits\": [5, 6, 7, 8]," +
                     "\"MaxDuration\": 50" +
                     "}]"))));
 
@@ -225,19 +224,18 @@ namespace SmartLogViewer.Model.Tests {
             reader.Setup(x => x.StreamReader()).Returns(
                 new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes("[{" +
                     "\"Name\": \"TestSequence\"," +
-                    "\"StartEvent\": \"E01\"," +
-                    "\"StartEventState\": true," +
-                    "\"StartEventAvalilableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
-                    "\"EndEvent\": \"E02\"," +
-                    "\"EndEventState\": false," +
-                    "\"EndEventAvalilableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
+                    "\"StartEvents\": [{\"Code\": \"E01\"," +
+                    "\"Status\": true }]," +
+                    "\"StartEventsAvalilableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
+                    "\"EndEvents\": [{\"Code\": \"E02\"," +
+                    "\"Status\": false }]," +
+                    "\"EndEventsAvailableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
                     "\"MaxDuration\": 5000" +
                     "},{" +
                     "\"Name\": \"TestSequence2\"," +
-                    "\"StartEvent\": \"E11\"," +
-                    "\"StartEventState\": false," +
-                    "\"EndEventState\": true," +
-                    "\"EndEventAvalilableSubUnits\": [5, 6, 7, 8]," +
+                    "\"StartEvents\": [{\"Code\": \"E11\"," +
+                    "\"Status\": false }]," +
+                    "\"EndEventsAvailableSubUnits\": [5, 6, 7, 8]," +
                     "\"MaxDuration\": 50" +
                     "}]"))));
 
@@ -245,6 +243,62 @@ namespace SmartLogViewer.Model.Tests {
             Assert.IsTrue(manager.ParsingError);
             Assert.AreEqual(0, manager.SequenceNames().Count);
 
+        }
+
+        [TestMethod()]
+        public void SequencesManagerMultipleStartEndEvents() {
+            Mock<SequenceFileReader> reader = new();
+            reader.Setup(x => x.StreamReader()).Returns(
+                new StreamReader(new MemoryStream(
+                    Encoding.UTF8.GetBytes("[{" +
+                    "\"Name\": \"TestSequence\"," +
+                    "\"StartEvents\": [{\"Code\": \"E01\"," +
+                    "\"Status\": true }," +
+                    "{\"Code\": \"E02\", \"Status\": false}]," +
+                    "\"StartEventsAvailableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
+                    "\"EndEvents\": [{\"Code\": \"E02\"," +
+                    "\"Status\": false }," +
+                    "{\"Code\": \"E05\", \"Status\": true}]," +
+                    "\"EndEventsAvailableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
+                    "\"MaxDuration\": 5000" +
+                    "}]"))));
+
+            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            Assert.IsFalse(manager.ParsingError);
+            Sequence? seq = manager.Sequence("TestSequence");
+            Assert.IsNotNull(seq);
+            Assert.AreEqual("E01", seq.StartEvents[0].Code);
+            Assert.AreEqual("E02", seq.StartEvents[1].Code);
+            Assert.IsTrue(seq.StartEvents[0].Status);
+            Assert.IsFalse(seq.StartEvents[1].Status);
+            Assert.AreEqual("E02", seq.EndEvents[0].Code);
+            Assert.AreEqual("E05", seq.EndEvents[1].Code);
+            Assert.IsTrue(seq.EndEvents[1].Status);
+            Assert.IsFalse(seq.EndEvents[0].Status);
+        }
+
+        [TestMethod]
+        public void SequencesManagerMultipleStartEndEventsInvalid() {
+            Mock<SequenceFileReader> reader = new();
+            reader.Setup(x => x.StreamReader()).Returns(
+                new StreamReader(new MemoryStream(
+                    Encoding.UTF8.GetBytes("[{" +
+                    "\"Name\": \"TestSequence\"," +
+                    "\"StartEvents\": [{\"Code\": \"E01\"," +
+                    "\"Staus\": true }," +
+                    "{\"Code\": \"E02\", \"Status\": \"false\"}]," +
+                    "{\"Code\": \"E02\", \"Status\": \"false\"}]," +
+                    "\"StartEventsAvalilableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
+                    "\"EndEvents\": [{\"Code\": \"E02\"," +
+                    "\"Status\": false }," +
+                    "{\"Code\": \"E05\", \"Status\": ue}]," +
+                    "\"EndEventsAvailableSubUnits\": [1, 2, 3, 4, 5, 6, 7, 8]," +
+                    "\"MaxDuration\": 5000" +
+                    "}]"))));
+
+            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            Assert.IsTrue(manager.ParsingError);
+            Assert.AreEqual(0, manager.SequenceNames().Count);
         }
     }
 }
