@@ -102,18 +102,6 @@ export class LogRow {
     public get Color() {
         return this.color;
     }
-
-    public search(searchString: RegExp): boolean {
-
-        if (searchString.test(this.date + " - " + this.time)) return true;
-        if (searchString.test(this.unit + "")) return true;
-        if (searchString.test(this.subUnit + "")) return true;
-        if (searchString.test(this.code)) return true;
-        if (searchString.test(this.description)) return true;
-        if (searchString.test(`${this.value}`)) return true;
-
-        return false;
-    }
 }
 
 export class Log {

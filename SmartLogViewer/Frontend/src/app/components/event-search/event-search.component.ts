@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { LogService } from 'src/app/services/log.service';
-import { LogMessageService } from 'src/app/services/log-message.service';
+import { EventSearchService } from 'src/app/services/event-search.service';
 
 
 @Component({
@@ -16,22 +16,24 @@ export class EventSearchComponent implements OnInit {
     });
 
     searchString: string;
-    constructor(private formBuilder: FormBuilder, private logMessageService: LogMessageService) {
+
+    constructor(private formBuilder: FormBuilder, private eventSearchService: EventSearchService) {
         this.searchString = "";
     }
 
     ngOnInit() {
-        this.logMessageService.currentValue.subscribe(value => this.searchString = value)
+
     }
 
     onSubmit(): void {
+
         // Process data here
-        console.warn('Your data: ', this.uploadForm.value.q);
 
         this.searchString = this.uploadForm.value.q as string;
 
-        this.logMessageService.changeValue(this.searchString);
+        console.warn('Your data: ', this.searchString);
 
+        this.eventSearchService.filterEvents(this.searchString);
 
         this.uploadForm.reset();
         

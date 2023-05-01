@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LogMessageService } from './log-message.service';
+import { EventSearchService } from './event-search.service';
 
-describe('LogMessageService', () => {
-  let service: LogMessageService;
+describe('EventSearchService', () => {
+  let service: EventSearchService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(LogMessageService);
+    service = TestBed.inject(EventSearchService);
   });
 
   it('should be created', () => {
