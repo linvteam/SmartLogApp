@@ -1,7 +1,10 @@
 ﻿using Newtonsoft.Json;
 
 namespace SmartLogViewer.Model {
-    public class SequencesManager {
+    /// <summary>
+    /// Oggeto per gestire il caricamento delle sequenze note dal file di configurazione.
+    /// </summary>
+    public class SequencesManager: SequencesManagerBase {
 
         private readonly List<Sequence> sequences;
         
@@ -33,14 +36,14 @@ namespace SmartLogViewer.Model {
                 if(array == null) {
                     _logger.LogError("Impossibile leggere il file delle sequenze");
                 } else {
-                    foreach (var item in array) {
+                    foreach(var item in array) {
                         // Devo estrarre e convertire correttamente tutti i valori dell'oggetto (i dynamics sono un po' particolari da usare)
                         string Name = item.Name;
                         string StartEvent = item.StartEvent;
                         bool StartEventState = item.StartEventState;
                         List<int> StartEventAvailableSubUnit = new();
                         // Questo ciclo è stata la parte tribbolo del parsing :(
-                        foreach (var subunit in item.StartEventAvalilableSubUnits)
+                        foreach(var subunit in item.StartEventAvalilableSubUnits)
                             StartEventAvailableSubUnit.Add((int)subunit.Value);
 
                         string EndEvent = item.EndEvent;
@@ -54,13 +57,13 @@ namespace SmartLogViewer.Model {
                         // È stato necessario estrarre tutti i valori singolarmente per eseguire le dovute conversioni ed individuare gli errori.
                         // Quando si scatena un errore qualsiasi viene lanciata una eccezione 
                         sequences.Add(new Sequence(
-                                Name, 
-                                StartEvent, 
-                                StartEventState, 
-                                StartEventAvailableSubUnit, 
-                                EndEvent, 
-                                EndEventState, 
-                                EndEventAvailableSubUnit, 
+                                Name,
+                                StartEvent,
+                                StartEventState,
+                                StartEventAvailableSubUnit,
+                                EndEvent,
+                                EndEventState,
+                                EndEventAvailableSubUnit,
                                 MaxDuration)
                             );
                     }
