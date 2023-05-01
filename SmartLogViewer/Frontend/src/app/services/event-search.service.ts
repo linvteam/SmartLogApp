@@ -15,15 +15,22 @@ export class EventSearchService {
 
     filterEvents(searchString: string): void {
 
+        // Reset eventi dal log attuale
         let events = [...this.logService.getLog().Events]
+
+        //Se l'utente non da input allora termina
         if (searchString == undefined || searchString == null) {
             this.logService.getDisplayLog().Events = events;
 
             this.logSource.next(this.logService.getDisplayLog());
+
+            return;
         }
 
+        // Raccoglie tutte le stringhe all'interno di apici, prese per intero, poi toglie gli apici
         const stringList1 = searchString.match(/\'(.*?)\'/g)?.map(str => str.replace(/["']/g, ""))
 
+        // Raccoglie tutte le stringhe all' di fuori dei apici, separa le parole e toglie i spazi bianchi
         const stringList2 = searchString.replace(/\'(.*?)\'/g, "").split(" ").filter(entry => /\S/.test(entry));
 
         let stringList = [];
@@ -34,12 +41,15 @@ export class EventSearchService {
         else
             stringList = stringList2
 
+        // Si fa la ricerca con search ...
         for (let s of stringList) {
             events = events.filter(logRow => this.search(logRow, new RegExp(s)));
         }
+
         
         this.logService.getDisplayLog().Events = events;
 
+        // ... e infine si invia il risultato alla tabella e al grafico
         this.logSource.next(this.logService.getDisplayLog())
     }
 
