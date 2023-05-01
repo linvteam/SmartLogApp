@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {SequencesService} from "../../services/sequences.service";
+import {SequencesService} from "../../services/sequence-search.service";
 import {Sequence} from "../../sequence.classes";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {SequenceFetchService} from "../../services/sequence-fetch.service";

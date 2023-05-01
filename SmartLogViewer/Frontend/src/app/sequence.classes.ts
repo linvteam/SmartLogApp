@@ -1,21 +1,35 @@
+export class Event {
+    private code: string;
+    private status: boolean;
+    
+    constructor(event: Event) {
+        this.code = event.code;
+        this.status = event.status;
+    }
+    
+    public get Code() {
+        return this.code;
+    }
+    
+    public get Status() {
+        return this.status;
+    }
+}
+
 export class Sequence {
     private name: string;
     private startEventAvailableSubUnits: number[];
-    private startEvent: string;
-    private startEventState: boolean;
+    private startEvents: Event[];
     private endEventAvailableSubUnits: number[];
-    private endEvent: string;
-    private endEventState: boolean;
+    private endEvents: Event[];
     private maxDuration: number;
 
     constructor(sequence: Sequence) {
         this.name = sequence.name;
         this.startEventAvailableSubUnits = sequence.startEventAvailableSubUnits;
-        this.startEvent = sequence.startEvent;
-        this.startEventState = sequence.startEventState;
+        this.startEvents = sequence.startEvents;
         this.endEventAvailableSubUnits = sequence.endEventAvailableSubUnits;
-        this.endEvent = sequence.endEvent;
-        this.endEventState = sequence.endEventState;
+        this.endEvents = sequence.endEvents;
         this.maxDuration = sequence.maxDuration;
     }
 
@@ -27,24 +41,16 @@ export class Sequence {
         return this.startEventAvailableSubUnits;
     } 
 
-    public get StartEvent() {
-        return this.startEvent;
-    }
-
-    public get StartEventState() {
-        return this.startEventState;
+    public get StartEvents() {
+        return this.startEvents;
     }
 
     public get EndEventAvailableSubUnits() {
         return this.endEventAvailableSubUnits;
     }
 
-    public get EndEvent() {
-        return this.endEvent;
-    }
-
-    public get EndEventState() {
-        return this.endEventState;
+    public get EndEvents() {
+        return this.endEvents;
     }
 
     public get MaxDuration() {
