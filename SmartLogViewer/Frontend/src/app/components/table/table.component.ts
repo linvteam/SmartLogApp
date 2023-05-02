@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import { ColDef } from 'ag-grid-community';
 import { LogService } from 'src/app/services/log.service';
 import { EventGroupingService } from "../../services/event-grouping.service";
-import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-table',
@@ -13,11 +12,11 @@ export class TableComponent implements OnInit{
 
   regroupTime : number;
   numberOfTables:number;
-  arrayOfNumberOfTables:number[];
+  //arrayOfNumberOfTables:number[];
   constructor(private logService: LogService, private eventGroupingService: EventGroupingService) {
     this.regroupTime = 0;
-    this.numberOfTables = 20;
-    this.arrayOfNumberOfTables=Array(this.numberOfTables).fill(1).map((x, i) => i + 1);
+    this.numberOfTables = 1;
+    //this.arrayOfNumberOfTables=Array(this.numberOfTables).fill(1).map((x, i) => i + 1);
   }
   
   columnDefs = [
@@ -42,17 +41,16 @@ export class TableComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.eventGroupingService.currentValue.subscribe(regroupTime => this.regroupTime = regroupTime);
+    this.eventGroupingService.currentRegroupTime.subscribe(regroupTime => {
+      this.regroupTime = regroupTime;
+      this.numberOfTables = this.eventGroupingService.getNumberOfRegroups(this.regroupTime)});
   }
 
-  showTable(index : number){
-    
+  showTable(values : any) {
+
     this.numberOfTables = this.eventGroupingService.getNumberOfRegroups(this.regroupTime);
-    this.arrayOfNumberOfTables=Array(this.numberOfTables).fill(1).map((x, i) => i + 1);
+    //this.arrayOfNumberOfTables=Array(this.numberOfTables).fill(1).map((x, i) => i + 1);
     
-    
-    console.log(this.numberOfTables);
-    
-    this.rowData = this.eventGroupingService.getRegroup(index, this.regroupTime);
+    this.rowData = this.eventGroupingService.getRegroup(values.valore, this.regroupTime);
   }
 } 

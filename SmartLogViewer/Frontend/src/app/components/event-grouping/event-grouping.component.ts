@@ -15,7 +15,7 @@ export class EventGroupingComponent implements OnInit{
   }
   
   ngOnInit() {
-    this.data.currentValue.subscribe(regroupTime => this.regroupTime = regroupTime)
+    this.data.currentRegroupTime.subscribe(regroupTime => this.regroupTime = regroupTime)
   }
 
   getFormValues(values : any){

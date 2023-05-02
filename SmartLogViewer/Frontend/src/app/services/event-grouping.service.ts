@@ -9,7 +9,7 @@ import {LogService} from "./log.service";
 export class EventGroupingService {
 
   private regroupTimeSource = new BehaviorSubject<number>(0);
-  currentValue = this.regroupTimeSource.asObservable();
+  currentRegroupTime = this.regroupTimeSource.asObservable();
 
   constructor(private logService: LogService) { }
 
@@ -22,14 +22,12 @@ export class EventGroupingService {
     let start = new Date ([this.logService.getLog().Events.at(this.logService.getLog().Events.length-1)!.Date, this.logService.getLog().Events.at(this.logService.getLog().Events.length-1)!.Time].join('T').replaceAll("/", "-") + "Z");
     //trovo la data dell'evento finale
     let end = new Date ([this.logService.getLog().Events.at(0)!.Date, this.logService.getLog().Events.at(0)!.Time].join('T').replaceAll("/", "-") + "Z");
-
-    console.log(start.getTime());
-    console.log(end.getTime());
+    
     //calcolo il numero di raggruppamenti nel log
     if(regroupTime!=0){
       return Math.trunc(((end.getTime() - start.getTime()) / regroupTime))+1;
     }
-    return 0;
+    return 1;
   }
 
   getRegroup(index : number, regroupTime : number){

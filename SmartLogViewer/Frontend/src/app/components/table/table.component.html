@@ -2,16 +2,29 @@
 <app-header></app-header>
 
 <div>
-    {{regroupTime}}
-    <nav aria-label="Page navigation example">
+    <!--<nav aria-label="Page navigation example">
         <ul class="pagination" >
             <li class="page-item" *ngFor="let index of arrayOfNumberOfTables">
                 <button class="page-link" (click)="showTable(index)">{{index}}</button>
             </li>
-            <!--<li class="page-item" *ngFor='let in of [].constructor(numberOfTables) ;let i = index'>{{i}}</li>-->
-        </ul>
+            ESEMPIO: <li class="page-item" *ngFor='let in of [].constructor(numberOfTables) ;let i = index'>{{i}}</li>-->
+        <!--</ul>
+    </nav>-->
+    <form class="row gy-2 gx-3 align-items-center col-auto" #visualizePartionForm="ngForm" (ngSubmit)="showTable(visualizePartionForm.value)">
+        <div class="form-group row">
+            Raggruppamento
+            <div class="col">
+                <label class="visually-hidden" for="autoSizingInputRegroup">Raggruppamento</label>
+                <input type="number" ngModel name="valore" class="form-control" id="autoSizingInputRegroup" min="1" max="{{numberOfTables}}" placeholder="Es: 1">
+            </div>
+            di {{numberOfTables}}
+            <div class="col">
+                <button type="submit" class="btn btn-primary form-control">Visualizza</button>
+            </div>
+        </div>
+    </form>
         
-    </nav>
+    
     <ag-grid-angular
             class="ag-theme-alpine"
             [rowData]="rowData"
