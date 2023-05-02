@@ -19,17 +19,17 @@ export class Event {
 export class Sequence {
     private name: string;
     private startEventAvailableSubUnits: number[];
-    private startEvents: Event[];
+    private startEvents: Event[] = [];
     private endEventAvailableSubUnits: number[];
-    private endEvents: Event[];
+    private endEvents: Event[] = [];
     private maxDuration: number;
 
     constructor(sequence: Sequence) {
         this.name = sequence.name;
         this.startEventAvailableSubUnits = sequence.startEventAvailableSubUnits;
-        this.startEvents = sequence.startEvents;
+        sequence.startEvents.forEach((event) => this.startEvents.push(new Event(event)));
         this.endEventAvailableSubUnits = sequence.endEventAvailableSubUnits;
-        this.endEvents = sequence.endEvents;
+        sequence.endEvents.forEach((event) => this.endEvents.push(new Event(event)));
         this.maxDuration = sequence.maxDuration;
     }
 
