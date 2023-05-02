@@ -8,40 +8,43 @@ import { EventGroupingService } from "../../services/event-grouping.service";
 })
 export class EventGroupingComponent implements OnInit{
 
+  //tempo per il raggruppamento
   regroupTime : number;
   
-  constructor(private data: EventGroupingService) { 
+  constructor(private eventGroupingService: EventGroupingService) { 
     this.regroupTime = 0; 
   }
   
   ngOnInit() {
-    this.data.currentRegroupTime.subscribe(regroupTime => this.regroupTime = regroupTime)
+    //aggiorno dinamicamente il tempo del raggruppamento
+    this.eventGroupingService.currentRegroupTime.subscribe(regroupTime => this.regroupTime = regroupTime)
   }
 
   getFormValues(values : any){
+    //cambio il valore del tempo di raggruppamento in base all'unità di misura
     switch(values.unita) {
       case "1": {
-        this.data.changeValue(values.valore);
+        this.eventGroupingService.changeValue(values.valore);
         break;
       }
       case "2": {
-        this.data.changeValue(values.valore * 1000);
+        this.eventGroupingService.changeValue(values.valore * 1000);
         break;
       }
       case "3": {
-        this.data.changeValue(values.valore * 60000);
+        this.eventGroupingService.changeValue(values.valore * 60000);
         break;
       }
       case "4": {
-        this.data.changeValue(values.valore * 3600000);
+        this.eventGroupingService.changeValue(values.valore * 3600000);
         break;
       }
       case "5": {
-        this.data.changeValue(values.valore * 86400000);
+        this.eventGroupingService.changeValue(values.valore * 86400000);
         break;
       }
       default: {
-        this.data.changeValue(values.valore);
+        this.eventGroupingService.changeValue(values.valore);
         break;
       }
     }

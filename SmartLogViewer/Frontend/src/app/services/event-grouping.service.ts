@@ -31,18 +31,24 @@ export class EventGroupingService {
   }
 
   getRegroup(index : number, regroupTime : number){
-    //trovo la data dell'evento iniziale
-    let start = new Date ([this.logService.getLog().Events.at(this.logService.getLog().Events.length-1)!.Date, this.logService.getLog().Events.at(this.logService.getLog().Events.length-1)!.Time].join('T').replaceAll("/", "-") + "Z");
+    //il tempo di raggruppamento uguale a 0 implica la visualizzazione dell'intero log
+    if(regroupTime==0){
+      return this.logService.getLog().Events;
+    }
+    else {
+      //trovo la data dell'evento iniziale
+      let start = new Date ([this.logService.getLog().Events.at(this.logService.getLog().Events.length-1)!.Date, this.logService.getLog().Events.at(this.logService.getLog().Events.length-1)!.Time].join('T').replaceAll("/", "-") + "Z");
 
-    //trovo l'inizio e la fine del raggruppamento in ms
-    let startRegroup = start.getTime() + (index-1) * regroupTime;
-    let endRegroup = startRegroup + index * regroupTime;
+      //trovo l'inizio e la fine del raggruppamento in ms
+      let startRegroup = start.getTime() + (index-1) * regroupTime;
+      let endRegroup = startRegroup + index * regroupTime;
 
-    //filtraggio degli eventi del log contenuti nell'intervallo tra l'inizio e la fine del raggruppamento
-    return this.logService.getLog().Events.filter( (e:LogRow) => {
-      let DateTime = new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z").getTime();
-      return DateTime >= startRegroup && DateTime <= endRegroup;
-    } );
+      //filtraggio degli eventi del log contenuti nell'intervallo tra l'inizio e la fine del raggruppamento
+      return this.logService.getLog().Events.filter( (e:LogRow) => {
+        let DateTime = new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z").getTime();
+        return DateTime >= startRegroup && DateTime <= endRegroup;
+      } ); 
+    }
   }
   
 }

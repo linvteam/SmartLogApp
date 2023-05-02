@@ -10,13 +10,14 @@ import { EventGroupingService } from "../../services/event-grouping.service";
 })
 export class TableComponent implements OnInit{
 
+  //tempo per il raggruppamento
   regroupTime : number;
+  //numero di tabelle da visualizzare (con raggruppamento o ricerca di sequenze)
   numberOfTables:number;
-  //arrayOfNumberOfTables:number[];
+
   constructor(private logService: LogService, private eventGroupingService: EventGroupingService) {
     this.regroupTime = 0;
     this.numberOfTables = 1;
-    //this.arrayOfNumberOfTables=Array(this.numberOfTables).fill(1).map((x, i) => i + 1);
   }
   
   columnDefs = [
@@ -41,16 +42,14 @@ export class TableComponent implements OnInit{
   }
 
   ngOnInit() {
+    //aggiorno dinamicamente il tempo del raggruppamento e il numero di raggruppamenti
     this.eventGroupingService.currentRegroupTime.subscribe(regroupTime => {
       this.regroupTime = regroupTime;
       this.numberOfTables = this.eventGroupingService.getNumberOfRegroups(this.regroupTime)});
   }
 
   showTable(values : any) {
-
-    this.numberOfTables = this.eventGroupingService.getNumberOfRegroups(this.regroupTime);
-    //this.arrayOfNumberOfTables=Array(this.numberOfTables).fill(1).map((x, i) => i + 1);
-    
+    //cambio i dati da visualizzare
     this.rowData = this.eventGroupingService.getRegroup(values.valore, this.regroupTime);
   }
 } 
