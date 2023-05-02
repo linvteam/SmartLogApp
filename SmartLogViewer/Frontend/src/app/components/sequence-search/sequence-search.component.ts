@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {SequencesService} from "../../services/sequence-search.service";
+import {SequencesSearchService} from "../../services/sequence-search.service";
 import {Sequence} from "../../sequence.classes";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {SequenceFetchService} from "../../services/sequence-fetch.service";
+import {LogService} from "../../services/log.service";
 
 @Component({
   selector: 'app-sequence-search',
@@ -14,16 +15,16 @@ export class SequenceSearchComponent{
   sequences: string[] = [];
   isValidFormSubmitted: boolean;
   sequenceForm: FormGroup;
-  constructor(private formBuilder: FormBuilder, private sequenceFetchService: SequenceFetchService, private sequencesService: SequencesService) {
+  constructor(private formBuilder: FormBuilder, private logService: LogService, private sequenceFetchService: SequenceFetchService, private sequencesSearchService: SequencesSearchService) {
     this.isValidFormSubmitted = false;
     this.sequenceForm = this.formBuilder.group(
         {
           sequence: [null, [Validators.required]],
         });
-    if (this.sequencesService.Sequences == undefined || this.sequencesService.Sequences.length == 0) {
+    if (this.sequences == undefined || this.sequences.length == 0) {
       this.getSequencesNames();
     } else {
-      this.sequencesService.Sequences.forEach((sequence) => this.sequences.push(sequence), [this]);
+      this.sequences.forEach((sequence) => this.sequences.push(sequence), [this]);
     }
     
   }
@@ -44,16 +45,18 @@ export class SequenceSearchComponent{
   // Event handlers
   private namesHandler(): any {
     return (fetchedSequences: string[]) => {
+      this.sequences.splice(0);
       fetchedSequences.forEach((sequence) => this.sequences.push(sequence), [this]);
-      this.sequencesService.Sequences = fetchedSequences;
-      console.log(fetchedSequences);
     };
   }
 
   private sequencesHandler(): any {
     return (fetchedSequence: Sequence) => {
-      this.sequencesService.ChosenSequence = fetchedSequence;
-      console.log(fetchedSequence);
+      
+      let sequence : Sequence = new Sequence(fetchedSequence);
+      this.sequencesSearchService.findSequences(sequence, this.logService.getLog().Events);
+      
+      
     };
   }
 
