@@ -114,6 +114,13 @@ export class Log {
         this.header=new Header(log.header);
         this.fileName=log.fileName;
         log.events.forEach( x => this.events.push(new LogRow(x)));
+        
+        // Ordinamento degli eventi
+        this.events.sort((e1: LogRow, e2 : LogRow) => {
+            let e1DateTime = (new Date([e1.Date, e1.Time].join('T').replaceAll("/", "-") + "Z")).getTime();
+            let e2DateTime = (new Date([e2.Date, e2.Time].join('T').replaceAll("/", "-") + "Z")).getTime();
+            return e1DateTime - e2DateTime;
+        });
     }
 
     public get Header() {
