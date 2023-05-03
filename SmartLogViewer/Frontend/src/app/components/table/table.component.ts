@@ -80,18 +80,7 @@ export class TableComponent implements OnInit{
     this.eventGroupingService.currentEndRegroup.subscribe(endRegroup =>(this.endRegroup = endRegroup));
   }
 
-  /***showTable(values : any) {
-    //cambio i dati da visualizzare
-    this.rowData = this.eventGroupingService.getRegroup(values.valore, this.regroupTime, this.startRegroup, this.endRegroup);
-
-    //aggiorno i valori del tempo di inizio e di fine del raggruppamento
-    this.startDateFormatted = formatDate((new Date (this.startRegroup.getTime() - this.timeZoneOffset)), this.format, this.locale);
-    this.endDateFormatted = formatDate((new Date (this.endRegroup.getTime() - this.timeZoneOffset)), this.format, this.locale);
-    
-    this.rowData = this.eventGroupingService.getRegroup(values.valore, this.regroupTime, this.startRegroup, this.endRegroup);
-
-  }*/
-
+  //aggiorna i dati della tabella e dell' intestazione della tabella
   showTable(event : any){
     //ottengo dinamicamnete il valore del raggruppamento da visualizzare dallla casella di input
     const target = event.target as HTMLInputElement;
