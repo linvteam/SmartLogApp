@@ -21,8 +21,11 @@ export class EventGroupingService {
   currentEndRegroup = this.endRegroupSource.asObservable();
 
   constructor(private logService: LogService) { }
-
-  //cambio del valore del tempo di raggruppamento
+  
+  /***
+   * cambio del valore del tempo di raggruppamento
+   * @param regroupTime : nuovo valore
+   */
   changeRegroupTimeValue(regroupTime : number){
     this.regroupTimeSource.next(regroupTime);
   }
@@ -32,12 +35,18 @@ export class EventGroupingService {
     this.startRegroupSource.next(startRegroup);
   }
 
-  //cambio del valore del tempo di fine del raggruppamento
+  /***
+   * cambio del valore del tempo di fine del raggruppamento
+   * @param endRegroup : nuovo valore
+   */
   changeEndRegroupValue(endRegroup : Date){
     this.endRegroupSource.next(endRegroup);
   }
-
-  //numero di raggruppamenti nel log
+  
+  /***
+   * numero di raggruppamenti nel log
+   * @param regroupTime : tempo secondo il quale raggruppare
+   */
   getNumberOfRegroups(regroupTime : number){
     //trovo la data dell'evento iniziale
     let start = new Date ([this.logService.getLog().Events.at(this.logService.getLog().Events.length-1)!.Date, this.logService.getLog().Events.at(this.logService.getLog().Events.length-1)!.Time].join('T').replaceAll("/", "-") + "Z");
@@ -50,11 +59,16 @@ export class EventGroupingService {
     }
     return 1;
   }
-
-  //raggruppamento numero index con tempo regroupTime
+  
+  /***
+   * raggruppamento numero index con tempo regroupTime
+   * @param index : indice del raggruppamento richiesto
+   * @param regroupTime : tempo secondo il quale raggruppare
+   */
   getRegroup(index : number, regroupTime : number){
     //il tempo di raggruppamento uguale a 0 implica la visualizzazione dell'intero log
     if(regroupTime==0){
+      //in teoria non viene mai eseguito (potrebbe essere utile per i test)
       return this.logService.getLog().Events;
     }
     else {

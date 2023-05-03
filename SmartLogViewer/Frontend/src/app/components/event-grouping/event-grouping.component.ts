@@ -19,9 +19,12 @@ export class EventGroupingComponent implements OnInit{
     //aggiorno dinamicamente il tempo del raggruppamento
     this.eventGroupingService.currentRegroupTime.subscribe(regroupTime => this.regroupTime = regroupTime)
   }
-  
+
+  /***
+   * cambio il valore del tempo di raggruppamento in base all'unità di misura
+   * @param values : valori inseriti nel form per il raggruppamento
+   */
   getFormValues(values : any){
-    //cambio il valore del tempo di raggruppamento in base all'unità di misura
     switch(values.unita) {
       case "1": {
         this.eventGroupingService.changeRegroupTimeValue(values.valore);

@@ -71,6 +71,10 @@ export class TableComponent implements OnInit{
     //aggiorno dinamicamente il tempo del raggruppamento e il numero di raggruppamenti
     this.eventGroupingService.currentRegroupTime.subscribe(regroupTime => {
       this.regroupTime = regroupTime;
+      //se il tempo di raggruppamento è 0 allora mostro tutto il log
+      if(this.regroupTime==0){
+        this.rowData = this.logService.getLog().Events;
+      }
       this.numberOfTables = this.eventGroupingService.getNumberOfRegroups(this.regroupTime)});
 
     //aggiorno dinamicamente il tempo di inizio del raggruppamento
@@ -79,8 +83,11 @@ export class TableComponent implements OnInit{
     //aggiorno dinamicamente il tempo di fine del raggruppamento
     this.eventGroupingService.currentEndRegroup.subscribe(endRegroup =>(this.endRegroup = endRegroup));
   }
-
-  //aggiorna i dati della tabella e dell' intestazione della tabella
+  
+  /***
+   * aggiorna i dati della tabella e dell' intestazione della tabella
+   * @param event : evento di aggiornamento della cella di input
+   */
   showTable(event : any){
     //ottengo dinamicamnete il valore del raggruppamento da visualizzare dallla casella di input
     const target = event.target as HTMLInputElement;
