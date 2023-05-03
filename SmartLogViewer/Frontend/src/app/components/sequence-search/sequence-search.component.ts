@@ -52,9 +52,8 @@ export class SequenceSearchComponent{
 
   private sequencesHandler(): any {
     return (fetchedSequence: Sequence) => {
-      
-      let sequence : Sequence = new Sequence(fetchedSequence);
-      this.sequencesSearchService.findSequences(sequence, this.logService.getLog().Events);
+      let sequence = new Sequence(fetchedSequence as Sequence);
+      this.sequencesSearchService.findSequences(this.logService.getLog(), sequence);
       
       
     };
