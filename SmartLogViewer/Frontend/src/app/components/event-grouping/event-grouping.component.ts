@@ -24,27 +24,27 @@ export class EventGroupingComponent implements OnInit{
     //cambio il valore del tempo di raggruppamento in base all'unità di misura
     switch(values.unita) {
       case "1": {
-        this.eventGroupingService.changeValue(values.valore);
+        this.eventGroupingService.changeRegroupTimeValue(values.valore);
         break;
       }
       case "2": {
-        this.eventGroupingService.changeValue(values.valore * 1000);
+        this.eventGroupingService.changeRegroupTimeValue(values.valore * 1000);
         break;
       }
       case "3": {
-        this.eventGroupingService.changeValue(values.valore * 60000);
+        this.eventGroupingService.changeRegroupTimeValue(values.valore * 60000);
         break;
       }
       case "4": {
-        this.eventGroupingService.changeValue(values.valore * 3600000);
+        this.eventGroupingService.changeRegroupTimeValue(values.valore * 3600000);
         break;
       }
       case "5": {
-        this.eventGroupingService.changeValue(values.valore * 86400000);
+        this.eventGroupingService.changeRegroupTimeValue(values.valore * 86400000);
         break;
       }
       default: {
-        this.eventGroupingService.changeValue(values.valore);
+        this.eventGroupingService.changeRegroupTimeValue(values.valore);
         break;
       }
     }

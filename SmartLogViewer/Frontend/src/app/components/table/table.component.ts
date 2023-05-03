@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { ColDef } from 'ag-grid-community';
 import { LogService } from 'src/app/services/log.service';
 import { EventGroupingService } from "../../services/event-grouping.service";
+import {formatDate} from "@angular/common";
 
 @Component({
   selector: 'app-table',
@@ -12,12 +13,27 @@ export class TableComponent implements OnInit{
 
   //tempo per il raggruppamento
   regroupTime : number;
+  startRegroup : Date;
+  endRegroup : Date;
+  
+  startDateFormatted : string;
+  endDateFormatted : string;
+  
+  timeZoneOffset : number = 7200000;
+  
+  format : string = 'dd/MM/yyyy - HH:mm:ss.SSS';
+  locale : string = 'it-IT';
+
   //numero di tabelle da visualizzare (con raggruppamento o ricerca di sequenze)
   numberOfTables:number;
 
   constructor(private logService: LogService, private eventGroupingService: EventGroupingService) {
     this.regroupTime = 0;
     this.numberOfTables = 1;
+    this.startRegroup = new Date();
+    this.endRegroup = new Date();
+    this.startDateFormatted = formatDate(this.startRegroup, this.format, this.locale);
+    this.endDateFormatted = formatDate(this.endRegroup, this.format, this.locale);
   }
   
   columnDefs = [
@@ -46,10 +62,21 @@ export class TableComponent implements OnInit{
     this.eventGroupingService.currentRegroupTime.subscribe(regroupTime => {
       this.regroupTime = regroupTime;
       this.numberOfTables = this.eventGroupingService.getNumberOfRegroups(this.regroupTime)});
+
+    //aggiorno dinamicamente il tempo di inizio del raggruppamento
+    this.eventGroupingService.currentStartRegroup.subscribe(startRegroup =>(this.startRegroup = startRegroup));
+
+    //aggiorno dinamicamente il tempo di fine del raggruppamento
+    this.eventGroupingService.currentEndRegroup.subscribe(endRegroup =>(this.endRegroup = endRegroup));
   }
 
   showTable(values : any) {
     //cambio i dati da visualizzare
-    this.rowData = this.eventGroupingService.getRegroup(values.valore, this.regroupTime);
+    this.rowData = this.eventGroupingService.getRegroup(values.valore, this.regroupTime, this.startRegroup, this.endRegroup);
+
+    //aggiorno i valori del tempo di inizio e di fine del raggruppamento
+    this.startDateFormatted = formatDate((new Date (this.startRegroup.getTime() - this.timeZoneOffset)), this.format, this.locale);
+    this.endDateFormatted = formatDate((new Date (this.endRegroup.getTime() - this.timeZoneOffset)), this.format, this.locale);
+
   }
 } 
