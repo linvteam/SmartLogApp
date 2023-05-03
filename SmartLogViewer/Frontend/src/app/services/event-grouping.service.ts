@@ -8,38 +8,36 @@ import {LogService} from "./log.service";
 })
 export class EventGroupingService {
 
+  //tempo di raggruppamento
   private regroupTimeSource = new BehaviorSubject<number>(0);
   currentRegroupTime = this.regroupTimeSource.asObservable();
 
-
+  //data di inizio del raggruppamento
   private startRegroupSource = new BehaviorSubject<Date>(new Date());
   currentStartRegroup = this.startRegroupSource.asObservable();
 
+  //data di fine del raggruppamento
   private endRegroupSource = new BehaviorSubject<Date>(new Date());
   currentEndRegroup = this.endRegroupSource.asObservable();
-  
-  private regroupEvents : number [][];
-  //private startRegroup : number;
-  //private endRegroup : number;
 
-  constructor(private logService: LogService) {
-    this.regroupEvents = [];
-    //this.startRegroup = 0;
-    //this.endRegroup = 0;
-  }
+  constructor(private logService: LogService) { }
 
+  //cambio del valore del tempo di raggruppamento
   changeRegroupTimeValue(regroupTime : number){
     this.regroupTimeSource.next(regroupTime);
   }
 
+  //cambio del valore del tempo di inizio del raggruppamento
   changeStartRegroupValue(startRegroup : Date){
     this.startRegroupSource.next(startRegroup);
   }
 
+  //cambio del valore del tempo di fine del raggruppamento
   changeEndRegroupValue(endRegroup : Date){
     this.endRegroupSource.next(endRegroup);
   }
 
+  //numero di raggruppamenti nel log
   getNumberOfRegroups(regroupTime : number){
     //trovo la data dell'evento iniziale
     let start = new Date ([this.logService.getLog().Events.at(this.logService.getLog().Events.length-1)!.Date, this.logService.getLog().Events.at(this.logService.getLog().Events.length-1)!.Time].join('T').replaceAll("/", "-") + "Z");
@@ -53,7 +51,8 @@ export class EventGroupingService {
     return 1;
   }
 
-  getRegroup(index : number, regroupTime : number, startRegroup : Date, endRegroup : Date){
+  //raggruppamento numero index con tempo regroupTime
+  getRegroup(index : number, regroupTime : number){
     //il tempo di raggruppamento uguale a 0 implica la visualizzazione dell'intero log
     if(regroupTime==0){
       return this.logService.getLog().Events;
@@ -63,8 +62,12 @@ export class EventGroupingService {
       let start = new Date ([this.logService.getLog().Events.at(this.logService.getLog().Events.length-1)!.Date, this.logService.getLog().Events.at(this.logService.getLog().Events.length-1)!.Time].join('T').replaceAll("/", "-") + "Z");
 
       //trovo l'inizio e la fine del raggruppamento in ms
-      this.changeStartRegroupValue( new Date(start.getTime() + (index-1) * regroupTime));
-      this.changeEndRegroupValue( new Date(start.getTime() + index * regroupTime));
+      let startRegroup = new Date(start.getTime() + (index-1) * regroupTime)
+      let endRegroup = new Date(start.getTime() + index * regroupTime)
+
+      //aggiorno i valori globali di inizio e di fine del raggruppamento
+      this.changeStartRegroupValue( startRegroup );
+      this.changeEndRegroupValue( endRegroup );
       
       //filtraggio degli eventi del log contenuti nell'intervallo tra l'inizio e la fine del raggruppamento
       return this.logService.getLog().Events.filter( (e:LogRow) => {

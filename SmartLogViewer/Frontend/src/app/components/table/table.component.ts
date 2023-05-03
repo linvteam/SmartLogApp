@@ -13,14 +13,24 @@ export class TableComponent implements OnInit{
 
   //tempo per il raggruppamento
   regroupTime : number;
+
+  //data di inizio del raggruppamento/sequenza
   startRegroup : Date;
+
+  //data di fine del raggruppamento/sequenza
   endRegroup : Date;
-  
+
+
+  //data di inizio del raggruppamento/sequenza da visualizzare come header della tabella
   startDateFormatted : string;
+
+  //data di fine del raggruppamento/sequenza da visualizzare come header della tabella
   endDateFormatted : string;
   
+  //fuso orario (2 ore in ms)
   timeZoneOffset : number = 7200000;
   
+  //formato delle date da visualizzare come header della tabella
   format : string = 'dd/MM/yyyy - HH:mm:ss.SSS';
   locale : string = 'it-IT';
 
@@ -70,13 +80,29 @@ export class TableComponent implements OnInit{
     this.eventGroupingService.currentEndRegroup.subscribe(endRegroup =>(this.endRegroup = endRegroup));
   }
 
-  showTable(values : any) {
+  /***showTable(values : any) {
     //cambio i dati da visualizzare
     this.rowData = this.eventGroupingService.getRegroup(values.valore, this.regroupTime, this.startRegroup, this.endRegroup);
 
     //aggiorno i valori del tempo di inizio e di fine del raggruppamento
     this.startDateFormatted = formatDate((new Date (this.startRegroup.getTime() - this.timeZoneOffset)), this.format, this.locale);
     this.endDateFormatted = formatDate((new Date (this.endRegroup.getTime() - this.timeZoneOffset)), this.format, this.locale);
+    
+    this.rowData = this.eventGroupingService.getRegroup(values.valore, this.regroupTime, this.startRegroup, this.endRegroup);
 
+  }*/
+
+  showTable(event : any){
+    //ottengo dinamicamnete il valore del raggruppamento da visualizzare dallla casella di input
+    const target = event.target as HTMLInputElement;
+    let value : number = +target.value;
+    
+    //cambio i dati da visualizzare
+    this.rowData = this.eventGroupingService.getRegroup(value, this.regroupTime);
+    
+    //aggiorno i valori del tempo di inizio e di fine del raggruppamento
+    this.startDateFormatted = formatDate((new Date (this.startRegroup.getTime() - this.timeZoneOffset)), this.format, this.locale);
+    this.endDateFormatted = formatDate((new Date (this.endRegroup.getTime() - this.timeZoneOffset)), this.format, this.locale);
   }
+  
 } 
