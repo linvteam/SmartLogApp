@@ -184,8 +184,7 @@ export class ChartComponent {
             .attr("y", (this.Size + this.Padding) / 2)
             .attr("dy", "0.35em")
             .text(([z]: any) => z);
-
-        // Dato che normalmente non ci sono margini a sinistra o a destra, i, non mostrare i segni di graduazione che sono vicini al bordo del grafico,
+        //Dato che normalmente non ci sono margini a sinistra o a destra, non si mostrano i segni di graduazione che sono vicini al bordo del grafico
         // poiché è probabile che questi segni vengano tagliati
         this.gXAxis = this.svg.append("g")
             .attr("transform", `translate(0,${this.MarginTop})`)
