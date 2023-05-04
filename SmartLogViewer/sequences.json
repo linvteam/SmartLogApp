@@ -1,18 +1,96 @@
-[{  "Name": "TestSequence",
-    "StartEvent": "E01",
-    "StartEventState": true,
-    "StartEventAvalilableSubUnits": [1, 2, 3, 4, 5, 6, 7, 8],
-    "EndEvent": "E02",
-    "EndEventState": false,
-    "EndEventAvalilableSubUnits": [1, 2, 3, 4, 5, 6, 7, 8],
-    "MaxDuration": 5000},
-    {  
-    "Name": "TestSequence2",
-    "StartEvent": "E00",
-    "StartEventState": false,
-    "StartEventAvalilableSubUnits": [1, 2, 3, 5, 6, 7, 8],
-    "EndEvent": "E01",
-    "EndEventState": true,
-    "EndEventAvalilableSubUnits": [1, 2, 3, 4, 5, 7, 8],
-    "MaxDuration": 2500}]
-
+[
+  {
+    "Name": "InputMainsNotOK",
+    "StartEvents": [
+      {
+        "Code": "EA09_R2",
+        "Status": true
+      }
+    ],
+    "StartEventsAvailableSubUnits": [ 1, 2, 3, 4, 5, 6, 7, 8 ],
+    "EndEvents": [
+      {
+        "Code": "A019",
+        "Status": true
+      }
+    ],
+    "EndEventsAvailableSubUnits": [ 1, 2, 3, 4, 5, 6, 7, 8 ],
+    "MaxDuration": 5000
+  },
+  {
+    "Name": "InputMainsOK",
+    "StartEvents": [
+      {
+        "Code": "A035",
+        "Status": false
+      }
+    ],
+    "StartEventsAvailableSubUnits": [ 1, 2, 3, 5, 6, 7, 8 ],
+    "EndEvents": [
+      {
+        "Code": "A019",
+        "Status": false
+      }
+    ],
+    "EndEventsAvailableSubUnits": [ 1, 2, 3, 4, 5, 7, 8 ],
+    "MaxDuration": 25000
+  },
+  {
+    "Name": "EcoModeOFF",
+    "StartEvents": [
+      {
+        "Code": "ES044",
+        "Status": true
+      }
+    ],
+    "StartEventsAvailableSubUnits": [ 14 ],
+    "EndEvents": [
+      {
+        "Code": "S000",
+        "Status": true
+      },
+      {
+        "Code": "S002",
+        "Status": false
+      }
+    ],
+    "EndEventsAvailableSubUnits": [ 0 ],
+    "MaxDuration": 15000
+  },
+  {
+    "Name": "StartProcedure",
+    "StartEvents": [
+      {
+        "Code": "S049",
+        "Status": true
+      }
+    ],
+    "StartEventsAvailableSubUnits": [ 1, 2, 3, 5, 6, 7, 8 ],
+    "EndEvents": [
+      {
+        "Code": "S000",
+        "Status": true
+      }
+    ],
+    "EndEventsAvailableSubUnits": [ 0 ],
+    "MaxDuration": 120000
+  },
+  {
+    "Name": "MaintenanceBypassProcedure",
+    "StartEvents": [
+      {
+        "Code": "ES026",
+        "Status": true
+      }
+    ],
+    "StartEventsAvailableSubUnits": [ 14 ],
+    "EndEvents": [
+      {
+        "Code": "S003",
+        "Status": true
+      }
+    ],
+    "EndEventsAvailableSubUnits": [ 0 ],
+    "MaxDuration": 120000
+  }
+]

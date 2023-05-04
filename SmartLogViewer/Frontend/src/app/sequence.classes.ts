@@ -1,21 +1,35 @@
+export class Event {
+    private code: string;
+    private status: boolean;
+    
+    constructor(event: Event) {
+        this.code = event.code;
+        this.status = event.status;
+    }
+    
+    public get Code() {
+        return this.code;
+    }
+    
+    public get Status() {
+        return this.status;
+    }
+}
+
 export class Sequence {
     private name: string;
-    private startEventAvailableSubUnits: number[];
-    private startEvent: string;
-    private startEventState: boolean;
-    private endEventAvailableSubUnits: number[];
-    private endEvent: string;
-    private endEventState: boolean;
+    private startEventsAvailableSubUnits: number[] = [];
+    private startEvents: Event[] = [];
+    private endEventsAvailableSubUnits: number[] = [];
+    private endEvents: Event[] = [];
     private maxDuration: number;
 
     constructor(sequence: Sequence) {
         this.name = sequence.name;
-        this.startEventAvailableSubUnits = sequence.startEventAvailableSubUnits;
-        this.startEvent = sequence.startEvent;
-        this.startEventState = sequence.startEventState;
-        this.endEventAvailableSubUnits = sequence.endEventAvailableSubUnits;
-        this.endEvent = sequence.endEvent;
-        this.endEventState = sequence.endEventState;
+        sequence.startEventsAvailableSubUnits.forEach((subUnit) => this.startEventsAvailableSubUnits.push(subUnit));
+        sequence.startEvents.forEach((event) => this.startEvents.push(new Event(event)));
+        sequence.endEventsAvailableSubUnits.forEach((subUnit) => this.endEventsAvailableSubUnits.push(subUnit));
+        sequence.endEvents.forEach((event) => this.endEvents.push(new Event(event)));
         this.maxDuration = sequence.maxDuration;
     }
 
@@ -24,27 +38,19 @@ export class Sequence {
     }
 
     public get StartEventAvailableSubUnits() {
-        return this.startEventAvailableSubUnits;
+        return this.startEventsAvailableSubUnits;
     } 
 
-    public get StartEvent() {
-        return this.startEvent;
-    }
-
-    public get StartEventState() {
-        return this.startEventState;
+    public get StartEvents() {
+        return this.startEvents;
     }
 
     public get EndEventAvailableSubUnits() {
-        return this.endEventAvailableSubUnits;
+        return this.endEventsAvailableSubUnits;
     }
 
-    public get EndEvent() {
-        return this.endEvent;
-    }
-
-    public get EndEventState() {
-        return this.endEventState;
+    public get EndEvents() {
+        return this.endEvents;
     }
 
     public get MaxDuration() {

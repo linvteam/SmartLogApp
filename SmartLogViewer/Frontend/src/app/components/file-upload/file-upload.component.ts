@@ -34,9 +34,7 @@ export class FileUploadComponent {
                 this.progress = Math.round(100 * event.loaded / event.total);
             } else if (event instanceof HttpResponse<Log>) {
                 this.logService.Log = new Log((event.body) as Log);
-                let log = this.logService.getLog();
-
-                this.message = "File caricato: " + log.FileName;
+                this.message = "File caricato: " + this.logService.getLog().FileName;
             }
         };
     }

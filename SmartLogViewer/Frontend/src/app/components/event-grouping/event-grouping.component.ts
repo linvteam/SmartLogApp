@@ -7,7 +7,6 @@ import { EventGroupingService } from "../../services/event-grouping.service";
   styleUrls: ['./event-grouping.component.css']
 })
 export class EventGroupingComponent implements OnInit{
-
   //tempo per il raggruppamento
   regroupTime : number;
   
