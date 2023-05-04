@@ -42,7 +42,7 @@ export class ChartComponent {
     private yScale;
     private xAxis;
     private svg: any;
-    private g: any;//: d3.Selection<d3.BaseType,unknown,SVGSVGElement,unknown>;
+    private g: any;
     private plot: any;
     private gXAxis : any;
     
