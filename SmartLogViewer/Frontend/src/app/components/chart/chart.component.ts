@@ -135,7 +135,6 @@ export class ChartComponent {
          this.g.on("mousemove", (e: any,[code, I]: [string, [number]]) => {
             this.hovering = true;
             let xPointer = d3.pointer(e)[0];
-            let yPointerRel = d3.pointer(e)[1];
             
             let datetime = this.xScale.invert(xPointer);
             let start: Date = this.xDomain[0] as Date;
