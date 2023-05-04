@@ -42,7 +42,7 @@ export class ChartComponent {
     private yScale;
     private xAxis;
     private svg: any;
-    private g: any;//: d3.Selection<d3.BaseType,unknown,SVGSVGElement,unknown>;
+    private g: any;
     private plot: any;
     private gXAxis : any;
     
@@ -165,7 +165,6 @@ export class ChartComponent {
             this.moveTooltip(absoluteX, absoluteY);
             })
             .on("mouseleave", (e: any) => {
-                console.log("adsadas part 2")
                 this.hovering = false; //rende invisibile il tooltip
             });
          
@@ -243,24 +242,32 @@ export class ChartComponent {
         const format = 'yyyy/MM/dd - HH:mm:ss.SSS';
         const locale = "it-IT";
         //aggiorna il tooltip con i dati nuovi
-        d3.select("div div#tooltip p span#code").text(code)
-        d3.select("div div#tooltip p span#start").text(formatDate(start, format, locale));
-        d3.select("div div#tooltip p span#end").text(formatDate(end, format, locale));
-        d3.select("div div#tooltip p span#unit").text(unit);
-        d3.select("div div#tooltip p span#subunit").text(subUnit);
-        d3.select("div div#tooltip p span#description").text(description);
+        const tooltip =d3.select("div div#tooltip");
+        tooltip.select("p span#code").text(code)
+        tooltip.select("p span#start").text(formatDate(start, format, locale));
+        tooltip.select("p span#end").text(formatDate(end, format, locale));
+        tooltip.select("p span#unit").text(unit);
+        tooltip.select("p span#subunit").text(subUnit);
+        tooltip.select("p span#description").text(description);
     }
     
     private moveTooltip(x: number, y: number){
-        if(x>1100){ //se è troppo a destra lo sposta a sinistra del mouse
+        if(this.tooltipCollideX(x)){ //se è troppo a destra lo sposta a sinistra del mouse
             x-=360;
         }
-        if (y > 650) {  //se è troppo in basso lo sposta in sopra al mouse
-            y-=250;
+        if (this.tooltipCollideY(d3.select("div div#tooltip"), y)) {  //se è troppo in basso lo sposta in sopra al mouse
+            y-=160;
         }
         d3.select("div div#tooltip")
             .style("left", x + "px")
             .style("top", y + "px");
+    }
+    
+    private tooltipCollideX(x: number){
+        return 365 + x > window.innerWidth;
+    }
+    private tooltipCollideY(tooltip: any, y: number){
+        return 150 + y > window.innerHeight;
     }
 }
 

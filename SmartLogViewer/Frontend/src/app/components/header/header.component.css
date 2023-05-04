@@ -1,0 +1,18 @@
+#file-info-and-search{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1 1 auto;
+    background-color: #f8f9fa;
+}
+
+.accordion-button {
+    width: 100%;
+    border: 1px solid #dde2eb;
+}
+
+
+#accordionFlushExample {
+    margin-bottom: 1em;
+}
