@@ -186,8 +186,8 @@ export class ChartComponent {
             .attr("dy", "0.35em")
             .text(([z]: any) => z);
 
-        // Since there are normally no left or right margins, don’t show ticks that
-        // are close to the edge of the chart, as these ticks are likely to be clipped.
+        // Dato che normalmente non ci sono margini a sinistra o a destra, i, non mostrare i segni di graduazione che sono vicini al bordo del grafico,
+        // poiché è probabile che questi segni vengano tagliati
         this.gXAxis = this.svg.append("g")
             .attr("transform", `translate(0,${this.MarginTop})`)
             .call(this.xAxis)
