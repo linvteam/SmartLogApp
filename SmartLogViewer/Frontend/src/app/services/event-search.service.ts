@@ -8,7 +8,7 @@ import { LogService } from 'src/app/services/log.service';
 })
 export class EventSearchService {
 
-    private logSource = new BehaviorSubject<Log | undefined>(undefined);
+    private logSource = new BehaviorSubject<LogRow[]>([]);
     currentValue = this.logSource.asObservable();
 
     constructor(private logService: LogService) { }
@@ -20,9 +20,8 @@ export class EventSearchService {
 
         //Se l'utente non da input allora termina
         if (searchString == undefined || searchString == null) {
-            this.logService.getDisplayLog().Events = events;
 
-            this.logSource.next(this.logService.getDisplayLog());
+            this.logSource.next(events);
 
             return;
         }
@@ -46,11 +45,8 @@ export class EventSearchService {
             events = events.filter(logRow => this.search(logRow, new RegExp(s)));
         }
 
-        
-        this.logService.getDisplayLog().Events = events;
-
         // ... e infine si invia il risultato alla tabella e al grafico
-        this.logSource.next(this.logService.getDisplayLog())
+        this.logSource.next(events)
     }
 
     private search(logRow: LogRow, searchString: RegExp): boolean {

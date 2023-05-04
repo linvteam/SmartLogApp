@@ -9,16 +9,13 @@ import { Log } from '../../log.classes';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent implements OnInit {
+export class TableComponent {
 
-    rowData = this.logService.getDisplayLog().Events;
+    rowData: any[];
 
     constructor(private logService: LogService, private eventSearchService: EventSearchService) {
-
-    }
-
-    ngOnInit() {
-        this.eventSearchService.currentValue.subscribe(value => this.rowData = (value as Log).Events);
+        this.eventSearchService.currentValue.subscribe(value => this.rowData = value);
+        this.rowData = this.logService.getLog().Events;
     }
 
   columnDefs = [

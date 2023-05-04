@@ -11,7 +11,7 @@ import { LogRow } from '../../log.classes';
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements OnInit{
 
     private readonly MarginTop = 20;
     private readonly MarginRight = 0;
@@ -22,49 +22,29 @@ export class ChartComponent implements OnInit {
     private readonly Padding = 5;
 
     private width = 1500;
-    private xDomain : Array<Date|undefined>;// [xmin, xmax]
+    private xDomain!: Array<Date|undefined>;// [xmin, xmax]
     private xRange = [this.MarginLeft, this.width - this.MarginRight]; // [left, right]
     private yDomain = [0,1]; // [ymin, ymax]
     private yRange = [this.Size, this.Padding]; // [bottom, top]
-    private zDomain : d3.InternSet<string|undefined>; // array of z-values
+    private zDomain!: d3.InternSet<string | undefined>; // array of z-values
     
-    private x;
-    private y;
-    private z;
-    private colors;
-    private codeColors;
+    private x!: any[];
+    private y!: any[];
+    private z!: any[];
+    private colors!: any[];
+    private codeColors!: any[];
 
-    chartData = this.logService.getDisplayLog().Events
+    chartData: any[];
     constructor(private logService: LogService, private eventSearchService: EventSearchService) {
-        this.x = d3.map(this.chartData, e => new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z"));
-        this.y = d3.map(this.chartData, e => e.Value ? 1 : 0);
-        this.z = d3.map(this.chartData, e => e.Code);
-        this.colors = d3.map(this.chartData, ((e: LogRow) => { return { Code: e.Code, Color: e.Color } }));
-
-        this.colors.reverse();
-        this.codeColors = [];
-        for (let i of this.colors) {  //crea l'array codeColors con tuple di code e Colors non ripetuti
-            if (this.codeColors.indexOf(i) == -1) {
-                this.codeColors.push(i);
-            }
-        }
-
-        //vengono invertite le variabili in maniera da avere i valori in ordine crescente
-        this.x.reverse();
-        this.y.reverse();
-        this.z.reverse();
-
-        this.xDomain = d3.extent(this.x);
-        this.zDomain = new d3.InternSet(this.z);
-        
-    }
-
-    ngOnInit(){
         this.eventSearchService.currentValue.subscribe(value => {
-            this.chartData = (value as Log).Events;
+            this.chartData = value;
             this.drawChart();
         });
 
+        this.chartData = this.logService.getLog().Events;
+     }
+
+    ngOnInit(): void {
         this.drawChart();
     }
 
