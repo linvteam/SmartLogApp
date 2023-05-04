@@ -34,6 +34,7 @@ export class SequencesSearchService {
                 let e2DateTime : number = (new Date([e2.Date, e2.Time].join('T').replaceAll("/", "-") + "Z")).getTime();
                 return e1DateTime - e2DateTime;
             });
+            
 
             // Variabili che indicano se sono stati trovati tutti i tipi di eventi iniziali / finali nella ricerca di una sequenza
             let sequenceStartEventsFound: boolean[] = [];
@@ -61,31 +62,9 @@ export class SequencesSearchService {
                     startEventsLowerDateTime = (new Date([startEventFound.Date, startEventFound.Time].join('T').replaceAll("/", "-") + "Z")).getTime();
                 }
 
-                // Per ogni tipologia di evento iniziale
-                sequence.StartEvents.forEach((event, index) => {
-
-                    // Se l'evento iniziale ha una tipologia tra quelle accettate per l'inizio della sequenza e non è ancora stato trovato un evento di quel tipo
-                    if(event.Code == startEventFound.Code && !sequenceStartEventsFound[index]) {
-                        sequenceStartEventsFound[index] = true;                                                         // Si indica che quel tipo di evento è stato trovato
-                        sequenceFound.push(startEventFound);                                                            // Si inserisce l'evento nell'array della sequenza
-                    } else if (event.Code == startEventFound.Code && sequenceStartEventsFound[index]) {                 // Altrimenti, se un evento di quel tipo è già stato trovato
-                        let indexOfElementToRemove = 0;
-                        sequenceFound.forEach( ( row: LogRow, index: number) => {                                       // Si cerca l'evento tra quelli salvati nella sequenza
-                            if (row.Code == event.Code){
-                                indexOfElementToRemove = index;
-                            }
-                        });
-                        sequenceFound.splice(indexOfElementToRemove,1);                                      // Si rimuove l'elemento dalla sequenza
-                        sequenceFound.push(startEventFound);                                                            // Si inserisce l'evento nell'array della sequenza
-
-                        // Se si sostituisce l'evento più vecchio
-                        if (indexOfElementToRemove == 0){
-                            // Si sostituisce la data di inizio della serie di eventi di inizio con quella dell'evento più vecchio presente
-                            startEventsLowerDateTime = (new Date([sequenceFound[0].Date, sequenceFound[0].Time].join('T').replaceAll("/", "-") + "Z")).getTime() ;    
-                        }
-                    }
-
-                });
+                // Inserisce l'evento nell'array di eventi utili alla sequenza (rimuovendo un eventuale evento con lo stesso codice qualora fosse presente)
+                startEventsLowerDateTime = this.extractStartEvent(sequence, startEventFound, sequenceStartEventsFound, sequenceFound, startEventsLowerDateTime);
+                
                 // Analizzato un evento del log ed eventualmente inserito nell'array degli eventi di partenza
 
                 // Controlla se sono stati trovati tutti gli eventi di inizio sequenza
@@ -96,7 +75,7 @@ export class SequencesSearchService {
                 if(foundAllStartEvents) {
                     
                     // Si riporta allo stato iniziale la variabile per tracciare i tipi di evento di inizio della sequenza trovati
-                    sequenceStartEventsFound = sequenceStartEventsFound.map(() => false);
+                    sequenceStartEventsFound = sequenceStartEventsFound.map(() => {return false});
 
                     // Data/ora (in ms) dell'ultimo evento della fine della sequenza
                     let endEventDateTime = 0;
@@ -110,17 +89,8 @@ export class SequencesSearchService {
                         // Se l'evento avviene dopo l'ultimo evento di inizio sequenza
                         if(startEventsUpperDateTime < endEventDateTime) {
 
-
-                            // Per ogni tipologia di evento finale
-                            sequence.EndEvents.forEach((event, index) => {
-
-                                // Se l'evento finale ha una tipologia tra quelle accettate per la fine della sequenza e non è ancora stato trovato un evento di quel tipo
-                                if (event.Code == endEventFound.Code && !sequenceEndEventsFound[index]) {
-                                    sequenceEndEventsFound[index] = true;                                               // Si indica che quel tipo di evento è stato trovato
-                                    sequenceFound.push(endEventFound);                                                  // Si inserisce l'evento nell'array della sequenza
-                                }
-
-                            });
+                            // Estrae l'evento di fine e lo inserisce nell'array ausiliario
+                            this.extractEndEvent(sequence, endEventFound, sequenceEndEventsFound, sequenceFound);
 
                             // Controlla se sono stati trovati tutti gli eventi di fine sequenza
                             let foundAllEndEvents : boolean = true;
@@ -128,15 +98,16 @@ export class SequencesSearchService {
 
                             // Se sono stati trovati tutti gli eventi di fine sequenza
                             if(foundAllEndEvents) {
-
+                                
                                 // Si riporta allo stato iniziale la variabile per tracciare i tipi di evento di fine della sequenza trovati
-                                sequenceEndEventsFound = sequenceEndEventsFound.map(() => false);
+                                sequenceEndEventsFound = sequenceEndEventsFound.map(() => {return false});
 
                                 // Se la sequenza di eventi individuati avviene entro il tempo massimo
                                 if(endEventDateTime - startEventsLowerDateTime < sequence.MaxDuration) {
+                                    
                                     foundSequence = true;                                                                                   // La sequenza è stata trovata
                                     sequences.push(sequenceFound.slice());                                                                  // Gli eventi di inizio e fine sono salvati
-                                    endEventsFound = endEventsFound.filter((event) => {return !sequenceFound.includes(event)} );    // Gli eventi di fine già presenti in altre sequenze vengono rimossi dagli eventi utilizzabili per individuare altre occorenze
+                                    endEventsFound = endEventsFound.filter((event) => { return !sequenceFound.includes(event);  });    // Gli eventi di fine già presenti in altre sequenze vengono rimossi dagli eventi utilizzabili per individuare altre occorenze
                                 }
                                 sequenceFound.splice(0);                                                                                // Si svuota la struttura dati di appoggio degli eventi
                             }
@@ -150,22 +121,74 @@ export class SequencesSearchService {
 
             }
         }
-        
         // Sequenza di eventi completa
         let completeSequences : LogRow[][] = [];
         
         // Per ogni occorrenza di sequenza individuata, si ricavano tutti gli elementi tra il primo evento iniziale e l'ultimo evento finale
-        sequences.forEach((sequence) => {
-            let first = log.Events.indexOf(sequence[0]);
-            let last = log.Events.indexOf(sequence[sequence.length-1]);            
-            completeSequences.push(log.Events.slice(first, last+1));    // NB: last+1 perché il metodo "slice" non restituisce l'ultimo elemento se si usa il parametro "end"
-        });
+        this.extractSequences(sequences, log, completeSequences);
         console.log(completeSequences);
         return completeSequences;
 
     }
 
-    // Funzione per trovare gli eventi del file di log uguali ad una serie di eventi passati
+    private extractSequences(sequences: LogRow[][], log: Log, completeSequences: LogRow[][]) {
+        sequences.forEach((sequence) => {
+            // Indici degli eventi di inizio/fine sequenza
+            let indexes: number [] = [];
+
+            sequence.forEach((row) => indexes.push(log.Events.indexOf(row)));                                   // Si ricavano gli indici degli eventi di inizio e fine
+            indexes.sort((index1: number, index2: number) => {
+                return index1 - index2
+            });                       // Si ordinano gli indici (non è detto che arrivino ordinati data la presenza di eventi con medesimo date/time
+            completeSequences.push(log.Events.slice(indexes[0], indexes[indexes.length - 1] + 1));                          // Si inseriscono tutti gli eventi dell'occorrenza della sequenza in un'apposita struttura 
+            // NB: +1 perché il metodo "slice" non restituisce l'ultimo elemento se si usa il parametro "end"
+        });
+    }
+
+    private extractEndEvent(sequence: Sequence, endEventFound: LogRow, sequenceEndEventsFound: boolean[], sequenceFound: LogRow[]) {
+        // Per ogni tipologia di evento finale
+        sequence.EndEvents.forEach((event, index) => {
+
+            // Se l'evento finale ha una tipologia tra quelle accettate per la fine della sequenza e non è ancora stato trovato un evento di quel tipo
+            if (event.Code == endEventFound.Code && !sequenceEndEventsFound[index]) {
+                sequenceEndEventsFound[index] = true;                                               // Si indica che quel tipo di evento è stato trovato
+                sequenceFound.push(endEventFound);                                                  // Si inserisce l'evento nell'array della sequenza
+            }
+
+        });1
+    }
+
+// Estrae l'evento iniziale (inserendolo in sequenceFound) e ritorna il lower bound dell'intervallo di avvenimento degli eventi di inizio sequenza 
+    private extractStartEvent(sequence: Sequence, startEventFound: LogRow, sequenceStartEventsFound: boolean[], sequenceFound: LogRow[], startEventsLowerDateTime: number) {
+        // Per ogni tipologia di evento iniziale
+        sequence.StartEvents.forEach((event, index) => {
+
+            // Se l'evento iniziale ha una tipologia tra quelle accettate per l'inizio della sequenza e non è ancora stato trovato un evento di quel tipo
+            if (event.Code == startEventFound.Code && !sequenceStartEventsFound[index]) {
+                sequenceStartEventsFound[index] = true;                                                         // Si indica che quel tipo di evento è stato trovato
+                sequenceFound.push(startEventFound);                                                            // Si inserisce l'evento nell'array della sequenza
+            } else if (event.Code == startEventFound.Code && sequenceStartEventsFound[index]) {                 // Altrimenti, se un evento di quel tipo è già stato trovato
+                let indexOfElementToRemove = 0;
+                sequenceFound.forEach((row: LogRow, index: number) => {                                       // Si cerca l'evento tra quelli salvati nella sequenza
+                    if (row.Code == event.Code) {
+                        indexOfElementToRemove = index;
+                    }
+                });
+                sequenceFound.splice(indexOfElementToRemove, 1);                                      // Si rimuove l'elemento dalla sequenza
+                sequenceFound.push(startEventFound);                                                            // Si inserisce l'evento nell'array della sequenza
+
+                // Se si sostituisce l'evento più vecchio
+                if (indexOfElementToRemove == 0) {
+                    // Si sostituisce la data di inizio della serie di eventi di inizio con quella dell'evento più vecchio presente
+                    startEventsLowerDateTime = (new Date([sequenceFound[0].Date, sequenceFound[0].Time].join('T').replaceAll("/", "-") + "Z")).getTime();
+                }
+            }
+
+        });
+        return startEventsLowerDateTime;
+    }
+
+// Funzione per trovare gli eventi del file di log uguali ad una serie di eventi passati
     private findEvents(log : Log, EventsToFind : Event[], acceptedSubUnits: number[]) : LogRow[] {
         let eventsFound : LogRow[] = [];
         for (let event of EventsToFind) {

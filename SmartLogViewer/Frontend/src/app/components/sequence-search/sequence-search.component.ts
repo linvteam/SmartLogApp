@@ -4,6 +4,7 @@ import {Sequence} from "../../sequence.classes";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {SequenceFetchService} from "../../services/sequence-fetch.service";
 import {LogService} from "../../services/log.service";
+import {LogRow} from "../../log.classes";
 
 @Component({
   selector: 'app-sequence-search',
@@ -53,7 +54,7 @@ export class SequenceSearchComponent{
   private sequencesHandler(): any {
     return (fetchedSequence: Sequence) => {
       let sequence = new Sequence(fetchedSequence as Sequence);
-      this.sequencesSearchService.findSequences(this.logService.getLog(), sequence);
+      let occurrences : LogRow[][] = this.sequencesSearchService.findSequences(this.logService.getLog(), sequence);
       
       
     };
