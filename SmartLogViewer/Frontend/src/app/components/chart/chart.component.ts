@@ -14,20 +14,20 @@ import { LogRow } from '../../log.classes';
 })
 export class ChartComponent {
 
-    private readonly MarginTop = 20;
-    private readonly MarginRight = 0;
-    private readonly MarginBottom = 0;
-    private readonly MarginLeft = 100;
+    private readonly marginTop = 20;
+    private readonly marginRight = 0;
+    private readonly marginBottom = 0;
+    private readonly marginLeft = 100;
 
-    private readonly Size = 35;
-    private readonly Padding = 5;
+    private readonly size = 35;
+    private readonly padding = 5;
 
     private width = 1500;
     private height;
     private xDomain : Array<Date|undefined>;// [xmin, xmax]
-    private xRange = [this.MarginLeft, this.width - this.MarginRight]; // [left, right]
+    private xRange = [this.marginLeft, this.width - this.marginRight]; // [left, right]
     private yDomain = [0,1]; // [ymin, ymax]
-    private yRange = [this.Size, this.Padding]; // [bottom, top]
+    private yRange = [this.size, this.padding]; // [bottom, top]
     private zDomain : d3.InternSet<string|undefined>; // array of z-values
     
     private x;
@@ -71,7 +71,7 @@ export class ChartComponent {
         this.xDomain = d3.extent(this.x);  
         this.zDomain = new d3.InternSet(this.z);
 
-        this.height = this.zDomain.size * this.Size + this.MarginTop + this.MarginBottom;
+        this.height = this.zDomain.size * this.size + this.marginTop + this.marginBottom;
         this.xScale = d3.scaleTime(this.xDomain as Array<Date>, this.xRange);
         this.yScale = d3.scaleOrdinal(this.yDomain, this.yRange);
         this.xAxis = d3.axisTop(this.xScale).ticks(this.width / 80).tickSizeOuter(0);
@@ -107,16 +107,16 @@ export class ChartComponent {
         this.g = this.svg.selectAll("g")
             .data(d3.group(I, i => this.z[i]))
             .join("g")
-            .attr("transform", (_ : any, i : any) => `translate(0,${i * this.Size + this.MarginTop})`);
+            .attr("transform", (_ : any, i : any) => `translate(0,${i * this.size + this.marginTop})`);
 
         const defs = this.g.append("defs");
 
         defs.append("clipPath")
             .attr("id", (_: any, i: any) => `${uid}-clip-${i}`)
             .append("rect")
-            .attr("y", this.Padding)
+            .attr("y", this.padding)
             .attr("width", this.width)
-            .attr("height", this.Size - this.Padding);
+            .attr("height", this.size - this.padding);
 
         this.createClipRect();
 
@@ -175,19 +175,19 @@ export class ChartComponent {
             .attr("clip-path", "url(#clip)")
             .attr("fill", (d: any, i: any) => this.codeColors[d].Color.replace("0xFF", "#"))    //imposta il colore del campo Code
             .attr("stroke", "black")
-            .attr("transform", (_: any, i: any) => `translate(0,${i * this.Size})`)
+            .attr("transform", (_: any, i: any) => `translate(0,${i * this.size})`)
             .attr("xlink:href", (i: any) => `#${uid}-path-${i}`);
 
         this.g.append("text")
             .attr("font-size", "1.5em")
-            .attr("x", this.MarginLeft - 100)
-            .attr("y", (this.Size + this.Padding) / 2)
+            .attr("x", this.marginLeft - 100)
+            .attr("y", (this.size + this.padding) / 2)
             .attr("dy", "0.35em")
             .text(([z]: any) => z);
         //Dato che normalmente non ci sono margini a sinistra o a destra, non si mostrano i segni di graduazione che sono vicini al bordo del grafico
         // poiché è probabile che questi segni vengano tagliati
         this.gXAxis = this.svg.append("g")
-            .attr("transform", `translate(0,${this.MarginTop})`)
+            .attr("transform", `translate(0,${this.marginTop})`)
             .call(this.xAxis)
             .call((g: any) => g.selectAll(".tick")
                 .filter((d: any) => this.xScale(d as Date) < 10 || this.xScale(d as Date) > this.width - 10)
@@ -195,7 +195,8 @@ export class ChartComponent {
             .call((g: any) => g.select(".domain").remove());
         
     }
-    
+
+    // Funzione di supporto per zoomed(), stabilisce i limiti di zoom
     private zoom(svg: any, x: any, y: any) {
     svg.call(d3.zoom()
         //limiti del moltiplicatore di zoom/de-zoom, da 0x a infinito
@@ -205,6 +206,7 @@ export class ChartComponent {
         .on("zoom", (event: any) => this.zoomed(event, y, x)));
     }
 
+    //Funzione che implementa la funzionalità di zoom scalando gli assi ed il grafico
     private zoomed(event: any, y: any, x: any) {
         //assex viene scalato con le nuove dimensioni dopo zoom o scroll
         this.xScale = event.transform.rescaleX(x);
@@ -228,15 +230,17 @@ export class ChartComponent {
         });
     }
 
+    // Funzione che delimita la porzione su cui viene disegnato il grafico
     private createClipRect(): any {
         const defs: any = this.svg.append("defs");
         const clipTag: any = defs.append("clipPath").attr("id", "clip");
         return clipTag.append("rect")
-            .attr("x", this.MarginLeft)
-            .attr("width", this.width - this.MarginLeft)
+            .attr("x", this.marginLeft)
+            .attr("width", this.width - this.marginLeft)
             .attr("height", this.height)
     }
-    
+
+    //Funzione che scrive i dati sul tooltip che viene visualizzato quando si fa hover sul grafico
     private setTooltipInfo(start: Date, end: Date, code: string, unit: number, subUnit: number, description: string){
         const format = 'yyyy/MM/dd - HH:mm:ss.SSS';
         const locale = "it-IT";
@@ -249,7 +253,8 @@ export class ChartComponent {
         tooltip.select("p span#subunit").text(subUnit);
         tooltip.select("p span#description").text(description);
     }
-    
+
+    //Funzione che muove il tooltip seguendo lo spostamento del mouse ed aggiustando la posizione quando si è vicino ai bordi
     private moveTooltip(x: number, y: number){
         if(this.tooltipCollideX(x)){ //se è troppo a destra lo sposta a sinistra del mouse
             x-=360;
@@ -261,10 +266,12 @@ export class ChartComponent {
             .style("left", x + "px")
             .style("top", y + "px");
     }
-    
+
+    // Funziono che ritornano true se la posizione del mouse è vicino al margine destro
     private tooltipCollideX(x: number){
         return 365 + x > window.innerWidth;
     }
+    // Funziono che ritornano true se la posizione del mouse è vicino al margine inferiore
     private tooltipCollideY(tooltip: any, y: number){
         return 150 + y > window.innerHeight;
     }
