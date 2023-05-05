@@ -36,7 +36,7 @@ export class ChartComponent implements OnInit{
 
     chartData: any[];
     constructor(private logService: LogService, private eventSearchService: EventSearchService) {
-        this.eventSearchService.currentValue.subscribe(value => {
+        this.eventSearchService.filteredLog.subscribe(value => {
             this.chartData = value;
             this.drawChart();
         });

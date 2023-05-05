@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ColDef } from 'ag-grid-community';
 import { LogService } from 'src/app/services/log.service';
 import { EventSearchService } from 'src/app/services/event-search.service';
-import { Log } from '../../log.classes';
 
 @Component({
   selector: 'app-table',
@@ -14,7 +13,7 @@ export class TableComponent {
     rowData: any[];
 
     constructor(private logService: LogService, private eventSearchService: EventSearchService) {
-        this.eventSearchService.currentValue.subscribe(value => this.rowData = value);
+        this.eventSearchService.filteredLog.subscribe(value => this.rowData = value);
         this.rowData = this.logService.getLog().Events;
     }
 

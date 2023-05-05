@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from "rxjs";
-import { Log, LogRow } from "../log.classes";
+import { LogRow } from "../log.classes";
 import { LogService } from 'src/app/services/log.service';
+import { Subject } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventSearchService {
 
-    private logSource = new BehaviorSubject<LogRow[]>([]);
-    currentValue = this.logSource.asObservable();
+    private logSource = new Subject<LogRow[]>();
+    filteredLog = this.logSource.asObservable();
 
     constructor(private logService: LogService) { }
 
@@ -37,8 +37,9 @@ export class EventSearchService {
         if (stringList1 != undefined) {
             stringList = stringList1.concat(stringList2);
         }
-        else
-            stringList = stringList2
+        else {
+            stringList = stringList2;
+        }
 
         // Si fa la ricerca con search ...
         for (let s of stringList) {
