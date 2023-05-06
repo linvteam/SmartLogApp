@@ -196,7 +196,10 @@ export class ChartComponent {
         
     }
 
-    // Funzione di supporto per zoomed(), stabilisce i limiti di zoom
+    /** Funzione di supporto per zoomed(), stabilisce i limiti di zoom
+     * @param x indica la scala dell'asse x
+     * @param y indica la scala dell'asse y
+     */
     private zoom(svg: any, x: any, y: any) {
     svg.call(d3.zoom()
         //limiti del moltiplicatore di zoom/de-zoom, da 0x a infinito
@@ -206,7 +209,11 @@ export class ChartComponent {
         .on("zoom", (event: any) => this.zoomed(event, y, x)));
     }
 
-    //Funzione che implementa la funzionalità di zoom scalando gli assi ed il grafico
+    /**Funzione che implementa la funzionalità di zoom scalando gli assi ed il grafico
+     * @param event indica l'evento
+     * @param y indica la scala dell'asse y
+     * @param x indica la scala dell'asse x
+     */
     private zoomed(event: any, y: any, x: any) {
         //assex viene scalato con le nuove dimensioni dopo zoom o scroll
         this.xScale = event.transform.rescaleX(x);
@@ -240,7 +247,14 @@ export class ChartComponent {
             .attr("height", this.height)
     }
 
-    //Funzione che scrive i dati sul tooltip che viene visualizzato quando si fa hover sul grafico
+    /** Funzione che scrive i dati sul tooltip che viene visualizzato quando si fa hover sul grafico
+     * @param start indica la data in cui è cominciato l'evento
+     * @param end indica la data in cui è finito l'evento
+     * @param code indica il code dell'evento
+     * @param unit indica il campo unit dell'evento'
+     * @param subUnit indica il campo subUnit dell'evento
+     * @param description indica la descrizione dell'evento'
+     */
     private setTooltipInfo(start: Date, end: Date, code: string, unit: number, subUnit: number, description: string){
         const format = 'yyyy/MM/dd - HH:mm:ss.SSS';
         const locale = "it-IT";
@@ -254,7 +268,10 @@ export class ChartComponent {
         tooltip.select("p span#description").text(description);
     }
 
-    //Funzione che muove il tooltip seguendo lo spostamento del mouse ed aggiustando la posizione quando si è vicino ai bordi
+    /** Funzione che muove il tooltip seguendo lo spostamento del mouse ed aggiustando la posizione quando si è vicino ai bordi
+     * @param x indica la cordinata x del cursore 
+     * @param y indica la cordinata y del cursore
+     */
     private moveTooltip(x: number, y: number){
         if(this.tooltipCollideX(x)){ //se è troppo a destra lo sposta a sinistra del mouse
             x-=360;
@@ -267,11 +284,15 @@ export class ChartComponent {
             .style("top", y + "px");
     }
 
-    // Funziono che ritornano true se la posizione del mouse è vicino al margine destro
+    /** Funziono che ritornano true se la posizione del mouse è vicino al margine destro
+     * @param x indica la cordinata x del cursore
+     */
     private tooltipCollideX(x: number){
         return 365 + x > window.innerWidth;
     }
-    // Funziono che ritornano true se la posizione del mouse è vicino al margine inferiore
+    /** Funziono che ritornano true se la posizione del mouse è vicino al margine inferiore
+     * @param y indica la cordinata y del cursore
+     */
     private tooltipCollideY(tooltip: any, y: number){
         return 150 + y > window.innerHeight;
     }
