@@ -2,8 +2,12 @@ using Core;
 using SmartLogViewer;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSingleton<Parser>();
-// Add services to the container.
+//builder.Services.AddSingleton<Parser>();
+
+//Add services to the container.
+
+// Lascio alla classe Injectable aggiungere tutte le classi correttamente annotate al builder
+Core.Injectables.Injectable.RegisterClasses(builder);
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
