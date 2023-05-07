@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ColDef } from 'ag-grid-community';
-import { LogService } from 'src/app/services/log/log.service';
 import { LogRow } from 'src/app/log.classes';
 import { LogManipulationService } from '../../services/LogManipulation/log-manipulation.service';
 import { LogManipulator  } from 'src/app/LogManipulator/log-manipulator'

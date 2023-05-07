@@ -13,7 +13,7 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { HttpClientModule } from '@angular/common/http';
 import {AgGridModule} from "ag-grid-angular";
 import {BaseURL} from "./connection-info";
-import { HeaderComponent } from './components/header/header.component';
+import { TableHeaderComponent } from './components/table-header/table-header.component';
 import { EventSearchComponent } from './components/event-search/event-search.component';
 import { SequenceSearchComponent } from './components/sequence-search/sequence-search.component';
 import { EventGroupingComponent } from './components/event-grouping/event-grouping.component';
@@ -28,7 +28,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     TableComponent,
     ChartComponent,
     FileUploadComponent,
-    HeaderComponent,
+    TableHeaderComponent,
     EventSearchComponent,
     SequenceSearchComponent,
     EventGroupingComponent
@@ -43,7 +43,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
       ReactiveFormsModule
   ],
   providers: [
-    { provide: BaseURL, useValue: 'https://localhost:7210' }
+    { provide: BaseURL, useValue: 'https://localhost:7210/api' }
   ],
   bootstrap: [AppComponent]
 })

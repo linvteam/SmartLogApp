@@ -26,7 +26,7 @@ export class INIFile {
 export class Header {
 
     private pcDate: Date;
-    private upsDate: Date; 
+    private upsDate: Date;
     private iniFile: INIFile[] = [];
 
     constructor(header: Header){
@@ -47,7 +47,7 @@ export class Header {
     public get INIFile() {
         return this.iniFile;
     }
-  }
+}
 
 export class LogRow {
 
@@ -114,6 +114,13 @@ export class Log {
         this.header=new Header(log.header);
         this.fileName=log.fileName;
         log.events.forEach( x => this.events.push(new LogRow(x)));
+
+        // Ordinamento degli eventi
+        this.events.sort((e1: LogRow, e2 : LogRow) => {
+            let e1DateTime : number = (new Date([e1.Date, e1.Time].join('T').replaceAll("/", "-") + "Z")).getTime();
+            let e2DateTime : number = (new Date([e2.Date, e2.Time].join('T').replaceAll("/", "-") + "Z")).getTime();
+            return e2DateTime - e1DateTime;
+        });
     }
 
     public get Header() {

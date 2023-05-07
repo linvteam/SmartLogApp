@@ -18,7 +18,7 @@ export class FileUploadService {
     const headers = new HttpHeaders({
       accept: '*/*'});
 
-    const req = new HttpRequest('POST', `${this.ConnectionURL}/api/parse`, formData, {
+    const req = new HttpRequest('POST', `${this.ConnectionURL}/parse`, formData, {
       headers: headers,
       reportProgress: true,
       responseType: 'json'
