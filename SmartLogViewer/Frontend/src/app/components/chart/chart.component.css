@@ -1,3 +1,28 @@
-figure{
-    padding-bottom: 2em;
+#chart-container{
+    position: relative;
+}
+
+#tooltip {
+    position: fixed;
+    left: -100%;
+    border: solid 1px #050505;
+    border-radius: 5px;
+    background-color: #ffffffee;
+    transform: translate(40px);
+    width: 310px;
+    padding: 3px;
+    padding-left: 5px;
+}
+
+#horizon-chart{
+    background-color: #f8f9fa;
+}
+
+#tooltip p {
+    display: block;
+    margin:0;
+}
+
+.infoName{
+    font-weight: bold;
 }

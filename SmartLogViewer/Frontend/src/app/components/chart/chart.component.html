@@ -1,6 +1,15 @@
 
 <app-header></app-header>
 
-<div>
-    <figure id="horizon-chart"></figure>
+<div id="chart-container">
+    <figure id="horizon-chart">
+        <div *ngIf="hovering" id="tooltip">
+            <p><span class="infoName">Code: </span><span id="code"></span></p>
+            <p><span class="infoName">Data inizio: </span><span id="start"></span></p>
+            <p><span class="infoName">Data fine: </span><span id="end"></span></p>
+            <p><span class="infoName">Unit: </span><span id="unit"></span></p>
+            <p><span class="infoName">SubUnit: </span><span id="subunit"></span></p>
+            <p><span class="infoName">Description: </span><span id="description"></span></p>
+        </div>
+    </figure>
 </div>
