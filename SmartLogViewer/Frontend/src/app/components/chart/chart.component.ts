@@ -278,9 +278,11 @@ export class ChartComponent {
         tooltip.select("p span#description").text(description);
     }
 
-    /** Funzione che muove il tooltip seguendo lo spostamento del mouse ed aggiustando la posizione quando si è vicino ai bordi
-     * @param x indica la cordinata x del cursore 
-     * @param y indica la cordinata y del cursore
+    /**
+     * Funzione che muove il tooltip seguendo lo spostamento del mouse ed aggiusta la posizione quando è vicino ai bordi
+     * @param x coordinata x del cursore
+     * @param y coordinata y del cursore
+     * @private
      */
     private moveTooltip(x: number, y: number){
         if(this.tooltipCollideX(x)){ //se è troppo a destra lo sposta a sinistra del mouse
