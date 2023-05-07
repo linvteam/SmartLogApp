@@ -212,10 +212,12 @@ export class ChartComponent {
         .on("zoom", (event: any) => this.zoomed(event, y, x)));
     }
 
-    /**Funzione che implementa la funzionalità di zoom scalando gli assi ed il grafico
-     * @param event indica l'evento
-     * @param y indica la scala dell'asse y
-     * @param x indica la scala dell'asse x
+    /**
+     * Funzione che implementa la funzionalità di zoom scalando gli assi ed il grafico
+     * @param event evento
+     * @param y scala dell'asse y
+     * @param x scala dell'asse x
+     * @private
      */
     private zoomed(event: any, y: any, x: any) {
         //assex viene scalato con le nuove dimensioni dopo zoom o scroll
