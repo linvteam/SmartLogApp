@@ -255,13 +255,15 @@ export class ChartComponent {
             .attr("height", this.height)
     }
 
-    /** Funzione che scrive i dati sul tooltip che viene visualizzato quando si fa hover sul grafico
-     * @param start indica la data in cui è cominciato l'evento
-     * @param end indica la data in cui è finito l'evento
-     * @param code indica il code dell'evento
-     * @param unit indica il campo unit dell'evento'
-     * @param subUnit indica il campo subUnit dell'evento
-     * @param description indica la descrizione dell'evento'
+    /**
+     * Funzione che scrive i dati sul tooltip che viene visualizzato quando si fa hover sul grafico
+     * @param start data in cui è cominciato l'evento
+     * @param end data in cui è finito l'evento
+     * @param code code dell'evento
+     * @param unit campo unit dell'evento
+     * @param subUnit campo subUnit dell'evento
+     * @param description descrizione dell'evento
+     * @private
      */
     private setTooltipInfo(start: Date, end: Date, code: string, unit: number, subUnit: number, description: string){
         const format = 'yyyy/MM/dd - HH:mm:ss.SSS';
