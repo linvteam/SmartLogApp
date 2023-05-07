@@ -196,9 +196,12 @@ export class ChartComponent {
         
     }
 
-    /** Funzione di supporto per zoomed(), stabilisce i limiti di zoom
-     * @param x indica la scala dell'asse x
-     * @param y indica la scala dell'asse y
+    /**
+     * Funzione di supporto per zoomed(), stabilisce i limiti di zoom
+     * @param svg grafico
+     * @param x scala dell'asse x
+     * @param y scala dell'asse y
+     * @private
      */
     private zoom(svg: any, x: any, y: any) {
     svg.call(d3.zoom()
