@@ -242,7 +242,10 @@ export class ChartComponent {
         });
     }
 
-    // Funzione che delimita la porzione su cui viene disegnato il grafico
+    /**
+     * Funzione che delimita la porzione su cui viene disegnato il grafico
+     * @private
+     */
     private createClipRect(): any {
         const defs: any = this.svg.append("defs");
         const clipTag: any = defs.append("clipPath").attr("id", "clip");
