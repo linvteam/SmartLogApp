@@ -52,7 +52,8 @@ export class EventSearchService {
 
     private search(logRow: LogRow, searchString: RegExp): boolean {
 
-        if (searchString.test(logRow.Date + " - " + logRow.Time)) return true;
+        if (searchString.test(String(logRow.Date))) return true;
+        if (searchString.test(String(logRow.Time))) return true;
         if (searchString.test(String(logRow.Unit))) return true;
         if (searchString.test(String(logRow.SubUnit))) return true;
         if (searchString.test(logRow.Code)) return true;
