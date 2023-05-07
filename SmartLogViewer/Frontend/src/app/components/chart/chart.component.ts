@@ -294,8 +294,10 @@ export class ChartComponent {
             .style("top", y + "px");
     }
 
-    /** Funziono che ritornano true se la posizione del mouse è vicino al margine destro
-     * @param x indica la cordinata x del cursore
+    /**
+     * Funzione che ritorna true se la posizione del mouse è vicina al margine destro
+     * @param x coordinata x del cursore
+     * @private
      */
     private tooltipCollideX(x: number){
         return 365 + x > window.innerWidth;
