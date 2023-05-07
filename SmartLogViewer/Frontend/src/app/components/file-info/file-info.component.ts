@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {ColDef, GridOptions} from 'ag-grid-community';
-import { LogService } from 'src/app/services/log.service';
+import { LogService } from 'src/app/services/log/log.service';
 import {INIFile, Log} from "../../log.classes";
 import localeIT from "@angular/common/locales/it"
 import {formatDate, registerLocaleData} from "@angular/common";

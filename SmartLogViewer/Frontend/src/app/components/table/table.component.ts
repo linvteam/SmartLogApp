@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { ColDef } from 'ag-grid-community';
-import { LogService } from 'src/app/services/log.service';
+import { LogService } from 'src/app/services/log/log.service';
+import { LogRow } from 'src/app/log.classes';
+import { LogManipulationService } from '../../services/LogManipulation/log-manipulation.service';
+import { LogManipulator  } from 'src/app/LogManipulator/log-manipulator'
 
 @Component({
   selector: 'app-table',
@@ -8,9 +11,23 @@ import { LogService } from 'src/app/services/log.service';
   styleUrls: ['./table.component.css']
 })
 export class TableComponent {
-  
-  constructor(private logService: LogService) {}
-  
+
+    rowData: LogRow[] = [];
+    private logManipulation: LogManipulator;
+
+    constructor(private logManipulationService: LogManipulationService) {
+        this.logManipulation = logManipulationService.getDefaultManipulator();
+        this.updateView();
+        this.logManipulationService.manipulatedLog.subscribe(value => {
+            this.logManipulation = value;
+            this.updateView();
+        });
+    }
+
+    private updateView() {
+        this.rowData = this.logManipulation.getGroup(1);
+    }
+
   columnDefs = [
     { field: 'date', hide: true },
     { field: 'time', hide: true },
@@ -25,8 +42,6 @@ export class TableComponent {
   defaultColDef: ColDef ={
     resizable: true
   }
-
-  rowData = this.logService.getLog().Events;
 
   onGridReady(params : any) {
     params.api.sizeColumnsToFit();

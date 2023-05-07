@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { LogService } from 'src/app/services/log.service';
+import { LogService } from 'src/app/services/log/log.service';
 import { formatDate, registerLocaleData } from "@angular/common";
-import localeIT from "@angular/common/locales/it"
+import localeIT from "@angular/common/locales/it";
+import { LogManipulationService } from "src/app/services/LogManipulation/log-manipulation.service";
 registerLocaleData(localeIT, "it");
 
 import * as d3 from 'd3';
 import { LogRow } from '../../log.classes';
+import { LogManipulator  } from '../../LogManipulator/log-manipulator';
 
 @Component({
   selector: 'app-chart',
@@ -46,14 +48,26 @@ export class ChartComponent {
     private plot: any;
     private gXAxis : any;
     
-    public hovering: boolean= true;
-    constructor(private logService: LogService) {
-        
+    public hovering: boolean = true;
+    private events: LogRow[];
+    private logManipulator: LogManipulator;
+    constructor(private logManipulationService: LogManipulationService) {
+
+        this.logManipulator = logManipulationService.getDefaultManipulator();
+        this.events = this.logManipulator.getGroup(1);
+
+        this.logManipulationService.manipulatedLog.subscribe(value => {
+            this.logManipulator = value;
+            this.events = this.logManipulator.getGroup(1);
+            this.update();
+            this.draw();
+        });
+
         // La data va messa nel formato YYYY-MM-DDThh:mm:ss.mmmZ
-        this.x = d3.map(logService.getLog().Events, e => new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z"));
-        this.y = d3.map(logService.getLog().Events, e => e.Value ? 1 : 0);
-        this.z = d3.map(logService.getLog().Events, e => e.Code);
-        let colors = d3.map(logService.getLog().Events, ((e: LogRow) => { return { Code: e.Code, Color: e.Color } }));
+        this.x = d3.map(this.events, e => new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z"));
+        this.y = d3.map(this.events, e => e.Value ? 1 : 0);
+        this.z = d3.map(this.events, e => e.Code);
+        let colors = d3.map(this.events, ((e: LogRow) => { return { Code: e.Code, Color: e.Color } }));
         
         colors.reverse();
         this.codeColors = [];
@@ -78,12 +92,53 @@ export class ChartComponent {
 
         
         //getValori per il tooltip
-        this.descriptions = d3.map(logService.getLog().Events, e => e.Description);
-        this.units = d3.map(logService.getLog().Events, e => e.Unit);
-        this.subUnits = d3.map(logService.getLog().Events, e => e.SubUnit);
+        this.descriptions = d3.map(this.events, e => e.Description);
+        this.units = d3.map(this.events, e => e.Unit);
+        this.subUnits = d3.map(this.events, e => e.SubUnit);
+    }
+
+    private update() {
+        // La data va messa nel formato YYYY-MM-DDThh:mm:ss.mmmZ
+        this.x = d3.map(this.events, e => new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z"));
+        this.y = d3.map(this.events, e => e.Value ? 1 : 0);
+        this.z = d3.map(this.events, e => e.Code);
+        let colors = d3.map(this.events, ((e: LogRow) => { return { Code: e.Code, Color: e.Color } }));
+
+        colors.reverse();
+        this.codeColors = [];
+        for (let i of colors) {  //crea l'array codeColors con tuple di code e Colors non ripetuti
+            if (this.codeColors.indexOf(i) == -1) {
+                this.codeColors.push(i);
+            }
+        }
+
+        //vengono invertite le variabili in maniera da avere i valori in ordine crescente
+        this.x.reverse();
+        this.y.reverse();
+        this.z.reverse();
+
+        this.xDomain = d3.extent(this.x);
+        this.zDomain = new d3.InternSet(this.z);
+
+        this.height = this.zDomain.size * this.size + this.marginTop + this.marginBottom;
+        this.xScale = d3.scaleTime(this.xDomain as Array<Date>, this.xRange);
+        this.yScale = d3.scaleOrdinal(this.yDomain, this.yRange);
+        this.xAxis = d3.axisTop(this.xScale).ticks(this.width / 80).tickSizeOuter(0);
+
+
+        //getValori per il tooltip
+        this.descriptions = d3.map(this.events, e => e.Description);
+        this.units = d3.map(this.events, e => e.Unit);
+        this.subUnits = d3.map(this.events, e => e.SubUnit);
+    }
+
+    private ngOnInit() {
+        this.draw();
     }
     
-    private ngOnInit() {
+    private draw() {
+
+        d3.select("figure#horizon-chart svg").remove();
 
         const I = d3.range(this.x.length).filter(i => this.zDomain.has(this.z[i]));
 

@@ -17,6 +17,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { EventSearchComponent } from './components/event-search/event-search.component';
 import { SequenceSearchComponent } from './components/sequence-search/sequence-search.component';
 import { EventGroupingComponent } from './components/event-grouping/event-grouping.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,9 @@ import { EventGroupingComponent } from './components/event-grouping/event-groupi
     HttpClientModule,
     AppRoutingModule,
     NgbModule,
-    AgGridModule
+      AgGridModule,
+      FormsModule,
+      ReactiveFormsModule
   ],
   providers: [
     { provide: BaseURL, useValue: 'https://localhost:7210' }

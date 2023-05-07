@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { FileUploadService } from 'src/app/services/file-upload.service';
+import { FileUploadService } from 'src/app/services/upload/file-upload.service';
 import { Header, Log, LogRow } from 'src/app/log.classes';
-import { LogService } from 'src/app/services/log.service';
+import { LogService } from 'src/app/services/log/log.service';
 
 
 @Component({
