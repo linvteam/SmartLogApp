@@ -304,8 +304,12 @@ export class ChartComponent {
     private tooltipCollideX(x: number){
         return 365 + x > window.innerWidth;
     }
-    /** Funziono che ritornano true se la posizione del mouse è vicino al margine inferiore
-     * @param y indica la cordinata y del cursore
+
+    /**
+     * Funzione che ritorna true se la posizione del mouse è vicina al margine inferiore
+     * @param tooltip tooltip con le informazioni dell'evento
+     * @param y coordinata y del cursore
+     * @private
      */
     private tooltipCollideY(tooltip: any, y: number){
         return 150 + y > window.innerHeight;
