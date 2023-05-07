@@ -28,7 +28,6 @@ export class EventSearchComponent {
 
         this.eventSearchService.filterEvents(this.searchString);
 
-        this.uploadForm.reset();
         
     }
 
