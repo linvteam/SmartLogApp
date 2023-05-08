@@ -1,26 +1,9 @@
-import { Component, Directive, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FileUploadService } from 'src/app/services/upload/file-upload.service';
-import { Header, Log, LogRow } from 'src/app/log.classes';
+import { Log } from 'src/app/log.classes';
 import { LogService } from 'src/app/services/log/log.service';
-
-@Directive({ selector: "label[for='file']" })
-class DragFileManager {
-    constructor() {
-        console.log("caio")
-    }
-
-    @ViewChild("fileSelector") fileSelector: any;
-
-    @HostListener("drop", ['$event']) onDrop(e: any) {
-        e.preventDefault();
-        let files = e.originalEvent.dataTransfer.files;
-        if (files && files.lenght) {
-            this.fileSelector.nativeElememt.value = files;
-        }
-    }
-}
 
 @Component({
     selector: 'app-file-upload',
@@ -29,10 +12,12 @@ class DragFileManager {
 })
 export class FileUploadComponent {
 
-    selectedFiles?: FileList;
+    private readonly FileSelectText = 'Seleziona o trascina qui il file'
+
     currentFile?: File;
-    progress = 0;
+    progress : number | undefined;
     message = '';
+    labelText = this.FileSelectText;
 
     @ViewChild("fileSelector") fileSelector: any;
 
@@ -41,18 +26,29 @@ export class FileUploadComponent {
     constructor(private uploadService: FileUploadService, private logService: LogService) {
     }
 
-    selectFile(event: any): void {
-        console.log(this.fileSelector)
-        this.selectedFiles = event.target.files;
+    private updateCurrentFile(file: any): void {
+        if (this.currentFile && !file) return; // Evito di deselezionare il file se premo annulla sul file dialog
+        this.currentFile = file;
+        if (file)
+            this.labelText = file.name;
+        else
+            this.labelText = this.FileSelectText;
     }
 
-    fileDrop(e: any) {
-        console.log(e);
-        e.preventDefault();
-        let files = e.originalEvent.dataTransfer.files;
-        if (files && files.lenght) {
-            this.fileSelector.nativeElememt.value = files;
-        }
+    /**
+     * Gestisce la selezione dei file tramite dialog
+     * @param event evento lanciato dal <input type="file" />
+     */
+    selectFile(event: any): void {
+        this.updateCurrentFile(event.target.files?.item(0));
+    }
+
+    /**
+     * Gestisce il drag and drop del file
+     * @param fileList la lista di file che viene "scaricata" sul controllo
+     */
+    fileDrop(fileList: any): void {
+        this.updateCurrentFile(fileList.item(0));
     }
 
     private eventHandler(): any {
@@ -73,8 +69,7 @@ export class FileUploadComponent {
         return (err: any) => {
             this.progress = 0;
 
-            this.selectedFiles = undefined;
-            this.currentFile = undefined;
+            this.updateCurrentFile(undefined);
 
             if (err.error && err.error.message) {
                 if(err.error.code == 1)
@@ -88,6 +83,7 @@ export class FileUploadComponent {
             }
 
             this.fileSelector.nativeElement.value = null;
+            this.progress = undefined;
         }
     }
 
@@ -95,19 +91,14 @@ export class FileUploadComponent {
         this.progress = 0;
         this.logService.clean();
 
-        if (this.selectedFiles) {
-            const file: File | null = this.selectedFiles.item(0);
 
-            if (file) {
-                this.currentFile = file;
+        if (this.currentFile) {
 
-                this.uploadService.upload(this.currentFile).subscribe({
-                    next: this.eventHandler(),
-                    error: this.errorHandler()
-                });
-            }
+            this.uploadService.upload(this.currentFile).subscribe({
+                next: this.eventHandler(),
+                error: this.errorHandler()
+            });
 
-            this.selectedFiles = undefined;
         }
 
     }

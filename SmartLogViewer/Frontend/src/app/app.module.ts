@@ -21,6 +21,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
 import { ChartHeaderComponent } from "./components/chart-header/chart-header.component";
 import { ChartSearchComponent } from "./components/chart-search/chart-search.component";
+import { FileDroppedDirective } from './file-dropped.directive';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { ChartSearchComponent } from "./components/chart-search/chart-search.com
         SequenceSearchComponent,
         EventGroupingComponent,
         ChartHeaderComponent,
-        ChartSearchComponent
+        ChartSearchComponent,
+        FileDroppedDirective
     ],
     imports: [
         BrowserModule,
