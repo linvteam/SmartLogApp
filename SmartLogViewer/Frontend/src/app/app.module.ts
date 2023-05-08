@@ -13,7 +13,7 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { HttpClientModule } from '@angular/common/http';
 import { AgGridModule } from "ag-grid-angular";
 import { BaseURL } from "./connection-info";
-import { TableHeaderComponent } from './components/header/header.component';
+import { TableHeaderComponent } from './components/table-header/table-header.component';
 import { EventSearchComponent } from './components/event-search/event-search.component';
 import { SequenceSearchComponent } from './components/sequence-search/sequence-search.component';
 import { EventGroupingComponent } from './components/event-grouping/event-grouping.component';

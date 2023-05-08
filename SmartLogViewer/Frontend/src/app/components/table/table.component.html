@@ -2,6 +2,25 @@
 <app-table-header></app-table-header>
 
 <div>
+    <div class="form-group row tableSelection" *ngIf="numberOfGroups() > 1">
+        Tabella numbero
+        <div class="col">
+            <label class="visually-hidden" for="autoSizingInputGroup">Raggruppamento</label>
+            <input type="number" (change)="changeGroupIndex($event)" name="valore" class="form-control" id="autoSizingInputGroup" min='1' max="{{ numberOfGroups() }}" value="1" />
+        </div>
+        di {{numberOfGroups()}}
+    </div>
+
+    <table class="ag-theme-alpine textCenter datetime-header">
+        <tr>
+            <th>Dal:</th>
+            <td>{{ startDateTime() }}</td>
+        </tr>
+        <tr>
+            <th>Al:</th>
+            <td>{{ endDateTime() }}</td>
+        </tr>
+    </table> 
     <ag-grid-angular
             class="ag-theme-alpine"
             [rowData]="rowData"

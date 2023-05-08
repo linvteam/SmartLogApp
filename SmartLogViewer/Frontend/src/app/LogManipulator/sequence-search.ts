@@ -23,7 +23,7 @@ export class SequenceSearch implements LogManipulator {
         if(this.actualSequence != undefined) {
             this.findSequences(this.actualSequence);
         }
-        if(index > this.currentOccurrences.length) {
+        if(--index > this.currentOccurrences.length) {
             return [];
         } else {
             return this.currentOccurrences[index].slice();

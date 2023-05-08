@@ -22,9 +22,11 @@ export class FileUploadComponent {
 
     fileInfos?: Observable<any>;
 
-    constructor(private uploadService: FileUploadService, private logService: LogService) { }
+    constructor(private uploadService: FileUploadService, private logService: LogService) {
+    }
 
     selectFile(event: any): void {
+        console.log(this.fileSelector)
         this.selectedFiles = event.target.files;
     }
 
