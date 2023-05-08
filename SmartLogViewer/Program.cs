@@ -1,8 +1,13 @@
 using Core;
 using SmartLogViewer;
+using SmartLogViewer.Model;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<Parser>();
+builder.Services.AddSingleton<SequenceFileReader>(); // Configurazione del SequencesManager
+builder.Services.AddSingleton<SequencesManagerBase, SequencesManager>();
+
 // Add services to the container.
 
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -10,9 +15,14 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
     options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
 });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options => {
+    var xmlFIlename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFIlename));
+});
+
 builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
     policy =>
     {
