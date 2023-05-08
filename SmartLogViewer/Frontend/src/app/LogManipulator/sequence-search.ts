@@ -3,23 +3,43 @@ import { Log, LogRow } from "../log.classes"
 import { LogService } from "../services/log/log.service";
 import {Sequence, Event} from "../sequence.classes";
 
+/**
+ * Questa classe si occupa di cercare una sequenza di eventi specificata
+ */
 export class SequenceSearch implements LogManipulator {
 
-    private logService!: LogService;
-    private currentOccurrences: LogRow[][] = [];
+    private logService!: LogService; // Log service che fornisce gli eventi
+    private currentOccurrences: LogRow[][] = []; // I risultati delle ricerche
 
+    /**
+     * Costruisce una nuova classe che si occupa di cercare la ricerca specificata
+     * @param actualSequence La sequenza da cercare
+     */
     constructor(private actualSequence: Sequence) {
     }
 
+    /**
+     * Imposto il log service ed effettuo la ricerca
+     * @param logService il log service che fornisce gli eventi
+     */
     setLogService(logService: LogService): void {
         this.logService = logService;
         this.findSequences(this.actualSequence);
     }
 
+    /**
+     * Ottiene il numero di risultati da mostrare in gruppo
+     * @returns Il numero di sequenze trovate nel file di log
+     */
     getNumberOfGroups(): number {
         return Math.max(1, this.currentOccurrences.length);
     }
 
+    /**
+     * Ottiene un risultato di ricerca
+     * @param index indice del risultato di ricerca voluto
+     * @returns Ritona il risultato di ricerca di indice specificato oppure un array vuoto se non sono state trovate ricerche
+     */
     getGroup(index: number): LogRow[] {
         if(this.currentOccurrences.length == 0) 
             return [];
@@ -27,7 +47,7 @@ export class SequenceSearch implements LogManipulator {
         return this.currentOccurrences[index - 1].slice();
     }
 
-    findSequences(sequence: Sequence): void {
+    private findSequences(sequence: Sequence): void {
 
         /** PASSI ALGORITMO:
          1): Filtrare i dati del log: si creano due liste (una per gli eventi di inizio ed una per gli eventi di fine compatibili);
