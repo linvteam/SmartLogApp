@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Text;
-using System.Text.Json;
 using Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
-using SmartLogViewer.Controllers;
 
 namespace SmartLogViewer.Controllers.Tests
 {
@@ -39,25 +36,25 @@ namespace SmartLogViewer.Controllers.Tests
         {
             // Costruzione dell'oggetto di tipo Log atteso
             string fileName = "example.csv";
-            DateTime PCDateTime = new DateTime(2022, 03, 05, 08, 47, 18);
-            DateTime UPSDateTime = new DateTime(2022, 03, 05, 08, 47, 17);
-            List<INIFile> INIFiles = new List<INIFile>();
-            INIFiles.AddRange(new List<INIFile>()
+            DateTime pcDateTime = new DateTime(2022, 03, 05, 08, 47, 18);
+            DateTime upsDateTime = new DateTime(2022, 03, 05, 08, 47, 17);
+            List<INIFile> iniFiles= new List<INIFile>();
+            iniFiles.AddRange(new List<INIFile>()
                     {
                         new INIFile("MAPK_Unit_v2_04_00.ini", 0, 0),
                         new INIFile("MAPK_Unit_v2_04_00.ini", 1, 0),
                         new INIFile("MAPK_Module_RD_IV_v2_04_00.ini", 1, 1),
                         new INIFile("MAPK_ByPass_v2_04_00.ini", 1, 14),
                     });
-            Header header = new Header(PCDateTime, UPSDateTime, INIFiles);
-            List<LogRow> LogRows = new List<LogRow>();
-            LogRows.AddRange(new List<LogRow>()
+            Header header = new Header(pcDateTime, upsDateTime, iniFiles);
+            List<LogRow> logRows = new List<LogRow>();
+            logRows.AddRange(new List<LogRow>()
             {
                 new LogRow(new DateOnly(2022,03,05), new TimeOnly(08,36,29,618),1,0,"S000", "Load protected by inverter",true,"0xFFE0FFFF"),
                 new LogRow(new DateOnly(2022,03,05), new TimeOnly(08,36,29,238),1,14,"ES047", "Inverter contactor/relay is closed",true,"0xFFE0FFFF"),
             });
 
-            Log expected = new Log(fileName, header, LogRows);
+            Log expected = new Log(fileName, header, logRows);
 
             // Mocking del parser
             var mockParser = new Mock<Parser>();
