@@ -15,6 +15,10 @@ export class TableComponent {
     private logManipulator: LogManipulator;
 
     groupNumber = 1;
+    startDateTime: string = "";
+    endDateTime: string = "";
+    numberOfGroups: number = 1;
+    fastForward: boolean = false;
 
     constructor(private logManipulationService: LogManipulationService) {
         this.logManipulator = logManipulationService.getDefaultManipulator();
@@ -26,8 +30,6 @@ export class TableComponent {
         });
     }
 
-    numberOfGroups() { return this.logManipulator.getNumberOfGroups(); }
-
     changeGroupIndex(event: any) {
         this.groupNumber = Number((event.target as HTMLInputElement).value);
         this.updateView();
@@ -35,6 +37,15 @@ export class TableComponent {
 
     private updateView() {
         this.rowData = this.logManipulator.getGroup(this.groupNumber);
+        while (this.rowData.length == 0) {
+            this.rowData = this.logManipulator.getGroup(++this.groupNumber);
+        }
+        this.numberOfGroups = this.logManipulator.getNumberOfGroups();
+        console.log(this.numberOfGroups)
+        if (this.rowData.length > 0) {
+            this.startDateTime = this.rowData[this.rowData.length - 1].Date + " - " + this.rowData[this.rowData.length - 1].Time;
+            this.endDateTime = this.rowData[0].Date + " - " + this.rowData[0].Time;
+        }
     }
 
     columnDefs = [
@@ -55,13 +66,4 @@ export class TableComponent {
     onGridReady(params: any) {
         params.api.sizeColumnsToFit();
     }
-
-    startDateTime() {
-        return this.rowData[this.rowData.length - 1].Date + " - " + this.rowData[this.rowData.length - 1].Time;
-    }
-
-    endDateTime() {
-        return this.rowData[0].Date + " - " + this.rowData[0].Time;
-    }
-
 } 

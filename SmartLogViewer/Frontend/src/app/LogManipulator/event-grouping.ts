@@ -20,21 +20,21 @@ export class EventGrouping implements LogManipulator {
 
     getNumberOfGroups(): number {
         let events = this.logService.getLog().Events.sort((e1: LogRow, e2: LogRow) => {
-            return this.eventDateTime(e1) - this.eventDateTime(e2);
+            return this.eventDateTime(e2) - this.eventDateTime(e1);
         });
 
         let endDateTime = this.eventDateTime(events[0]);
         let startDateTime = this.eventDateTime(events[events.length - 1]);
-
-        return (endDateTime - startDateTime) / this.groupTime;
+        console.log((endDateTime - startDateTime) / this.groupTime)
+        return Math.ceil((endDateTime - startDateTime) / this.groupTime);
     }
 
     getGroup(index: number): LogRow[] {
         let events = this.logService.getLog().Events.sort((e1: LogRow, e2: LogRow) => {
-            return this.eventDateTime(e1) - this.eventDateTime(e2);
+            return this.eventDateTime(e2) - this.eventDateTime(e1);
         });
 
-        let startTime = this.eventDateTime(events[0]);
+        let startTime = this.eventDateTime(events[events.length - 1]);
 
         let startGroupTime = startTime + (index - 1) * this.groupTime;
         let endGroupTime = startTime + index * this.groupTime;

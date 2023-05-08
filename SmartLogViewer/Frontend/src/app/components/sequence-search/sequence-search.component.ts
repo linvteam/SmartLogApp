@@ -30,6 +30,10 @@ export class SequenceSearchComponent {
                 sequence: [null, [Validators.required]],
             });
 
+        this.sequenceForm.setValue({
+            sequence: "-"
+        })
+        
         if (this.sequences == undefined || this.sequences.length == 0) {
             this.getSequencesNames();
         } else {
@@ -109,11 +113,15 @@ export class SequenceSearchComponent {
     }
 
     getSequence(name: string): void {
+        if (name == "-") {
+            this.logManipulationService.setManipulation(new Identity());
+            return;
+        }
+
         this.sequenceFetchService.getSequenceInformation(name).subscribe({
             next: this.sequencesHandler(),
             error: this.errorSequenceHandler()
         });
-
     }
 
 
