@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-
+﻿
 namespace SmartLogViewer.Model {
     /// <summary>
     /// Classe che inietta la configurazione sulla classe SequencesManager, questo permette di fare un mock della configurazione e iniettare il Json che vogliamo

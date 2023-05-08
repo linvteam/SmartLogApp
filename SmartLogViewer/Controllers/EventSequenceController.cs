@@ -10,14 +10,14 @@ namespace SmartLogViewer.Controllers {
     [Route("api/sequences")]
     public class EventSequenceController: Controller {
 
-        private readonly Model.SequencesManagerBase sequencesManager;
+        private readonly Model.SequencesManagerBase SequencesManager;
 
         /// <summary>
         /// Crea una nuova istanza del gestore delle sequenze note
         /// </summary>
         /// <param name="sequencesManager">Gestore del file delle sequenze note</param>
         public EventSequenceController(Model.SequencesManagerBase sequencesManager) {
-            this.sequencesManager = sequencesManager;
+            this.SequencesManager = sequencesManager;
         }
 
         /// <summary>
@@ -31,10 +31,10 @@ namespace SmartLogViewer.Controllers {
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
         [Produces("application/json")]
         public IActionResult GetSequenceNames() {
-            if(sequencesManager.ParsingError)
+            if(SequencesManager.ParsingError)
                 return StatusCode((int)HttpStatusCode.InternalServerError);
                 
-            return Ok(sequencesManager.SequenceNames());
+            return Ok(SequencesManager.SequenceNames());
         }
 
         /// <summary>
@@ -52,10 +52,10 @@ namespace SmartLogViewer.Controllers {
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
         public IActionResult GetSequenceParameters(string sequenceName) {
-            if(sequencesManager.ParsingError)
+            if(SequencesManager.ParsingError)
                 return StatusCode((int)HttpStatusCode.InternalServerError);
 
-            Model.Sequence? sequence = sequencesManager.Sequence(sequenceName);
+            Model.Sequence? sequence = SequencesManager.Sequence(sequenceName);
             if(sequence != null) {
                 return Ok(sequence);
             } else {

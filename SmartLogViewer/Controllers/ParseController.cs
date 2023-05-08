@@ -24,7 +24,7 @@ namespace SmartLogViewer.Controllers
         }
 
         /// <summary>
-        /// Messaggio di errore del parsing
+        /// Messaggio di errore del parsing, record utilizzato per una corretta serializzazione di ParsingException
         /// </summary>
         /// <param name="Code">Codice di errore</param>
         /// <param name="Message">Messaggio che descrive l'errore</param>
