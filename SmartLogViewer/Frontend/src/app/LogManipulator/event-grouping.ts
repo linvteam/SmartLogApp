@@ -4,6 +4,7 @@ import { LogManipulator } from "./log-manipulator";
 
 export class EventGrouping implements LogManipulator {
 
+    private groupedEvents: LogRow[][] = [];
     private logService !: LogService;
 
     constructor(private groupTime: number) {
@@ -12,6 +13,24 @@ export class EventGrouping implements LogManipulator {
 
     setLogService(logService: LogService): void {
         this.logService = logService;
+
+        let events = this.logService.getLog().Events.sort((e1: LogRow, e2: LogRow) => {
+            return this.eventDateTime(e2) - this.eventDateTime(e1);
+        });
+
+        let currentGroupIndex = 0;
+        let startTime = this.eventDateTime(events[0]);
+        let currentEventsGroup: LogRow[] = [];
+        for (let e of events) {
+            let eventGroupIndex = Math.ceil((this.eventDateTime(e) - startTime) / this.groupTime);
+            if (eventGroupIndex == currentGroupIndex) {
+                currentEventsGroup.push(e);
+            } else {
+                this.groupedEvents.push(currentEventsGroup);
+                currentGroupIndex = eventGroupIndex;
+                currentEventsGroup = [ e ];
+            }
+        }
     }
 
     private eventDateTime(e: LogRow) {
@@ -19,30 +38,11 @@ export class EventGrouping implements LogManipulator {
     }
 
     getNumberOfGroups(): number {
-        let events = this.logService.getLog().Events.sort((e1: LogRow, e2: LogRow) => {
-            return this.eventDateTime(e2) - this.eventDateTime(e1);
-        });
-
-        let endDateTime = this.eventDateTime(events[0]);
-        let startDateTime = this.eventDateTime(events[events.length - 1]);
-        console.log((endDateTime - startDateTime) / this.groupTime)
-        return Math.ceil((endDateTime - startDateTime) / this.groupTime);
+        return this.groupedEvents.length;
     }
 
     getGroup(index: number): LogRow[] {
-        let events = this.logService.getLog().Events.sort((e1: LogRow, e2: LogRow) => {
-            return this.eventDateTime(e2) - this.eventDateTime(e1);
-        });
-
-        let startTime = this.eventDateTime(events[events.length - 1]);
-
-        let startGroupTime = startTime + (index - 1) * this.groupTime;
-        let endGroupTime = startTime + index * this.groupTime;
-
-        return events.filter((e: LogRow) => {
-            let DateTime = (new Date([e.Date, e.Time].join('T').replaceAll('/', '-') + 'Z')).getTime();
-            return DateTime >= startGroupTime && DateTime < endGroupTime;
-        });
+        return this.groupedEvents[index - 1];
     }
 
 }

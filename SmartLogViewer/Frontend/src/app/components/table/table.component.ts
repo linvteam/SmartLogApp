@@ -37,9 +37,7 @@ export class TableComponent {
 
     private updateView() {
         this.rowData = this.logManipulator.getGroup(this.groupNumber);
-        while (this.rowData.length == 0) {
-            this.rowData = this.logManipulator.getGroup(++this.groupNumber);
-        }
+        
         this.numberOfGroups = this.logManipulator.getNumberOfGroups();
         console.log(this.numberOfGroups)
         if (this.rowData.length > 0) {

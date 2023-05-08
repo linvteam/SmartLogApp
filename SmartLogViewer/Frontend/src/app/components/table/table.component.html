@@ -8,7 +8,7 @@
             <label class="visually-hidden" for="autoSizingInputGroup">Raggruppamento</label>
             <input type="number" (change)="changeGroupIndex($event)" name="valore" class="form-control" id="autoSizingInputGroup" min='1' max="{{ numberOfGroups }}" [value]="groupNumber" />
         </div>
-        di {{numberOfGroups}}
+        di {{ numberOfGroups }}
     </div>
 
     <table class="ag-theme-alpine textCenter datetime-header" *ngIf="this.rowData.length > 0">
@@ -19,6 +19,10 @@
         <tr>
             <th>Al:</th>
             <td>{{ endDateTime }}</td>
+        </tr>
+        <tr>
+            <th>Eventi visualizzati:</th>
+            <td>{{ rowData.length }}</td>
         </tr>
     </table> 
     <ag-grid-angular
