@@ -1,35 +1,36 @@
 
 <div class="row">
-    <p>Piccola descrizione che occupi almeno un po' di spazio</p>
-  </div>
-  
-  <div class="row">
-      <div class="col-8">
-        <label class="btn btn-default p-0">
-          <input #fileSelector type="file" (change)="selectFile($event)" accept="text/csv"/>
+    <h1>SmartLogViewer</h1>
+    <p>
+        SI
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <label class="btn btn-default p-0" for="file" (dropped)="fileDrop($event)">Seleziona o trascina qui il file
+            <input id="file" #fileSelector type="file" (change)="selectFile($event)" accept="text/csv" />
         </label>
-      </div>
-  
-      <div class="col-4">
+        
+    </div>
+
+    <div class="col-12">
         <button class="btn btn-success btn-sm" [disabled]="!selectedFiles" (click)="upload()">
-          Upload
+            Carica file
         </button>
-      </div>
     </div>
-  
-    <div *ngIf="currentFile" class="progress my-3">
-      <div
-        class="progress-bar progress-bar-info progress-bar-striped"
-        role="progressbar"
-        attr.aria-valuenow="{{ progress }}"
-        aria-valuemin="0"
-        aria-valuemax="100"
-        [ngStyle]="{ width: progress + '%' }"
-      >
+</div>
+
+<div *ngIf="currentFile" class="progress my-3">
+    <div class="progress-bar progress-bar-info progress-bar-striped"
+         role="progressbar"
+         attr.aria-valuenow="{{ progress }}"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         [ngStyle]="{ width: progress + '%' }">
         {{ progress }}%
-      </div>
     </div>
-  
-    <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
-  
-  
+</div>
+
+<div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
+

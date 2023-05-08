@@ -85,7 +85,7 @@ export class ChartComponent {
         this.xDomain = d3.extent(this.x);  
         this.zDomain = new d3.InternSet(this.z);
 
-        this.height = this.zDomain.size * this.size + this.marginTop + this.marginBottom;
+        this.height = (this.zDomain.size + 1) * this.size + this.marginTop + this.marginBottom;
         this.xScale = d3.scaleTime(this.xDomain as Array<Date>, this.xRange);
         this.yScale = d3.scaleOrdinal(this.yDomain, this.yRange);
         this.xAxis = d3.axisTop(this.xScale).ticks(this.width / 80).tickSizeOuter(0);
@@ -120,7 +120,7 @@ export class ChartComponent {
         this.xDomain = d3.extent(this.x);
         this.zDomain = new d3.InternSet(this.z);
 
-        this.height = this.zDomain.size * this.size + this.marginTop + this.marginBottom;
+        this.height = (this.zDomain.size + 1) * this.size + this.marginTop + this.marginBottom;
         this.xScale = d3.scaleTime(this.xDomain as Array<Date>, this.xRange);
         this.yScale = d3.scaleOrdinal(this.yDomain, this.yRange);
         this.xAxis = d3.axisTop(this.xScale).ticks(this.width / 80).tickSizeOuter(0);

@@ -19,6 +19,9 @@ import { SequenceSearchComponent } from './components/sequence-search/sequence-s
 import { EventGroupingComponent } from './components/event-grouping/event-grouping.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
+import { ChartHeaderComponent } from "./components/chart-header/chart-header.component";
+import { ChartSearchComponent } from "./components/chart-search/chart-search.component";
+
 
 @NgModule({
     declarations: [
@@ -32,7 +35,9 @@ import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
         TableHeaderComponent,
         EventSearchComponent,
         SequenceSearchComponent,
-        EventGroupingComponent
+        EventGroupingComponent,
+        ChartHeaderComponent,
+        ChartSearchComponent
     ],
     imports: [
         BrowserModule,

@@ -3,3 +3,7 @@ nav{
     padding-left: 2em;
     margin-bottom: 1em;
 }
+
+nav button {
+    left: auto;
+}

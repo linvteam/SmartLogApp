@@ -8,26 +8,23 @@ export class SequenceSearch implements LogManipulator {
     private logService!: LogService;
     private currentOccurrences: LogRow[][] = [];
 
-    constructor(private actualSequence?: Sequence) {
+    constructor(private actualSequence: Sequence) {
     }
 
     setLogService(logService: LogService): void {
         this.logService = logService;
+        this.findSequences(this.actualSequence);
     }
 
     getNumberOfGroups(): number {
-        return Math.max(1,this.currentOccurrences.length);
+        return Math.max(1, this.currentOccurrences.length);
     }
 
     getGroup(index: number): LogRow[] {
-        if(this.actualSequence != undefined) {
-            this.findSequences(this.actualSequence);
-        }
-        if(--index > this.currentOccurrences.length) {
+        if(this.currentOccurrences.length == 0) 
             return [];
-        } else {
-            return this.currentOccurrences[index].slice();
-        }
+
+        return this.currentOccurrences[index - 1].slice();
     }
 
     findSequences(sequence: Sequence): void {
@@ -231,8 +228,8 @@ export class SequenceSearch implements LogManipulator {
     }
 
     private findTimeBoundaries(groups: LogRow[][]) : number[][] {
-        let boundaries : number[][] = [];
-        groups.forEach( (group) => {
+        let boundaries: number[][] = [];
+        for (let group of groups) {
             let singleBound : number[] = [];
             this.sortEvents(group);
 
@@ -240,7 +237,7 @@ export class SequenceSearch implements LogManipulator {
             singleBound.push((new Date([group[group.length-1].Date, group[group.length-1].Time].join('T').replaceAll("/", "-") + "Z")).getTime());
 
             boundaries.push(singleBound.slice());
-        } );
+        }
         return boundaries;
     }
 }

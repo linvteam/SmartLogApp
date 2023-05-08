@@ -38,3 +38,7 @@ div {
 .datetime-header th {
     background-color: #f8f8f8;
 }
+
+.table-container {
+    margin-top: 1em;
+}

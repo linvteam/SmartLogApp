@@ -1,5 +1,5 @@
-#chart-container{
-    position: relative;
+#chart-container {
+    margin-top: 1em;
 }
 
 #tooltip {
@@ -16,6 +16,7 @@
 
 #horizon-chart{
     background-color: #f8f9fa;
+    margin-bottom: 1em;
 }
 
 #tooltip p {
@@ -25,4 +26,12 @@
 
 .infoName{
     font-weight: bold;
+}
+
+app-chart-header {
+    margin-bottom: 1em;
+}
+
+figure {
+    margin-bottom: 2em;
 }
