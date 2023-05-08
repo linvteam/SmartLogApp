@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Routing;
-using Newtonsoft.Json;
-using System.Diagnostics;
+﻿using Newtonsoft.Json;
 
 namespace SmartLogViewer.Model {
     /// <summary>
@@ -8,7 +6,7 @@ namespace SmartLogViewer.Model {
     /// </summary>
     public class SequencesManager: SequencesManagerBase {
 
-        private readonly List<Sequence> sequences;
+        private readonly List<Sequence> Sequences;
         
         private readonly ILogger<SequencesManager> _logger;
         
@@ -23,7 +21,7 @@ namespace SmartLogViewer.Model {
         /// <param name="logger">Default logger</param>
         /// <param name="fileReader">Classe che codifica la configurazione di lettura del file</param>
         public SequencesManager(ILogger<SequencesManager> logger, SequenceFileReader fileReader) {
-            sequences = new();
+            Sequences = new();
             _logger = logger;
             ParsingError = true;
 
@@ -40,48 +38,48 @@ namespace SmartLogViewer.Model {
                 } else {
                     foreach(var item in array) {
                         // Devo estrarre e convertire correttamente tutti i valori dell'oggetto (i dynamics sono un po' particolari da usare)
-                        string Name = item.Name;
-                        List<Model.Sequence.Event> StartEvents = new();
+                        string name = item.Name;
+                        List<Model.Sequence.Event> startEvents = new();
                         foreach(var startEvent in item.StartEvents) {
                             string code= startEvent.Code;
                             bool status = startEvent.Status;
-                            StartEvents.Add(new Model.Sequence.Event(code, status));
+                            startEvents.Add(new Model.Sequence.Event(code, status));
                         }
 
-                        List<int> StartEventsAvailableSubUnits = new();
+                        List<int> startEventsAvailableSubUnits = new();
                         // Questo ciclo è stata la parte tribbolo del parsing :(
                         foreach(var subunit in item.StartEventsAvailableSubUnits)
-                            StartEventsAvailableSubUnits.Add((int)subunit.Value);
+                            startEventsAvailableSubUnits.Add((int)subunit.Value);
 
 
-                        List<Model.Sequence.Event> EndEvents = new();
+                        List<Model.Sequence.Event> endEvents = new();
                         foreach(var endEvent in item.EndEvents) {
                             string code = endEvent.Code;
                             bool status = endEvent.Status;
-                            EndEvents.Add(new Model.Sequence.Event(code, status));
+                            endEvents.Add(new Model.Sequence.Event(code, status));
                         }
 
-                        List<int> EndEventsAvailableSubUnits = new();
+                        List<int> endEventsAvailableSubUnits = new();
                         foreach(var subunit in item.EndEventsAvailableSubUnits)
-                            EndEventsAvailableSubUnits.Add((int)subunit.Value);
+                            endEventsAvailableSubUnits.Add((int)subunit.Value);
 
-                        int MaxDuration = item.MaxDuration;
+                        int maxDuration = item.MaxDuration;
 
                         // È stato necessario estrarre tutti i valori singolarmente per eseguire le dovute conversioni ed individuare gli errori.
                         // Quando si scatena un errore qualsiasi viene lanciata una eccezione 
-                        sequences.Add(new Sequence(
-                                Name,
-                                StartEvents,
-                                StartEventsAvailableSubUnits,
-                                EndEvents,
-                                EndEventsAvailableSubUnits,
-                                MaxDuration)
+                        Sequences.Add(new Sequence(
+                                name,
+                                startEvents,
+                                startEventsAvailableSubUnits,
+                                endEvents,
+                                endEventsAvailableSubUnits,
+                                maxDuration)
                             );
                     }
                     ParsingError = false;
                 }
             } catch(Exception e) {
-                sequences.Clear();
+                Sequences.Clear();
                 _logger.LogError("Impossibile leggere il file delle sequenze");
                 _logger.LogError(e.Message);
             }
@@ -93,7 +91,7 @@ namespace SmartLogViewer.Model {
         /// </summary>
         /// <returns>Lista dei nomi delle sequenze</returns>
         public List<string> SequenceNames() {
-            return sequences.ConvertAll(x => x.Name);
+            return Sequences.ConvertAll(x => x.Name);
         }
 
         /// <summary>
@@ -102,7 +100,7 @@ namespace SmartLogViewer.Model {
         /// <param name="name">Il nome della sequenza che si sta cercando</param>
         /// <returns>L'oggetto che codifica la sequenza se esiste una sequenza con il nome fornito, null altrimenti</returns>
         public Sequence? Sequence(string name) {
-            return sequences.Find(x => x.Name == name);
+            return Sequences.Find(x => x.Name == name);
         }
     }
 }
