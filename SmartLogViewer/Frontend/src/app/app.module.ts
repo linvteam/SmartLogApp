@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { FileInfoComponent } from './components/file-info/file-info.component';
-import { SearchComponent } from './components/search/search.component';
+import { TableSearchComponent } from './components/table-search/table-search.component';
 import { TableComponent } from './components/table/table.component';
 import { ChartComponent } from './components/chart/chart.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
@@ -18,33 +18,35 @@ import { EventSearchComponent } from './components/event-search/event-search.com
 import { SequenceSearchComponent } from './components/sequence-search/sequence-search.component';
 import { EventGroupingComponent } from './components/event-grouping/event-grouping.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavBarComponent,
-    FileInfoComponent,
-    SearchComponent,
-    TableComponent,
-    ChartComponent,
-    FileUploadComponent,
-    TableHeaderComponent,
-    EventSearchComponent,
-    SequenceSearchComponent,
-    EventGroupingComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    NgbModule,
-      AgGridModule,
-      FormsModule,
-      ReactiveFormsModule
-  ],
-  providers: [
-    { provide: BaseURL, useValue: 'https://localhost:7210/api' }
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        NavBarComponent,
+        FileInfoComponent,
+        TableSearchComponent,
+        TableComponent,
+        ChartComponent,
+        FileUploadComponent,
+        TableHeaderComponent,
+        EventSearchComponent,
+        SequenceSearchComponent,
+        EventGroupingComponent
+    ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        NgbModule,
+        AgGridModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MdbAccordionModule
+    ],
+    providers: [
+        { provide: BaseURL, useValue: 'https://localhost:7210/api' }
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
