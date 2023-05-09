@@ -113,7 +113,6 @@ export class SequenceSearchComponent {
             this.sequences.splice(0);
             this.modalTitle = "Errore interno del server";
             this.modalContent = "Impossibile leggere il file di configurazione!";
-            // MANCANO LE OPTIONS
             this.errorModalRef = this.modalService.open(this.errorModal, {
                 size: 'sm'
             });
@@ -147,7 +146,6 @@ export class SequenceSearchComponent {
                 this.modalTitle = "Errore interno del server";
                 this.modalContent = "Impossibile leggere il file di configurazione!";
             }
-            // MANCANO LE OPTIONS
             this.errorModalRef = this.modalService.open(this.errorModal, {
                 size: 'sm'
             });
