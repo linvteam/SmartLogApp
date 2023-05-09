@@ -24,15 +24,13 @@
             <th>Eventi visualizzati:</th>
             <td>{{ rowData.length }}</td>
         </tr>
-    </table> 
-    <ag-grid-angular
-            class="ag-theme-alpine"
-            [rowData]="rowData"
-            [columnDefs]="columnDefs"
-            [defaultColDef]="defaultColDef"
-            [rowSelection]="'multiple'"
-            [animateRows]="true"
-            (gridReady)="onGridReady($event)"
-    >
+    </table>
+    <ag-grid-angular class="ag-theme-alpine"
+                     [rowData]="rowData"
+                     [columnDefs]="columnDefs"
+                     [defaultColDef]="defaultColDef"
+                     [rowSelection]="'multiple'"
+                     [animateRows]="true"
+                     (gridReady)="onGridReady($event)">
     </ag-grid-angular>
 </div>

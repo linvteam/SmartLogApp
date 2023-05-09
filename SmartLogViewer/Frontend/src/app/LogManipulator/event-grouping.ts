@@ -7,8 +7,15 @@ import { LogManipulator } from "./log-manipulator";
  */
 export class EventGrouping implements LogManipulator {
 
-    private groupedEvents: LogRow[][] = []; // Insieme dei gruppi di eventi calcolati
-    private logService !: LogService;       // Il logservice per ottenere la lista di eventi, può essere null perchè non viene assegnato dal costruttore :(
+    /**
+     * Insieme dei gruppi di eventi calcolati
+     */
+    private groupedEvents: LogRow[][] = []; 
+
+    /**
+     * Il logservice per ottenere la lista di eventi, può essere null perchè non viene assegnato dal costruttore
+     */
+    private logService !: LogService;
 
     /**
      * Costruisce un classe che raggruppa gli eventi in base ad una durata temporale

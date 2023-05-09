@@ -7,9 +7,15 @@ import { LogService } from "../services/log/log.service";
  */
 export class EventSearch implements LogManipulator {
 
-    private logService!: LogService; // Log service che fornisce l'elenco di eventi
+    /**
+     * Log service che fornisce l'elenco di eventi
+     */
+    private logService!: LogService; 
 
-    private searchTokens: string[]; // I token di ricerca
+    /**
+     * I token di ricerca
+     */
+    private searchTokens: string[];
 
     /**
      * Costruisce una classe che fornisce una funzionalità di filtraggio in base alla query di ricerca

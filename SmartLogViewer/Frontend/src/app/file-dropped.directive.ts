@@ -1,16 +1,22 @@
+import { Directive, EventEmitter, HostBinding, HostListener, Output } from '@angular/core';
+
 /**
  * Questa direttiva si occupa di gestire l'evento di drag and drop nella label della pagina di caricamento dei file
  * Si occupa di impostare la classe che attiva l'animazione e di rilanciare al component file-upload la lista di file selezionati
  */
-
-import { Directive, EventEmitter, HostBinding, HostListener, Output } from '@angular/core';
-
 @Directive({
   selector: '[appFileDropped]'
 })
 export class FileDroppedDirective {
-    @HostBinding('class.fileover') fileOver: boolean = false; // Permette di attivare e disattivare la classe css sul controllo che posside la direttiva
-    @Output() fileDropped = new EventEmitter<any>(); // Questa direttiva emete un evento fileDropped che può essere passato ad un component con la sintassi (fileDropped)="metodo($event)"
+    /**
+     * Indica quando il cursore è all'interno del controllo e sta trascinando dei file, in particolare attiva la classe .fileover sul controllo
+     */
+    @HostBinding('class.fileover') fileOver: boolean = false;
+
+    /**
+     * Emettitore dell'evento di rilascio dei file può essere catturato dal component con la sintassi (fileDropped)="metodo($event)"
+     */
+    @Output() fileDropped = new EventEmitter<any>(); 
 
     /**
      * Gestisce l'ingresso del mouse sul controllo

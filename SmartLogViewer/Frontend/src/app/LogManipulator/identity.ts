@@ -7,11 +7,14 @@ import { LogRow } from "../log.classes";
  */
 export class Identity implements LogManipulator {
 
-    private logService!: LogService; // Log service che fornisce gli eventi
+    /**
+     * Log service che fornisce gli eventi da mostre successivamente alla view
+     */
+    private logService!: LogService;
 
     /**
      * Imposta il logservice di cui rilanciare gli eventi
-     * @param logService
+     * @param logService Log service con tutti gli eventi da fornire alla view
      */
     setLogService(logService: LogService): void {
         this.logService = logService;
@@ -19,7 +22,7 @@ export class Identity implements LogManipulator {
 
     /**
      * Ottiene sempre 1 perchè questa funzionalità non prevede il raggruppamento
-     * @returns
+     * @returns Sempre 1 
      */
     getNumberOfGroups(): number {
         return 1;

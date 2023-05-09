@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 import { FileUploadService } from 'src/app/services/upload/file-upload.service';
 import { Log } from 'src/app/log.classes';
 import { LogService } from 'src/app/services/log/log.service';
-
+/**
+ * Classe che definisce il comportamento del widget di caricamento dei file
+ */
 @Component({
     selector: 'app-file-upload',
     templateUrl: './file-upload.component.html',
@@ -12,15 +14,41 @@ import { LogService } from 'src/app/services/log/log.service';
 })
 export class FileUploadComponent {
 
-    private readonly FileSelectText = 'Seleziona o trascina qui il file'; // Scritta di default per la selezione del file
+    /**
+     * Scritta di default per la selezione del file
+     */
+    private readonly FileSelectText = 'Seleziona o trascina qui il file'; 
 
-    currentFile?: File;                 // Il file attualmente selezionato
-    progress : number | undefined;      // Il progresso auttuale di caricamento, se è undefined fa sparire dalla view la progress bar
-    message = '';                       // Messaggio di errore
-    labelText = this.FileSelectText;    // Il testo della label di selezione del file
+    /**
+     * Il file attualmente selezionato
+     */
+    currentFile?: File;
 
-    @ViewChild("fileSelector") fileSelector: any; // Gestore del controllo di input
+    /**
+     * Il progresso auttuale di caricamento, se è undefined fa sparire dalla view la progress bar
+     */
+    progress: number | undefined;
 
+    /**
+     * Messaggio di errore
+     */
+    message = '';
+
+    /**
+     * Il testo della label di selezione del file
+     */
+    labelText = this.FileSelectText;
+
+    /**
+     * Gestore del controllo di input
+     */
+    @ViewChild("fileSelector") fileSelector: any;
+
+    /**
+     * Costruisce una nuova classe che contralla il widget per l'upload dei file, i parametri vengono passati tramite dependecy injector
+     * @param uploadService Service che si occupa di caricare sul server i file
+     * @param logService Service che si occupa di passare agli altri widget il file di log ricevuto dal server
+     */
     constructor(private uploadService: FileUploadService, private logService: LogService) {
     }
 
