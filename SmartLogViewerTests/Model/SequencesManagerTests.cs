@@ -19,7 +19,7 @@ namespace SmartLogViewer.Model.Tests {
                 )
             );
 
-            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            SequencesManagerJson manager = new(Mock.Of<ILogger<SequencesManagerJson>>(), reader.Object);
             Assert.IsTrue(manager.ParsingError);
             Assert.AreEqual(0, manager.SequenceNames().Count);
         }
@@ -32,7 +32,7 @@ namespace SmartLogViewer.Model.Tests {
                 new StreamReader(
                     new MemoryStream(Encoding.UTF8.GetBytes("{}"))));
 
-            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            SequencesManagerJson manager = new(Mock.Of<ILogger<SequencesManagerJson>>(), reader.Object);
             Assert.AreEqual(0, manager.SequenceNames().Count);
             Assert.IsFalse(manager.ParsingError);
         }
@@ -45,7 +45,7 @@ namespace SmartLogViewer.Model.Tests {
                 new StreamReader(
                     new MemoryStream(Encoding.UTF8.GetBytes("[]"))));
 
-            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            SequencesManagerJson manager = new(Mock.Of<ILogger<SequencesManagerJson>>(), reader.Object);
             Assert.AreEqual(0, manager.SequenceNames().Count);
             Assert.IsFalse(manager.ParsingError);
         }
@@ -58,7 +58,7 @@ namespace SmartLogViewer.Model.Tests {
                 new StreamReader(
                     new MemoryStream(Encoding.UTF8.GetBytes("[{}]"))));
 
-            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            SequencesManagerJson manager = new(Mock.Of<ILogger<SequencesManagerJson>>(), reader.Object);
             Assert.AreEqual(0, manager.SequenceNames().Count);
             Assert.IsTrue(manager.ParsingError);
         }
@@ -71,7 +71,7 @@ namespace SmartLogViewer.Model.Tests {
                     new MemoryStream(Encoding.UTF8.GetBytes("{" +
                     "\"Name\": \"TestSequence\"" +
                     "}"))));
-            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            SequencesManagerJson manager = new(Mock.Of<ILogger<SequencesManagerJson>>(), reader.Object);
             Assert.AreEqual(0, manager.SequenceNames().Count);
             Assert.IsTrue(manager.ParsingError);
         }
@@ -85,7 +85,7 @@ namespace SmartLogViewer.Model.Tests {
                     "\"Name\": \"TestSequence\"" +
                     "}]"))));
 
-            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            SequencesManagerJson manager = new(Mock.Of<ILogger<SequencesManagerJson>>(), reader.Object);
 
             Assert.AreEqual(0, manager.SequenceNames().Count);
             Assert.IsTrue(manager.ParsingError);
@@ -107,7 +107,7 @@ namespace SmartLogViewer.Model.Tests {
                 "\"MaxDuration\": 5000" +
                 "}"))));
 
-            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            SequencesManagerJson manager = new(Mock.Of<ILogger<SequencesManagerJson>>(), reader.Object);
             Assert.IsTrue(manager.ParsingError);
             Assert.AreEqual(0, manager.SequenceNames().Count);
         }
@@ -127,7 +127,7 @@ namespace SmartLogViewer.Model.Tests {
                 "\"MaxDuration\": 5000" +
                 "}]"))));
 
-            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            SequencesManagerJson manager = new(Mock.Of<ILogger<SequencesManagerJson>>(), reader.Object);
             Assert.IsFalse(manager.ParsingError);
             Assert.AreEqual(1, manager.SequenceNames().Count);
             //Assert parsed values
@@ -172,7 +172,7 @@ namespace SmartLogViewer.Model.Tests {
                     "\"MaxDuration\": 50" +
                     "}]"))));
 
-            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            SequencesManagerJson manager = new(Mock.Of<ILogger<SequencesManagerJson>>(), reader.Object);
             Assert.IsFalse(manager.ParsingError);
 
             Assert.AreEqual(2, manager.SequenceNames().Count);
@@ -213,7 +213,7 @@ namespace SmartLogViewer.Model.Tests {
                     "\"MaxDuration\": 50" +
                     "}]"))));
 
-            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            SequencesManagerJson manager = new(Mock.Of<ILogger<SequencesManagerJson>>(), reader.Object);
             Assert.IsTrue(manager.ParsingError);
             Assert.AreEqual(0, manager.SequenceNames().Count);
         }
@@ -239,7 +239,7 @@ namespace SmartLogViewer.Model.Tests {
                     "\"MaxDuration\": 50" +
                     "}]"))));
 
-            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            SequencesManagerJson manager = new(Mock.Of<ILogger<SequencesManagerJson>>(), reader.Object);
             Assert.IsTrue(manager.ParsingError);
             Assert.AreEqual(0, manager.SequenceNames().Count);
 
@@ -263,7 +263,7 @@ namespace SmartLogViewer.Model.Tests {
                     "\"MaxDuration\": 5000" +
                     "}]"))));
 
-            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            SequencesManagerJson manager = new(Mock.Of<ILogger<SequencesManagerJson>>(), reader.Object);
             Assert.IsFalse(manager.ParsingError);
             Sequence? seq = manager.Sequence("TestSequence");
             Assert.IsNotNull(seq);
@@ -296,7 +296,7 @@ namespace SmartLogViewer.Model.Tests {
                     "\"MaxDuration\": 5000" +
                     "}]"))));
 
-            SequencesManager manager = new(Mock.Of<ILogger<SequencesManager>>(), reader.Object);
+            SequencesManagerJson manager = new(Mock.Of<ILogger<SequencesManagerJson>>(), reader.Object);
             Assert.IsTrue(manager.ParsingError);
             Assert.AreEqual(0, manager.SequenceNames().Count);
         }

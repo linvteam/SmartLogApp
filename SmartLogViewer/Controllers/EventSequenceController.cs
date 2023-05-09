@@ -10,13 +10,13 @@ namespace SmartLogViewer.Controllers {
     [Route("api/sequences")]
     public class EventSequenceController: Controller {
 
-        private readonly Model.SequencesManagerBase SequencesManager;
+        private readonly Model.SequencesManager SequencesManager;
 
         /// <summary>
         /// Crea una nuova istanza del gestore delle sequenze note
         /// </summary>
         /// <param name="sequencesManager">Gestore del file delle sequenze note</param>
-        public EventSequenceController(Model.SequencesManagerBase sequencesManager) {
+        public EventSequenceController(Model.SequencesManager sequencesManager) {
             this.SequencesManager = sequencesManager;
         }
 

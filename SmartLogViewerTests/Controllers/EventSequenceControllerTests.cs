@@ -10,7 +10,7 @@ namespace SmartLogViewer.Controllers.Tests {
     public class EventSequenceControllerTests {
         [TestMethod()]
         public void EventSequenceControllerTest() {
-            Mock<SequencesManagerBase> manager = new();
+            Mock<SequencesManager> manager = new();
             manager.Setup(x => x.ParsingError).Returns(true);
             manager.Setup(x => x.SequenceNames()).Returns(new List<string> { });
             manager.Setup(x => x.Sequence(It.IsAny<string>())).Returns((Sequence)null);
@@ -22,7 +22,7 @@ namespace SmartLogViewer.Controllers.Tests {
 
         [TestMethod()]
         public void GetSequenceNamesTest() {
-            Mock<SequencesManagerBase> manager = new();
+            Mock<SequencesManager> manager = new();
             manager.Setup(x => x.ParsingError).Returns(false);
             manager.Setup(x => x.SequenceNames()).Returns(new List<string>() { "Sequenza1", "Sequenza2" });
 
@@ -38,7 +38,7 @@ namespace SmartLogViewer.Controllers.Tests {
 
         [TestMethod()]
         public void GetSequenceParametersTest() {
-            Mock<SequencesManagerBase> manager = new();
+            Mock<SequencesManager> manager = new();
             manager.Setup(x => x.ParsingError).Returns(false);
             manager.Setup(x => x.SequenceNames()).Returns(new List<string> { "Sequenza1" });
             manager.Setup(x => x.Sequence(It.Is<string>(x => "Sequenza1" == x)))

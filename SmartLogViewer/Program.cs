@@ -5,8 +5,8 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<Parser>();
-builder.Services.AddSingleton<SequenceFileReader>(); // Configurazione del SequencesManager
-builder.Services.AddSingleton<SequencesManagerBase, SequencesManager>();
+builder.Services.AddSingleton<SequenceFileReader>(); // Configurazione del SequencesManagerJson
+builder.Services.AddSingleton<SequencesManager, SequencesManagerJson>();
 
 // Add services to the container.
 
