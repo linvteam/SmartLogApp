@@ -9,14 +9,12 @@ import {Sequence, Event} from "../sequence.classes";
 export class SequenceSearch implements LogManipulator {
 
     /**
-     * 
-     * @private Log service che fornisce gli eventi
+     * Log service che fornisce gli eventi
      */
     private logService!: LogService;
 
     /**
-     * 
-     * @private Le occorrenze derivanti dalla ricerca di una sequenza
+     * Le occorrenze derivanti dalla ricerca di una sequenza
      */
     private currentOccurrences: LogRow[][] = [];
 
