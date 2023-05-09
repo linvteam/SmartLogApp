@@ -188,40 +188,40 @@ export class ChartComponent {
             });
 
          this.g.on("mousemove", (e: any,[code, I]: [string, [number]]) => {
-            this.hovering = true;
-            let xPointer = d3.pointer(e)[0];
-            
-            let datetime = this.xScale.invert(xPointer);
-            let start: Date = this.xDomain[0] as Date;
-            let end: Date = this.xDomain[1] as Date;
-
-            //  Imposta la data dell'evendo precedente e successiva dell'intervallo che si stà osservando
-            for (let i = 0; i < I.length; i++) {    
-                if (this.x[I[i]] >= datetime) {
-                    end = this.x[I[i]];
-                    if (i > 0) {
-                        start = this.x[I[i - 1]]
-                    }
-                    break;
-                }
-            }
-            // trova il numero della riga su cui stai facendo hover
-            let codePosition: number = 0;
-            let codeList: any[] = Array.from(this.zDomain);
-            for (let i = 0; i < this.zDomain.size; i++) {
-                if (code == codeList[i]) {
-                    codePosition = i;
-                    break;
-                }
-            }
-            let absoluteX = e.clientX;
-            let absoluteY = e.clientY;
-            this.setTooltipInfo(start, end, code, this.units[I[0]], this.subUnits[I[0]], this.descriptions[I[0]]);
-            this.moveTooltip(absoluteX, absoluteY);
-            })
-            .on("mouseleave", (e: any) => {
-                this.hovering = false; //rende invisibile il tooltip
-            });
+             this.hovering = true;
+             let xPointer = d3.pointer(e)[0];
+             
+             let dateTime = this.xScale.invert(xPointer);
+             let start: Date = this.xDomain[0] as Date;
+             let end: Date = this.xDomain[1] as Date;
+             
+             //  Imposta la data dell'evendo precedente e successiva dell'intervallo che si stà osservando
+             for (let i = 0; i < I.length; i++) {    
+                 if (this.x[I[i]] >= dateTime) {
+                     end = this.x[I[i]];
+                     if (i > 0) {
+                         start = this.x[I[i - 1]]
+                     }
+                     break;
+                 }
+             }
+             // trova il numero della riga su cui stai facendo hover
+             let codePosition: number = 0;
+             let codeList: any[] = Array.from(this.zDomain);
+             for (let i = 0; i < this.zDomain.size; i++) {
+                 if (code == codeList[i]) {
+                     codePosition = i;
+                     break;
+                 }
+             }
+             let absoluteX = e.clientX;
+             let absoluteY = e.clientY;
+             this.setTooltipInfo(dateTime,start, end, code, this.units[I[0]], this.subUnits[I[0]], this.descriptions[I[0]]);
+             this.moveTooltip(absoluteX, absoluteY);
+             })
+             .on("mouseleave", (e: any) => {
+                 this.hovering = false; //rende invisibile il tooltip
+             });
          
          this.g.attr("clip-path", (_: any, i: any) => `#${uid}-clip-${i}`)
             .selectAll("use")
@@ -248,7 +248,29 @@ export class ChartComponent {
                 .filter((d: any) => this.xScale(d as Date) < 10 || this.xScale(d as Date) > this.width - 10)
                 .remove())
             .call((g: any) => g.select(".domain").remove());
-        
+
+        //crea la barra verticale che indica l'ora su cui si sta facendo hover
+        var vertical = d3.select("figure#horizon-chart")
+            .append("div")
+            .style("position", "absolute")
+            .style("z-index", "19")
+            .style("width", "1px")
+            .style("height", "calc(100% - 15px)")
+            .style("top", "15px")
+            .style("left", "0px")
+            .style("background", "#000")
+            .style("pointer-events", "none");
+
+        //muove la barra sopra creata facendola seguire il mouse
+        d3.select("figure#horizon-chart")
+            .on("mousemove", e => {
+                let mousex = d3.pointer(e)[0];
+                vertical.style("left", mousex + "px");
+            })
+            .on("mouseover", e => {
+                let mousex = d3.pointer(e)[0];
+                vertical.style("left", mousex + "px")
+            });
     }
 
     /**
@@ -312,6 +334,7 @@ export class ChartComponent {
 
     /**
      * Funzione che scrive i dati sul tooltip che viene visualizzato quando si fa hover sul grafico
+     * @param currentDate data su cui si sta facendo l'hover
      * @param start data in cui è cominciato l'evento
      * @param end data in cui è finito l'evento
      * @param code code dell'evento
@@ -320,12 +343,13 @@ export class ChartComponent {
      * @param description descrizione dell'evento
      * @private
      */
-    private setTooltipInfo(start: Date, end: Date, code: string, unit: number, subUnit: number, description: string){
+    private setTooltipInfo(currentDate: Date,start: Date, end: Date, code: string, unit: number, subUnit: number, description: string){
         const format = 'yyyy/MM/dd - HH:mm:ss.SSS';
         const locale = "it-IT";
         //aggiorna il tooltip con i dati nuovi
         const tooltip =d3.select("div div#tooltip");
         tooltip.select("p span#code").text(code)
+        tooltip.select("p span#currentdate").text(formatDate(currentDate, format, locale));
         tooltip.select("p span#start").text(formatDate(start, format, locale));
         tooltip.select("p span#end").text(formatDate(end, format, locale));
         tooltip.select("p span#unit").text(unit);
@@ -340,11 +364,14 @@ export class ChartComponent {
      * @private
      */
     private moveTooltip(x: number, y: number){
-        if(this.tooltipCollideX(x)){ //se è troppo a destra lo sposta a sinistra del mouse
-            x-=360;
+        if (this.tooltipCollideX(x)){ //se è troppo a destra lo sposta a sinistra del mouse
+            x -= 410;
+            console.log(x);
         }
-        if (this.tooltipCollideY(d3.select("div div#tooltip"), y)) {  //se è troppo in basso lo sposta in sopra al mouse
-            y-=160;
+        console.log(x);
+
+        if (this.tooltipCollideY(y)) {  //se è troppo in basso lo sposta in sopra al mouse
+            y-=210;
         }
         d3.select("div div#tooltip")
             .style("left", x + "px")
@@ -362,12 +389,11 @@ export class ChartComponent {
 
     /**
      * Funzione che ritorna true se la posizione del mouse è vicina al margine inferiore
-     * @param tooltip tooltip con le informazioni dell'evento
      * @param y coordinata y del cursore
      * @private
      */
-    private tooltipCollideY(tooltip: any, y: number){
-        return 150 + y > window.innerHeight;
+    private tooltipCollideY(y: number){
+        return 200 + y > window.innerHeight;
     }
 }
 

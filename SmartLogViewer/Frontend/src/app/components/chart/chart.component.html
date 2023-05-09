@@ -1,10 +1,11 @@
 
 <app-chart-header></app-chart-header>
 
-<div id="chart-container">
+<div style="position:relative" id="chart-container">
     <figure id="horizon-chart">
         <div *ngIf="hovering" id="tooltip">
             <p><span class="infoName">Code: </span><span id="code"></span></p>
+            <p><span class="infoName">Data attuale: </span><span id="currentdate"></span></p>
             <p><span class="infoName">Data inizio: </span><span id="start"></span></p>
             <p><span class="infoName">Data fine: </span><span id="end"></span></p>
             <p><span class="infoName">Unit: </span><span id="unit"></span></p>
