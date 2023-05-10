@@ -12,6 +12,9 @@
             <p><span class="infoName">SubUnit: </span><span id="subunit"></span></p>
             <p><span class="infoName">Description: </span><span id="description"></span></p>
         </div>
+        <div id="no-events" *ngIf="events.length == 0">
+            <p>Nessun evento da visualizzare</p>
+        </div>
         <div *ngIf="hovering" id="verticalline"></div>
     </figure>
 </div>

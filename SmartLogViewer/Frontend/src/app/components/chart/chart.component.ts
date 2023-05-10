@@ -49,8 +49,9 @@ export class ChartComponent {
     private gXAxis : any;
     
     public hovering: boolean = false;
-    private events: LogRow[];
+    public events: LogRow[];
     private logManipulator: LogManipulator;
+    private zoomMultiplier: number;
     constructor(private logManipulationService: LogManipulationService) {
 
         this.logManipulator = logManipulationService.getDefaultManipulator();
@@ -85,7 +86,7 @@ export class ChartComponent {
         this.xDomain = d3.extent(this.x);  
         this.zDomain = new d3.InternSet(this.z);
 
-        this.height = (this.zDomain.size + 1) * this.size + this.marginTop + this.marginBottom;
+        this.height = (this.zDomain.size) * this.size + this.marginTop + this.marginBottom;
         this.xScale = d3.scaleTime(this.xDomain as Array<Date>, this.xRange);
         this.yScale = d3.scaleOrdinal(this.yDomain, this.yRange);
         this.xAxis = d3.axisTop(this.xScale).ticks(this.width / 80).tickSizeOuter(0);
@@ -95,6 +96,10 @@ export class ChartComponent {
         this.descriptions = d3.map(this.events, e => e.Description);
         this.units = d3.map(this.events, e => e.Unit);
         this.subUnits = d3.map(this.events, e => e.SubUnit);
+
+        //calcolo i valori di max zoom
+
+        this.zoomMultiplier = ((this.xDomain[1] as Date).getTime() - (this.xDomain[0] as Date).getTime()) / 100;
     }
 
     private update() {
@@ -120,7 +125,7 @@ export class ChartComponent {
         this.xDomain = d3.extent(this.x);
         this.zDomain = new d3.InternSet(this.z);
 
-        this.height = (this.zDomain.size + 1) * this.size + this.marginTop + this.marginBottom;
+        this.height = (this.zDomain.size) * this.size + this.marginTop + this.marginBottom;
         this.xScale = d3.scaleTime(this.xDomain as Array<Date>, this.xRange);
         this.yScale = d3.scaleOrdinal(this.yDomain, this.yRange);
         this.xAxis = d3.axisTop(this.xScale).ticks(this.width / 80).tickSizeOuter(0);
@@ -130,6 +135,10 @@ export class ChartComponent {
         this.descriptions = d3.map(this.events, e => e.Description);
         this.units = d3.map(this.events, e => e.Unit);
         this.subUnits = d3.map(this.events, e => e.SubUnit);
+
+        //calcolo i valori di max zoom
+
+        this.zoomMultiplier = ((this.xDomain[1] as Date).getTime() - (this.xDomain[0] as Date).getTime()) / 100;
     }
 
     private ngOnInit() {
@@ -272,7 +281,7 @@ export class ChartComponent {
     svg.call(d3.zoom()
         //limiti del moltiplicatore di zoom/de-zoom, da 0x a infinito
         //quindi de-zoom infinito e zoom infinito
-        .scaleExtent([1, Infinity])
+        .scaleExtent([.75, this.zoomMultiplier])
         //operazione da eseguire quando si effettua lo zoom/trascinamento
         .on("zoom", (event: any) => this.zoomed(event, y, x)));
     }
