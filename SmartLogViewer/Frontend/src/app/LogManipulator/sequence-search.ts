@@ -8,8 +8,15 @@ import {Sequence, Event} from "../sequence.classes";
  */
 export class SequenceSearch implements LogManipulator {
 
-    private logService!: LogService; // Log service che fornisce gli eventi
-    private currentOccurrences: LogRow[][] = []; // I risultati delle ricerche
+    /**
+     * Log service che fornisce gli eventi
+     */
+    private logService!: LogService;
+
+    /**
+     * Le occorrenze derivanti dalla ricerca di una sequenza
+     */
+    private currentOccurrences: LogRow[][] = [];
 
     /**
      * Costruisce una nuova classe che si occupa di cercare la ricerca specificata
@@ -38,7 +45,7 @@ export class SequenceSearch implements LogManipulator {
     /**
      * Ottiene un risultato di ricerca
      * @param index indice del risultato di ricerca voluto
-     * @returns Ritona il risultato di ricerca di indice specificato oppure un array vuoto se non sono state trovate ricerche
+     * @returns Ritorna il risultato di ricerca di indice specificato oppure un array vuoto se non sono state trovate ricerche
      */
     getGroup(index: number): LogRow[] {
         if(this.currentOccurrences.length == 0) 
@@ -47,6 +54,10 @@ export class SequenceSearch implements LogManipulator {
         return this.currentOccurrences[index - 1].slice();
     }
 
+    /**
+     * Ottiene un insieme di gruppi di eventi: ogni gruppo è un'occorrenza di una sequenza di eventi
+     * @param sequence sequenza da ricercare tra gli eventi disponibili
+     */
     private findSequences(sequence: Sequence): void {
 
         /** PASSI ALGORITMO:
@@ -122,7 +133,13 @@ export class SequenceSearch implements LogManipulator {
     }
 
 
-    private extractSequences(sequences: LogRow[][], log: Log, completeSequences: LogRow[][]) {
+    /**
+     * Estrazione di tutti gli eventi delle sequenze trovate a partire dai loro eventi di inizio e fine
+     * @param sequences insiemi di gruppi di eventi in cui ogni gruppo contiene gli eventi iniziali e finali di un'occorrenza di una sequenza 
+     * @param log file di log attualmente attivo
+     * @param completeSequences insiemi di gruppi di eventi in cui ogni gruppo contiene tutti gli eventi di un'occorrenza di una sequenza
+     */
+    private extractSequences(sequences: LogRow[][], log: Log, completeSequences: LogRow[][]): void {
         sequences.forEach((sequence) => {
             // Indici degli eventi di inizio/fine sequenza
             let indexes: number [] = [];
@@ -130,13 +147,18 @@ export class SequenceSearch implements LogManipulator {
             sequence.forEach((row) => indexes.push(log.Events.indexOf(row)));                                   // Si ricavano gli indici degli eventi di inizio e fine
             indexes.sort((index1: number, index2: number) => {
                 return index1 - index2
-            });                       // Si ordinano gli indici (non è detto che arrivino ordinati data la presenza di eventi con medesimo date/time
-            completeSequences.push(log.Events.slice(indexes[0], indexes[indexes.length - 1] + 1));                          // Si inseriscono tutti gli eventi dell'occorrenza della sequenza in un'apposita struttura 
-            // NB: +1 perché il metodo "slice" non restituisce l'ultimo elemento se si usa il parametro "end"
+            });                                                                                                         // Si ordinano gli indici (non è detto che arrivino ordinati data la presenza di eventi con medesimo date/time
+            completeSequences.push(log.Events.slice(indexes[0], indexes[indexes.length - 1] + 1));                      // Si inseriscono tutti gli eventi dell'occorrenza della sequenza in un'apposita struttura 
+                                                                                                                        // NB: +1 perché il metodo "slice" non restituisce l'ultimo elemento se si usa il parametro "end"
         });
     }
 
-// Funzione per trovare gli eventi del file di log uguali ad una serie di eventi passati
+    /** Trova gli eventi del file di log uguali ad una serie di eventi passati
+     * @param log il file di log attuale
+     * @param EventsToFind l'insieme di eventi da trovare
+     * @param acceptedSubUnits le sottounità in cui gli eventi passati possono essere avvenuti
+     * @returns Ritorna gli eventi dei tipi richiesti e che riguardano le sottounità indicate
+     */
     private findEvents(log : Log, EventsToFind : Event[], acceptedSubUnits: number[]) : LogRow[] {
         let eventsFound : LogRow[] = [];
         for (let event of EventsToFind) {
@@ -144,16 +166,26 @@ export class SequenceSearch implements LogManipulator {
         }
         return eventsFound;
     }
-
-    // Funzione per trovare gli eventi del file di log uguali ad un evento passato
+    
+    /** Trova gli eventi del file di log uguali ad un evento passato
+     * 
+     * @param log il file di log attuale
+     * @param eventToFind l'evento da trovare
+     * @param acceptedSubUnits le sottounità in cui l'evento passato può essere avvenuto
+     * @returns Ritorna gli eventi del tipo richiesto e che riguardano le sottounità indicate 
+     */
     private findEvent(log : Log, eventToFind: Event, acceptedSubUnits: number[]) : LogRow[] {
         return log.Events.filter((e: LogRow) => {
             return e.Code == eventToFind.Code && e.Value == eventToFind.Status && acceptedSubUnits.includes(e.SubUnit);
         });
     }
 
-    private sortEvents(eventsFound:LogRow[]) {
-        eventsFound.sort((e1: LogRow, e2 : LogRow) => {
+    /**
+     * Ordina un insieme di eventi per data/ora crescente
+     * @param events eventi da ordinare 
+     */
+    private sortEvents(events:LogRow[]) {
+        events.sort((e1: LogRow, e2 : LogRow) => {
             let e1DateTime : number = (new Date([e1.Date, e1.Time].join('T').replaceAll("/", "-") + "Z")).getTime();
             let e2DateTime : number = (new Date([e2.Date, e2.Time].join('T').replaceAll("/", "-") + "Z")).getTime();
             return e1DateTime - e2DateTime;
@@ -161,6 +193,12 @@ export class SequenceSearch implements LogManipulator {
 
     }
 
+    /**
+     * Trova gruppi di eventi che possono far iniziare un'occorrenza di una sequenza
+     * @param startEvents eventi di inizio da cui trovare occorrenze degli eventi di inizio
+     * @param sequence sequenza contenente i tipi di eventi di inizio
+     * @returns Ritorna gruppi di eventi che possono far iniziare un'occorrenza di una sequenza
+     */
     private findStartGroups(startEvents: LogRow[], sequence: Sequence) : LogRow[][] {
         let groups : LogRow[][] = [];
         let sequenceFound : LogRow[] = [];
@@ -208,6 +246,12 @@ export class SequenceSearch implements LogManipulator {
         return groups;
     }
 
+    /**
+     * Trova gruppi di eventi che possono far finire un'occorrenza di una sequenza
+     * @param endEvents eventi di fine da cui trovare occorrenze degli eventi di fine
+     * @param sequence sequenza contenente i tipi di eventi di fine
+     * @returns Ritorna gruppi di eventi che possono far finire un'occorrenza di una sequenza
+     */
     private findEndGroups(endEvents: LogRow[], sequence: Sequence) : LogRow[][] {
         let groups : LogRow[][] = [];
         let sequenceFound : LogRow[] = [];
@@ -247,6 +291,11 @@ export class SequenceSearch implements LogManipulator {
         return groups;
     }
 
+    /**
+     * Trova l'intervallo temporale in cui sono compresi i gruppi di eventi in ingresso
+     * @param groups gruppi di eventi
+     * @returns Ritorna l'intervallo temporale in cui sono compresi i gruppi di eventi in ingresso
+     */
     private findTimeBoundaries(groups: LogRow[][]) : number[][] {
         let boundaries: number[][] = [];
         for (let group of groups) {
