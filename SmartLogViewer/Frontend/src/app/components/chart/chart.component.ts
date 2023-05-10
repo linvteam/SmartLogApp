@@ -48,7 +48,7 @@ export class ChartComponent {
     private plot: any;
     private gXAxis : any;
     
-    public hovering: boolean = true;
+    public hovering: boolean = false;
     private events: LogRow[];
     private logManipulator: LogManipulator;
     constructor(private logManipulationService: LogManipulationService) {
@@ -188,7 +188,7 @@ export class ChartComponent {
             });
 
          this.g.on("mousemove", (e: any,[code, I]: [string, [number]]) => {
-             this.hovering = true;
+             //this.hovering = true;
              let xPointer = d3.pointer(e)[0];
              
              let dateTime = this.xScale.invert(xPointer);
@@ -219,11 +219,10 @@ export class ChartComponent {
              this.setTooltipInfo(dateTime,start, end, code, this.units[I[0]], this.subUnits[I[0]], this.descriptions[I[0]]);
              this.moveTooltip(absoluteX, absoluteY);
              })
-             .on("mouseleave", (e: any) => {
+             /*.on("mouseleave", (e: any) => {
                  this.hovering = false; //rende invisibile il tooltip
-             });
-         
-         this.g.attr("clip-path", (_: any, i: any) => `#${uid}-clip-${i}`)
+             })*/;
+        this.g.attr("clip-path", (_: any, i: any) => `#${uid}-clip-${i}`)
             .selectAll("use")
             .data((d: any, i: any) => new Array(1).fill(i))
             .join("use")
@@ -231,7 +230,13 @@ export class ChartComponent {
             .attr("fill", (d: any, i: any) => this.codeColors[d].Color.replace("0xFF", "#"))    //imposta il colore del campo Code
             .attr("stroke", "black")
             .attr("transform", (_: any, i: any) => `translate(0,${i * this.size})`)
-            .attr("xlink:href", (i: any) => `#${uid}-path-${i}`);
+            .attr("xlink:href", (i: any) => `#${uid}-path-${i}`)
+            .on("mouseleave", (e: any) => {
+                this.hovering = false; //rende invisibile il tooltip e la barra verticale
+            })
+            .on("mouseover", (e: any) => { //rende visibile il tooltip e la barra verticale
+                this.hovering = true
+            });
 
         this.g.append("text")
             .attr("font-size", "1.5em")
@@ -249,28 +254,11 @@ export class ChartComponent {
                 .remove())
             .call((g: any) => g.select(".domain").remove());
 
-        //crea la barra verticale che indica l'ora su cui si sta facendo hover
-        var vertical = d3.select("figure#horizon-chart")
-            .append("div")
-            .style("position", "absolute")
-            .style("z-index", "19")
-            .style("width", "1px")
-            .style("height", "calc(100% - 15px)")
-            .style("top", "15px")
-            .style("left", "0px")
-            .style("background", "#000")
-            .style("pointer-events", "none");
-
-        //muove la barra sopra creata facendola seguire il mouse
-        d3.select("figure#horizon-chart")
-            .on("mousemove", e => {
-                let mousex = d3.pointer(e)[0];
-                vertical.style("left", mousex + "px");
-            })
-            .on("mouseover", e => {
-                let mousex = d3.pointer(e)[0];
-                vertical.style("left", mousex + "px")
-            });
+        //muove barra verticale che indica l'ora su cui si sta facendo hover facendola seguire il mouse
+        d3.select("figure#horizon-chart").on("mousemove", e => {
+            let mousex = d3.pointer(e)[0];
+            d3.select("div div#verticalline").style("left", mousex + "px");
+        });
     }
 
     /**
@@ -366,9 +354,7 @@ export class ChartComponent {
     private moveTooltip(x: number, y: number){
         if (this.tooltipCollideX(x)){ //se è troppo a destra lo sposta a sinistra del mouse
             x -= 410;
-            console.log(x);
         }
-        console.log(x);
 
         if (this.tooltipCollideY(y)) {  //se è troppo in basso lo sposta in sopra al mouse
             y-=210;

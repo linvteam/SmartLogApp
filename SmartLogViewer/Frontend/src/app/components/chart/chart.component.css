@@ -15,7 +15,17 @@
     pointer-events: none;
 }
 
-#horizon-chart{
+#verticalline {
+    position: absolute; 
+    z-index: 19; 
+    width: 1px;
+    height: calc(100% - 15px);
+    top: 15px; 
+    background: #000; 
+    pointer-events: none;
+}
+
+#horizon-chart {
     background-color: #f8f9fa;
     margin-bottom: 1em;
 }
