@@ -13,7 +13,7 @@ namespace SmartLogStatistics.Repository
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Database=Statistics;Username=user;Password=password");
+            optionsBuilder.UseNpgsql("Host=localhost;Database=Statistics;Username=Utente;Password=Password");
         }
         public DbSet<Log> Log { get; set; }
         public DbSet<LogFile> File { get; set; }
