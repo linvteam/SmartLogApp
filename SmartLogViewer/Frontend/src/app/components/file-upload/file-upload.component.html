@@ -1,7 +1,7 @@
 
 <div id="upload-container" class="row">
     <div class="col-12">
-        <label class="btn btn-default p-0" for="file" (dropped)="fileDrop($event)" appFileDropped (fileDropped)="fileDrop($event)">
+        <label class="btn btn-default p-0" for="file" appFileDropped (fileDropped)="fileDrop($event)">
             {{ labelText }}
             <input id="file" #fileSelector type="file" (change)="selectFile($event)" accept="text/csv" />
         </label>

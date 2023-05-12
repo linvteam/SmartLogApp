@@ -80,7 +80,7 @@ export class FileUploadComponent {
     fileDrop(fileList: any): void {
         let file = fileList.item(0);
 
-        if (file && file.name.endsWith(".csv")) return; // Ignoro il file se non è un csv
+        if (file && file.type != 'text/csv') return; // Ignoro il file se non è un csv
 
         this.updateCurrentFile(file);
     }
