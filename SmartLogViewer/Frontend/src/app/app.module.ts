@@ -22,7 +22,7 @@ import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
 import { ChartHeaderComponent } from "./components/chart-header/chart-header.component";
 import { ChartSearchComponent } from "./components/chart-search/chart-search.component";
 import { FileDroppedDirective } from './file-dropped.directive';
-
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
     declarations: [
@@ -49,7 +49,8 @@ import { FileDroppedDirective } from './file-dropped.directive';
         AgGridModule,
         FormsModule,
         ReactiveFormsModule,
-        MdbAccordionModule
+        MdbAccordionModule,
+        NgMultiSelectDropDownModule
     ],
     providers: [
         { provide: BaseURL, useValue: 'https://localhost:7210/api' }

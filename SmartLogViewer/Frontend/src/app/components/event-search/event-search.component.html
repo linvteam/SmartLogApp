@@ -1,10 +1,47 @@
 <form class="row gy-2 gx-3 align-items-center col-auto" [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
     <div class="row">
-        <div class="col">
-            <label class="visually-hidden" for="autoSizingInputEvent">Evento</label>
-            <input type="text" class="form-control" id="autoSizingInputEvent" name="q" placeholder="Immetti la stringa di ricerca" formControlName="q">
+        <div class="col tooltip-parent">
+            <label class="visually-hidden" for="searchQuery">Evento</label>
+            <input type="text" class="form-control" id="searchQuery" name="q" placeholder="Immetti la stringa di ricerca" formControlName="q" />
+            <div class="mytooltip">
+                Scrivi qui i criteri di ricerca, se stai cercando per una descrizione usa le " per racchiudere pi&ugrave; termini assieme
+            </div>
         </div>
-        <div class="col-auto">
+    </div>
+
+    <div class="row">
+        <div class="col tooltip-parent">
+            <label for="unitSelector" class="visually-hidden">Unit:</label>
+            <ng-multiselect-dropdown id="unitSelector"
+                                     formControlName="units"
+                                     [placeholder]="'Seleziona le unit'"
+                                     [data]='AvailableUnits'
+                                     [(ngModel)]="SelectedUnits"
+                                     [settings]="dropdownSettings"></ng-multiselect-dropdown>
+            <div class="mytooltip">
+                Seleziona le unit sulle quali eseguire la ricerca 
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col tooltip-parent">
+            <label for="subUnitSelector" class="visually-hidden">SubUnit:</label>
+            <ng-multiselect-dropdown id="subUnitSelector"
+                                     formControlName="subunits"
+                                     [placeholder]="'Seleziona le subunit'"
+                                     [data]='AvailableSubUnits'
+                                     [(ngModel)]="SelectedSubUnits"
+                                     [settings]="dropdownSettings"></ng-multiselect-dropdown>
+            <div class="mytooltip">
+                Seleziona le subunit sulle quali eseguire la ricerca
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div aria-hidden="true" class="col-8"></div>
+        <div class="col-4">
             <button type="submit" class="btn btn-primary form-control">Cerca</button>
         </div>
     </div>

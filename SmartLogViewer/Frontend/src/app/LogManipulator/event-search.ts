@@ -21,7 +21,7 @@ export class EventSearch implements LogManipulator {
      * Costruisce una classe che fornisce una funzionalità di filtraggio in base alla query di ricerca
      * @param queryString Query di ricerca 
      */
-    constructor(queryString: string) {
+    constructor(queryString: string, private selectedUnits: number[], private selectedSubUnits: number[]) {
         this.searchTokens = new Array<string>();
 
         if (queryString != "") {
@@ -32,11 +32,13 @@ export class EventSearch implements LogManipulator {
             let tokens2 = queryString.replace(/['|"](.*?)['|"]/g, "").split(" ").filter(entry => /\S/.test(entry));
 
             // Unisco tutti i token 
-            if(tokens1 != undefined)
+            if (tokens1 != undefined)
                 this.searchTokens = this.searchTokens.concat(tokens1);
 
             if (tokens2 != undefined)
                 this.searchTokens = this.searchTokens.concat(tokens2);
+        } else {
+            this.searchTokens = [];
         }
     }
 
@@ -65,8 +67,18 @@ export class EventSearch implements LogManipulator {
 
         let events = this.logService.getLog().Events;
 
-        for (let s of this.searchTokens)
-            events = events.filter(logRow => this.search(logRow, new RegExp(s, "i")));
+        if (this.selectedUnits.length > 0) {
+            events = events.filter((e) => this.selectedUnits.indexOf(e.Unit) != -1 );
+        }
+
+        if (this.selectedSubUnits.length > 0) {
+            events = events.filter((e) => this.selectedSubUnits.indexOf(e.SubUnit) != -1);
+        }
+
+        if (this.searchTokens.length > 0) {
+            for (let s of this.searchTokens)
+                events = events.filter(logRow => this.search(logRow, new RegExp(s, "i")));
+        }
 
         return events;
 

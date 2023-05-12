@@ -6,3 +6,38 @@ form {
     justify-content: center;
     margin-top: .1rem;
 }
+
+.mytooltip {
+    display: none;
+}
+
+select:hover + .mytooltip, input:hover + .mytooltip {
+    display: block;
+    position: absolute;
+    z-index: 100;
+    max-width: calc(100% - 1.5em);
+    background: #191919fa;
+    color: white;
+    pointer-events: none;
+    padding: .75em;
+    top: calc(100% + 7px);
+    border-radius: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+    select:hover + .mytooltip::before, input:hover + .mytooltip::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        transform: translateX(-50%) rotate(45deg);
+        background: #191919fa;
+        left: 50%;
+        top: -5px;
+        position: absolute;
+        display: block;
+    }
+
+.tooltip-parent {
+    position: relative;
+}

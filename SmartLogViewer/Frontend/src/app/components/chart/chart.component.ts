@@ -19,7 +19,7 @@ export class ChartComponent {
     private readonly marginTop = 20;
     private readonly marginRight = 0;
     private readonly marginBottom = 0;
-    private readonly marginLeft = 100;
+    private readonly marginLeft = 200;
 
     private readonly size = 35;
     private readonly padding = 5;
@@ -27,18 +27,19 @@ export class ChartComponent {
     private width = 1500;
     private height;
     private xDomain : Array<Date|undefined>;// [xmin, xmax]
-    private xRange = [this.marginLeft, this.width - this.marginRight]; // [left, right]
+    private xRange = [this.marginLeft, this.width - this.marginRight - 2]; // [left, right], i due px hard coded servono per vedere l'ultimo tick a dx
     private yDomain = [0,1]; // [ymin, ymax]
     private yRange = [this.size, this.padding]; // [bottom, top]
-    private zDomain : d3.InternSet<string|undefined>; // array of z-values
+    private zDomain: d3.InternSet<string|undefined>; // array of z-values
     
     private x;
     private y;
     private z;
     private codeColors;
-    private descriptions;
-    private units;
-    private subUnits;
+    private descriptions: Record<string, string> = {}
+;
+    //private units;
+    //private subUnits;
 
     private xScale;
     private yScale;
@@ -52,6 +53,9 @@ export class ChartComponent {
     public events: LogRow[];
     private logManipulator: LogManipulator;
     private zoomMultiplier: number;
+
+    private ConvertDateTime(e: LogRow) { return new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z"); }
+
     constructor(private logManipulationService: LogManipulationService) {
 
         this.logManipulator = logManipulationService.getDefaultManipulator();
@@ -67,7 +71,10 @@ export class ChartComponent {
         // La data va messa nel formato YYYY-MM-DDThh:mm:ss.mmmZ
         this.x = d3.map(this.events, e => new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z"));
         this.y = d3.map(this.events, e => e.Value ? 1 : 0);
-        this.z = d3.map(this.events, e => e.Code);
+        //this.z = d3.map(this.events, e => e.Code);
+        this.z = d3.map(this.events, e => `${e.Code} (U=${e.Unit}, S=${e.SubUnit})`); // Per zDomain string
+        
+
         let colors = d3.map(this.events, ((e: LogRow) => { return { Code: e.Code, Color: e.Color } }));
         
         colors.reverse();
@@ -93,9 +100,13 @@ export class ChartComponent {
 
         
         //getValori per il tooltip
-        this.descriptions = d3.map(this.events, e => e.Description);
-        this.units = d3.map(this.events, e => e.Unit);
-        this.subUnits = d3.map(this.events, e => e.SubUnit);
+        //this.descriptions = d3.map(this.events, e => e.Description);
+        this.descriptions = {}
+        for (let e of this.events) {
+            this.descriptions[e.Code] = e.Description;
+        }
+        //this.units = d3.map(this.events, e => e.Unit);
+        //this.subUnits = d3.map(this.events, e => e.SubUnit);
 
         //calcolo i valori di max zoom
 
@@ -106,7 +117,8 @@ export class ChartComponent {
         // La data va messa nel formato YYYY-MM-DDThh:mm:ss.mmmZ
         this.x = d3.map(this.events, e => new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z"));
         this.y = d3.map(this.events, e => e.Value ? 1 : 0);
-        this.z = d3.map(this.events, e => e.Code);
+        //this.z = d3.map(this.events, e => e.Code);
+        this.z = d3.map(this.events, e => `${e.Code} (U=${e.Unit}, S=${e.SubUnit})`);
         let colors = d3.map(this.events, ((e: LogRow) => { return { Code: e.Code, Color: e.Color } }));
 
         colors.reverse();
@@ -132,9 +144,13 @@ export class ChartComponent {
 
 
         //getValori per il tooltip
-        this.descriptions = d3.map(this.events, e => e.Description);
-        this.units = d3.map(this.events, e => e.Unit);
-        this.subUnits = d3.map(this.events, e => e.SubUnit);
+        //this.descriptions = d3.map(this.events, e => e.Description);
+        this.descriptions = {}
+        for (let e of this.events) {
+            this.descriptions[e.Code] = e.Description;
+        }
+        //this.units = d3.map(this.events, e => e.Unit);
+        //this.subUnits = d3.map(this.events, e => e.SubUnit);
 
         //calcolo i valori di max zoom
 
@@ -196,7 +212,7 @@ export class ChartComponent {
                 return area(dati);
             });
 
-         this.g.on("mousemove", (e: any,[code, I]: [string, [number]]) => {
+         this.g.on("mousemove", (e: any,[eventString, I]: [string, [number]]) => {
              //this.hovering = true;
              let xPointer = d3.pointer(e)[0];
              
@@ -215,17 +231,26 @@ export class ChartComponent {
                  }
              }
              // trova il numero della riga su cui stai facendo hover
-             let codePosition: number = 0;
+             /*let codePosition: number = 0;
              let codeList: any[] = Array.from(this.zDomain);
              for (let i = 0; i < this.zDomain.size; i++) {
                  if (code == codeList[i]) {
                      codePosition = i;
                      break;
                  }
-             }
+             } */
              let absoluteX = e.clientX;
              let absoluteY = e.clientY;
-             this.setTooltipInfo(dateTime,start, end, code, this.units[I[0]], this.subUnits[I[0]], this.descriptions[I[0]]);
+
+
+             let code = eventString.slice(0, eventString.indexOf(" "));
+
+             let unit = eventString.slice(eventString.indexOf('(U=') + 3, eventString.indexOf(", "));
+             let subUnit = eventString.slice(eventString.indexOf(', S=') + 4, eventString.indexOf(")"));
+
+
+             //this.setTooltipInfo(dateTime,start, end, code, this.units[I[0]], this.subUnits[I[0]], this.descriptions[code]);
+             this.setTooltipInfo(dateTime,start, end, code, unit, subUnit, this.descriptions[code]);
              this.moveTooltip(absoluteX, absoluteY);
              })
              /*.on("mouseleave", (e: any) => {
@@ -249,7 +274,7 @@ export class ChartComponent {
 
         this.g.append("text")
             .attr("font-size", "1.5em")
-            .attr("x", this.marginLeft - 100)
+            .attr("x", 0)
             .attr("y", (this.size + this.padding) / 2)
             .attr("dy", "0.35em")
             .text(([z]: any) => z);
@@ -340,7 +365,7 @@ export class ChartComponent {
      * @param description descrizione dell'evento
      * @private
      */
-    private setTooltipInfo(currentDate: Date,start: Date, end: Date, code: string, unit: number, subUnit: number, description: string){
+    private setTooltipInfo(currentDate: Date,start: Date, end: Date, code: string, unit: string, subUnit: string, description: string){
         const format = 'yyyy/MM/dd - HH:mm:ss.SSS';
         const locale = "it-IT";
         //aggiorna il tooltip con i dati nuovi

@@ -1,6 +1,6 @@
 <form class="row gy-2 gx-3 align-items-center col-auto" [formGroup]="sequenceForm" (ngSubmit)="onSubmit()">
     <div class="row">
-        <div class="col">
+        <div class="col tooltip-parent">
             <label class="visually-hidden" for="autoSizingInputSequence">Sequenze</label>
             <select class="custom-select my-1 mr-sm-2 form-control" id="autoSizingInputSequence" formControlName="sequence" required>
                     <option [ngValue]="" >-</option>
@@ -8,6 +8,9 @@
                         {{ sequence }}
                     </option>
             </select>
+            <div class="mytooltip">
+                Seleziona la sequenza nota di tuo interesse
+            </div>
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-primary form-control">Cerca</button>
