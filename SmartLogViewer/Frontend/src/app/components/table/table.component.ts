@@ -74,7 +74,6 @@ export class TableComponent {
         this.rowData = this.logManipulator.getGroup(this.groupNumber);
 
         this.numberOfGroups = this.logManipulator.getNumberOfGroups();
-        console.log(this.numberOfGroups)
         if (this.rowData.length > 0) {
             this.startDateTime = this.rowData[this.rowData.length - 1].Date + " - " + this.rowData[this.rowData.length - 1].Time;
             this.endDateTime = this.rowData[0].Date + " - " + this.rowData[0].Time;
@@ -87,10 +86,10 @@ export class TableComponent {
     columnDefs = [
         { field: 'date', hide: true },
         { field: 'time', hide: true },
-        { headerName: 'Date-Time', valueGetter: 'return data.date + " - " + data.time', field: 'DateTime', sortable: true, filter: true, width: 250 },
-        { field: 'unit', sortable: true, filter: true, width: 100 },
-        { field: 'subUnit', sortable: true, filter: true, width: 125 },
-        { field: 'code', sortable: true, filter: true, width: 150 },
+        { headerName: 'Date-Time', valueGetter: 'return data.date + " - " + data.time', field: 'DateTime', width: 250 },
+        { field: 'unit', width: 100 },
+        { field: 'subUnit', width: 125 },
+        { field: 'code', width: 150 },
         { field: 'description', width: 355 },
         { field: 'value', width: 100 },
     ];
@@ -99,7 +98,9 @@ export class TableComponent {
      * Impostazione di default dei campi della tabella
      */
     defaultColDef: ColDef = {
-        resizable: true
+        resizable: true, 
+        sortable: true, 
+        filter: true
     }
 
     /**
