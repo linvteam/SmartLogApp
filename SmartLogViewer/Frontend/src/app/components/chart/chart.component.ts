@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { LogService } from 'src/app/services/log/log.service';
 import { formatDate, registerLocaleData } from "@angular/common";
 import localeIT from "@angular/common/locales/it";
 import { LogManipulationService } from "src/app/services/LogManipulation/log-manipulation.service";
@@ -37,9 +36,6 @@ export class ChartComponent {
     private z;
     private codeColors;
     private descriptions: Record<string, string> = {}
-;
-    //private units;
-    //private subUnits;
 
     private xScale;
     private yScale;
@@ -71,7 +67,6 @@ export class ChartComponent {
         // La data va messa nel formato YYYY-MM-DDThh:mm:ss.mmmZ
         this.x = d3.map(this.events, e => new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z"));
         this.y = d3.map(this.events, e => e.Value ? 1 : 0);
-        //this.z = d3.map(this.events, e => e.Code);
         this.z = d3.map(this.events, e => `${e.Code} (U=${e.Unit}, S=${e.SubUnit})`); // Per zDomain string
         
 
@@ -105,11 +100,8 @@ export class ChartComponent {
         for (let e of this.events) {
             this.descriptions[e.Code] = e.Description;
         }
-        //this.units = d3.map(this.events, e => e.Unit);
-        //this.subUnits = d3.map(this.events, e => e.SubUnit);
 
         //calcolo i valori di max zoom
-
         this.zoomMultiplier = ((this.xDomain[1] as Date).getTime() - (this.xDomain[0] as Date).getTime()) / 100;
     }
 
@@ -117,7 +109,6 @@ export class ChartComponent {
         // La data va messa nel formato YYYY-MM-DDThh:mm:ss.mmmZ
         this.x = d3.map(this.events, e => new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z"));
         this.y = d3.map(this.events, e => e.Value ? 1 : 0);
-        //this.z = d3.map(this.events, e => e.Code);
         this.z = d3.map(this.events, e => `${e.Code} (U=${e.Unit}, S=${e.SubUnit})`);
         let colors = d3.map(this.events, ((e: LogRow) => { return { Code: e.Code, Color: e.Color } }));
 
@@ -149,11 +140,8 @@ export class ChartComponent {
         for (let e of this.events) {
             this.descriptions[e.Code] = e.Description;
         }
-        //this.units = d3.map(this.events, e => e.Unit);
-        //this.subUnits = d3.map(this.events, e => e.SubUnit);
 
         //calcolo i valori di max zoom
-
         this.zoomMultiplier = ((this.xDomain[1] as Date).getTime() - (this.xDomain[0] as Date).getTime()) / 100;
     }
 
@@ -213,7 +201,6 @@ export class ChartComponent {
             });
 
          this.g.on("mousemove", (e: any,[eventString, I]: [string, [number]]) => {
-             //this.hovering = true;
              let xPointer = d3.pointer(e)[0];
              
              let dateTime = this.xScale.invert(xPointer);
@@ -230,15 +217,7 @@ export class ChartComponent {
                      break;
                  }
              }
-             // trova il numero della riga su cui stai facendo hover
-             /*let codePosition: number = 0;
-             let codeList: any[] = Array.from(this.zDomain);
-             for (let i = 0; i < this.zDomain.size; i++) {
-                 if (code == codeList[i]) {
-                     codePosition = i;
-                     break;
-                 }
-             } */
+
              let absoluteX = e.clientX;
              let absoluteY = e.clientY;
 
@@ -249,13 +228,9 @@ export class ChartComponent {
              let subUnit = eventString.slice(eventString.indexOf(', S=') + 4, eventString.indexOf(")"));
 
 
-             //this.setTooltipInfo(dateTime,start, end, code, this.units[I[0]], this.subUnits[I[0]], this.descriptions[code]);
              this.setTooltipInfo(dateTime,start, end, code, unit, subUnit, this.descriptions[code]);
              this.moveTooltip(absoluteX, absoluteY);
-             })
-             /*.on("mouseleave", (e: any) => {
-                 this.hovering = false; //rende invisibile il tooltip
-             })*/;
+             });
         this.g.attr("clip-path", (_: any, i: any) => `#${uid}-clip-${i}`)
             .selectAll("use")
             .data((d: any, i: any) => new Array(1).fill(i))

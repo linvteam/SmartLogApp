@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { LogManipulationService } from '../../services/LogManipulation/log-manipulation.service';
 import { EventSearch } from "../../LogManipulator/event-search";
-import { FormArray, FormBuilder, FormControl } from "@angular/forms";
+import { FormBuilder, FormControl } from "@angular/forms";
 import { LogService } from '../../services/log/log.service';
 
 /**

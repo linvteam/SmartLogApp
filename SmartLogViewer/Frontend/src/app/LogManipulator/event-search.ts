@@ -1,5 +1,5 @@
 import { LogManipulator } from "./log-manipulator";
-import { Log, LogRow, Header } from "../log.classes"
+import { LogRow } from "../log.classes"
 import { LogService } from "../services/log/log.service";
 
 /**

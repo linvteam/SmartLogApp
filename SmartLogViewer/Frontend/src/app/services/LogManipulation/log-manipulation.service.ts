@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LogService } from "../log/log.service";
 import { LogManipulator } from "../../LogManipulator/log-manipulator";
-import { EventSearch } from "../../LogManipulator/event-search";
 import { Identity } from "../../LogManipulator/identity"
 import { Subject } from "rxjs";
 
