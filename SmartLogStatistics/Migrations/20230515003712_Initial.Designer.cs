@@ -12,7 +12,7 @@ using SmartLogStatistics.Repository;
 namespace SmartLogStatistics.Migrations
 {
     [DbContext(typeof(SmartLogContext))]
-    [Migration("20230510140514_Initial")]
+    [Migration("20230515003712_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

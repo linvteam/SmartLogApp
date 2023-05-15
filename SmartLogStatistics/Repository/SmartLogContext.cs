@@ -4,22 +4,50 @@ using SmartLogStatistics.Model;
 
 namespace SmartLogStatistics.Repository
 {
+    /// <summary>
+    /// Classe Context che rappresenta il database e consente l'interazione tra il codice e il DB
+    /// </summary>
     public class SmartLogContext : DbContext
     {
+        /// <summary>
+        /// Crea una nuova istanza del context
+        /// </summary>
+        /// <param name="options">Opzioni usate dal context</param>
         public SmartLogContext(DbContextOptions<SmartLogContext> options)
             : base(options)
         {
         }
 
+        /// <summary>
+        /// Configura la stringa di connessione al DB
+        /// </summary>
+        /// <param name="optionsBuilder">Oggetto per configurare le opzioni del context</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql("Host=localhost;Database=Statistics;Username=Utente;Password=Password");
         }
+        
+        /// <summary>
+        /// Oggetto di tipo DbSet che rappresenta la tabella Log nel DB, dotato di getter e setter
+        /// </summary>
         public DbSet<Log> Log { get; set; }
+        /// <summary>
+        /// Oggetto di tipo DbSet che rappresenta la tabella File nel DB, dotato di getter e setter
+        /// </summary>
         public DbSet<LogFile> File { get; set; }
+        /// <summary>
+        /// Oggetto di tipo DbSet che rappresenta la tabella Firmware nel DB, dotato di getter e setter
+        /// </summary>
         public DbSet<Firmware> Firmware { get; set; }
+        /// <summary>
+        /// Oggetto di tipo DbSet che rappresenta la tabella Event nel DB, dotato di getter e setter
+        /// </summary>
         public DbSet<Event> Event { get; set; }
-
+        
+        /// <summary>
+        /// Crea le tabelle del DB, configurandone le chiavi interne e esterne
+        /// </summary>
+        /// <param name="modelBuilder">Oggetto per configurare le entita del DB e le loro relazioni</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Log>().ToTable("Log");
