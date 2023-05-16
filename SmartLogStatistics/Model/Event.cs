@@ -9,6 +9,15 @@ namespace SmartLogStatistics.Model;
 public class Event
 {
     /// <summary>
+    /// Crea un Event con valori di default
+    /// </summary>
+    public Event()
+    {
+        this.code = String.Empty;
+        this.description = String.Empty;
+        this.color = String.Empty;
+    }
+    /// <summary>
     /// Oggetto di tipo string che corrisponde alla colonna code nel DB, dotato di getter e setter
     /// </summary>
     public string code { get; set; }

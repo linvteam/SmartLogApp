@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.Core.Metadata.Edm;
+using Microsoft.AspNetCore.Connections;
 
 namespace SmartLogStatistics.Model;
 
@@ -9,6 +12,15 @@ namespace SmartLogStatistics.Model;
 public class LogFile
 {
     /// <summary>
+    /// Crea un LogFile con valori di default
+    /// </summary>
+    public LogFile()
+    {
+        this.filename = String.Empty;
+        this.PC_datetime = DateTime.Now;
+        this.UPS_datetime = DateTime.Now;
+    }
+    /// <summary>
     /// Oggetto di tipo int che corrisponde alla colonna id nel DB, dotato di getter e setter
     /// </summary>
     public int id { get; set; }
@@ -17,15 +29,13 @@ public class LogFile
     /// </summary>
     public string filename { get; set; }
     /// <summary>
-    /// Oggetto di tipo byte[Timestamp] che corrisponde alla colonna PC_datetime nel DB, dotato di getter e setter
+    /// Oggetto di tipo DateTime che corrisponde alla colonna PC_datetime nel DB, dotato di getter e setter
     /// </summary>
-    [Timestamp]
-    public byte[] PC_datetime { get; set; }
+    public DateTime PC_datetime { get; set; }
     /// <summary>
-    /// Oggetto di tipo byte[Timestamp] che corrisponde alla colonna UPS_datetime nel DB, dotato di getter e setter
+    /// Oggetto di tipo DateTime che corrisponde alla colonna UPS_datetime nel DB, dotato di getter e setter
     /// </summary>
-    [Timestamp]
-    public byte[] UPS_datetime { get; set; }
+    public DateTime UPS_datetime { get; set; }
     
     /// <summary>
     /// Oggetto di tipo ICollection che contiene i riferimenti alla tabella Firmware associati agli elementi della tabella File, dotato di getter e setter
