@@ -36,7 +36,7 @@ export class EventGroupingComponent {
     submitForm() {
         if (Number(this.formGroup.value.valore) <= 0) {
             this.logManipulationService.setManipulation(this.logManipulationService.getDefaultManipulator());
-            this.formGroup.value.valore = '0';
+            this.formGroup.reset({ valore: '0' ,  unita: '1' });
         } else {
             this.logManipulationService.setManipulation(
                 new EventGrouping(Number(this.formGroup.value.valore) * Number(this.formGroup.value.unita))
