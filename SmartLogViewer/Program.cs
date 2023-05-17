@@ -10,8 +10,7 @@ builder.Services.AddSingleton<SequencesManager, SequencesManagerJson>();
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
+builder.Services.AddControllers().AddJsonOptions(options => {
     options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
     options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
 });
@@ -24,8 +23,7 @@ builder.Services.AddSwaggerGen(options => {
 });
 
 builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
-    policy =>
-    {
+    policy => {
         policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
     }
 ));
@@ -33,13 +31,14 @@ builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+if(app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors("FrontendUI");
+} else {
+    app.UseStaticFiles();
+    app.MapFallbackToFile("index.html");
 }
-
-app.UseCors("FrontendUI");
 
 app.UseHttpsRedirection();
 

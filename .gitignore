@@ -376,3 +376,4 @@ FodyWeavers.xsd
 
 .angular
 /SmartLogViewer/Frontend/documentation
+/SmartLogViewer/Frontend/dist

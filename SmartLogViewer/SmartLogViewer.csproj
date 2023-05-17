@@ -1,19 +1,94 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-    <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-      <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PublishRelease>true</PublishRelease>
+    <!-- PublishSingleFile>true</PublishSingleFile -->
 
+    <Authors>Alessandro Baldissera, Alberto Casado Moreno, Mauro Carnuccio, Matteo Cusin, Nicola Ravagna, Riccardo Rossi, Alessandro Santin</Authors>
+    <Company>LINV Team</Company>
+    <ProductName>SmartLogViewer</ProductName>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+    <Title>SmartLogViewer</Title>
+    <RepositoryUrl>https://github.com/linvteam/SmartLogApp.git</RepositoryUrl>
+    <AssemblyVersion>1.0</AssemblyVersion>
+    <FileVersion>1.0</FileVersion>
+    <ApplicationIcon>SmartLogViewer.ico</ApplicationIcon>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+
+  <!-- Configurazione per rimuovere i file non necessari dalla publish del pacchetto -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <AllowedReferenceRelatedFileExtensions>
+      .allowedextension
+    </AllowedReferenceRelatedFileExtensions>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Frontend\src\favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Frontend\src\favicon.ico" />
+    <Content Include="SmartLogViewer.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update=".\Frontend\**">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+    <Content Update="appsettings.json" CopyToPublishDirectory="Never" />
+    <Content Update="appsettings.*.json" CopyToPublishDirectory="Never" />
+    <Content Update="appsettings.$(MSBuildThisFileName).json" CopyToPublishDirectory="Never" />
+  </ItemGroup>
+
+  <!-- dipendenze di nuget -->
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <!-- Dipendenze interne -->
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="SmartLogViewer.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <!-- Fasi custom del processo di publish -->
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+
+    <!-- Check nodejs installed -->
+    <Exec WorkingDirectory=".\Frontend" Command="node --version">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+
+    <!-- Check npm installed -->
+    <Exec WorkingDirectory=".\Frontend" Command="npm --version">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+
+    <!-- Install nodejs dependencies and build angular app -->
+    <Exec WorkingDirectory=".\Frontend" Command="npm install" />
+    <Exec WorkingDirectory=".\Frontend" Command="npm run build -- --configuration=production" />
+
+    <!-- Include angular build files to output directory -->
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+      <DistFiles Include=".\Frontend\dist\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Core\Core.csproj" />
-    </ItemGroup>
+  </Target>
 
 </Project>
