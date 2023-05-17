@@ -12,15 +12,6 @@ namespace SmartLogStatistics.Model;
 public class LogFile
 {
     /// <summary>
-    /// Crea un LogFile con valori di default
-    /// </summary>
-    public LogFile()
-    {
-        this.filename = String.Empty;
-        this.PC_datetime = DateTime.Now;
-        this.UPS_datetime = DateTime.Now;
-    }
-    /// <summary>
     /// Oggetto di tipo int che corrisponde alla colonna id nel DB, dotato di getter e setter
     /// </summary>
     public int id { get; set; }

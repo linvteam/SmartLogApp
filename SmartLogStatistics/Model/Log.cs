@@ -16,13 +16,13 @@ public class Log
     /// </summary>
     public int log_line { get; set; }
     /// <summary>
-    /// Oggetto di tipo DateTime che corrisponde alla colonna date nel DB, dotato di getter e setter
+    /// Oggetto di tipo DateOnly che corrisponde alla colonna date nel DB, dotato di getter e setter
     /// </summary>
-    public DateTime date { get; set; }
+    public DateOnly date { get; set; }
     /// <summary>
-    /// Oggetto di tipo DateTime che corrisponde alla colonna time nel DB, dotato di getter e setter
+    /// Oggetto di tipo DateOnly che corrisponde alla colonna time nel DB, dotato di getter e setter
     /// </summary>
-    public DateTime time { get; set; }
+    public DateOnly time { get; set; }
     /// <summary>
     /// Oggetto di tipo string che corrisponde alla colonna code nel DB, dotato di getter e setter
     /// </summary>
