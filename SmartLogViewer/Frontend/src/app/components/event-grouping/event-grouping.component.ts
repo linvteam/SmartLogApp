@@ -7,9 +7,9 @@ import { LogManipulationService } from '../../services/LogManipulation/log-manip
  * Controller che gestisce il widget di raggruppamento degli  eventi
  */
 @Component({
-  selector: 'app-event-grouping',
-  templateUrl: './event-grouping.component.html',
-  styleUrls: ['./event-grouping.component.css']
+    selector: 'app-event-grouping',
+    templateUrl: './event-grouping.component.html',
+    styleUrls: ['./event-grouping.component.css']
 })
 export class EventGroupingComponent {
 
@@ -34,11 +34,13 @@ export class EventGroupingComponent {
      * Metodo che gestisce il submit del form, comunica la log manipulation service il nuovo log manipulator. Se il numero di gruppi specificato è 0 verrà impostato il manipulator di default
      */
     submitForm() {
-        if (Number(this.formGroup.value) == 0)
+        if (Number(this.formGroup.value.valore) <= 0) {
             this.logManipulationService.setManipulation(this.logManipulationService.getDefaultManipulator());
-        else
+            this.formGroup.value.valore = '0';
+        } else {
             this.logManipulationService.setManipulation(
                 new EventGrouping(Number(this.formGroup.value.valore) * Number(this.formGroup.value.unita))
             );
+        }
     }
 }
