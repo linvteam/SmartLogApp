@@ -3,7 +3,7 @@
 
 <div class="table-container">
     <div class="form-group row tableSelection" *ngIf="numberOfGroups > 1">
-        Tabella numbero
+        Tabella numero
         <div class="col">
             <label class="visually-hidden" for="autoSizingInputGroup">Raggruppamento</label>
             <input type="number" (change)="changeGroupIndex($event)" name="valore" class="form-control" id="autoSizingInputGroup" min='1' max="{{ numberOfGroups }}" [value]="groupNumber" />

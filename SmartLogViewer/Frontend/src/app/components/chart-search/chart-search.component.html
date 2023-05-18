@@ -1,16 +1,10 @@
 <div class="accordion-wrapper">
-    <div class="accordion" id="accordionExample">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">
-                    Ricerca Eventi
-                </button>
-            </h2>
-            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                    <app-event-search></app-event-search>
-                </div>
-            </div>
-        </div>
-    </div>
+    <mdb-accordion>
+        <mdb-accordion-item [collapsed]="false">
+            <ng-template mdbAccordionItemHeader>Ricerca Eventi</ng-template>
+            <ng-template mdbAccordionItemBody>
+                <app-event-search></app-event-search>
+            </ng-template>
+        </mdb-accordion-item>
+    </mdb-accordion>
 </div>

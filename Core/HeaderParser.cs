@@ -77,7 +77,7 @@ namespace Core {
         /// <param name="riga">La riga da leggere</param>
         /// <returns>Tupla con IniFileName, Unit e SubUnit</returns>
         private INIFile INIFileParse(string riga) {
-            string pattern = @"INI File name :  ([\w_]+_v\d+_\d+_\d+.ini); Unit=(\d+) - SubUnit=(\d+)";
+            string pattern = @"INI File name :  ([\w_]+_v\d+_\d+_\d+.(?:ini|INI)); Unit=(\d+) - SubUnit=(\d+)";
             Regex regex = new(pattern);
 
             var matches = regex.Match(riga);

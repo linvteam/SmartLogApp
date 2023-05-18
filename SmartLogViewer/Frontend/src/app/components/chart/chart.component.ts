@@ -228,7 +228,7 @@ export class ChartComponent {
              let subUnit = eventString.slice(eventString.indexOf(', S=') + 4, eventString.indexOf(")"));
 
 
-             this.setTooltipInfo(dateTime,start, end, code, unit, subUnit, this.descriptions[code]);
+             this.setTooltipInfo(dateTime, start, end, code, unit, subUnit, this.descriptions[code]);
              this.moveTooltip(absoluteX, absoluteY);
              });
         this.g.attr("clip-path", (_: any, i: any) => `#${uid}-clip-${i}`)
@@ -346,9 +346,9 @@ export class ChartComponent {
         //aggiorna il tooltip con i dati nuovi
         const tooltip =d3.select("div div#tooltip");
         tooltip.select("p span#code").text(code)
-        tooltip.select("p span#currentdate").text(formatDate(currentDate, format, locale));
-        tooltip.select("p span#start").text(formatDate(start, format, locale));
-        tooltip.select("p span#end").text(formatDate(end, format, locale));
+        tooltip.select("p span#currentdate").text(formatDate(currentDate, format, locale, "UTC"));
+        tooltip.select("p span#start").text(formatDate(start, format, locale, "UTC"));
+        tooltip.select("p span#end").text(formatDate(end, format, locale, "UTC"));
         tooltip.select("p span#unit").text(unit);
         tooltip.select("p span#subunit").text(subUnit);
         tooltip.select("p span#description").text(description);

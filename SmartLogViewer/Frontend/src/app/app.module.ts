@@ -24,6 +24,8 @@ import { ChartSearchComponent } from "./components/chart-search/chart-search.com
 import { FileDroppedDirective } from './file-dropped.directive';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
+import { environment } from "../environments/environment";
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -53,7 +55,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
         NgMultiSelectDropDownModule
     ],
     providers: [
-        { provide: BaseURL, useValue: 'https://localhost:7210/api' }
+        { provide: BaseURL, useValue: environment.baseUrl }
     ],
     bootstrap: [AppComponent]
 })
