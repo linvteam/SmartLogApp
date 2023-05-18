@@ -18,27 +18,27 @@ export class FileInfoComponent {
     /**
      * Lista degli INI File del log
      */
-    iniFiles: INIFile[];
+    public iniFiles: INIFile[];
 
     /**
      * Descrizione delle colonne della tabella degli ini file
      */
-    columnDefs: ColDef[];
+    public columnDefs: ColDef[];
 
     /**
      * Impostazioni di default della tabella
      */
-    defaultColDef: ColDef;
+    public defaultColDef: ColDef;
 
     /**
-     * Data del pc del momento in cui il log è stato scaricato
+     * Data del pc del momento in cui il log ï¿½ stato scaricato
      */
-    pcDate: string;
+    public pcDate: string;
 
     /**
-     * Data dell'ups del momento in cui il log è stato scaricato
+     * Data dell'ups del momento in cui il log ï¿½ stato scaricato
      */
-    upsDate: string;
+    public upsDate: string;
 
     /**
      * Costruisce una nuova istanza del controller di file-info
@@ -71,7 +71,7 @@ export class FileInfoComponent {
      * Metodo che gestisce l'evento gridReady della tabella
      * @param params Parametri dell'evento
      */
-    onGridReady(params: any) {
+    public onGridReady(params: any): void {
         params.api.sizeColumnsToFit();
     }
 
