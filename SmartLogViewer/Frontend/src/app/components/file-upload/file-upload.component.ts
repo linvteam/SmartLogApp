@@ -21,27 +21,27 @@ export class FileUploadComponent {
     /**
      * Il file attualmente selezionato
      */
-    currentFile?: File;
+    public currentFile?: File;
 
     /**
      * Il progresso auttuale di caricamento, se � undefined fa sparire dalla view la progress bar
      */
-    progress: number | undefined;
+    public progress: number | undefined;
 
     /**
      * Messaggio di errore
      */
-    message = '';
+    public message = '';
 
     /**
      * Il testo della label di selezione del file
      */
-    labelText = this.FileSelectText;
+    public labelText :string = this.FileSelectText;
 
     /**
      * Gestore del controllo di input
      */
-    @ViewChild("fileSelector") fileSelector: any;
+    @ViewChild("fileSelector") private fileSelector: any;
 
     /**
      * Costruisce una nuova classe che contralla il widget per l'upload dei file, i parametri vengono passati tramite dependecy injector
