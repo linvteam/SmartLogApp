@@ -31,6 +31,9 @@ jobs:
         path-to-opencover-xml: ./CoreTests/TestResults/coverage.opencover.xml
         path-to-badges: ./.github/badges/core/
         repo-token: ${{ secrets.CI_TOKEN }}
+
+    - name: List Files
+      run: ls
     
     - name: OpenCover Badge Generator - SmartLogViewer
       uses: danpetitt/open-cover-badge-generator-action@v1.0.9
