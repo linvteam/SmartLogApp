@@ -1,5 +1,5 @@
 /**
- * Questa classe rappresenta un'occorrenza di un evento che deve essere trovata per identificare una fase della sequenzaa
+ * Questa classe rappresenta un'occorrenza di un evento che deve essere trovata per identificare una fase della sequenza
  */
 export class Event {
     /**
@@ -23,14 +23,14 @@ export class Event {
     /**
      * Ottiene il code dell'evento
      */
-    public get Code() {
+    public get Code(): string {
         return this.code;
     }
 
     /**
      * Ottiene il valore che prende l'evento
      */
-    public get Status() {
+    public get Status() : boolean {
         return this.status;
     }
 }
