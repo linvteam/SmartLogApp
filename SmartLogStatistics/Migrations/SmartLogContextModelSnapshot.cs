@@ -76,7 +76,7 @@ namespace SmartLogStatistics.Migrations
                     b.Property<DateOnly>("date")
                         .HasColumnType("date");
 
-                    b.Property<DateOnly>("time")
+                    b.Property<TimeOnly>("time")
                         .HasColumnType("date");
 
                     b.Property<bool>("value")
