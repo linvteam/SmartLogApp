@@ -38,7 +38,8 @@ namespace SmartLogStatistics.Controller
         /// Ritorna un JSON che rappresenta il file di log in ingresso (dopo essere stato filtrato)
         /// </summary>
         /// <param name="file">File di cui deve essere eseguito il parsing</param>
-        /// <returns>Esito della chiamata POST, può essere un file JSON che rappresenta il file di log o un'eccezione dovuta al parsing del file</returns>
+        /// <returns>Esito della chiamata POST, può essere un file JSON che rappresenta il file di log o un'eccezione dovuta al parsing del file,
+        ///             al fallito inserimento su database o alla connessione al database</returns>
         /// <response code="201">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nella conversione</response>
         /// <response code="409">Se c'è già il file caricato nel database</response>
