@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartLogViewer", "SmartLogV
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartLogViewerTests", "SmartLogViewerTests\SmartLogViewerTests.csproj", "{0D296CDC-9A76-4DCF-A20A-820E9942DCED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartLogStatistics", "SmartLogStatistics\SmartLogStatistics.csproj", "{584E683D-2812-43A3-B023-0E3498C49033}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartLogStatistics", "SmartLogStatistics\SmartLogStatistics.csproj", "{584E683D-2812-43A3-B023-0E3498C49033}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartLogStatisticsTests", "SmartLogStatisticsTests\SmartLogStatisticsTests.csproj", "{BC4A56C1-FBB5-4239-8048-1F82D941E0D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{584E683D-2812-43A3-B023-0E3498C49033}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{584E683D-2812-43A3-B023-0E3498C49033}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{584E683D-2812-43A3-B023-0E3498C49033}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC4A56C1-FBB5-4239-8048-1F82D941E0D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC4A56C1-FBB5-4239-8048-1F82D941E0D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC4A56C1-FBB5-4239-8048-1F82D941E0D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC4A56C1-FBB5-4239-8048-1F82D941E0D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
