@@ -1,5 +1,6 @@
-#chart-container{
-    position: relative;
+#chart-container {
+    margin-top: 1em;
+    padding-bottom: 1em;
 }
 
 #tooltip {
@@ -9,13 +10,25 @@
     border-radius: 5px;
     background-color: #ffffffee;
     transform: translate(40px);
-    width: 310px;
+    width: 350px;
     padding: 3px;
     padding-left: 5px;
+    pointer-events: none;
 }
 
-#horizon-chart{
+#verticalline {
+    position: absolute; 
+    z-index: 19; 
+    width: 1px;
+    height: calc(100% - 15px);
+    top: 15px; 
+    background: #000; 
+    pointer-events: none;
+}
+
+#horizon-chart {
     background-color: #f8f9fa;
+    margin-bottom: 1em;
 }
 
 #tooltip p {
@@ -25,4 +38,17 @@
 
 .infoName{
     font-weight: bold;
+}
+
+figure {
+    box-sizing: border-box;
+    margin-bottom: 4em;
+}
+
+#no-events {
+    padding: 1em;
+}
+
+#no-events p {
+    text-align: center;
 }

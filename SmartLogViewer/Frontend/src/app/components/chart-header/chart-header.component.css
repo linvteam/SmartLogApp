@@ -1,10 +1,14 @@
-#file-info-and-search{
+#file-info-and-search {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    flex-wrap: wrap;
     flex: 1 1 auto;
-    background-color: #f8f9fa;
+}
+
+#file-info, #search {
+    padding: 1.5em;
 }
 
 .accordion-button {
@@ -12,7 +16,10 @@
     border: 1px solid #dde2eb;
 }
 
+mdb-accordion {
+    margin-bottom: 1em;
+}
 
-#accordionFlushExample {
+app-table-header {
     margin-bottom: 1em;
 }

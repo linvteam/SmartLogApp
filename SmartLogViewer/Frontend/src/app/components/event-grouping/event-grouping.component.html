@@ -1,0 +1,27 @@
+<form class="row gy-2 gx-3 align-items-center col-auto" [formGroup]="formGroup" (ngSubmit)="submitForm()">
+    <div class="row form-group">
+        <div class="col tooltip-parent">
+            <label class="visually-hidden" for="autoSizingInputRegroup">Raggruppamento</label>
+            <input type="number" name="valore" class="form-control" id="autoSizingInputRegroup" placeholder="Es: 1" min="0" value="0" formControlName="valore">
+            <div class="mytooltip">
+                Inserisci qui la grandezza massima di raggruppamento
+            </div>
+        </div>
+        <div class="col tooltip-parent">
+            <label class="visually-hidden" for="autoSizingInputMesureUnit">Unità di misura</label>
+            <select name="unita" class="custom-select my-1 mr-sm-2 form-control" id="autoSizingInputMesureUnit" formControlName="unita">
+                <option value="1">ms</option>
+                <option value="1000">s</option>
+                <option value="60000">m</option>
+                <option value="3600000">h</option>
+                <option value="86400000">gg</option>
+            </select>
+            <div class="mytooltip">
+                Inserisci qui l'unità temporale
+            </div>
+        </div>
+        <div class="col">
+            <button type="submit" class="btn btn-primary form-control">Raggruppa</button>
+        </div>
+    </div>
+</form>
