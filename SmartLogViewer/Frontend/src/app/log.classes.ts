@@ -83,21 +83,21 @@ export class Header {
     /**
      * Ottiene la data del pc di quando � stato scaricato il log dal macchinario
      */
-    public get PCDate() {
+    public get PCDate() :Date {
         return this.pcDate;
     }
 
     /**
      * Ottiene la data dell'ups di quando � stato scaricato il log dal macchinario
      */
-    public get UPSDate() {
+    public get UPSDate() :Date {
         return this.upsDate;
     }
 
     /**
      * Ottiene la lista di INI File che descrivono le componenti del macchinario
      */
-    public get INIFile() {
+    public get INIFile(): INIFile[] {
         return this.iniFile;
     }
 }
