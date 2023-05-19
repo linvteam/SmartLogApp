@@ -56,7 +56,8 @@ export class EventSearchComponent {
     /**
      * Costruisce una nuova istanza del controller del event-search
      * @param formBuilder Servizio che gestisce i form
-     * @param logManipulationService Servizio che segnala alla tabella e grafico la presenza di un nuovo logManipulator
+     * @param logManipulationService Servizio che segnala alla tabella e al grafico la presenza di un nuovo logManipulator
+     * @param logService Il logService che contiene tutti gli eventi del log
      */
     constructor(private formBuilder: FormBuilder, private logManipulationService: LogManipulationService, private logService: LogService) {
         for (let e of logService.getLog().Events) {
