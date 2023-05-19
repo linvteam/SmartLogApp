@@ -5,6 +5,8 @@ using SmartLogStatistics.Repository;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+Core.Injectables.Injectable.RegisterClasses(builder);
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

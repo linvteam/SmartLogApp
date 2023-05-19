@@ -2,6 +2,7 @@
     /// <summary>
     /// Classe che si occupa di leggere interamente un file di log
     /// </summary>
+    [Injectables.Singleton()]
     public class Parser {
         /// <summary>
         /// Converte un file di log
