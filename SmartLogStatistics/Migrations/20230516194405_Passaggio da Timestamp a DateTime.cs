@@ -12,7 +12,7 @@ namespace SmartLogStatistics.Migrations
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UPS_datetime",
                 table: "File",
-                type: "timestamp with time zone",
+                type: "timestamp without time zone",
                 nullable: false,
                 oldClrType: typeof(byte[]),
                 oldType: "bytea",
@@ -21,7 +21,7 @@ namespace SmartLogStatistics.Migrations
             migrationBuilder.AlterColumn<DateTime>(
                 name: "PC_datetime",
                 table: "File",
-                type: "timestamp with time zone",
+                type: "timestamp without time zone",
                 nullable: false,
                 oldClrType: typeof(byte[]),
                 oldType: "bytea",
@@ -37,7 +37,7 @@ namespace SmartLogStatistics.Migrations
                 rowVersion: true,
                 nullable: false,
                 oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+                oldType: "timestamp without time zone");
 
             migrationBuilder.AlterColumn<byte[]>(
                 name: "PC_datetime",
@@ -46,7 +46,7 @@ namespace SmartLogStatistics.Migrations
                 rowVersion: true,
                 nullable: false,
                 oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+                oldType: "timestamp without time zone");
         }
     }
 }

@@ -1,7 +1,10 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using SmartLogStatistics.Model;
 
 namespace SmartLogStatistics.Repository {
+
+    [Core.Injectables.Singleton(typeof(UploadRepository))]
     public class UploadRepositoryPgSql : UploadRepository {
 
         private readonly SmartLogContext context;
@@ -15,8 +18,8 @@ namespace SmartLogStatistics.Repository {
             LogFile logFile = new()
             {
                 filename = log.FileName,
-                PC_datetime = log.Header.PCDate,
-                UPS_datetime = log.Header.UPSDate
+                PC_datetime = log.Header.PCDate.ToUniversalTime(),
+                UPS_datetime = log.Header.UPSDate.ToUniversalTime(),
             };
 
             context.File.Add(logFile);

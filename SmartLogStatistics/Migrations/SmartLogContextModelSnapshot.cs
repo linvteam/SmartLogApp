@@ -30,7 +30,7 @@ namespace SmartLogStatistics.Migrations
                     b.Property<string>("color")
                         .IsRequired()
                         .HasMaxLength(9)
-                        .HasColumnType("character varying(9)");
+                        .HasColumnType("character varying(10)");
 
                     b.Property<string>("description")
                         .IsRequired()
@@ -77,7 +77,7 @@ namespace SmartLogStatistics.Migrations
                         .HasColumnType("date");
 
                     b.Property<TimeOnly>("time")
-                        .HasColumnType("date");
+                        .HasColumnType("time without time zone");
 
                     b.Property<bool>("value")
                         .HasColumnType("boolean");
@@ -98,10 +98,10 @@ namespace SmartLogStatistics.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<DateTime>("PC_datetime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("UPS_datetime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("filename")
                         .IsRequired()
