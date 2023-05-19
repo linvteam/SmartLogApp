@@ -165,56 +165,56 @@ export class LogRow {
     /**
      * Ottiene la data di registrazione del log
      */
-    public get Date() {
+    public get Date(): Date {
         return this.date;
     }
 
     /**
      * Ottiene l'ora di registrazione del log
      */
-    public get Time() {
+    public get Time(): Date {
         return this.time;
     }
 
     /**
-     * Ottiene la unit che ha scatenato l'evento
+     * Ottiene la Unit che ha scatenato l'evento
      */
-    public get Unit() {
+    public get Unit(): number {
         return this.unit;
     }
 
     /**
      * Ottiene la SubUnit che ha scatenato l'evento
      */
-    public get SubUnit() {
+    public get SubUnit(): number {
         return this.subUnit;
     }
 
     /**
      * Ottiene il Code dell'evento
      */
-    public get Code() {
+    public get Code(): string {
         return this.code;
     }
 
     /**
      * Ottiene la descrizione dell'evento scatenato
      */
-    public get Description() {
+    public get Description(): string {
         return this.description;
     }
 
     /**
      * Ottiene il valore dell'evento
      */
-    public get Value() {
+    public get Value(): boolean {
         return this.value;
     }
 
     /**
      * Ottiene il colore associato all'evento
      */
-    public get Color() {
+    public get Color(): string {
         return this.color;
     }
 }
