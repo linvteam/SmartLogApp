@@ -85,42 +85,42 @@ export class Sequence {
     /**
      * Ottene il nome della sequenza
      */
-    public get Name() {
+    public get Name(): string {
         return this.name;
     }
 
     /**
      * Ottene la lista delle sub unit sulle quali possono scatenarsi gli eventi di inizio sequenza
      */
-    public get StartEventAvailableSubUnits() {
+    public get StartEventAvailableSubUnits(): number[] {
         return this.startEventsAvailableSubUnits;
     } 
 
     /**
      * Ottene la lista di eventi che identificano l'inizio della sequenza
      */
-    public get StartEvents() {
+    public get StartEvents(): Event[] {
         return this.startEvents;
     }
 
     /**
-     * Ottene la lista delle sub unit sulle quali possono scatenarsi gli eventi di fine sequenza
+     * Ottene la lista delle subunit sulle quali possono scatenarsi gli eventi di fine sequenza
      */
-    public get EndEventAvailableSubUnits() {
+    public get EndEventAvailableSubUnits(): number[] {
         return this.endEventsAvailableSubUnits;
     }
 
     /**
      * Ottene la lista di eventi che identificano la fine della sequenza
      */
-    public get EndEvents() {
+    public get EndEvents(): Event[] {
         return this.endEvents;
     }
 
     /**
      * Ottene la durata massima della sequenza in millisecondi
      */
-    public get MaxDuration() {
+    public get MaxDuration(): number {
         return this.maxDuration;
     }
     
