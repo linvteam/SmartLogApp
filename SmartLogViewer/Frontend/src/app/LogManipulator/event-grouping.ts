@@ -13,7 +13,7 @@ export class EventGrouping implements LogManipulator {
     private groupedEvents: LogRow[][] = []; 
 
     /**
-     * Il logservice per ottenere la lista di eventi, può essere null perchè non viene assegnato dal costruttore
+     * Il logservice per ottenere la lista di eventi, puï¿½ essere null perchï¿½ non viene assegnato dal costruttore
      */
     private logService !: LogService;
 
@@ -29,7 +29,7 @@ export class EventGrouping implements LogManipulator {
      * Imposta il logService e calcola tutti i gruppi di eventi
      * @param logService Il logService che contiene tutti gli eventi del log
      */
-    setLogService(logService: LogService): void {
+    public setLogService(logService: LogService): void {
         this.logService = logService;
 
         let events = this.logService.getLog().Events.sort((e1: LogRow, e2: LogRow) => {
@@ -56,7 +56,7 @@ export class EventGrouping implements LogManipulator {
      * @param e L'evento di cui si vuole conoscere la timestamp
      * @returns La timestamp dell'evento
      */
-    private eventDateTime(e: LogRow) {
+    private eventDateTime(e: LogRow): number {
         return (new Date([e.Date, e.Time].join('T').replaceAll('/', '-') + 'Z')).getTime();
     }
 
@@ -64,7 +64,7 @@ export class EventGrouping implements LogManipulator {
      * Ottiene il numero di gruppi di eventi calcolati
      * @returns il numero di gruppi di eventi
      */
-    getNumberOfGroups(): number {
+    public getNumberOfGroups(): number {
         return this.groupedEvents.length;
     }
 
@@ -73,7 +73,7 @@ export class EventGrouping implements LogManipulator {
      * @param index indice del gruppo che si vuole ottenere
      * @returns Gruppo di eventi voluto
      */
-    getGroup(index: number): LogRow[] {
+    public getGroup(index: number): LogRow[] {
         return this.groupedEvents[index - 1];
     }
 
