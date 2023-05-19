@@ -375,3 +375,5 @@ FodyWeavers.xsd
 # Angular cache
 
 .angular
+/SmartLogViewer/Frontend/dist
+/SmartLogViewer/Frontend/documentation
