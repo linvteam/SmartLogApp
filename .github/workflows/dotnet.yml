@@ -25,11 +25,8 @@ jobs:
     - name: Test
       run: dotnet test -p:ExcludeByFile="**/Program.cs" --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover
 
-    - name: CD
-      run: cd ./CoreTests/TestResults
-
     - name: List Files
-      run: ls
+      run: ls ./CoreTests/TestResults
     
     - name: OpenCover Badge Generator - Core
       uses: danpetitt/open-cover-badge-generator-action@v1.0.9
