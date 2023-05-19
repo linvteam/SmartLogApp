@@ -1,49 +1,78 @@
 import { Component } from '@angular/core';
-import {ColDef, GridOptions} from 'ag-grid-community';
-import { LogService } from 'src/app/services/log.service';
-import {INIFile, Log} from "../../log.classes";
+import { ColDef } from 'ag-grid-community';
+import { LogService } from 'src/app/services/log/log.service';
+import { INIFile } from "../../log.classes";
 import localeIT from "@angular/common/locales/it"
-import {formatDate, registerLocaleData} from "@angular/common";
+import { formatDate, registerLocaleData } from "@angular/common";
 registerLocaleData(localeIT, "it");
 
+/**
+ * Questa classe fornisce il comportamento per il widget che mostra le informazioni del log
+ */
 @Component({
-  selector: 'app-file-info',
-  templateUrl: './file-info.component.html',
-  styleUrls: ['./file-info.component.css']
+    selector: 'app-file-info',
+    templateUrl: './file-info.component.html',
+    styleUrls: ['./file-info.component.css']
 })
 export class FileInfoComponent {
-  
-  iniFiles: INIFile[];
-  columnDefs: ColDef[];
-  defaultColDef: ColDef;
-  pcDate: string;
-  upsDate: string;
+    /**
+     * Lista degli INI File del log
+     */
+    public iniFiles: INIFile[];
 
-  constructor(private logService: LogService) {
-    
-    const format = 'dd/MM/yyyy - HH:mm:ss';
-    let pcDateToConvert = this.logService.getLog().Header.PCDate;
-    let upsDateToConvert = this.logService.getLog().Header.UPSDate;
-    const locale = 'it-IT';
-    
-    this.pcDate = formatDate(pcDateToConvert, format, locale);
-    this.upsDate = formatDate(upsDateToConvert, format, locale)
-    
-    this.columnDefs = [
-      { field: 'fileName', width: 300 },
-      { field: 'unit', width: 100 },
-      { field: 'subUnit', width: 124 },
-    ];
-    
-    this.defaultColDef ={
-      sortable: true, filter: true, resizable: true
-    };
-    
-    this.iniFiles = this.logService.getLog().Header.INIFile;
-  }
+    /**
+     * Descrizione delle colonne della tabella degli ini file
+     */
+    public columnDefs: ColDef[];
 
-  onGridReady(params : any) {
-    params.api.sizeColumnsToFit();
-  }
-  
+    /**
+     * Impostazioni di default della tabella
+     */
+    public defaultColDef: ColDef;
+
+    /**
+     * Data del pc del momento in cui il log � stato scaricato
+     */
+    public pcDate: string;
+
+    /**
+     * Data dell'ups del momento in cui il log � stato scaricato
+     */
+    public upsDate: string;
+
+    /**
+     * Costruisce una nuova istanza del controller di file-info
+     * @param logService LogService che contiene il log di cui mostrare le informazioni
+     */
+    constructor(private logService: LogService) {
+
+        const format = 'dd/MM/yyyy - HH:mm:ss';
+        let pcDateToConvert = this.logService.getLog().Header.PCDate;
+        let upsDateToConvert = this.logService.getLog().Header.UPSDate;
+        const locale = 'it-IT';
+
+        this.pcDate = formatDate(pcDateToConvert, format, locale);
+        this.upsDate = formatDate(upsDateToConvert, format, locale)
+
+        this.columnDefs = [
+            { field: 'fileName', width: 300 },
+            { field: 'unit', width: 100 },
+            { field: 'subUnit', width: 124 },
+        ];
+
+        this.defaultColDef = {
+            sortable: true, filter: true, resizable: true
+        };
+
+        this.iniFiles = this.logService.getLog().Header.INIFile;
+    }
+
+    /**
+     * Metodo che gestisce l'evento gridReady della tabella
+     * @param params Parametri dell'evento
+     */
+    public onGridReady(params: any): void {
+        params.api.sizeColumnsToFit();
+    }
+
 }

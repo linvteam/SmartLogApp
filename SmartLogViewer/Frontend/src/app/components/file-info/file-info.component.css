@@ -25,17 +25,17 @@
 
 #header {
     width: 34em; 
-    height: 15em; 
+    height: 100%; 
 }
 
-#pcDateHeader {
+#pcDateHeader, #filenameHeader {
     border-bottom: 1px solid #babfc7;
 }
 
-#pcDate {
+#pcDate, #filename {
     border-bottom: 1px solid #dde2eb;
 }
 
-#upsDate {
+#upsDate, #filename {
     background-color: #fcfcfc;
 }

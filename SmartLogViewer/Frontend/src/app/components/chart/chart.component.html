@@ -1,6 +1,20 @@
 
-<app-header></app-header>
+<app-chart-header></app-chart-header>
 
-<div>
-    <figure id="horizon-chart"></figure>
+<div style="position:relative" id="chart-container">
+    <figure id="horizon-chart">
+        <div *ngIf="hovering" id="tooltip">
+            <p><span class="infoName">Code: </span><span id="code"></span></p>
+            <p><span class="infoName">Data attuale: </span><span id="currentdate"></span></p>
+            <p><span class="infoName">Data inizio: </span><span id="start"></span></p>
+            <p><span class="infoName">Data fine: </span><span id="end"></span></p>
+            <p><span class="infoName">Unit: </span><span id="unit"></span></p>
+            <p><span class="infoName">SubUnit: </span><span id="subunit"></span></p>
+            <p><span class="infoName">Description: </span><span id="description"></span></p>
+        </div>
+        <div id="no-events" *ngIf="events.length == 0">
+            <p>Nessun evento da visualizzare</p>
+        </div>
+        <div *ngIf="hovering" id="verticalline"></div>
+    </figure>
 </div>

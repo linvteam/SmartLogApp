@@ -1,0 +1,37 @@
+<form class="row gy-2 gx-3 align-items-center col-auto" [formGroup]="sequenceForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+        <div class="col tooltip-parent">
+            <label class="visually-hidden" for="autoSizingInputSequence">Sequenze</label>
+            <select class="custom-select my-1 mr-sm-2 form-control" id="autoSizingInputSequence" formControlName="sequence" required>
+                    <option [ngValue]="" >-</option>
+                    <option *ngFor="let sequence of sequences" [ngValue]="sequence">
+                        {{ sequence }}
+                    </option>
+            </select>
+            <div class="mytooltip">
+                Seleziona la sequenza nota di tuo interesse
+            </div>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary form-control">Cerca</button>
+        </div>
+    </div>
+</form>
+
+<ng-template #errorModal let-modal>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> {{ modalTitle }} </h5>
+            </div>
+            <div class="modal-body">
+                <p>{{ modalContent }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Chiudi</button>
+            </div>
+        </div>
+</ng-template>
+
+<!--ng-template #errorModal let-c="close" let-d="dismiss">
+    {{modalContent}}
+</!ng-template-->
