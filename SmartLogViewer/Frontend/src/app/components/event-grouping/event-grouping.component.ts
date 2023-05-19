@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import { EventGrouping } from '../../LogManipulator/event-grouping';
 import { LogManipulationService } from '../../services/LogManipulation/log-manipulation.service';
 
 /**
- * Controller che gestisce il widget di raggruppamento degli  eventi
+ * Controller che gestisce il widget di raggruppamento degli eventi
  */
 @Component({
     selector: 'app-event-grouping',
@@ -16,7 +16,7 @@ export class EventGroupingComponent {
     /**
      * Gestore del form 
      */
-    formGroup = this.formBuilder.group({
+    public formGroup: FormGroup = this.formBuilder.group({
         valore: '0',
         unita: '1'
     });
@@ -31,9 +31,9 @@ export class EventGroupingComponent {
     }
 
     /**
-     * Metodo che gestisce il submit del form, comunica la log manipulation service il nuovo log manipulator. Se il numero di gruppi specificato è 0 verrà impostato il manipulator di default
+     * Metodo che gestisce il submit del form, comunica la log manipulation service il nuovo log manipulator. Se il numero di gruppi specificato ï¿½ 0 verrï¿½ impostato il manipulator di default
      */
-    submitForm() {
+    public submitForm(): void {
         if (Number(this.formGroup.value.valore) <= 0) {
             this.logManipulationService.setManipulation(this.logManipulationService.getDefaultManipulator());
             this.formGroup.reset({ valore: '0' ,  unita: '1' });
