@@ -23,7 +23,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test -p:ExcludeByFile="**/Program.cs" --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover
+      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover
 
     - name: List Files
       run: ls ./CoreTests/TestResults
@@ -33,6 +33,7 @@ jobs:
       with:
         path-to-opencover-xml: ./CoreTests/TestResults/coverage.opencover.xml
         path-to-badges: ./.github/badges/core/
+        commit-badges: false
         repo-token: ${{ secrets.CI_TOKEN }}
     
     - name: OpenCover Badge Generator - SmartLogViewer
