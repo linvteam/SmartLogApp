@@ -16,32 +16,32 @@ export class FileUploadComponent {
     /**
      * Scritta di default per la selezione del file
      */
-    private readonly FileSelectText = 'Seleziona o trascina qui il file'; 
+    private readonly FileSelectText: string = 'Seleziona o trascina qui il file'; 
 
     /**
      * Il file attualmente selezionato
      */
-    currentFile?: File;
+    public currentFile?: File;
 
     /**
-     * Il progresso auttuale di caricamento, se è undefined fa sparire dalla view la progress bar
+     * Il progresso auttuale di caricamento, se ï¿½ undefined fa sparire dalla view la progress bar
      */
-    progress: number | undefined;
+    public progress: number | undefined;
 
     /**
      * Messaggio di errore
      */
-    message = '';
+    public message = '';
 
     /**
      * Il testo della label di selezione del file
      */
-    labelText = this.FileSelectText;
+    public labelText :string = this.FileSelectText;
 
     /**
      * Gestore del controllo di input
      */
-    @ViewChild("fileSelector") fileSelector: any;
+    @ViewChild("fileSelector") private fileSelector: any;
 
     /**
      * Costruisce una nuova classe che contralla il widget per l'upload dei file, i parametri vengono passati tramite dependecy injector
@@ -68,18 +68,18 @@ export class FileUploadComponent {
      * Gestisce la selezione dei file tramite dialog, prendendo solo il primo file della lista ed ignorando tutti gli altri
      * @param event evento lanciato dal <input type="file" />
      */
-    selectFile(event: any): void {
+    public selectFile(event: any): void {
         this.updateCurrentFile(event.target.files?.item(0));
     }
 
     /**
-     * Gestisce il drag and drop del file, prendendo solo il primo file della lista se è un csv e ignorando tutti gli altri
+     * Gestisce il drag and drop del file, prendendo solo il primo file della lista se ï¿½ un csv e ignorando tutti gli altri
      * @param fileList la lista di file che viene "scaricata" sul controllo
      */
-    fileDrop(fileList: any): void {
+    public fileDrop(fileList: any): void {
         let file = fileList.item(0);
 
-        if (file && file.type != 'text/csv') return; // Ignoro il file se non è un csv
+        if (file && file.type != 'text/csv') return; // Ignoro il file se non ï¿½ un csv
 
         this.updateCurrentFile(file);
     }
@@ -124,9 +124,9 @@ export class FileUploadComponent {
     }
 
     /**
-     * Avvio il processo di carcamento del file di log
+     * Avvia il processo di carcamento del file di log
      */
-    upload(): void {
+    public upload(): void {
         this.progress = 0;
         this.logService.clean();
 

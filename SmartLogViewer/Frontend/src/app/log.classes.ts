@@ -31,21 +31,21 @@ export class INIFile {
     /**
      * Ottiene il nome del file INI
      */
-    public get FileName() {
+    public get FileName(): string {
         return this.fileName;
     }
 
     /**
      * Ottiene la Unit associata al file INI
      */
-    public get Unit() {
+    public get Unit(): number {
         return this.unit;
     }
 
     /**
      * Ottiene la SubUnit associata al file INI
      */
-    public get SubUnit() {
+    public get SubUnit(): number {
         return this.subUnit;
     }
 }
@@ -56,12 +56,12 @@ export class INIFile {
 export class Header {
 
     /**
-     * Data del pc di quando è stato scaricato il log dal macchinario
+     * Data del pc di quando ï¿½ stato scaricato il log dal macchinario
      */
     private pcDate: Date;
 
     /**
-     * Data dell'ups di quando è stato scaricato il log dal macchinario
+     * Data dell'ups di quando ï¿½ stato scaricato il log dal macchinario
      */
     private upsDate: Date;
 
@@ -81,14 +81,14 @@ export class Header {
     }
 
     /**
-     * Ottiene la data del pc di quando è stato scaricato il log dal macchinario
+     * Ottiene la data del pc di quando ï¿½ stato scaricato il log dal macchinario
      */
     public get PCDate() {
         return this.pcDate;
     }
 
     /**
-     * Ottiene la data dell'ups di quando è stato scaricato il log dal macchinario
+     * Ottiene la data dell'ups di quando ï¿½ stato scaricato il log dal macchinario
      */
     public get UPSDate() {
         return this.upsDate;

@@ -23,7 +23,7 @@ export class FileUploadService {
      * @param file File da mandare al server per la fase di parsing
      * @returns Oggetto observable che ritorna la risposta appena disponibile
      */
-    upload(file: File): Observable<HttpEvent<any>> {
+    public upload(file: File): Observable<HttpEvent<any>> {
         const formData: FormData = new FormData();
 
         formData.append('file', file);

@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { SequenceSearch } from "../../LogManipulator/sequence-search";
 import { LogManipulationService } from '../../services/LogManipulation/log-manipulation.service';
 import { Sequence } from "../../sequence.classes";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { SequenceFetchService } from "../../services/fetch/sequence-fetch.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -20,38 +20,38 @@ export class SequenceSearchComponent {
     /**
      * Titolo del dialog che mostra un errore di comunucazione con il backend
      */
-    modalTitle: string = "";
+    public modalTitle: string = "";
 
     /**
      * Contenuto del dialog che mostra un errore di comunicazione con il backend
      */
-    modalContent: string = "";
+    public modalContent: string = "";
 
     /**
      * Collegamento al template del dialog di errore 
      */
-    @ViewChild('errorModal') errorModal: any;
+    @ViewChild('errorModal') private errorModal: any;
 
     /**
      * Riferimento al dialog aperto
      */
-    errorModalRef: any;
+    private errorModalRef: any;
 
     /**
      * Elenco dei nomi delle sequenze note disponibili
      */
-    sequences: string[] = [];
+    public sequences: string[] = [];
 
     /**
      * Controllo che ragguppa gli input del form
      */
-    sequenceForm: FormGroup;
+    public sequenceForm: FormGroup;
 
     /**
      * Costruisce una nuova istanza del controller del widget della ricerca delle sequenze note
      * @param formBuilder Formbuilder 
      * @param logManipulationService Servizio che comunica ai controlli di visualizzazione del log il nuovo LogManipulator
-     * @param sequenceFetchService Servizio che si occupa di ottenre le informazini sulle sequenze
+     * @param sequenceFetchService Servizio che si occupa di ottenere le informazioni sulle sequenze
      * @param modalService Servizio che si occupa di gestire i modal di bootstrap
      */
     constructor(private formBuilder: FormBuilder, private logManipulationService: LogManipulationService, private sequenceFetchService: SequenceFetchService, private modalService: NgbModal) {
@@ -75,21 +75,21 @@ export class SequenceSearchComponent {
     /**
      * Metodo che gestisce il submit del form
      */
-    onSubmit() {
+    public onSubmit(): void {
         this.getSequence(this.sequence?.value);
     }
 
     /**
      * Ottiene il nome della sequenza selezionata sul form
      */
-    get sequence() {
+    private get sequence(): AbstractControl<any> | null {
         return this.sequenceForm.get('sequence');
     }
 
     /**
      * Metodo che gestisce la chiusura del dialog di errore
      */
-    closeModal() {
+    public closeModal(): void {
         this.errorModalRef.close();
     }
 
@@ -155,7 +155,7 @@ export class SequenceSearchComponent {
     /**
      * Metodo che avvia il fetch dei nomi delle sequenze disponibili dal backend
      */
-    getSequencesNames(): void {
+    private getSequencesNames(): void {
         this.sequenceFetchService.getSequences().subscribe(
             {
                 next: this.namesHandler(),
@@ -168,7 +168,7 @@ export class SequenceSearchComponent {
      * Metodo che avvierà il fetch delle informazioni di una sequenza dal backend
      * @param name Nome della sequenza di cui si vogliono ottenere informazioni
      */
-    getSequence(name: string): void {
+    private getSequence(name: string): void {
         if (name == "-") {
             this.logManipulationService.setManipulation(this.logManipulationService.getDefaultManipulator());
             return;
@@ -179,6 +179,5 @@ export class SequenceSearchComponent {
             error: this.errorSequenceHandler()
         });
     }
-
 
 }
