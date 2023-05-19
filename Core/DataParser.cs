@@ -65,7 +65,13 @@ namespace Core {
                 return null;
 
             // Converto il valore di value
-            bool value = row.Value == "ON";
+            bool value;
+            if(row.Value == "ON")
+                value = true;
+            else if(row.Value == "OFF")
+                value = false;
+            else
+                throw new ParsingException("Impossibile convertire i dati", ParsingException.ErrorCode.DatoErrato);
 
             // Converto la data
             Regex dateRegex = new Regex(@"(\d\d)/(\d\d)/(\d\d\d\d)");
