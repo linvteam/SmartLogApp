@@ -48,26 +48,27 @@ namespace SmartLogStatistics.Controller
         [Produces("application/json")]
         public IActionResult Frequency(DateTime startDateTime, DateTime endDateTime, bool dataBoold, bool firmwareBool, bool unitBool, bool subunitBool)
         {
-            try
+            if (startDateTime == null || endDateTime == null)
             {
+                return StatusCode((int)HttpStatusCode.BadRequest);
+            }else if (startDateTime > endDateTime)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                try
+                {
+                    FrequencyDto data = Repository.Frequency(startDateTime, endDateTime, dataBoold, firmwareBool, unitBool, subunitBool);
 
-                FrequencyDto data = Repository.Frequency(startDateTime, endDateTime, dataBoold, firmwareBool, unitBool, subunitBool);
-
-                return StatusCode((int)HttpStatusCode.OK, data);
+                    return StatusCode((int)HttpStatusCode.OK, data);
+                }
+                catch (Exception e)         //
+                {                           // DA ELIMINARE UNA VOLTA AGGIUNTI GLI ERRORI
+                    return StatusCode((int)HttpStatusCode.InternalServerError,
+                        new ApiError(5, "Si è verificato un errore durante la connessione"));
+                }
             }
-            catch (Exception e)         //
-            {                           // DA ELIMINARE UNA VOLTA AGGIUNTI GLI ERRORI
-                return null;            //
-            }
-            /*catch (Exception e)     //TODO cambiare l'exception ERRORE DATA
-            {
-                return StatusCode((int)HttpStatusCode.BadRequest, new ApiError(e.Code, e.Message));
-            }
-            catch (Exception e)       //TODO cambiare l'exception ERRORE DATABASE
-            {
-                reader.Close();
-                return StatusCode((int)HttpStatusCode.BadRequest, new ApiError(e.Code, e.Message));
-            }*/
         }
 
         /// <summary>
@@ -86,26 +87,28 @@ namespace SmartLogStatistics.Controller
         [Produces("application/json")]
         public IActionResult Cumulative(DateTime startDateTime, DateTime endDateTime, string code)
         {
-            try
+            if (startDateTime == null || endDateTime == null)
             {
+                return StatusCode((int)HttpStatusCode.BadRequest);
+            }
+            else if (startDateTime > endDateTime)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                try
+                {
+                    CumulativeDto data = Repository.Cumulative(startDateTime, endDateTime, code);
 
-                CumulativeDto data = Repository.Cumulative(startDateTime, endDateTime, code);
-
-                return StatusCode((int)HttpStatusCode.OK, data);
+                    return StatusCode((int)HttpStatusCode.OK, data);
+                }
+                catch (Exception e)         
+                {                           
+                    return StatusCode((int)HttpStatusCode.InternalServerError,
+                        new ApiError(5, "Si è verificato un errore durante la connessione"));
+                }
             }
-            catch (Exception e)         //
-            {                           // DA ELIMINARE UNA VOLTA AGGIUNTI GLI ERRORI
-                return null;            //
-            }
-            /*catch (Exception e)     //TODO cambiare l'exception ERRORE DATA
-            {
-                return StatusCode((int)HttpStatusCode.BadRequest, new ApiError(e.Code, e.Message));
-            }
-            catch (Exception e)       //TODO cambiare l'exception ERRORE DATABASE
-            {
-                reader.Close();
-                return StatusCode((int)HttpStatusCode.BadRequest, new ApiError(e.Code, e.Message));
-            }*/
         }
 
         /// <summary>
@@ -124,26 +127,28 @@ namespace SmartLogStatistics.Controller
         [Produces("application/json")]
         public IActionResult TotalByCode(DateTime startDateTime, DateTime endDateTime)
         {
-            try
+            if (startDateTime == null || endDateTime == null)
             {
+                return StatusCode((int)HttpStatusCode.BadRequest);
+            }
+            else if (startDateTime > endDateTime)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                try
+                {
+                    TotalByCodeDto data = Repository.TotalByCode(startDateTime, endDateTime);
 
-                TotalByCodeDto data = Repository.TotalByCode(startDateTime, endDateTime);
-
-                return StatusCode((int)HttpStatusCode.OK, data);
+                    return StatusCode((int)HttpStatusCode.OK, data);
+                }
+                catch (Exception e)
+                {
+                    return StatusCode((int)HttpStatusCode.InternalServerError,
+                        new ApiError(5, "Si è verificato un errore durante la connessione"));
+                }
             }
-            catch (Exception e)         //
-            {                           // DA ELIMINARE UNA VOLTA AGGIUNTI GLI ERRORI
-                return null;            //
-            }
-            /*catch (Exception e)     //TODO cambiare l'exception ERRORE DATA
-            {
-                return StatusCode((int)HttpStatusCode.BadRequest, new ApiError(e.Code, e.Message));
-            }
-            catch (Exception e)       //TODO cambiare l'exception ERRORE DATABASE
-            {
-                reader.Close();
-                return StatusCode((int)HttpStatusCode.BadRequest, new ApiError(e.Code, e.Message));
-            }*/
         }
 
 
@@ -163,26 +168,28 @@ namespace SmartLogStatistics.Controller
         [Produces("application/json")]
         public IActionResult TotalByFirmware(DateTime startDateTime, DateTime endDateTime, string code)
         {
-            try
+            if (startDateTime == null || endDateTime == null)
             {
+                return StatusCode((int)HttpStatusCode.BadRequest);
+            }
+            else if (startDateTime > endDateTime)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                try
+                {
+                    TotalByFirmwareDto data = Repository.TotalByFirmware(startDateTime, endDateTime, code);
 
-                TotalByFirmwareDto data = Repository.TotalByFirmware(startDateTime, endDateTime, code);
-
-                return StatusCode((int)HttpStatusCode.OK, data);
+                    return StatusCode((int)HttpStatusCode.OK, data);
+                }
+                catch (Exception e)
+                {
+                    return StatusCode((int)HttpStatusCode.InternalServerError,
+                        new ApiError(5, "Si è verificato un errore durante la connessione"));
+                }
             }
-            catch (Exception e)         //
-            {                           // DA ELIMINARE UNA VOLTA AGGIUNTI GLI ERRORI
-                return null;            //
-            }
-            /*catch (Exception e)     //TODO cambiare l'exception ERRORE DATA
-            {
-                return StatusCode((int)HttpStatusCode.BadRequest, new ApiError(e.Code, e.Message));
-            }
-            catch (Exception e)       //TODO cambiare l'exception ERRORE DATABASE
-            {
-                reader.Close();
-                return StatusCode((int)HttpStatusCode.BadRequest, new ApiError(e.Code, e.Message));
-            }*/
         }
     }
 }
