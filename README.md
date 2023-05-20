@@ -1,8 +1,12 @@
 # SmartLog
 
-[![codecov](https://codecov.io/gh/linvteam/SmartLogApp/branch/master/graph/badge.svg?token=LLSSUS59CX)](https://codecov.io/gh/linvteam/SmartLogApp)
 [![Build and Test](https://github.com/linvteam/SmartLogApp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/linvteam/SmartLogApp/actions/workflows/dotnet.yml)
-
+[![Line Coverage Core Status](./.github/core/coverage-badge-line.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
+[![Branch Coverage Core Status](./.github/core/coverage-badge-branch.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
+[![Line Coverage SmartLogViewer Status](./.github/smartlogviewer/coverage-badge-line.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
+[![Branch Coverage SmartLogViewer Status](./.github/smartlogviewer/coverage-badge-branch.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
+[![Line Coverage SmartLogStatistics Status](./.github/smartlogstatistics/coverage-badge-line.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
+[![Branch Coverage SmartLogStatistics Status](./.github/smartlogstatistics/coverage-badge-branch.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
 
 Repository del sorgente di SmartLog
 

@@ -8,7 +8,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  build-test-dotnet:
 
     runs-on: ubuntu-latest
 
@@ -23,8 +23,30 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test /p:ExcludeByFile="**/Program.cs" --no-build --verbosity normal --collect:"XPlat Code Coverage"
-    - name: Upload coverage
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      uses: codecov/codecov-action@v3
+      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover
+
+    - name: List Files
+      run: ls ./CoreTests/TestResults
+    
+    - name: OpenCover Badge Generator - Core
+      uses: danpetitt/open-cover-badge-generator-action@v1.0.10
+      with:
+        path-to-opencover-xml: ./CoreTests/TestResults/coverage.opencover.xml
+        path-to-badges: ./.github/badges/core/
+        commit-badges: false
+        repo-token: ${{ secrets.CI_TOKEN }}
+    
+    - name: OpenCover Badge Generator - SmartLogViewer
+      uses: danpetitt/open-cover-badge-generator-action@v1.0.9
+      with:
+        path-to-opencover-xml: ./SmartLogViewerTests/TestResults/coverage.opencover.xml
+        path-to-badges: ./.github/badges/smartlogviewer
+        repo-token: ${{ secrets.CI_TOKEN }}
+
+    
+    - name: OpenCover Badge Generator - Statistics
+      uses: danpetitt/open-cover-badge-generator-action@v1.0.9
+      with:
+        path-to-opencover-xml: ./SmartLogStatisticsTests/TestResults/coverage.opencover.xml
+        path-to-badges: ./.github/badges/smartlogstatistics
+        repo-token: ${{ secrets.CI_TOKEN }}
