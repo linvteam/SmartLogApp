@@ -4,11 +4,11 @@ using SmartLogViewer.Model;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSingleton<Parser>();
-builder.Services.AddSingleton<SequenceFileReader>(); // Configurazione del SequencesManagerJson
-builder.Services.AddSingleton<SequencesManager, SequencesManagerJson>();
 
-// Add services to the container.
+//Add services to the container.
+
+// Lascio alla classe Injectable aggiungere tutte le classi correttamente annotate al builder
+Core.Injectables.Injectable.RegisterClasses(builder);
 
 builder.Services.AddControllers().AddJsonOptions(options => {
     options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());

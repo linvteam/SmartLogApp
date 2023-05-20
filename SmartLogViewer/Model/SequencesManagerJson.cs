@@ -4,6 +4,7 @@ namespace SmartLogViewer.Model {
     /// <summary>
     /// Oggeto per gestire il caricamento delle sequenze note dal file di configurazione.
     /// </summary>
+    [Core.Injectables.Singleton(typeof(SequencesManager))]
     public class SequencesManagerJson: SequencesManager {
 
         private readonly List<Sequence> Sequences;

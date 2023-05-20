@@ -1,4 +1,5 @@
 ﻿namespace SmartLogStatistics.Model {
-    public class StatisticsDto {
+    public class StatisticsDto
+    {
     }
 }
