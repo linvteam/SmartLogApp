@@ -39,10 +39,13 @@ namespace SmartLogStatistics.Repository {
                 };
 
                 context.Firmware.Add(firmware);
+                context.SaveChanges();
             });
 
+            List<string> newEvents = new();
             //Poi salvo le righe di log
-            for (int i = 0; i < log.Events.Count; i++) {
+            for (int i = 0; i < log.Events.Count; i++)
+            {
 
                 Log logLine = new()
                 {
@@ -55,23 +58,22 @@ namespace SmartLogStatistics.Repository {
                 };
 
                 //Nel caso in cui l'evento trovato nella riga non sia ancora presente nel DB lo aggiungo agli eventi
-                if (context.Event.Find(log.Events[i].Code) is null) {
-                    Event e = new() 
-                    {   
+                if (context.Event.Find(log.Events[i].Code) is null && !newEvents.Contains(log.Events[i].Code))
+                {
+                    Event e = new()
+                    {
                         code = log.Events[i].Code,
                         description = log.Events[i].Description,
                         color = log.Events[i].Color
                     };
 
+                    newEvents.Add(log.Events[i].Code);
                     context.Event.Add(e);
                 }
 
                 context.Log.Add(logLine);
+                context.SaveChanges();
             }
-
-            //Alla fine salvo nel database
-            context.SaveChanges();
-
 
         }
     }

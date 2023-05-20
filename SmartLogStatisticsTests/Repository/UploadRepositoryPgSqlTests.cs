@@ -21,6 +21,7 @@ namespace SmartLogStatistics.Repository.Tests {
             var eventsMock = new Mock<DbSet<Event>>();
 
             var mockContext = new Mock<SmartLogContext>();
+
             mockContext.Setup(m => m.File).Returns(fileMock.Object);
             mockContext.Setup(m => m.Log).Returns(logLineMock.Object);
             mockContext.Setup(m => m.Firmware).Returns(firmwareMock.Object);
@@ -29,8 +30,8 @@ namespace SmartLogStatistics.Repository.Tests {
             UploadRepositoryPgSql repo = new(mockContext.Object);
 
             string fileName = "example.csv";
-            DateTime pcDateTime = new DateTime(2022, 03, 05, 08, 47, 18);
-            DateTime upsDateTime = new DateTime(2022, 03, 05, 08, 47, 17);
+            DateTime pcDateTime = new(2022, 03, 05, 08, 47, 18);
+            DateTime upsDateTime = new(2022, 03, 05, 08, 47, 17);
 
             List<INIFile> iniFiles = new List<INIFile>();
             iniFiles.AddRange(new List<INIFile>()
@@ -46,14 +47,19 @@ namespace SmartLogStatistics.Repository.Tests {
             {
                 new LogRow(new DateOnly(2022,03,05), new TimeOnly(08,36,29,618),1,0,"A001", "Load protected by inverter",true,"0xFFE0FFFF"),
                 new LogRow(new DateOnly(2022,03,05), new TimeOnly(08,36,29,618),1,0,"B001", "Load protected by inverter",true,"0xFFE0FFFF"),
+                new LogRow(new DateOnly(2022,04,05), new TimeOnly(08,36,29,618),1,0,"B001", "Load protected by inverter",false,"0xFFE0FFFF"),
             });
 
             Core.Log logFIle = new(fileName, header, logRows);
 
             repo.Upload(logFIle);
 
-            //mockContext.Verify(m => m.Add(It.IsAny<LogFile>()), Times.Exactly(0));
-            mockContext.Verify(m => m.SaveChanges(), Times.Exactly(2));
+            mockContext.Verify(m => m.SaveChanges(), Times.Exactly(8));
+            mockContext.Verify(m => m.Log.Add(It.IsAny<Model.Log>()), Times.Exactly(3));
+            mockContext.Verify(m => m.File.Add(It.IsAny<LogFile>()), Times.Once());
+            mockContext.Verify(m => m.Event.Add(It.IsAny<Event>()), Times.Exactly(2));
+            mockContext.Verify(m => m.Firmware.Add(It.IsAny<Firmware>()), Times.Exactly(4));
+
 
         }
     }
