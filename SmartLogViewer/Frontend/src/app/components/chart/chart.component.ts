@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { formatDate, registerLocaleData } from "@angular/common";
 import localeIT from "@angular/common/locales/it";
 import { LogManipulationService } from "src/app/services/LogManipulation/log-manipulation.service";
@@ -8,6 +8,9 @@ import * as d3 from 'd3';
 import { LogRow } from '../../log.classes';
 import { LogManipulator  } from '../../LogManipulator/log-manipulator';
 
+/**
+ * Classe che definisce il comportamento del grafico per la visualizzazione degli eventi
+ */
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
@@ -15,26 +18,70 @@ import { LogManipulator  } from '../../LogManipulator/log-manipulator';
 })
 export class ChartComponent {
 
-    private readonly marginTop = 20;
-    private readonly marginRight = 0;
-    private readonly marginBottom = 0;
-    private readonly marginLeft = 200;
+    /**
+     * Margine superiore del grafico
+     * @private
+     */
+    private readonly marginTop: number = 20;
 
-    private readonly size = 35;
-    private readonly padding = 5;
+    /**
+     * Margine destro del grafico
+     * @private
+     */
+    private readonly marginRight: number = 0;
 
-    private width = 1500;
-    private height;
+    /**
+     * Margine inferiore del grafico
+     * @private
+     */
+    private readonly marginBottom: number = 0;
+
+    /**
+     * Margine sinistro del grafico
+     * @private
+     */
+    private readonly marginLeft: number = 200;
+
+    
+    private readonly size: number = 35;
+    private readonly padding: number = 5;
+
+    /**
+     * Larghezza del grafico
+     * @private
+     */
+    private width: number = 1500;
+
+    /**
+     * Altezza del grafico
+     * @private
+     */
+    private height: number;
     private xDomain : Array<Date|undefined>;// [xmin, xmax]
     private xRange = [this.marginLeft, this.width - this.marginRight - 2]; // [left, right], i due px hard coded servono per vedere l'ultimo tick a dx
     private yDomain = [0,1]; // [ymin, ymax]
     private yRange = [this.size, this.padding]; // [bottom, top]
     private zDomain: d3.InternSet<string|undefined>; // array of z-values
+
+    /**
+     * Valori dell'asse x (Date)
+     * @private
+     */
+    private x: Date[];
     
-    private x;
     private y;
-    private z;
-    private codeColors;
+    private z: string[];
+
+    /**
+     * Array con tuple di Code e Colors non ripetute
+     * @private
+     */
+    private codeColors: { Color: string; Code: string }[];
+
+    /**
+     * Descrizioni degli eventi
+     * @private
+     */
     private descriptions: Record<string, string> = {}
 
     private xScale;
