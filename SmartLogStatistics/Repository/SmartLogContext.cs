@@ -18,6 +18,8 @@ namespace SmartLogStatistics.Repository
         {
         }
 
+        public SmartLogContext(): base() { }
+
         /// <summary>
         /// Configura la stringa di connessione al DB
         /// </summary>
@@ -30,19 +32,19 @@ namespace SmartLogStatistics.Repository
         /// <summary>
         /// Oggetto di tipo DbSet che rappresenta la tabella Log nel DB, dotato di getter e setter
         /// </summary>
-        public DbSet<Log> Log { get; set; }
+        public virtual DbSet<Log> Log { get; set; }
         /// <summary>
         /// Oggetto di tipo DbSet che rappresenta la tabella File nel DB, dotato di getter e setter
         /// </summary>
-        public DbSet<LogFile> File { get; set; }
+        public virtual DbSet<LogFile> File { get; set; }
         /// <summary>
         /// Oggetto di tipo DbSet che rappresenta la tabella Firmware nel DB, dotato di getter e setter
         /// </summary>
-        public DbSet<Firmware> Firmware { get; set; }
+        public virtual DbSet<Firmware> Firmware { get; set; }
         /// <summary>
         /// Oggetto di tipo DbSet che rappresenta la tabella Event nel DB, dotato di getter e setter
         /// </summary>
-        public DbSet<Event> Event { get; set; }
+        public virtual DbSet<Event> Event { get; set; }
         
         /// <summary>
         /// Crea le tabelle del DB, configurandone le chiavi interne e esterne
