@@ -48,12 +48,9 @@ namespace SmartLogStatistics.Controller
         [Produces("application/json")]
         public IActionResult Frequency(DateTime startDateTime, DateTime endDateTime, bool dataBoold, bool firmwareBool, bool unitBool, bool subunitBool)
         {
-            if (startDateTime == null || endDateTime == null)
+            if (startDateTime > endDateTime)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest);
-            }else if (startDateTime > endDateTime)
-            {
-                return StatusCode((int)HttpStatusCode.BadRequest);
+                return StatusCode((int)HttpStatusCode.BadRequest, "I parametri non sono corretti");
             }
             else
             {
@@ -63,9 +60,9 @@ namespace SmartLogStatistics.Controller
 
                     return StatusCode((int)HttpStatusCode.OK, data);
                 }
-                catch (Exception e)         //
-                {                           // DA ELIMINARE UNA VOLTA AGGIUNTI GLI ERRORI
-                    return StatusCode((int)HttpStatusCode.InternalServerError,
+                catch (Exception e)
+                {                           
+                    return StatusCode((int)HttpStatusCode.InternalServerError, 
                         new ApiError(5, "Si è verificato un errore durante la connessione"));
                 }
             }
@@ -87,13 +84,9 @@ namespace SmartLogStatistics.Controller
         [Produces("application/json")]
         public IActionResult Cumulative(DateTime startDateTime, DateTime endDateTime, string code)
         {
-            if (startDateTime == null || endDateTime == null)
+            if (startDateTime > endDateTime)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest);
-            }
-            else if (startDateTime > endDateTime)
-            {
-                return StatusCode((int)HttpStatusCode.BadRequest);
+                return StatusCode((int)HttpStatusCode.BadRequest, "I parametri non sono corretti");
             }
             else
             {
@@ -127,13 +120,9 @@ namespace SmartLogStatistics.Controller
         [Produces("application/json")]
         public IActionResult TotalByCode(DateTime startDateTime, DateTime endDateTime)
         {
-            if (startDateTime == null || endDateTime == null)
+            if (startDateTime > endDateTime)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest);
-            }
-            else if (startDateTime > endDateTime)
-            {
-                return StatusCode((int)HttpStatusCode.BadRequest);
+                return StatusCode((int)HttpStatusCode.BadRequest, "I parametri non sono corretti");
             }
             else
             {
@@ -168,13 +157,9 @@ namespace SmartLogStatistics.Controller
         [Produces("application/json")]
         public IActionResult TotalByFirmware(DateTime startDateTime, DateTime endDateTime, string code)
         {
-            if (startDateTime == null || endDateTime == null)
+            if (startDateTime > endDateTime)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest);
-            }
-            else if (startDateTime > endDateTime)
-            {
-                return StatusCode((int)HttpStatusCode.BadRequest);
+                return StatusCode((int)HttpStatusCode.BadRequest, "I parametri non sono corretti");
             }
             else
             {
