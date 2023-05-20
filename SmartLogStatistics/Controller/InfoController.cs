@@ -28,12 +28,6 @@ namespace SmartLogStatistics.Controller
             Repository = repository;
         }
 
-        /// <summary>
-        /// Messaggio di errore, record utilizzato per una corretta serializzazione delle Exception
-        /// </summary>
-        /// <param name="Code">Codice di errore</param>
-        /// <param name="Message">Messaggio che descrive l'errore</param>
-        internal record ApiError(int Code, string Message);
 
         /// <summary>
         /// Ritorna un JSON che rappresenta la lista di codici degli eventi con le relative descrizioni
@@ -45,7 +39,7 @@ namespace SmartLogStatistics.Controller
         [HttpPost]
         [Route("code-description")]
         [ProducesResponseType(typeof(List<CodeWithDescriptionDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiError), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
         public IActionResult GetCodeWithDescription() {
             try {
@@ -54,7 +48,7 @@ namespace SmartLogStatistics.Controller
             }
             catch (ParsingException e) //TODO cambiare l'exception ERRORE DATABASE
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ApiError(e.Code, e.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));
             }
 
         }
@@ -68,7 +62,7 @@ namespace SmartLogStatistics.Controller
         [HttpPost]
         [Route("timeinterval")]
         [ProducesResponseType(typeof(DateTimeIntervalDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiError), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
         public IActionResult GetTimeInterval() {
             try {
@@ -77,7 +71,7 @@ namespace SmartLogStatistics.Controller
             }
             catch (ParsingException e) //TODO cambiare l'exception ERRORE DATABASE
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ApiError(e.Code, e.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));
             }
         }
         
@@ -90,7 +84,7 @@ namespace SmartLogStatistics.Controller
         [HttpPost]
         [Route("firmwarelist")]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiError), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
         public IActionResult GetFirmwareList() {
             try {
@@ -99,7 +93,7 @@ namespace SmartLogStatistics.Controller
             }
             catch (ParsingException e) //TODO cambiare l'exception ERRORE DATABASE
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ApiError(e.Code, e.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));
             }
         }
     }

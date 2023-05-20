@@ -77,7 +77,7 @@ namespace SmartLogStatistics.Migrations
                         .HasColumnType("date");
 
                     b.Property<DateOnly>("time")
-                        .HasColumnType("date");
+                        .HasColumnType("time");
 
                     b.Property<bool>("value")
                         .HasColumnType("boolean");
@@ -98,10 +98,10 @@ namespace SmartLogStatistics.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<DateTime>("PC_datetime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime>("UPS_datetime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp");
 
                     b.Property<string>("filename")
                         .IsRequired()
