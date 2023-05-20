@@ -54,7 +54,7 @@ namespace SmartLogStatistics.Repository {
                     value = log.Events[i].Value,
                 };
 
-                //Nel caso in cui l'evento trovato non sia ancora presente nel DB
+                //Nel caso in cui l'evento trovato nella riga non sia ancora presente nel DB lo aggiungo agli eventi
                 if (context.Event.Find(log.Events[i].Code) is null) {
                     Event e = new() 
                     {   
