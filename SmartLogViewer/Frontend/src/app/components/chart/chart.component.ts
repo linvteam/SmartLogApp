@@ -87,17 +87,17 @@ export class ChartComponent {
      * Funzione per convertire una data in una posizione per l'asse x
      * @private
      */
-    private xScale;
+    private xScale: d3.ScaleTime<number, number>;
     /**
      * Funzione per convertire un valore in una posizione per l'asse y
      * @private
      */
-    private yScale;
+    private yScale:  d3.ScaleOrdinal<number, number>;
     /**
      * Variabile che contiene le informazioni per disegnare l'asse x
      * @private
      */
-    private xAxis;
+    private xAxis: d3.Axis<Date | d3.NumberValue>;
     /**
      * Variabile che contiene il tag svg
      * @private
@@ -143,8 +143,7 @@ export class ChartComponent {
      */
     private zoomMultiplier: number;
 
-    private ConvertDateTime(e: LogRow) { return new Date([e.Date, e.Time].join('T').replaceAll("/", "-") + "Z"); }
-
+    
     /**
      * Costruttore. Inizializza le variabili e si iscrive all'observer che controlla quando viene fatta una modifica
      * ai parametri di filtraggio.
@@ -290,7 +289,7 @@ export class ChartComponent {
             .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
             .attr("font-family", "sans-serif")
             .attr("font-size", 10)
-            .call((svg: any) => this.zoom(svg, this.xScale, this.yScale));
+            .call((svg: any) => this.zoom(svg, this.xScale));
 
         //Inserisce tutti i g per ogni elemento in I (lista di  codici)
         this.g = this.svg.selectAll("g")
@@ -419,26 +418,24 @@ export class ChartComponent {
      * Funzione di supporto per zoomed(), stabilisce i limiti di zoom
      * @param svg grafico
      * @param x scala dell'asse x
-     * @param y scala dell'asse y
      * @private
      */
-    private zoom(svg: any, x: any, y: any) {
+    private zoom(svg: any, x: any) {
     svg.call(d3.zoom()
         //limiti del moltiplicatore di zoom/de-zoom, da 0x a infinito
         //quindi de-zoom infinito e zoom infinito
         .scaleExtent([.75, this.zoomMultiplier])
         //operazione da eseguire quando si effettua lo zoom/trascinamento
-        .on("zoom", (event: any) => this.zoomed(event, y, x)));
+        .on("zoom", (event: any) => this.zoomed(event, x)));
     }
 
     /**
      * Funzione che implementa la funzionalità di zoom scalando gli assi ed il grafico
      * @param event evento
-     * @param y scala dell'asse y
      * @param x scala dell'asse x
      * @private
      */
-    private zoomed(event: any, y: any, x: any) {
+    private zoomed(event: any, x: any) {
         //assex viene scalato con le nuove dimensioni dopo zoom o scroll
         this.xScale = event.transform.rescaleX(x);
         this.gXAxis.call(d3.axisTop(this.xScale));
