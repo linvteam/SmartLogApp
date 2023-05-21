@@ -70,19 +70,19 @@ export class ChartComponent {
      * Array contenente le coppie xmin e xmax
      * @private
      */
-    private xDomain : Array<Date|undefined>;
+    private xDomain: Array<Date|undefined>;
 
     /**
      * Range dell'asse x, contiene coppie di valori dei range sinistro e destro
      * @private
      */
-    private xRange: number[] = [this.marginLeft, this.width - this.marginRight - 2];
+    private xRange: number[] = [this.marginLeft, this.width - this.marginRight - 2]; //i due px hard coded servono per vedere l'ultimo tick a dx
 
     /**
      * Array contenente le coppie ymin e ymax
      * @private
      */
-    private yDomain:number[] = [0,1];
+    private yDomain: number[] = [0,1];
 
     /**
      * Range dell'asse y, contiene coppie di valori dei range inferiore e superiore
@@ -97,19 +97,19 @@ export class ChartComponent {
     private zDomain: d3.InternSet<string|undefined>;
 
     /**
-     * Valori dell'asse x
+     * Valori dell'asse x (lista delle date)
      * @private
      */
     private x: Date[];
 
     /**
-     * Valori dell'asse y
+     * Valori dell'asse y (1 se l'evento è attivo, 0 altrimenti)
      * @private
      */
-    private y:(0|1)[];
+    private y: (0|1)[];
 
     /**
-     * Valori dell'asse z
+     * Valori dell'asse z (lista degli eventi)
      * @private
      */
     private z: string[];
@@ -147,7 +147,7 @@ export class ChartComponent {
     private svg: any;
     /**
      * Variabile che contiene i tag g.
-     * Ogni tag g contiene sia il testo del codice e il suo grafico
+     * Ogni tag g contiene sia il testo del codice che il suo grafico
      * @private
      */
     private g: any;
@@ -160,7 +160,7 @@ export class ChartComponent {
      * Variabile che contiene l'effettivo tag g dell'asse x
      * @private
      */
-    private gXAxis : any;
+    private gXAxis: any;
     
     /**
      * Variabile booleana che contiene che rileva se l'utente sta facendo hover sul grafico.
@@ -169,8 +169,7 @@ export class ChartComponent {
      */
     public hovering: boolean = false;
     /**
-     * Variabile booleana che contiene che rileva se l'utente sta facendo hover sul grafico.
-     * true se sta facendo hover, false altrimenti
+     * Eventi visualizzati
      * @private
      */
     public events: LogRow[];
