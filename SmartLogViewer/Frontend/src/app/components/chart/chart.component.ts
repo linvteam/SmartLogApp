@@ -42,8 +42,16 @@ export class ChartComponent {
      */
     private readonly marginLeft: number = 200;
 
-    
+    /**
+     * Altezza della riga del singolo evento
+     * @private
+     */
     private readonly size: number = 35;
+
+    /**
+     * Padding del grafico
+     * @private
+     */
     private readonly padding: number = 5;
 
     /**
@@ -57,19 +65,53 @@ export class ChartComponent {
      * @private
      */
     private height: number;
-    private xDomain : Array<Date|undefined>;// [xmin, xmax]
+
+    /**
+     * Array contenente le coppie xmin e xmax
+     * @private
+     */
+    private xDomain : Array<Date|undefined>;
+
+    /**
+     * Range dell'asse x, contiene coppie di valori dei range sinistro e destro
+     * @private
+     */
     private xRange: number[] = [this.marginLeft, this.width - this.marginRight - 2]; // [left, right], i due px hard coded servono per vedere l'ultimo tick a dx
+
+    /**
+     * Array contenente le coppie ymin e ymax
+     * @private
+     */
     private yDomain:number[] = [0,1]; // [ymin, ymax]
+
+    /**
+     * Range dell'asse y, contiene coppie di valori dei range inferiore e superiore
+     * @private
+     */
     private yRange: number[] = [this.size, this.padding]; // [bottom, top]
+
+    /**
+     * Dominio dei valori dell'asse z
+     * @private
+     */
     private zDomain: d3.InternSet<string|undefined>; // array of z-values
 
     /**
-     * Valori dell'asse x (Date)
+     * Valori dell'asse x
      * @private
      */
     private x: Date[];
-    
+
+    /**
+     * Valori dell'asse y
+     * @private
+     */
     private y:(0|1)[];
+
+    /**
+     * Valori dell'asse z
+     * @private
+     */
     private z: string[];
 
     /**
