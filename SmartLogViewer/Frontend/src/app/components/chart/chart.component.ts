@@ -76,25 +76,25 @@ export class ChartComponent {
      * Range dell'asse x, contiene coppie di valori dei range sinistro e destro
      * @private
      */
-    private xRange: number[] = [this.marginLeft, this.width - this.marginRight - 2]; // [left, right], i due px hard coded servono per vedere l'ultimo tick a dx
+    private xRange: number[] = [this.marginLeft, this.width - this.marginRight - 2];
 
     /**
      * Array contenente le coppie ymin e ymax
      * @private
      */
-    private yDomain:number[] = [0,1]; // [ymin, ymax]
+    private yDomain:number[] = [0,1];
 
     /**
      * Range dell'asse y, contiene coppie di valori dei range inferiore e superiore
      * @private
      */
-    private yRange: number[] = [this.size, this.padding]; // [bottom, top]
+    private yRange: number[] = [this.size, this.padding];
 
     /**
      * Dominio dei valori dell'asse z
      * @private
      */
-    private zDomain: d3.InternSet<string|undefined>; // array of z-values
+    private zDomain: d3.InternSet<string|undefined>;
 
     /**
      * Valori dell'asse x
