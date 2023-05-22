@@ -1,5 +1,6 @@
 ﻿using SmartLogStatistics.Model;
 using SmartLogStatistics.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace SmartLogStatistics.Repository {
     /// <summary>
@@ -18,7 +19,8 @@ namespace SmartLogStatistics.Repository {
         /// Esegue l'upload di un file di log nel database PostgreSQL
         /// </summary>
         /// <param name="log">Il log da caricare</param>
-        /// <exception cref="">Eccezione lanciata quando avviene un errore nel caricamento del file sul database</exception>
+        /// <exception cref="DbUpdateException">Eccezione lanciata quando avviene un errore nel caricamento del file sul database</exception>
+        /// <exception cref="FileConflictException">Eccezione lanciata quando si tenta di caricare un file sul database già presente</exception>
         public void Upload(Core.Log log) {
 
             //Prima di tutto inseriamo il file

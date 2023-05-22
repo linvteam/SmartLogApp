@@ -1,4 +1,8 @@
 ﻿namespace SmartLogStatistics.Exceptions {
+
+    /// <summary>
+    /// Eccezione lanciata quando si tenta di caricare un file già presente
+    /// </summary>
     public class FileConflictException : Exception {
 
         public FileConflictException() : base() { }
