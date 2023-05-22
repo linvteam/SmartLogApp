@@ -1,4 +1,7 @@
 ﻿namespace SmartLogStatistics.Model {
+    /// <summary>
+    /// Classe di trasferimento dai che contiene il minimo e il massimo delle date degli eventi contenuti nel database
+    /// </summary>
     public class DateTimeIntervalDto {
         
         public DateTime start {get; private set;}

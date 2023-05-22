@@ -1,5 +1,8 @@
 ﻿namespace SmartLogStatistics.Model
 {
+    /// <summary>
+    /// Classe di trasferimento dati che contiene un code e la sua relativa description
+    /// </summary>
     public class CodeWithDescriptionDto
     {
         public string Code { get; private set; }

@@ -22,6 +22,7 @@ namespace SmartLogStatistics.Repository {
 
         /// <summary>
         /// Comunica col database per restituire la lista di tutti i codici con le loro descrizioni
+        /// ordinata per code in ordine alfabetico
         /// </summary>
         /// <returns>La lista di codici con le descrizioni</returns>
         public List<CodeWithDescriptionDto> GetCodesWithDescription() {
@@ -46,8 +47,15 @@ namespace SmartLogStatistics.Repository {
         }
 
 
+        /// <summary>
+        /// Metodo che connettendosi con il database ottiene il minimo e il massimo delle date degli eventi all'interno del database
+        /// </summary>
+        /// <returns>Oggeddo di tipo DateTImeIntervalDto con la data minima e la data massima</returns>
+        /// <exception cref="EmptyOrFailedQuery"></exception>
+        /// <exception cref="FailedConnection"></exception>
         public DateTimeIntervalDto GetTimeInterval() {
             try {
+                //Mi prendo tutte le date ordinate così da poter prendere la prima e l'ultima dalla lista
                 IQueryable<DateTime> timestamps = this.context.Log
                                                       .OrderBy(l => l.date.ToDateTime(l.time))
                                                       .Select(l => l.date.ToDateTime(l.time));
@@ -67,6 +75,13 @@ namespace SmartLogStatistics.Repository {
 
         }
 
+        /// <summary>
+        /// Metodo che connettendosi con il database ottiene una lista di tutti i firmware senza ripetizioni
+        /// ordinata in ordine alfabetico
+        /// </summary>
+        /// <returns>La lista di firmware ordinata in ordine alfabetico</returns>
+        /// <exception cref="EmptyOrFailedQuery"></exception>
+        /// <exception cref="FailedConnection"></exception>
         public List<string> GetFirmwareList() {
             try{
                 List<string> result = new(this.context.Firmware
