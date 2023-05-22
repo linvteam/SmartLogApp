@@ -28,13 +28,6 @@ namespace SmartLogStatistics.Controller
         }
 
         /// <summary>
-        /// Messaggio di errore del parsing, record utilizzato per una corretta serializzazione di ParsingException
-        /// </summary>
-        /// <param name="Code">Codice di errore</param>
-        /// <param name="Message">Messaggio che descrive l'errore</param>
-        internal record ApiError(int Code, string Message);
-
-        /// <summary>
         /// Ritorna un JSON che rappresenta il file di log in ingresso (dopo essere stato filtrato)
         /// </summary>
         /// <param name="file">File di cui deve essere eseguito il parsing</param>
@@ -45,9 +38,9 @@ namespace SmartLogStatistics.Controller
         /// <response code="500">Se non riesce a connettersi al database</response>
         [HttpPost]
         [ProducesResponseType(typeof(Log), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ApiError), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(ApiError), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
         public IActionResult Upload(IFormFile file)
         {
@@ -65,7 +58,7 @@ namespace SmartLogStatistics.Controller
             catch (ParsingException e)
             {
                 reader.Close();
-                return StatusCode((int)HttpStatusCode.BadRequest, new ApiError(e.Code, e.Message));
+                return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(e.Code, e.Message));
             }
             /* catch (Exception e)       //TODO cambiare l'exception CONFLICT
             {
