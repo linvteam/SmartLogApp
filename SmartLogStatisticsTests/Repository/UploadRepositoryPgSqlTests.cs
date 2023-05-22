@@ -7,6 +7,7 @@ using Core;
 using Newtonsoft.Json.Linq;
 using System.Reflection.Metadata;
 using System.Xml.Linq;
+using SmartLogStatistics.Exceptions;
 
 namespace SmartLogStatistics.Repository.Tests {
     [TestClass()]
@@ -76,6 +77,52 @@ namespace SmartLogStatistics.Repository.Tests {
             mockContext.Verify(m => m.Event.Add(It.IsAny<Event>()), Times.Exactly(2));
             mockContext.Verify(m => m.Firmware.Add(It.IsAny<Firmware>()), Times.Exactly(4));
 
+
+        }
+
+        
+        [TestMethod()]
+        [ExpectedException(typeof(FileConflictException))]
+        public void ExistingFileUploadTest()
+        {
+            var logLineMock = new Mock<DbSet<Model.Log>>();
+            var firmwareMock = new Mock<DbSet<Firmware>>();
+            var eventsMock = new Mock<DbSet<Event>>();
+
+            var mockContext = new Mock<SmartLogContext>();
+
+            var files = new List<LogFile>()
+            {
+                new LogFile
+                {
+                    id = 1,
+                    filename = "Test.csv",
+                    PC_datetime = new(2022, 03, 05, 08, 47, 18),
+                    UPS_datetime = new(2022, 03, 05, 08, 47, 17),
+                }
+            };
+
+            var fileMock = CreateDbSetMock(files);
+
+            mockContext.Setup(m => m.File).Returns(fileMock.Object);
+            mockContext.Setup(m => m.Log).Returns(logLineMock.Object);
+            mockContext.Setup(m => m.Firmware).Returns(firmwareMock.Object);
+            mockContext.Setup(m => m.Event).Returns(eventsMock.Object);
+
+            UploadRepositoryPgSql repo = new(mockContext.Object);
+
+            string fileName = "Test.csv";
+            DateTime pcDateTime = new(2022, 03, 05, 08, 47, 18);
+            DateTime upsDateTime = new(2022, 03, 05, 08, 47, 17);
+
+            List<INIFile> iniFiles = new List<INIFile>();
+
+            Header header = new Header(pcDateTime, upsDateTime, iniFiles);
+            List<LogRow> logRows = new List<LogRow>();
+
+            Core.Log logFIle = new(fileName, header, logRows);
+
+            repo.Upload(logFIle);
 
         }
     }
