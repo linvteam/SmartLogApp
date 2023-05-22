@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SmartLogStatistics.Model;
 using System.Collections.Immutable;
+using System.Diagnostics;
 
 namespace SmartLogStatistics.Repository {
     /// <summary>
@@ -69,6 +70,8 @@ namespace SmartLogStatistics.Repository {
                     new StatisticsDto.Statistic("Media di eventi", AverageNumberOfEvents),
                     new StatisticsDto.Statistic("Deviazione standard", StandardDeviation)
                 });
+            } catch(Exceptions.EmptyOrFailedQuery) {
+                throw;
             } catch {
                 throw new Exceptions.FailedConnection();
             }
