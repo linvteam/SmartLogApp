@@ -1,6 +1,5 @@
 ﻿using SmartLogStatistics.Model;
 using SmartLogStatistics.Exceptions;
-using Microsoft.EntityFrameworkCore;
 
 namespace SmartLogStatistics.Repository {
     /// <summary>

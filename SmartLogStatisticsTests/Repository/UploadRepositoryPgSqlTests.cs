@@ -2,11 +2,7 @@
 using Moq;
 using SmartLogStatistics.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Core;
-using Newtonsoft.Json.Linq;
-using System.Reflection.Metadata;
-using System.Xml.Linq;
 using SmartLogStatistics.Exceptions;
 
 namespace SmartLogStatistics.Repository.Tests {
