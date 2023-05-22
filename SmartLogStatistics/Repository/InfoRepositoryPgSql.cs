@@ -1,10 +1,14 @@
-﻿using SmartLogStatistics.Model;
+﻿using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
+using SmartLogStatistics.Model;
 using System.Diagnostics;
+using Core;
+using SmartLogStatistics.Exceptions;
 
 namespace SmartLogStatistics.Repository {
-    
+
     [Core.Injectables.Singleton(typeof(InfoRepository))]
-    public class InfoRepositoryPgSql: InfoRepository {
+    public class InfoRepositoryPgSql : InfoRepository {
 
         private readonly SmartLogContext context;
 
@@ -21,23 +25,60 @@ namespace SmartLogStatistics.Repository {
         /// </summary>
         /// <returns>La lista di codici con le descrizioni</returns>
         public List<CodeWithDescriptionDto> GetCodesWithDescription() {
-
-            
-            List<CodeWithDescriptionDto> result = this.context.Event
-                                                      .Select(l => new CodeWithDescriptionDto(l.code, l.description))
-                                                      .ToList();
-
-            // return new List<CodeWithDescriptionDto>(){new(e.code, e.description)};
-            return result;
+            try{
+                List<CodeWithDescriptionDto> result = this.context.Event
+                                                          .OrderBy(e=>e.code)
+                                                          .Select(e => new CodeWithDescriptionDto(e.code, e.description))
+                                                          .ToList();
+                
+                if(!(result.Any())) throw new EmptyOrFailedQuery();
+                
+                return result;
+            }
+            catch(EmptyOrFailedQuery e){
+                throw;
+            }
+            catch {
+                throw new FailedConnection();
+            }
         }
 
 
         public DateTimeIntervalDto GetTimeInterval() {
-            throw new NotImplementedException();
+            try {
+                IQueryable<DateTime> timestamps = this.context.Log
+                                                      .OrderBy(l => l.date.ToDateTime(l.time))
+                                                      .Select(l => l.date.ToDateTime(l.time));
+
+                if(!(timestamps.Any())) throw new EmptyOrFailedQuery();
+                
+                return new DateTimeIntervalDto(timestamps.First(), timestamps.Last());
+            }
+            catch(EmptyOrFailedQuery e){
+                throw;
+            }
+            catch {
+                throw new FailedConnection();
+            }
+
         }
 
         public List<string> GetFirmwareList() {
-            throw new NotImplementedException();
+            try{
+                List<string> result = new(this.context.Firmware
+                                            .GroupBy(f => f.INI_file_name)
+                                            .OrderBy(f=>f.Key)
+                                            .Select(f => f.Key)
+                                            .ToList());
+                if(!(result.Any())) throw new EmptyOrFailedQuery();
+                return result;
+            }
+            catch(EmptyOrFailedQuery e) {
+                throw;
+            }
+            catch {
+                throw new FailedConnection();
+            }
         }
     }
 }
