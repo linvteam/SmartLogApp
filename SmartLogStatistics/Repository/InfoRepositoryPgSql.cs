@@ -31,6 +31,8 @@ namespace SmartLogStatistics.Repository {
                                                           .Select(e => new CodeWithDescriptionDto(e.code, e.description))
                                                           .ToList();
                 
+                //Viene lanciata questa eccezione quando la query non produce risultati
+                //questo tendenzialmente può accadere solo quando il db è vuoto
                 if(!(result.Any())) throw new EmptyOrFailedQuery();
                 
                 return result;
@@ -50,6 +52,8 @@ namespace SmartLogStatistics.Repository {
                                                       .OrderBy(l => l.date.ToDateTime(l.time))
                                                       .Select(l => l.date.ToDateTime(l.time));
 
+                //Viene lanciata questa eccezione quando la query non produce risultati
+                //questo tendenzialmente può accadere solo quando il db è vuoto
                 if(!(timestamps.Any())) throw new EmptyOrFailedQuery();
                 
                 return new DateTimeIntervalDto(timestamps.First(), timestamps.Last());
@@ -70,6 +74,9 @@ namespace SmartLogStatistics.Repository {
                                             .OrderBy(f=>f.Key)
                                             .Select(f => f.Key)
                                             .ToList());
+                
+                //Viene lanciata questa eccezione quando la query non produce risultati
+                //questo tendenzialmente può accadere solo quando il db è vuoto
                 if(!(result.Any())) throw new EmptyOrFailedQuery();
                 return result;
             }

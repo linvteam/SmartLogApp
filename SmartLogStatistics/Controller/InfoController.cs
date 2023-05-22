@@ -5,6 +5,7 @@ using NuGet.Packaging.Licenses;
 using SmartLogStatistics.Repository;
 using System.Net;
 using Microsoft.CodeAnalysis.CodeActions;
+using SmartLogStatistics.Exceptions;
 using SmartLogStatistics.Model;
 using Log = Core.Log;
 
@@ -46,7 +47,10 @@ namespace SmartLogStatistics.Controller
                 List<CodeWithDescriptionDto> response = Repository.GetCodesWithDescription();
                 return StatusCode((int)HttpStatusCode.OK, response);
             }
-            catch (ParsingException e) //TODO cambiare l'exception ERRORE DATABASE
+            catch(EmptyOrFailedQuery e) {
+                return StatusCode((int)HttpStatusCode.NotFound, new ErrorObject(e.Code, e.Message));
+            }
+            catch (FailedConnection e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));
             }
@@ -69,7 +73,10 @@ namespace SmartLogStatistics.Controller
                 DateTimeIntervalDto response = this.Repository.GetTimeInterval();
                 return StatusCode((int)HttpStatusCode.OK, response);
             }
-            catch (ParsingException e) //TODO cambiare l'exception ERRORE DATABASE
+            catch(EmptyOrFailedQuery e) {
+                return StatusCode((int)HttpStatusCode.NotFound, new ErrorObject(e.Code, e.Message));
+            }
+            catch (FailedConnection e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));
             }
@@ -91,7 +98,10 @@ namespace SmartLogStatistics.Controller
                 List<string> response = this.Repository.GetFirmwareList();
                 return StatusCode((int)HttpStatusCode.OK, response);
             }
-            catch (ParsingException e) //TODO cambiare l'exception ERRORE DATABASE
+            catch(EmptyOrFailedQuery e) {
+                return StatusCode((int)HttpStatusCode.NotFound, new ErrorObject(e.Code, e.Message));
+            }
+            catch (FailedConnection e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));
             }
