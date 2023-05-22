@@ -67,7 +67,7 @@ jobs:
         cache: 'npm'
     - run: npm ci
       working-directory: SmartLogViewer/Frontend
-    - run: ng test --browsers=ChromeHeadless --watch=false --code-coverage
+    - run: npm test
       working-directory: SmartLogViewer/Frontend
 
     - name: Publish badges
