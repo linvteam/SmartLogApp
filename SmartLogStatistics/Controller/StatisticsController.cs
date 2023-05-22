@@ -36,7 +36,6 @@ public class StatisticsController : ControllerBase
         /// <returns>Esito della chiamata GET, può essere un file JSON che rappresenta le statistiche sui file analizzati o un'eccezione dovuta ad una richiesta errata / ad un errore lato server</returns>
         /// <response code="200">Vengono ritornate le statistiche del database</response>
         /// <response code="400">Se le date non sono compatibili fra loro</response>
-        /// <response code="400">Se le date hanno un formato non corretto</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
         [HttpGet]
         [Route("{startDateTime}/{endDateTime}")]
@@ -44,24 +43,21 @@ public class StatisticsController : ControllerBase
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
-        public IActionResult Statistics(DateTime start, DateTime end)
+        public IActionResult Statistics(DateTime startDateTime, DateTime endDateTime)
         {
-            if(start == null || end == null) {
-                return StatusCode((int)HttpStatusCode.BadRequest,
-                    new ApiError(4, "Le date presentano un formato non corretto"));
-            } else if (start > end) {
+            if (startDateTime > endDateTime) {
                 return StatusCode((int)HttpStatusCode.BadRequest,
                     new ApiError(3, "Le date non sono tra loro compatibili"));
             } else {
                 try
                 {
-                    StatisticsDto statistics = Repository.Statistics(start, end);
+                    StatisticsDto statistics = Repository.Statistics(startDateTime, endDateTime);
                     return Ok(statistics);
                 }
                 catch (Exception e)
                 {
                     return StatusCode((int)HttpStatusCode.InternalServerError,
-                        new ApiError(5, "Se è verificato un errore alla connessione"));
+                        new ApiError(4, "Se è verificato un errore alla connessione"));
                 }
             }
         }
