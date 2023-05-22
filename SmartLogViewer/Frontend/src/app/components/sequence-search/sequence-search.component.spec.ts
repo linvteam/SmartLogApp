@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { SequenceFetchService } from 'src/app/services/fetch/sequence-fetch.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LogManipulationService } from 'src/app/services/LogManipulation/log-manipulation.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 describe('SequenceSearchComponent', () => {
   let component: SequenceSearchComponent;
@@ -17,13 +17,16 @@ describe('SequenceSearchComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        SequenceFetchService,
-        NgbModal,
-        LogManipulationService,
-        FormBuilder
+        ReactiveFormsModule,
       ],
       declarations: [ SequenceSearchComponent ],
-      providers: [{ provide: BaseURL, useValue: environment.baseUrl }]
+      providers: [
+        FormBuilder,
+        LogManipulationService,
+        NgbModal,
+        SequenceFetchService,
+        { provide: BaseURL, useValue: environment.baseUrl }
+      ]
     })
     .compileComponents();
 

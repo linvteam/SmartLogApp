@@ -49,3 +49,30 @@ jobs:
         path-to-badges: ./.github/badges/smartlogstatistics
         minimum-coverage: 80
         repo-token: ${{ secrets.CI_TOKEN }}
+
+  build-test-angular:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.16.0]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - name: Change Directory
+      run: cd SmartLogViewer/Frontend
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: ng test --browsers=ChromeHeadless --watch=false --code-coverage
+
+    - name: Publish badges
+      uses:  demyanets/angular-coverage-badges-action@v1
+      with:
+        github_token: ${{ secrets.CI_TOKEN }}
+        coverage-summary-path: coverage/front-end_viewer/coverage-summary.json
+        badges-directory: ../../.github/badges/smartlogviewer
