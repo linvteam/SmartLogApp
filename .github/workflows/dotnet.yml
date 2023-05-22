@@ -60,21 +60,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Change Directory
-      run: cd SmartLogViewer/Frontend
-    - name: List Directory
-      run: ls
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
+      working-directory: SmartLogViewer/Frontend
     - run: ng test --browsers=ChromeHeadless --watch=false --code-coverage
+      working-directory: SmartLogViewer/Frontend
 
     - name: Publish badges
       uses:  demyanets/angular-coverage-badges-action@v1
       with:
         github_token: ${{ secrets.CI_TOKEN }}
-        coverage-summary-path: coverage/front-end_viewer/coverage-summary.json
-        badges-directory: ../../.github/badges/smartlogviewer
+        coverage-summary-path: SmartLogViewer/Frontend/coverage/front-end_viewer/coverage-summary.json
+        badges-directory: /.github/badges/smartlogviewer
