@@ -1,9 +1,11 @@
-﻿
+﻿using SmartLogStatistics.Model;
+using SmartLogStatistics.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using SmartLogStatistics.Model;
 
 namespace SmartLogStatistics.Repository {
-
+    /// <summary>
+    /// Classe che definisce la comunicazione con il database PostgreSQL per l'upload del file
+    /// </summary>
     [Core.Injectables.Singleton(typeof(UploadRepository))]
     public class UploadRepositoryPgSql : UploadRepository {
 
@@ -12,6 +14,12 @@ namespace SmartLogStatistics.Repository {
         public UploadRepositoryPgSql(SmartLogContext context) {
             this.context = context;
         }
+
+        /// <summary>
+        /// Esegue l'upload di un file di log nel database PostgreSQL
+        /// </summary>
+        /// <param name="log">Il log da caricare</param>
+        /// <exception cref="">Eccezione lanciata quando avviene un errore nel caricamento del file sul database</exception>
         public void Upload(Core.Log log) {
 
             //Prima di tutto inseriamo il file
@@ -21,6 +29,14 @@ namespace SmartLogStatistics.Repository {
                 PC_datetime = log.Header.PCDate.ToUniversalTime(),
                 UPS_datetime = log.Header.UPSDate.ToUniversalTime(),
             };
+
+            var checkQuery = from file in context.File where file.filename == log.FileName select file;
+            var logFiles = checkQuery.ToList();
+
+            if(logFiles.Any())
+            {
+                throw new FileConflictException("Il file è già stato salvato nel database");
+            }
 
             context.File.Add(logFile);
             context.SaveChanges();
@@ -74,7 +90,6 @@ namespace SmartLogStatistics.Repository {
                 context.Log.Add(logLine);
                 context.SaveChanges();
             }
-
         }
     }
 }

@@ -6,21 +6,37 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Core;
 using Newtonsoft.Json.Linq;
 using System.Reflection.Metadata;
+using System.Xml.Linq;
 
 namespace SmartLogStatistics.Repository.Tests {
     [TestClass()]
     public class UploadRepositoryPgSqlTests {
 
-        [TestMethod()]
-        public void FileUploadTest()
+        private static Mock<DbSet<T>> CreateDbSetMock<T>(IEnumerable<T> elements) where T : class
         {
+            var elementsAsQueryable = elements.AsQueryable();
+            var dbSetMock = new Mock<DbSet<T>>();
 
-            var fileMock = new Mock<DbSet<LogFile>>();
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.Provider).Returns(elementsAsQueryable.Provider);
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.Expression).Returns(elementsAsQueryable.Expression);
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(elementsAsQueryable.ElementType);
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
+
+            return dbSetMock;
+        }
+        [TestMethod()]
+        public void UploadTest()
+        {
+            
             var logLineMock = new Mock<DbSet<Model.Log>>();
             var firmwareMock = new Mock<DbSet<Firmware>>();
             var eventsMock = new Mock<DbSet<Event>>();
 
             var mockContext = new Mock<SmartLogContext>();
+
+            var files = new List<LogFile>();
+
+            var fileMock = CreateDbSetMock(files);
 
             mockContext.Setup(m => m.File).Returns(fileMock.Object);
             mockContext.Setup(m => m.Log).Returns(logLineMock.Object);
