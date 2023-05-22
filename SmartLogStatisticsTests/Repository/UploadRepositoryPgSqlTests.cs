@@ -25,6 +25,7 @@ namespace SmartLogStatistics.Repository.Tests {
 
             return dbSetMock;
         }
+
         [TestMethod()]
         public void UploadTest()
         {
