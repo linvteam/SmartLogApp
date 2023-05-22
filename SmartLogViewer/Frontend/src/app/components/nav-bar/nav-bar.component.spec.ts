@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NavBarComponent } from './nav-bar.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { RouterLinkActive, RouterModule } from '@angular/router';
 
 describe('NavBarComponent', () => {
   let component: NavBarComponent;
@@ -8,6 +10,7 @@ describe('NavBarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [ NgbModule, RouterModule ],
       declarations: [ NavBarComponent ]
     })
     .compileComponents();

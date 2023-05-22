@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TableSearchComponent } from './table-search.component';
+import { MdbAccordionComponent, MdbAccordionItemComponent } from 'mdb-angular-ui-kit/accordion';
 
 describe('SearchComponent', () => {
   let component: TableSearchComponent;
@@ -8,7 +9,7 @@ describe('SearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TableSearchComponent ]
+      declarations: [ TableSearchComponent, MdbAccordionItemComponent, MdbAccordionComponent ]
     })
     .compileComponents();
 

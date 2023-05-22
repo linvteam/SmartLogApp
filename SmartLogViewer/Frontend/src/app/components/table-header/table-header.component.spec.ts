@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TableHeaderComponent } from './table-header.component';
+import { MdbAccordionComponent } from 'mdb-angular-ui-kit/accordion';
 
 describe('HeaderComponent', () => {
   let component: TableHeaderComponent;
@@ -8,7 +9,7 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TableHeaderComponent ]
+      declarations: [ TableHeaderComponent, MdbAccordionComponent ]
     })
     .compileComponents();
 

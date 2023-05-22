@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FileInfoComponent } from './file-info.component';
+import { Header, INIFile } from 'src/app/log.classes';
+import { InjectionToken } from '@angular/core';
 
 describe('FileInfoComponent', () => {
   let component: FileInfoComponent;
@@ -8,6 +10,7 @@ describe('FileInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers: [Header, INIFile],
       declarations: [ FileInfoComponent ]
     })
     .compileComponents();
