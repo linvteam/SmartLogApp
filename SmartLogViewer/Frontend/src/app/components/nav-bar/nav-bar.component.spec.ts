@@ -10,7 +10,7 @@ describe('NavBarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ NgbModule, RouterModule ],
+      imports: [ NgbModule, RouterModule, RouterModule.forRoot([]), ],
       declarations: [ NavBarComponent ]
     })
     .compileComponents();

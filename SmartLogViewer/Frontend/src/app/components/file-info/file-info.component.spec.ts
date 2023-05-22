@@ -2,7 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FileInfoComponent } from './file-info.component';
 import { Header, INIFile } from 'src/app/log.classes';
-import { InjectionToken } from '@angular/core';
+import {mockLog} from '../../test_common/logMock'
+import { LogService } from 'src/app/services/log/log.service';
+import { AgGridAngular } from 'ag-grid-angular';
+
+const mockLogService = {
+  getLog: () => (mockLog)}
 
 describe('FileInfoComponent', () => {
   let component: FileInfoComponent;
@@ -10,8 +15,10 @@ describe('FileInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [Header, INIFile],
-      declarations: [ FileInfoComponent ]
+      declarations: [ FileInfoComponent, AgGridAngular ],
+      providers: [
+        { provide: LogService, useValue: mockLogService }
+      ]
     })
     .compileComponents();
 
