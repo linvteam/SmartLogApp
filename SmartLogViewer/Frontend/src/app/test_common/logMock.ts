@@ -79,7 +79,7 @@ let fakeLog = {
         "color": "0xFFD3D3D3"
       }
     ],
-    "fileName": "P257645001_SYS_U0S0_071122_0935_Log.csv"
+    fileName: "P257645001_SYS_U0S0_071122_0935_Log.csv"
   };
 
   export let mockLog : Log = new Log(fakeLog as unknown as Log);
