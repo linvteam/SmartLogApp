@@ -31,7 +31,7 @@ jobs:
         path-to-opencover-xml: ./CoreTests/TestResults/coverage.opencover.xml
         path-to-badges: ./.github/badges/core
         minimum-coverage: 80
-        repo-token: ${{ secrets.CI_TOKEN }}
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
     
     - name: OpenCover Badge Generator - SmartLogViewer
       uses: danpetitt/open-cover-badge-generator-action@v1.0.9
@@ -39,7 +39,7 @@ jobs:
         path-to-opencover-xml: ./SmartLogViewerTests/TestResults/coverage.opencover.xml
         path-to-badges: ./.github/badges/smartlogviewer/backend
         minimum-coverage: 80
-        repo-token: ${{ secrets.CI_TOKEN }}
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
 
     
     - name: OpenCover Badge Generator - Statistics
@@ -48,7 +48,7 @@ jobs:
         path-to-opencover-xml: ./SmartLogStatisticsTests/TestResults/coverage.opencover.xml
         path-to-badges: ./.github/badges/smartlogstatistics/backend
         minimum-coverage: 80
-        repo-token: ${{ secrets.CI_TOKEN }}
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
 
   build-test-angular:
     runs-on: ubuntu-latest
