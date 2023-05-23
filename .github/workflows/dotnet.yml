@@ -5,10 +5,6 @@ name: Build and Test
 
 on:
   push:
-  pull_request:
-    types: [opened]
-    branches:
-      - master
 
 jobs:
   build-test-dotnet:
