@@ -54,9 +54,25 @@ namespace SmartLogStatistics.Repository {
         /// <param name="end">Data di fine dell'analisi</param>
         /// <param name="code">Code dell'evento da considerare</param>
         /// <returns>Oggetto contenente l'andamento cumulativo</returns>
-        public Model.CumulativeDto Cumulative(DateTime start, DateTime end, string code)
+        public CumulativeDto Cumulative(DateTime start, DateTime end, string code)
         {
+            var eventsFiltered = context.Log.Where(e => e.date > DateOnly.FromDateTime(start) && e.date < DateOnly.FromDateTime(end) && e.code == code);
 
+            var records = new List<CumulativeRecord>();
+
+            for (var day = start; start <= end; day = day.AddDays(1))
+            {
+                records.Add(new CumulativeRecord
+                {
+                    dateTime = day,
+                    EventOccurencies = eventsFiltered.Where(e => e.date < DateOnly.FromDateTime(day)).Count(),
+                });
+            }
+
+            return new CumulativeDto
+            {
+                records = records,
+            };
         }
 
         /// <summary>
@@ -65,9 +81,16 @@ namespace SmartLogStatistics.Repository {
         /// <param name="start">Data di inizio dell'analisi</param>
         /// <param name="end">Data di fine dell'analisi</param>
         /// <returns>Oggetto che raggruppa per ogni code il numero di occorrenze</returns>
-        public Model.TotalByCodeDto TotalByCode(DateTime start, DateTime end)
+        public TotalByCodeDto TotalByCode(DateTime start, DateTime end)
         {
+            var eventsFiltered = context.Log.Where(e => e.date > DateOnly.FromDateTime(start) && e.date < DateOnly.FromDateTime(end));
 
+            var eventGroups =eventsFiltered.GroupBy(e => e.code)
+                                           .OrderBy(e => e.Key)
+                                           .Select(group => new CodeOccurrence { Code = group.Key, EventOccurrences = group.Count()})
+                                           .ToList();
+
+            return new TotalByCodeDto { CodeOccurences = eventGroups };
         }
 
         /// <summary>
@@ -77,9 +100,9 @@ namespace SmartLogStatistics.Repository {
         /// <param name="end">Data di fine dell'analisi</param>
         /// <param name="code">Codice dell'evento voluto</param>
         /// <returns>Ritorna il numero di occorrenze dell'evento raggruppate per firmware</returns>
-        public Model.TotalByFirmwareDto TotalByFirmwareDto(DateTime start, DateTime end, string code)
+        public TotalByFirmwareDto TotalByFirmwareDto(DateTime start, DateTime end, string code)
         {
-
+            
         }
     }
 }
