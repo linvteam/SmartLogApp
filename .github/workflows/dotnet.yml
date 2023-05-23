@@ -44,7 +44,7 @@ jobs:
     
     - name: OpenCover Badge Generator - Statistics
       uses: danpetitt/open-cover-badge-generator-action@v1.0.9
-      with:
+      with: 
         path-to-opencover-xml: ./SmartLogStatisticsTests/TestResults/coverage.opencover.xml
         path-to-badges: ./.github/badges/smartlogstatistics/backend
         minimum-coverage: 80
