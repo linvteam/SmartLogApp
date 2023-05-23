@@ -60,7 +60,7 @@ namespace SmartLogStatistics.Controller
 
                     return StatusCode((int)HttpStatusCode.OK, data);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {                           
                     return StatusCode((int)HttpStatusCode.InternalServerError, 
                         new ApiError(5, "Si è verificato un errore durante la connessione"));
