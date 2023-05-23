@@ -6,12 +6,13 @@ import { LogService } from 'src/app/services/log/log.service';
 import {mockLog} from '../../test_common/logMock'
 import { NgModule } from '@angular/core';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { MdbAccordionComponent, MdbAccordionItemComponent } from 'mdb-angular-ui-kit/accordion';
 
 const mockLogService = {
-  getLog: () => (mockLog)}
+  getLog: () => (mockLog)
+}
 
 describe('EventSearchComponent', () => {
   let component: EventSearchComponent;
@@ -40,5 +41,22 @@ describe('EventSearchComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should set EventSearch as LogManipulator', () => {
+    let dynamicType : String = "";
+    component.uploadForm.setValue({
+      q: '',
+      units: new FormControl(),
+      subunits: new FormControl()
+  });
+    setTimeout( () => {
+      component.onSubmit();
+      component['logManipulationService']['manipulator'].subscribe({
+        next: (value) => { dynamicType = typeof value; } 
+      });
+      expect(dynamicType).toEqual("EventSearch");
+    }, 2000 );
+    
   });
 });

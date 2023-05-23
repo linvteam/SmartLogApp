@@ -19,7 +19,8 @@ import { mockLog } from 'src/app/test_common/logMock';
 import { LogService } from 'src/app/services/log/log.service';
 
 const mockLogService = {
-  getLog: () => (mockLog)}
+  getLog: () => (mockLog)
+}
 
 @Injectable({
   providedIn: 'root'
@@ -70,7 +71,7 @@ describe('SequenceSearchComponent', () => {
   it('should have mocked sequences', () => {
     setTimeout(()=>{
       expect(component.sequences).toEqual(['Prima', 'Seconda', 'Terza']);
-    },1000);
+    },2000);
   });
 
   it('should have identity manipulator', () => {
@@ -82,7 +83,7 @@ describe('SequenceSearchComponent', () => {
         next: (value) => { dynamicType = typeof value; } 
       });
       expect(dynamicType).toEqual("Identity");
-    }, 1000 );
+    }, 2000 );
   });
 
   it('should have sequence search manipulator', () => {
@@ -95,7 +96,7 @@ describe('SequenceSearchComponent', () => {
         next: (value) => { dynamicType = typeof value; } 
       });
       expect(dynamicType).toEqual("SequenceSearch");
-    }, 1000 );
+    }, 2000 );
   });
 
 
