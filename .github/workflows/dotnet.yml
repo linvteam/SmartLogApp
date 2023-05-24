@@ -49,3 +49,21 @@ jobs:
         path-to-badges: ./.github/badges/smartlogstatistics
         minimum-coverage: 80
         repo-token: ${{ secrets.CI_TOKEN }}
+
+    - name: Generate Code Covereage Report
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.1.21
+      with:
+        reports: 'coverage.opencover.xml'
+        targetdir: 'report'
+        reporttypes: 'HTML'
+        sourcedirs: 'CoreTests/TestResults;SmartLogViewerTests/TestResults;SmartLogStatisticsTests/TestResults'
+        verbosity: "Info"
+        title: 'Code Coverage Report'
+        toolpath: 'reportgeneratortool'
+
+    - name: Upload code coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: CodeCoverageReport
+        path: report
+        retention-days: 1
