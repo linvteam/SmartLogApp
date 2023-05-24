@@ -79,8 +79,6 @@ namespace SmartLogStatistics.Migrations
                     b.Property<int>("subunit")
                         .HasColumnType("integer");
 
-                    b.Property<DateOnly>("time")
-                        .HasColumnType("date");
                     b.Property<TimeOnly>("time")
                         .HasColumnType("time without time zone");
 
