@@ -37,46 +37,7 @@ namespace SmartLogViewer.Model {
                 if(array == null) {
                     _logger.LogError("Impossibile leggere il file delle sequenze");
                 } else {
-                    foreach(var item in array) {
-                        // Devo estrarre e convertire correttamente tutti i valori dell'oggetto (i dynamics sono un po' particolari da usare)
-                        string name = item.Name;
-                        List<Model.Sequence.Event> startEvents = new();
-                        foreach(var startEvent in item.StartEvents) {
-                            string code= startEvent.Code;
-                            bool status = startEvent.Status;
-                            startEvents.Add(new Model.Sequence.Event(code, status));
-                        }
-
-                        List<int> startEventsAvailableSubUnits = new();
-                        // Questo ciclo è stata la parte tribbolo del parsing :(
-                        foreach(var subunit in item.StartEventsAvailableSubUnits)
-                            startEventsAvailableSubUnits.Add((int)subunit.Value);
-
-
-                        List<Model.Sequence.Event> endEvents = new();
-                        foreach(var endEvent in item.EndEvents) {
-                            string code = endEvent.Code;
-                            bool status = endEvent.Status;
-                            endEvents.Add(new Model.Sequence.Event(code, status));
-                        }
-
-                        List<int> endEventsAvailableSubUnits = new();
-                        foreach(var subunit in item.EndEventsAvailableSubUnits)
-                            endEventsAvailableSubUnits.Add((int)subunit.Value);
-
-                        int maxDuration = item.MaxDuration;
-
-                        // È stato necessario estrarre tutti i valori singolarmente per eseguire le dovute conversioni ed individuare gli errori.
-                        // Quando si scatena un errore qualsiasi viene lanciata una eccezione 
-                        Sequences.Add(new Sequence(
-                                name,
-                                startEvents,
-                                startEventsAvailableSubUnits,
-                                endEvents,
-                                endEventsAvailableSubUnits,
-                                maxDuration)
-                            );
-                    }
+                    ExtractSequences(array);
                     ParsingError = false;
                 }
             } catch(Exception e) {
@@ -85,6 +46,66 @@ namespace SmartLogViewer.Model {
                 _logger.LogError(e.Message);
             }
 
+        }
+
+        /// <summary>
+        /// Estrae le sequenze dal file letto
+        /// </summary>
+        /// <param name="array">Oggetto dynamic generato dal lettore di file JSON</param>
+        private void ExtractSequences(dynamic array) {
+            foreach(var item in array) {
+                // Devo estrarre e convertire correttamente tutti i valori dell'oggetto (i dynamics sono un po' particolari da usare)
+                string name = item.Name;
+                List<Sequence.Event> startEvents = ExtractEvents(item.StartEvents);
+
+                List<int> startEventsAvailableSubUnits = ExtractSubUnitList(item.StartEventsAvailableSubUnits);
+
+                List<Sequence.Event> endEvents = ExtractEvents(item.EndEvents);
+
+                List<int> endEventsAvailableSubUnits = ExtractSubUnitList(item.EndEventsAvailableSubUnits);
+
+                int maxDuration = item.MaxDuration;
+
+                // È stato necessario estrarre tutti i valori singolarmente per eseguire le dovute conversioni ed individuare gli errori.
+                // Quando si scatena un errore qualsiasi viene lanciata una eccezione 
+                Sequences.Add(new Sequence(
+                        name,
+                        startEvents,
+                        startEventsAvailableSubUnits,
+                        endEvents,
+                        endEventsAvailableSubUnits,
+                        maxDuration)
+                    );
+            }
+        }
+
+        /// <summary>
+        /// Estrae una lista di eventi dal file delle sequenze
+        /// </summary>
+        /// <param name="events">Oggetto JSON che contiene la lista di eventi</param>
+        /// <returns>Lista di eventi convertita</returns>
+        private List<Sequence.Event> ExtractEvents(dynamic events) {
+            List<Sequence.Event> eventsList = new();
+            foreach(var e in events) {
+                string code = e.Code;
+                bool status = e.Status;
+                eventsList.Add(new Model.Sequence.Event(code, status));
+            }
+            return eventsList;
+        }
+
+        /// <summary>
+        /// Estrai una lista di subunit dall'oggetto JSON
+        /// </summary>
+        /// <param name="unitList">Oggetto JSON che contiene la lista di subunit</param>
+        /// <returns>Lista di subunit convertite</returns>
+        private List<int> ExtractSubUnitList(dynamic unitList) {
+            List<int> subunits = new();
+            // Questo ciclo è stata la parte tribbolo del parsing :(
+            foreach(var unit in unitList) {
+                subunits.Add((int)unit.Value);
+            }
+            return subunits;
         }
 
         /// <summary>
