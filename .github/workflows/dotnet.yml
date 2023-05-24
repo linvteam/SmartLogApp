@@ -53,10 +53,9 @@ jobs:
     - name: Generate Code Covereage Report
       uses: danielpalme/ReportGenerator-GitHub-Action@5.1.21
       with:
-        reports: 'coverage.opencover.xml'
+        reports: '*Tests/TestResults/coverage.opencover.xml'
         targetdir: 'report'
         reporttypes: 'HTML'
-        sourcedirs: 'CoreTests/TestResults;SmartLogViewerTests/TestResults;SmartLogStatisticsTests/TestResults'
         verbosity: "Info"
         title: 'Code Coverage Report'
         toolpath: 'reportgeneratortool'
