@@ -75,7 +75,7 @@ jobs:
         style: flat
         label: statements
         source: SmartLogViewer/Frontend/coverage/front-end_viewer/coverage-summary.json
-        output: /.github/badges/smartlogviewer/frontend/coverage-statements.svg
+        output: /.github/badges/smartlogviewer/frontend/statements/coverage-statements.svg
 
 
     - name: Create Coverage Badges - Lines
@@ -85,7 +85,7 @@ jobs:
         label: lines
         type: lines
         source: SmartLogViewer/Frontend/coverage/front-end_viewer/coverage-summary.json
-        output: /.github/badges/smartlogviewer/frontend/coverage-lines.svg
+        output: /.github/badges/smartlogviewer/frontend/lines/coverage-lines.svg
 
     - name: Create Coverage Badges - Functions
       uses: jaywcjlove/coverage-badges-cli@main
@@ -94,7 +94,7 @@ jobs:
         label: functions
         type: functions
         source: SmartLogViewer/Frontend/coverage/front-end_viewer/coverage-summary.json
-        output: /.github/badges/smartlogviewer/frontend/coverage-functions.svg
+        output: /.github/badges/smartlogviewer/frontend/functions/coverage-functions.svg
 
     - name: Create Coverage Badges - Branches
       uses: jaywcjlove/coverage-badges-cli@main
@@ -103,7 +103,7 @@ jobs:
         label: branches
         type: branches
         source: SmartLogViewer/Frontend/coverage/front-end_viewer/coverage-summary.json
-        output: /.github/badges/smartlogviewer/frontend/coverage-branches.svg
+        output: /.github/badges/smartlogviewer/frontend/branches/coverage-branches.svg
 
     - name: Commit & Push changes
       uses: Andro999b/push@v1.3
