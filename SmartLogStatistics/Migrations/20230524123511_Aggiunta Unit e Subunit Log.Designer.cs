@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SmartLogStatistics.Repository;
@@ -11,9 +12,10 @@ using SmartLogStatistics.Repository;
 namespace SmartLogStatistics.Migrations
 {
     [DbContext(typeof(SmartLogContext))]
-    partial class SmartLogContextModelSnapshot : ModelSnapshot
+    [Migration("20230524123511_Aggiunta Unit e Subunit Log")]
+    partial class AggiuntaUniteSubunitLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +32,7 @@ namespace SmartLogStatistics.Migrations
                     b.Property<string>("color")
                         .IsRequired()
                         .HasMaxLength(9)
-                        .HasColumnType("character varying(10)");
+                        .HasColumnType("character varying(9)");
 
                     b.Property<string>("description")
                         .IsRequired()
@@ -104,10 +106,10 @@ namespace SmartLogStatistics.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<DateTime>("PC_datetime")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("UPS_datetime")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("filename")
                         .IsRequired()
