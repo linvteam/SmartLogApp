@@ -45,6 +45,10 @@ namespace SmartLogStatistics.Repository {
             //                                         l => new { val1 = l.Event.uni, val2 = x.Id }
             //}
 
+            return new FrequencyDto
+            {
+
+            };
         }
 
         /// <summary>
@@ -85,10 +89,9 @@ namespace SmartLogStatistics.Repository {
         {
             var eventsFiltered = context.Log.Where(e => e.date > DateOnly.FromDateTime(start) && e.date < DateOnly.FromDateTime(end));
 
-            var eventGroups =eventsFiltered.GroupBy(e => e.code)
-                                           .OrderBy(e => e.Key)
-                                           .Select(group => new CodeOccurrence { Code = group.Key, EventOccurrences = group.Count()})
-                                           .ToList();
+            var eventGroups = eventsFiltered.GroupBy(e => e.code)
+                                            .Select(group => new CodeOccurrence { Code = group.Key, EventOccurrences = group.Count()})
+                                            .ToList();
 
             return new TotalByCodeDto { CodeOccurences = eventGroups };
         }
@@ -102,7 +105,12 @@ namespace SmartLogStatistics.Repository {
         /// <returns>Ritorna il numero di occorrenze dell'evento raggruppate per firmware</returns>
         public TotalByFirmwareDto TotalByFirmwareDto(DateTime start, DateTime end, string code)
         {
-            
+            var eventsFiltered = context.Log.Where(e => e.date > DateOnly.FromDateTime(start) && e.date < DateOnly.FromDateTime(end) && e.code == code);
+
+            return new TotalByFirmwareDto
+            {
+
+            };
         }
     }
 }
