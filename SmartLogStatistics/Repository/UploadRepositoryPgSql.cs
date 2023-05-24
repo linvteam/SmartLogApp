@@ -70,6 +70,8 @@ namespace SmartLogStatistics.Repository {
                     log_line = i,
                     date = log.Events[i].Date,
                     time = log.Events[i].Time,
+                    unit = log.Events[i].Unit,
+                    subunit = log.Events[i].SubUnit,
                     code = log.Events[i].Code,
                     value = log.Events[i].Value,
                 };
