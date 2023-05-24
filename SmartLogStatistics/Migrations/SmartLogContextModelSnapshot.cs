@@ -80,7 +80,7 @@ namespace SmartLogStatistics.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateOnly>("time")
-                        .HasColumnType("date");
+                        .HasColumnType("time without time zone");
 
                     b.Property<int>("unit")
                         .HasColumnType("integer");
