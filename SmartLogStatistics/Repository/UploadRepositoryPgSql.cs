@@ -97,6 +97,8 @@ namespace SmartLogStatistics.Repository {
                     context.SaveChanges();
                 }
 
+                transaction.Commit();
+
             }
             catch (Exception ex)
             {
