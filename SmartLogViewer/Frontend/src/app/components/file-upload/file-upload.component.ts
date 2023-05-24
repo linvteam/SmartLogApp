@@ -124,7 +124,7 @@ export class FileUploadComponent {
     }
 
     /**
-     * Avvia il processo di carcamento del file di log
+     * Avvia il processo di caricamento del file di log
      */
     public upload(): void {
         this.progress = 0;

@@ -6,16 +6,21 @@
 [![Branch Coverage Core Status](./.github/badges/core/coverage-badge-branch.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
 
 ### SmartLogViewer
-[![Line Coverage SmartLogViewer Status](./.github/badges/smartlogviewer/coverage-badge-line.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
-[![Branch Coverage SmartLogViewer Status](./.github/badges/smartlogviewer/coverage-badge-branch.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
+[![Line Coverage SmartLogViewer Status](./.github/badges/smartlogviewer/backend/coverage-badge-line.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
+[![Branch Coverage SmartLogViewer Status](./.github/badges/smartlogviewer/backend/coverage-badge-branch.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
 
 ### SmartLogStatistics
-[![Line Coverage SmartLogStatistics Status](./.github/badges/smartlogstatistics/coverage-badge-line.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
-[![Branch Coverage SmartLogStatistics Status](./.github/badges/smartlogstatistics/coverage-badge-branch.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
+[![Line Coverage SmartLogStatistics Status](./.github/badges/smartlogstatistics/backend/coverage-badge-line.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
+[![Branch Coverage SmartLogStatistics Status](./.github/badges/smartlogstatistics/backend/coverage-badge-branch.svg)](https://github.com/danpetitt/open-cover-badge-generator-action/)
 
 ## Front-end
 
 ### SmartLogViewer
+[![General Coverage SmartLogViewer Status](./.github/badges/smartlogviewer/frontend/coverage.svg)](./.github/badges/smartlogviewer/frontend/coverage.svg)
+[![Branch Coverage SmartLogViewer Status](./.github/badges/smartlogviewer/frontend/coverage-branches.svg)](./.github/badges/smartlogviewer/frontend/coverage-branches.svg)
+[![Functions Coverage SmartLogViewer Status](./.github/badges/smartlogviewer/frontend/coverage-functions.svg)](./.github/badges/smartlogviewer/frontend/coverage-functions.svg)
+[![Lines Coverage SmartLogViewer Status](./.github/badges/smartlogviewer/frontend/coverage-lines.svg)](./.github/badges/smartlogviewer/frontend/coverage-lines.svg)
+[![Statements Coverage SmartLogViewer Status](./.github/badges/smartlogviewer/frontend/coverage-statements.svg)](./.github/badges/smartlogviewer/frontend/coverage-statements.svg)
 
 ### SmartLogStatistics
 

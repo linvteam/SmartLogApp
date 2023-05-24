@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ChartHeaderComponent } from './chart-header.component';
+import { MdbAccordionComponent, MdbAccordionItemComponent } from 'mdb-angular-ui-kit/accordion';
 
 describe('ChartHeaderComponent', () => {
   let component: ChartHeaderComponent;
@@ -8,7 +9,7 @@ describe('ChartHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ChartHeaderComponent ]
+      declarations: [ ChartHeaderComponent, MdbAccordionComponent, MdbAccordionItemComponent ]
     })
     .compileComponents();
 
