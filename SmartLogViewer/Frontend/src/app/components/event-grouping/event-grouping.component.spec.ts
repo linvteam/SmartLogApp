@@ -5,10 +5,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { Log } from 'src/app/log.classes';
 import { LogService } from 'src/app/services/log/log.service';
 import { mockLog } from 'src/app/test_common/logMock';
+import { EventGrouping } from 'src/app/LogManipulator/event-grouping';
 
 class mockLogServiceLog extends LogService{
   constructor(){
     super();
+    super.Log = mockLog;
   }
 
   override getLog() : Log{
@@ -26,6 +28,9 @@ describe('EventGroupingComponent', () => {
         BrowserModule,
         FormsModule,
         ReactiveFormsModule
+    ],
+    providers: [
+      { provide: LogService, useClass: mockLogServiceLog }
     ],
       declarations: [ EventGroupingComponent ]
     })
@@ -46,20 +51,16 @@ describe('EventGroupingComponent', () => {
     expect(component.formGroup.value.unita).toEqual('1');
   });
 
-  it('should set EventGrouping as LogManipulator', () => {
-    let dynamicType : String = "";
+  it('should set EventSearch as LogManipulator', (done: DoneFn) => {
     component.formGroup.setValue({
       valore: '2',
       unita: '2'
     });
-    component['logManipulationService']['logService'] = new mockLogServiceLog();
+    component['logManipulationService']['manipulator'].subscribe(value => {
+      expect(value).toBeInstanceOf(EventGrouping);
+      done();
+    });    
     component.submitForm();
 
-    setTimeout( () => {
-      component['logManipulationService']['manipulator'].subscribe({
-        next: (value) => { dynamicType = typeof value; } 
-      });
-      expect(dynamicType).toEqual("EventGrouping");
-    }, 2000 );
   });
 });

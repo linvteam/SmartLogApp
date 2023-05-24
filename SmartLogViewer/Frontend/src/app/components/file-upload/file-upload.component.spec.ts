@@ -5,6 +5,18 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BaseURL } from 'src/app/connection-info';
 import { environment } from 'src/environments/environment';
 import { mockLog } from 'src/app/test_common/logMock';
+import { Log } from 'src/app/log.classes';
+import { LogService } from 'src/app/services/log/log.service';
+
+class mockLogServiceGroupableLog extends LogService{
+  constructor(){
+    super();
+  }
+
+  override getLog() : Log{
+    return mockLog;
+  }
+}
 
 describe('FileUploadComponent', () => {
   let component: FileUploadComponent;
@@ -58,13 +70,12 @@ describe('FileUploadComponent', () => {
   });
 
   it('should upload current file', () => {
-    setTimeout( () => {
-      component.currentFile = new File([mockLog.toString()], "filename_2");
-      component.upload();
-      expect(component['logService'].getLog().FileName).toEqual("filename_2");
+    component['logService'] = new mockLogServiceGroupableLog();
+      component.currentFile = new File([mockLog.toString()], "prova.csv");
+      component.upload(); 
+      expect(component['logService'].getLog().FileName).toEqual("prova.csv");
       expect(component['logService'].getLog().Header).toEqual(mockLog.Header);
       expect(component['logService'].getLog().Events).toEqual(mockLog.Events);
-    }, 2000);
   });
 
 });

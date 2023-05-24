@@ -17,9 +17,18 @@ import { LogManipulator } from 'src/app/LogManipulator/log-manipulator';
 import { Identity } from 'src/app/LogManipulator/identity';
 import { mockLog } from 'src/app/test_common/logMock';
 import { LogService } from 'src/app/services/log/log.service';
+import { Log } from 'src/app/log.classes';
+import { SequenceSearch } from 'src/app/LogManipulator/sequence-search';
 
-const mockLogService = {
-  getLog: () => (mockLog)
+class mockLogService extends LogService{
+  constructor(){
+    super();
+    super.Log = mockLog;
+  }
+
+  override getLog() : Log{
+    return mockLog;
+  }
 }
 
 @Injectable({
@@ -29,7 +38,7 @@ export class mockSequenceFetchService extends SequenceFetchService{
 
   override getSequences(): Observable<any> { 
     let sequences: string[] = ['Prima', 'Seconda', 'Terza'];
-    return from(sequences);
+    return of(sequences);
   }
   override getSequenceInformation(sequenceName: string): Observable<Sequence> {
     let sequence = mockSequence;
@@ -53,7 +62,7 @@ describe('SequenceSearchComponent', () => {
         LogManipulationService,
         NgbModal,
         { provide: SequenceFetchService, useClass: mockSequenceFetchService},
-        { provide: LogService, useValue: mockLogService },
+        { provide: LogService, useClass: mockLogService },
         { provide: BaseURL, useValue: environment.baseUrl }
       ]
     })
@@ -69,34 +78,25 @@ describe('SequenceSearchComponent', () => {
   });
 
   it('should have mocked sequences', () => {
-    setTimeout(()=>{
-      expect(component.sequences).toEqual(['Prima', 'Seconda', 'Terza']);
-    },2000);
+    expect(component.sequences).toEqual(['Prima', 'Seconda', 'Terza']); 
   });
 
-  it('should have identity manipulator', () => {
-    let dynamicType : String = "";
+  it('should have identity manipulator', (done: DoneFn) => {
+    component['logManipulationService']['manipulator'].subscribe(value => {
+      expect(value).toBeInstanceOf(Identity);
+      done();
+    }); 
     component.onSubmit();
-
-    setTimeout( () => {
-      component['logManipulationService']['manipulator'].subscribe({
-        next: (value) => { dynamicType = typeof value; } 
-      });
-      expect(dynamicType).toEqual("Identity");
-    }, 2000 );
   });
 
-  it('should have sequence search manipulator', () => {
-    let dynamicType : String = "";
+  it('should have sequence search manipulator', (done: DoneFn) => {
     component.sequenceForm.setValue({sequence : "InputMainNotOk"});
-    component.onSubmit();
 
-    setTimeout( () => {
-      component['logManipulationService']['manipulator'].subscribe({
-        next: (value) => { dynamicType = typeof value; } 
-      });
-      expect(dynamicType).toEqual("SequenceSearch");
-    }, 2000 );
+    component['logManipulationService']['manipulator'].subscribe(value => {
+      expect(value).toBeInstanceOf(SequenceSearch);
+      done();
+    }); 
+    component.onSubmit();
   });
 
 

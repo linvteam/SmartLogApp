@@ -9,9 +9,18 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { MdbAccordionComponent, MdbAccordionItemComponent } from 'mdb-angular-ui-kit/accordion';
+import { EventSearch } from 'src/app/LogManipulator/event-search';
+import { Log } from 'src/app/log.classes';
 
-const mockLogService = {
-  getLog: () => (mockLog)
+class mockLogServiceLog extends LogService{
+  constructor(){
+    super();
+    super.Log = mockLog;
+  }
+
+  override getLog() : Log{
+    return mockLog;
+  }
 }
 
 describe('EventSearchComponent', () => {
@@ -29,7 +38,7 @@ describe('EventSearchComponent', () => {
       declarations: [ EventSearchComponent, MdbAccordionComponent, MdbAccordionItemComponent ],
       providers : [
         LogManipulationService,
-        { provide: LogService, useValue: mockLogService }
+        { provide: LogService, useClass: mockLogServiceLog }
       ]
     })
     .compileComponents();
@@ -43,20 +52,17 @@ describe('EventSearchComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set EventSearch as LogManipulator', () => {
-    let dynamicType : String = "";
+  it('should set EventSearch as LogManipulator', (done: DoneFn) => {
     component.uploadForm.setValue({
       q: '',
       units: new FormControl(),
       subunits: new FormControl()
   });
-    setTimeout( () => {
-      component.onSubmit();
-      component['logManipulationService']['manipulator'].subscribe({
-        next: (value) => { dynamicType = typeof value; } 
-      });
-      expect(dynamicType).toEqual("EventSearch");
-    }, 2000 );
-    
+    component['logManipulationService']['manipulator'].subscribe(value => {
+      expect(value).toBeInstanceOf(EventSearch);
+      done();
+    });    
+    component.onSubmit();
+
   });
 });
