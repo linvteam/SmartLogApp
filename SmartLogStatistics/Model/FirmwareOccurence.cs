@@ -3,6 +3,6 @@
 
         public string Firmware { get; set; }
 
-        public string EventOccurrences { get; set; }
+        public int EventOccurrences { get; set; }
     }
 }

@@ -103,13 +103,24 @@ namespace SmartLogStatistics.Repository {
         /// <param name="end">Data di fine dell'analisi</param>
         /// <param name="code">Codice dell'evento voluto</param>
         /// <returns>Ritorna il numero di occorrenze dell'evento raggruppate per firmware</returns>
-        public TotalByFirmwareDto TotalByFirmwareDto(DateTime start, DateTime end, string code)
+        public TotalByFirmwareDto TotalByFirmware(DateTime start, DateTime end, string code)
         {
             var eventsFiltered = context.Log.Where(e => e.date > DateOnly.FromDateTime(start) && e.date < DateOnly.FromDateTime(end) && e.code == code);
 
+            var result = eventsFiltered.Join(context.Firmware,
+                                             line => new { line.file_id, line.unit, line.subunit },
+                                             f => new { f.file_id, f.unit, f.subunit },
+                                             (line, f) => new
+                                             {
+                                                 firmware = f.INI_file_name,
+                                             })
+                                        .GroupBy(e => e.firmware)
+                                        .Select(group => new FirmwareOccurrence { Firmware = group.Key, EventOccurrences = group.Count() })
+                                        .ToList();
+                         
             return new TotalByFirmwareDto
             {
-
+                FirmwareOccurrences = result,
             };
         }
     }
