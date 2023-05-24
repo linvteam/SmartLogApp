@@ -69,50 +69,9 @@ jobs:
     - run: npm test
       working-directory: SmartLogViewer/Frontend
 
-    - name: Create Coverage Badges - Statements
-      uses: jaywcjlove/coverage-badges-cli@main
+    - name: Publish badges
+      uses:  demyanets/angular-coverage-badges-action@v1
       with:
-        style: flat
-        label: statements
-        source: SmartLogViewer/Frontend/coverage/front-end_viewer/coverage-summary.json
-        output: /.github/badges/smartlogviewer/frontend/statements/coverage-statements.svg
-
-
-    - name: Create Coverage Badges - Lines
-      uses: jaywcjlove/coverage-badges-cli@main
-      with:
-        style: flat
-        label: lines
-        type: lines
-        source: SmartLogViewer/Frontend/coverage/front-end_viewer/coverage-summary.json
-        output: /.github/badges/smartlogviewer/frontend/lines/coverage-lines.svg
-
-    - name: Create Coverage Badges - Functions
-      uses: jaywcjlove/coverage-badges-cli@main
-      with:
-        style: flat
-        label: functions
-        type: functions
-        source: SmartLogViewer/Frontend/coverage/front-end_viewer/coverage-summary.json
-        output: /.github/badges/smartlogviewer/frontend/functions/coverage-functions.svg
-
-    - name: Create Coverage Badges - Branches
-      uses: jaywcjlove/coverage-badges-cli@main
-      with:
-        style: flat
-        label: branches
-        type: branches
-        source: SmartLogViewer/Frontend/coverage/front-end_viewer/coverage-summary.json
-        output: /.github/badges/smartlogviewer/frontend/branches/coverage-branches.svg
-
-    - name: Commit & Push changes
-      uses: Andro999b/push@v1.3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-
-    # - name: Publish badges
-    #   uses:  demyanets/angular-coverage-badges-action@v1
-    #   with:
-    #     github_token: ${{ secrets.CI_TOKEN }}
-    #     coverage-summary-path: SmartLogViewer/Frontend/coverage/front-end_viewer/coverage-summary.json
-    #     badges-directory: /.github/badges/smartlogviewer/frontend
+        github_token: ${{ secrets.CI_TOKEN }}
+        coverage-summary-path: SmartLogViewer/Frontend/coverage/front-end_viewer/coverage-summary.json
+        badges-directory: /.github/badges/smartlogviewer/frontend
