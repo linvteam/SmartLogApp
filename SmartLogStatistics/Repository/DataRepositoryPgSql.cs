@@ -1,6 +1,9 @@
 ﻿using SmartLogStatistics.Model;
 using SmartLogStatistics.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
+using System.Data.Common;
+using System.Data;
 
 namespace SmartLogStatistics.Repository {
 
@@ -27,27 +30,53 @@ namespace SmartLogStatistics.Repository {
         /// <returns>Oggetto che contiene la frequenza di occorrenza degli eventi, con eventuale raggruppamento</returns>
         public FrequencyDto Frequency(DateTime start, DateTime end, bool data, bool firmware, bool unit, bool subunit)
         {
-            //var eventsFiltered = context.Log.Where(e => e.date > DateOnly.FromDateTime(start) && e.date < DateOnly.FromDateTime(end))
-            //                                .Join(context.Event,
-            //                                      l => l.code,
-            //                                      e => e.code,
-            //                                      (line, e) =>
-            //                                         new Log
-            //                                         {
-            //                                             code = e.code,
-            //                                             date = line.date,
-            //                                             Event = e,
-            //                                         });
+          
+            StringBuilder stringBuilder = new();
 
-            //if (firmware)
-            //{
-            //    eventsFiltered = eventsFiltered.Join(context.Firmware,
-            //                                         l => new { val1 = l.Event.uni, val2 = x.Id }
-            //}
+            string groups = stringBuilder.Append(data ? "l.date," : "")
+                                         .Append(firmware ? "f.\"INI_file_name\"," : "")
+                                         .Append(unit ? "l.unit," : "")
+                                         .Append(subunit ? "l.subunit," : "")
+                                         .ToString();
 
+            string groupByString = groups.Length > 0 ? groups.Remove(groups.Length - 1) : groups;
+
+            DbCommand command = context.Log.CreateDbCommand();
+
+            command.CommandText = $"SELECT l.code,{groups}COUNT(*) FROM public.\"Log\" l LEFT JOIN public.\"Firmware\" f ON l.file_id = f.file_id AND l.unit = f.unit AND l.subunit =f.subunit  WHERE l.date > '{DateOnly.FromDateTime(start)}' AND l.date < '{DateOnly.FromDateTime(end)}' GROUP BY l.code,{groups.Remove(groups.Length - 1)}";
+            command.Connection = context.Database.GetDbConnection();
+            command.Connection.Open();
+
+            DbDataReader reader = command.ExecuteReader();
+            DataTable dataTable = new();
+            dataTable.Load(reader);
+
+            List<LogRowEnhanced> logRowEnhanceds = new();
+
+            foreach ( DataRow row in dataTable.Rows)
+            {
+                LogRowEnhanced logRow = new()
+                {
+                    Code = Convert.ToString(row["code"]),
+                    Frequency = Convert.ToInt32(row["count"])
+                };
+
+                if (data)
+                    logRow.Date = DateOnly.FromDateTime(Convert.ToDateTime(row["date"]));
+                if (firmware)
+                    logRow.Firmware = Convert.ToString(row["INI_file_name"]);
+                if (unit)
+                    logRow.Unit = Convert.ToInt32(row["unit"]);
+                if (subunit)
+                    logRow.SubUnit = Convert.ToInt32(row["subunit"]);
+
+                logRowEnhanceds.Add(logRow);
+            }
+
+            Console.WriteLine(logRowEnhanceds.Count());
             return new FrequencyDto
             {
-
+                events = logRowEnhanceds,
             };
         }
 
@@ -113,6 +142,10 @@ namespace SmartLogStatistics.Repository {
                                              (line, f) => new
                                              {
                                                  firmware = f.INI_file_name,
+                                                 line.file_id,
+                                                 line.code,
+                                                 line.unit,
+                                                 line.subunit,
                                              })
                                         .GroupBy(e => e.firmware)
                                         .Select(group => new FirmwareOccurrence { Firmware = group.Key, EventOccurrences = group.Count() })
