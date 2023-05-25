@@ -79,11 +79,11 @@ namespace SmartLogStatistics.Repository.Tests {
             mockContext.Verify(m => m.File.Add(It.IsAny<LogFile>()), Times.Once());
             mockContext.Verify(m => m.Event.Add(It.IsAny<Event>()), Times.Exactly(2));
             mockContext.Verify(m => m.Firmware.Add(It.IsAny<Firmware>()), Times.Exactly(4));
+            transactionMock.Verify(m => m.Commit(), Times.Once);
 
 
         }
 
-        
         [TestMethod()]
         [ExpectedException(typeof(FileConflictException))]
         public void ExistingFileUploadTest()
@@ -134,6 +134,9 @@ namespace SmartLogStatistics.Repository.Tests {
 
             repo.Upload(logFIle);
 
+            transactionMock.Verify( m => m.Rollback(),Times.Once);
+
         }
+
     }
 }
