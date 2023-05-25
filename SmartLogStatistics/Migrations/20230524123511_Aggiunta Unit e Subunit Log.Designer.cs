@@ -32,7 +32,7 @@ namespace SmartLogStatistics.Migrations
                     b.Property<string>("color")
                         .IsRequired()
                         .HasMaxLength(9)
-                        .HasColumnType("character varying(10)");
+                        .HasColumnType("character varying(9)");
 
                     b.Property<string>("description")
                         .IsRequired()
