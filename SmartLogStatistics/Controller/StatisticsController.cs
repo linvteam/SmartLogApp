@@ -54,7 +54,7 @@ public class StatisticsController : ControllerBase
                     StatisticsDto statistics = Repository.Statistics(startDateTime, endDateTime);
                     return Ok(statistics);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return StatusCode((int)HttpStatusCode.InternalServerError,
                         new ApiError(4, "Se è verificato un errore alla connessione"));
