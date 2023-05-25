@@ -42,7 +42,7 @@ namespace SmartLogStatistics.Controller
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
-        public IActionResult Upload(IFormFile file)
+        public IActionResult Upload([FromBody]IFormFile file)
         {
             string filename = file.FileName;                                    // Nome del file
             TextReader reader = new StreamReader(file.OpenReadStream());        // Stream di lettura
