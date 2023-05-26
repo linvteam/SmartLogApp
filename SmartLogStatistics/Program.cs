@@ -2,6 +2,7 @@ using Core;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using SmartLogStatistics.Repository;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<Parser>();
@@ -24,8 +25,11 @@ builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<SmartLogContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("SmartLogContext")), ServiceLifetime.Singleton);
+builder.Services.AddSwaggerGen(options => {
+    var xmlFIlename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFIlename));
+});
+builder.Services.AddDbContext<SmartLogContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("SmartLogContext")),ServiceLifetime.Singleton);
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();

@@ -39,7 +39,7 @@ namespace SmartLogStatistics.Repository {
 
                 if (logFiles.Any())
                 {
-                    throw new FileConflictException("Il file è già stato salvato nel database");
+                    throw new FileConflictException();
                 }
 
                 context.File.Add(logFile);
@@ -100,8 +100,11 @@ namespace SmartLogStatistics.Repository {
                 transaction.Commit();
 
             }
-            catch (Exception ex)
+            catch (DbUpdateException)
             {
+                transaction.Rollback();
+                throw new FailedConnection();
+            }catch (Exception ex) { 
                 transaction.Rollback();
                 throw ex;
             }
