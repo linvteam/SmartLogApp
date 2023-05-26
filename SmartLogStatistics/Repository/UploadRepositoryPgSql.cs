@@ -37,6 +37,7 @@ namespace SmartLogStatistics.Repository {
                 var checkQuery = from file in context.File where file.filename == log.FileName select file;
                 var logFiles = checkQuery.ToList();
 
+                //Se il file è gia presente nel database allora lancia un eccezione
                 if (logFiles.Any())
                 {
                     throw new FileConflictException();
@@ -97,6 +98,7 @@ namespace SmartLogStatistics.Repository {
                     context.SaveChanges();
                 }
 
+                //Faccio il commit della transazione nel database
                 transaction.Commit();
 
             }
