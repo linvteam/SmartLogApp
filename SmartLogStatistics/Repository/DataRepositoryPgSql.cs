@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Data.Common;
 using System.Data;
+using Microsoft.JSInterop;
 
 namespace SmartLogStatistics.Repository {
 
@@ -32,50 +33,25 @@ namespace SmartLogStatistics.Repository {
         public FrequencyDto Frequency(DateTime start, DateTime end, bool data, bool firmware, bool unit, bool subunit)
         {
           
-            StringBuilder stringBuilder = new();
-
-            string groups = stringBuilder.Append(data ? "l.date," : "")
-                                         .Append(firmware ? "f.\"INI_file_name\"," : "")
-                                         .Append(unit ? "l.unit," : "")
-                                         .Append(subunit ? "l.subunit," : "")
-                                         .ToString();
-
-            string groupByString = groups.Length > 0 ? ("," + groups.Remove(groups.Length - 1)) : groups;
-
-            DbCommand command = context.Log.CreateDbCommand();
-
-            command.CommandText = $"SELECT l.code,{groups}COUNT(*) FROM public.\"Log\" l LEFT JOIN public.\"Firmware\" f ON l.file_id = f.file_id AND l.unit = f.unit AND l.subunit =f.subunit  WHERE l.date > '{DateOnly.FromDateTime(start)}' AND l.date < '{DateOnly.FromDateTime(end)}' GROUP BY l.code{groupByString}";
-            command.Connection.Open();
-
-            DbDataReader reader = command.ExecuteReader();
-            DataTable dataTable = new();
-            dataTable.Load(reader);
-
-            if (dataTable.Rows.Count == 0) {
-               throw new EmptyOrFailedQuery();
-            }
+            var query = from line in context.Log
+                        join firm in context.Firmware
+                        on new { line.file_id, line.unit, line.subunit } equals new { firm.file_id, firm.unit, firm.subunit}
+                        group line by new { line.code, data = (data ? line.date : DateOnly.MinValue), firmware = (firmware ? firm.INI_file_name : ""), unit = (unit ? firm.unit : 0), subunit = (subunit ? firm.subunit : 0) } into g
+                        select new { key = g.Key, count = g.Count() };
 
             List<LogRowEnhanced> logRowEnhanceds = new();
 
-            foreach ( DataRow row in dataTable.Rows)
-            {
-                LogRowEnhanced logRow = new()
-                {
-                    Code = Convert.ToString(row["code"]),
-                    Frequency = Convert.ToInt32(row["count"])
-                };
-
-                if (data)
-                    logRow.Date = DateOnly.FromDateTime(Convert.ToDateTime(row["date"]));
-                if (firmware)
-                    logRow.Firmware = Convert.ToString(row["INI_file_name"]);
-                if (unit)
-                    logRow.Unit = Convert.ToInt32(row["unit"]);
-                if (subunit)
-                    logRow.SubUnit = Convert.ToInt32(row["subunit"]);
-
-                logRowEnhanceds.Add(logRow);
-            }
+            query.ToList().ForEach(r =>
+                 logRowEnhanceds.Add(new LogRowEnhanced
+                 {
+                     Code = r.key.code,
+                     Date = data ? r.key.data : null,
+                     Firmware = firmware ? r.key.firmware : null,
+                     Unit = unit ? r.key.unit : null,
+                     SubUnit = subunit ? r.key.subunit : null,
+                     Frequency = r.count
+                 })
+            );
 
             return new FrequencyDto
             {
