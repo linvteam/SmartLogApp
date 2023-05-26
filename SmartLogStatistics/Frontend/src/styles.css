@@ -1,1 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+@import 'ag-grid-community/dist/styles/ag-grid.css';
+@import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+
+
+html, body {
+    height: 100%;
+}
+
+app-root > div {
+    width: 85% !important;
+}
+
+.multiselect-dropdown .dropdown-btn {
+    border-color: #ced4da !important;
+    color: #6c757d !important;
+}
+
+.multiselect-dropdown .selected-item, .multiselect-dropdown .multiselect-item-checkbox input[type=checkbox]:checked + div::before {
+    background: var(--bs-blue) !important;
+    border-color: var(--bs-blue) !important;
+}
+
+.multiselect-dropdown .multiselect-item-checkbox input[type=checkbox] + div::before {
+    border-color: var(--bs-blue) !important;
+}
+
+.multiselect-dropdown .dropdown-list {
+    padding-top: 0 !important;
+}
+
+.multiselect-dropdown .dropdown-btn:focus {
+    border-color: #86b7fe !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
