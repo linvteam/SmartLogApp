@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartLogStatistics.Repository;
 using SmartLogStatistics.Model;
 using System.Net;
+using SmartLogStatistics.Controller;
 
 [Route("api/statistics")]
 [ApiController]
@@ -41,7 +42,7 @@ public class StatisticsController : ControllerBase
         {
             if (startDateTime > endDateTime) {
                 return StatusCode((int)HttpStatusCode.BadRequest,
-                    new ApiError(3, "Le date non sono tra loro compatibili"));
+                    new ErrorObject(3, "Le date non sono tra loro compatibili"));
             }
             try
             {
