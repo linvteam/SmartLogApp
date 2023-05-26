@@ -5,10 +5,14 @@ using SmartLogStatistics.Model;
 using Microsoft.EntityFrameworkCore;
 using SmartLogStatistics.Repository;
 using SmartLogStatistics.Exceptions;
+using NuGet.Protocol;
 
 namespace SmartLogStatistics.Repository.Tests {
     [TestClass()]
     public class DataRepositoryPgSqlTests {
+
+        private DataRepositoryPgSql repo;
+        private Mock<SmartLogContext> mockContext; 
 
         private static Mock<DbSet<T>> CreateDbSetMock<T>(IEnumerable<T> elements) where T : class
         {
@@ -23,29 +27,9 @@ namespace SmartLogStatistics.Repository.Tests {
             return dbSetMock;
         }
 
-        [TestMethod()]
-        public void FrequencyTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CumulativeTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void TotalByCodeTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void TotalByFirmwareTest()
-        {
-           
-            var mockContext = new Mock<SmartLogContext>();
+        [TestInitialize()]
+        public void Init() {
+            mockContext = new Mock<SmartLogContext>();
 
             List<LogFile> files = new()
             {
@@ -53,8 +37,8 @@ namespace SmartLogStatistics.Repository.Tests {
                 {
                     id = 1,
                     filename = "Test.csv",
-                    PC_datetime = new(2022, 03, 05, 08, 47, 18),
-                    UPS_datetime = new(2022, 03, 05, 08, 47, 17),
+                    PC_datetime = new(2022, 08, 05, 08, 47, 18),
+                    UPS_datetime = new(2022, 08, 05, 08, 47, 17),
                 }
             };
 
@@ -78,7 +62,7 @@ namespace SmartLogStatistics.Repository.Tests {
             {
                 new Model.Log
                 {
-                    code = "B001",
+                    code = "A001",
                     date = new DateOnly(2022,03,05),
                     time = new TimeOnly(08,36,29,618),
                     unit = 1,
@@ -88,6 +72,33 @@ namespace SmartLogStatistics.Repository.Tests {
                 new Model.Log
                 {
                     code = "B001",
+                    date = new DateOnly(2022,03,05),
+                    time = new TimeOnly(08,36,29,618),
+                    unit = 1,
+                    subunit =14,
+                    value = true,
+                },
+                new Model.Log
+                {
+                    code = "B001",
+                    date = new DateOnly(2022,04,05),
+                    time = new TimeOnly(08,36,29,618),
+                    unit = 1,
+                    subunit =14,
+                    value = false,
+                },
+                new Model.Log
+                {
+                    code = "C001",
+                    date = new DateOnly(2022,03,05),
+                    time = new TimeOnly(08,36,29,618),
+                    unit = 1,
+                    subunit =1,
+                    value = true,
+                },
+                new Model.Log
+                {
+                    code = "C001",
                     date = new DateOnly(2022,04,05),
                     time = new TimeOnly(08,36,29,618),
                     unit = 1,
@@ -96,109 +107,138 @@ namespace SmartLogStatistics.Repository.Tests {
                 },
                 new Model.Log
                 {
-                    code = "B001",
-                    date = new DateOnly(2022,03,05),
+                    code = "C001",
+                    date = new DateOnly(2022,05,05),
                     time = new TimeOnly(08,36,29,618),
                     unit = 1,
-                    subunit = 14,
+                    subunit = 1,
                     value = true,
                 },
                 new Model.Log
                 {
-                    code = "B001",
-                    date = new DateOnly(2022,04,05),
+                    code = "C001",
+                    date = new DateOnly(2022,05,07),
+                    time = new TimeOnly(08,36,29,618),
+                    unit = 1,
+                    subunit = 1,
+                    value = false,
+                },
+                new Model.Log
+                {
+                    code = "C001",
+                    date = new DateOnly(2022,06,05),
                     time = new TimeOnly(08,36,29,618),
                     unit = 1,
                     subunit = 14,
-                    value = true,
+                    value = false,
+                },
+                new Model.Log
+                {
+                    code = "C001",
+                    date = new DateOnly(2022,07,05),
+                    time = new TimeOnly(08,36,29,618),
+                    unit = 1,
+                    subunit = 14,
+                    value = false,
                 }
             };
             var logLineMock = CreateDbSetMock(logLines);
             var firmwareMock = CreateDbSetMock(firmwares);
-            var eventsMock = new Mock<DbSet<Event>>();
             var fileMock = CreateDbSetMock(files);
 
             mockContext.Setup(m => m.File).Returns(fileMock.Object);
             mockContext.Setup(m => m.Log).Returns(logLineMock.Object);
             mockContext.Setup(m => m.Firmware).Returns(firmwareMock.Object);
-            mockContext.Setup(m => m.Event).Returns(eventsMock.Object);
 
-            DataRepositoryPgSql repo = new(mockContext.Object);
+            repo = new(mockContext.Object);
+        }
 
-            var result = repo.TotalByFirmware(new DateOnly(2022, 01, 01).ToDateTime(TimeOnly.MinValue), new DateOnly(2024,01,01).ToDateTime(TimeOnly.MaxValue),"B001");
+        [TestMethod()]
+        public void FrequencyTest() {
+            repo.Frequency(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01), true, true, true, true);
+        }
+
+        [TestMethod()]
+        public void CumulativeTest() {
+
+            var result = repo.Cumulative(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01), "C001");
+
+            CumulativeRecord? record1 = result.records.Find(f => f.dateTime > new DateTime(2022,03,06));
+            CumulativeRecord? record2 = result.records.Find(f => f.dateTime > new DateTime(2022,05,06));
+            CumulativeRecord? record3 = result.records.Find(f => f.dateTime > new DateTime(2022,07,06));
+
+            Assert.IsNotNull(record1);
+            Assert.IsNotNull(record2);
+            Assert.IsNotNull(record3);
+            Assert.AreEqual(1,record1.EventOccurencies);
+            Assert.AreEqual(3,record2.EventOccurencies);
+            Assert.AreEqual(6,record3.EventOccurencies);
+        }
+
+        [TestMethod()]
+        public void ShorterTimeIntervalCumulativeTest() {
+
+            var result = repo.Cumulative(new DateTime(2022, 05, 01), new DateTime(2022, 05, 29), "C001");
+
+            CumulativeRecord? record1 = result.records.Find(f => f.dateTime > new DateTime(2022, 05, 06));
+            CumulativeRecord? record2 = result.records.Find(f => f.dateTime > new DateTime(2022, 05, 10));
+
+            Assert.IsNotNull(record1);
+            Assert.IsNotNull(record2);
+            Assert.AreEqual(1, record1.EventOccurencies);
+            Assert.AreEqual(2, record2.EventOccurencies);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(EmptyOrFailedQuery))]
+        public void BlankSearchCumulativeTest() {
+          
+            repo.Cumulative(new DateTime(2022, 05, 01), new DateTime(2022, 05, 29), "A");
+        }
+
+        [TestMethod()]
+        public void TotalByCodeTest() {
+
+            var result = repo.TotalByCode(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01));
+
+            CodeOccurrence? code1 = result.CodeOccurences.Find(c => c.Code == "A001");
+            CodeOccurrence? code2 = result.CodeOccurences.Find(c => c.Code == "B001");
+            CodeOccurrence? code3 = result.CodeOccurences.Find(c => c.Code == "C001");
+            Assert.IsNotNull(code1);
+            Assert.IsNotNull(code2);
+            Assert.IsNotNull(code3);
+            Assert.AreEqual(1, code1.EventOccurrences);
+            Assert.AreEqual(2, code2.EventOccurrences);
+            Assert.AreEqual(6, code3.EventOccurrences);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(EmptyOrFailedQuery))]
+        public void BlankSearchTotalByCodeTest() {
+           repo.TotalByCode(new DateTime(2000, 01, 01), new DateTime(2001, 01, 01));
+
+        }
+
+        [TestMethod()]
+        public void TotalByFirmwareTest() {
+
+            var result = repo.TotalByFirmware(new DateTime(2022, 01, 01), new DateTime(2024,01,01),"C001");
             
             FirmwareOccurrence? fw1 = result.FirmwareOccurrences.Find(f => f.Firmware == "MAPK_Module_RD_IV_v2_04_00.ini");
             FirmwareOccurrence? fw2 = result.FirmwareOccurrences.Find(f => f.Firmware == "MAPK_ByPass_v2_04_00.ini");
             
             Assert.IsNotNull(fw1);
             Assert.IsNotNull(fw2);
-            Assert.AreEqual(fw1.EventOccurrences, 2);
-            Assert.AreEqual(fw2.EventOccurrences, 2);
+            Assert.AreEqual(4,fw1.EventOccurrences);
+            Assert.AreEqual(2,fw2.EventOccurrences);
            
         }
 
         [TestMethod()]
         [ExpectedException(typeof(EmptyOrFailedQuery))]
-        public void BlankSearchTotalByFirmwareTest()
-        {
-
-            var mockContext = new Mock<SmartLogContext>();
-
-            List<LogFile> files = new()
-            {
-                new LogFile
-                {
-                    id = 1,
-                    filename = "Test.csv",
-                    PC_datetime = new(2022, 03, 05, 08, 47, 18),
-                    UPS_datetime = new(2022, 03, 05, 08, 47, 17),
-                }
-            };
-
-            List<Firmware> firmwares = new()
-            {
-                new Firmware
-                {
-                    INI_file_name = "MAPK_Module_RD_IV_v2_04_00.ini",
-                    unit = 1,
-                    subunit = 1,
-                }
-            };
-
-            List<Model.Log> logLines = new()
-            {
-                new Model.Log
-                {
-                    code = "B001",
-                    date = new DateOnly(2022,03,05),
-                    time = new TimeOnly(08,36,29,618),
-                    unit = 1,
-                    subunit =1,
-                    value = true,
-                },
-                new Model.Log
-                {
-                    code = "B001",
-                    date = new DateOnly(2022,04,05),
-                    time = new TimeOnly(08,36,29,618),
-                    unit = 1,
-                    subunit = 1,
-                    value = false,
-                }
-            };
-            var logLineMock = CreateDbSetMock(logLines);
-            var firmwareMock = CreateDbSetMock(firmwares);
-            var eventsMock = new Mock<DbSet<Event>>();
-            var fileMock = CreateDbSetMock(files);
-
-            mockContext.Setup(m => m.File).Returns(fileMock.Object);
-            mockContext.Setup(m => m.Log).Returns(logLineMock.Object);
-            mockContext.Setup(m => m.Firmware).Returns(firmwareMock.Object);
-            mockContext.Setup(m => m.Event).Returns(eventsMock.Object);
-
-            DataRepositoryPgSql repo = new(mockContext.Object);
+        public void BlankSearchTotalByFirmwareTest() {
             
-            var result = repo.TotalByFirmware(new DateOnly(2022, 01, 01).ToDateTime(TimeOnly.MinValue), new DateOnly(2024, 01, 01).ToDateTime(TimeOnly.MaxValue), "A");
+            repo.TotalByFirmware(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01), "A");
 
         }
     }

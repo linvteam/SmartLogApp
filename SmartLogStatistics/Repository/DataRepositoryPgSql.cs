@@ -45,7 +45,6 @@ namespace SmartLogStatistics.Repository {
             DbCommand command = context.Log.CreateDbCommand();
 
             command.CommandText = $"SELECT l.code,{groups}COUNT(*) FROM public.\"Log\" l LEFT JOIN public.\"Firmware\" f ON l.file_id = f.file_id AND l.unit = f.unit AND l.subunit =f.subunit  WHERE l.date > '{DateOnly.FromDateTime(start)}' AND l.date < '{DateOnly.FromDateTime(end)}' GROUP BY l.code{groupByString}";
-            command.Connection = context.Database.GetDbConnection();
             command.Connection.Open();
 
             DbDataReader reader = command.ExecuteReader();
@@ -108,7 +107,10 @@ namespace SmartLogStatistics.Repository {
 
             var records = new List<CumulativeRecord>();
 
-            for (var day = start; start <= end; day = day.AddDays(1))
+            //Se l'intervallo temporale
+            int interval = (end - start).TotalDays < 31 ? 1 : 24;
+
+            for (var day = start; day <= end; day = day.AddHours(interval))
             {
                 records.Add(new CumulativeRecord
                 {
@@ -119,6 +121,7 @@ namespace SmartLogStatistics.Repository {
 
             return new CumulativeDto
             {
+                Code = code,
                 records = records,
             };
         }
