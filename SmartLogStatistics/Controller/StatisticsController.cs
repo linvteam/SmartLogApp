@@ -21,18 +21,12 @@ public class StatisticsController : ControllerBase
             Repository = repository;
         }
 
-        /// <summary>
-        /// Messaggio di errore dell'API
-        /// </summary>
-        /// <param name="Code">Codice di errore</param>
-        /// <param name="Message">Messaggio che descrive l'errore</param>
-        internal record ApiError(int Code, string Message);
 
         /// <summary>
         /// Ritorna le statistiche sui file analizzati
         /// </summary>
-        /// <param name="start">Lower-bound temporale da cui prendere i file da analizzare</param>
-        /// <param name="end">Upper-bound temporale da cui prendere i file da analizzare</param>
+        /// <param name="startDateTime">Lower-bound temporale da cui prendere i file da analizzare</param>
+        /// <param name="endDateTime">Upper-bound temporale da cui prendere i file da analizzare</param>
         /// <returns>Esito della chiamata GET, può essere un file JSON che rappresenta le statistiche sui file analizzati o un'eccezione dovuta ad una richiesta errata / ad un errore lato server</returns>
         /// <response code="200">Vengono ritornate le statistiche del database</response>
         /// <response code="400">Se le date non sono compatibili fra loro</response>
@@ -40,25 +34,24 @@ public class StatisticsController : ControllerBase
         [HttpGet]
         [Route("{startDateTime}/{endDateTime}")]
         [ProducesResponseType(typeof(StatisticsDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ApiError), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
         public IActionResult Statistics(DateTime startDateTime, DateTime endDateTime)
         {
             if (startDateTime > endDateTime) {
                 return StatusCode((int)HttpStatusCode.BadRequest,
                     new ApiError(3, "Le date non sono tra loro compatibili"));
-            } else {
-                try
-                {
-                    StatisticsDto statistics = Repository.Statistics(startDateTime, endDateTime);
-                    return Ok(statistics);
-                }
-                catch (Exception)
-                {
-                    return StatusCode((int)HttpStatusCode.InternalServerError,
-                        new ApiError(4, "Se è verificato un errore alla connessione"));
-                }
+            }
+            try
+            {
+                StatisticsDto statistics = Repository.Statistics(startDateTime, endDateTime);
+                return Ok(statistics);
+            }
+            catch (Exception)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ErrorObject(4, "Se è verificato un errore alla connessione"));
             }
         }
 }
