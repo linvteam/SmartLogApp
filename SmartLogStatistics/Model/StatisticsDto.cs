@@ -3,7 +3,7 @@ using System.Security.Policy;
 
 namespace SmartLogStatistics.Model {
     /// <summary>
-    /// Classe contenente le statistiche di analisi dei log. È un contenutore per coppie chiave di tipo string, valore di tipo double, con date di inizio e fine analisi
+    /// Classe contenente le statistiche di analisi dei log. È un contenitore per coppie chiave di tipo string, valore di tipo double, con date di inizio e fine analisi
     /// </summary>
     public class StatisticsDto {
         /// <summary>
