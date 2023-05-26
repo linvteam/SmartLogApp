@@ -12,7 +12,7 @@ using SmartLogStatistics.Repository;
 namespace SmartLogStatistics.Migrations
 {
     [DbContext(typeof(SmartLogContext))]
-    [Migration("20230526082631_Initial")]
+    [Migration("20230526092515_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,8 +31,8 @@ namespace SmartLogStatistics.Migrations
 
                     b.Property<string>("color")
                         .IsRequired()
-                        .HasMaxLength(9)
-                        .HasColumnType("character varying(9)");
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
 
                     b.Property<string>("description")
                         .IsRequired()
@@ -81,8 +81,8 @@ namespace SmartLogStatistics.Migrations
                     b.Property<int>("subunit")
                         .HasColumnType("integer");
 
-                    b.Property<DateOnly>("time")
-                        .HasColumnType("date");
+                    b.Property<TimeOnly>("time")
+                        .HasColumnType("time without time zone");
 
                     b.Property<int>("unit")
                         .HasColumnType("integer");
@@ -106,10 +106,10 @@ namespace SmartLogStatistics.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<DateTime>("PC_datetime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("UPS_datetime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("filename")
                         .IsRequired()
