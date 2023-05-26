@@ -19,7 +19,7 @@ public class Event
     /// <summary>
     /// Oggetto di tipo string che corrisponde alla colonna color nel DB, dotato di getter e setter
     /// </summary>
-    [MaxLength(9)]
+    [MaxLength(10)]
     public string color { get; set; }
     
     /// <summary>
