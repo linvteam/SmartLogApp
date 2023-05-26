@@ -39,6 +39,6 @@
         /// <param name="end">Data di fine dell'analisi</param>
         /// <param name="code">Codice dell'evento voluto</param>
         /// <returns>Ritorna il numero di occorrenze dell'evento raggruppate per firmware</returns>
-        public Model.TotalByFirmwareDto TotalByFirmwareDto(DateTime start, DateTime end, string code);
+        public Model.TotalByFirmwareDto TotalByFirmware(DateTime start, DateTime end, string code);
     }
 }

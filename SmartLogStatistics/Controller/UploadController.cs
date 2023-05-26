@@ -9,7 +9,7 @@ namespace SmartLogStatistics.Controller
 {
     [Route("api")]
     [ApiController]
-    public class UploadController : ControllerBase{
+    public class UploadController : ControllerBase {
 
         /// <summary>
         /// Oggetto di tipo Parser dedicato al parsing dei file di log
@@ -44,7 +44,7 @@ namespace SmartLogStatistics.Controller
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
-        public IActionResult Upload(IFormFile file)
+        public IActionResult Upload([FromBody]IFormFile file)
         {
             string filename = file.FileName;                                    // Nome del file
             TextReader reader = new StreamReader(file.OpenReadStream());        // Stream di lettura
