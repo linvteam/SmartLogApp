@@ -29,7 +29,7 @@ namespace SmartLogStatistics.Migrations
 
                     b.Property<string>("color")
                         .IsRequired()
-                        .HasMaxLength(9)
+                        .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
 
                     b.Property<string>("description")
@@ -79,7 +79,7 @@ namespace SmartLogStatistics.Migrations
                     b.Property<int>("subunit")
                         .HasColumnType("integer");
 
-                    b.Property<DateOnly>("time")
+                    b.Property<TimeOnly>("time")
                         .HasColumnType("time without time zone");
 
                     b.Property<int>("unit")

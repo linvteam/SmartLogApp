@@ -11,7 +11,7 @@ namespace SmartLogStatistics.Controller
 {
     [Route("api/upload")]
     [ApiController]
-    public class UploadController : ControllerBase{
+    public class UploadController : ControllerBase {
 
         /// <summary>
         /// Oggetto di tipo Parser dedicato al parsing dei file di log
@@ -30,13 +30,6 @@ namespace SmartLogStatistics.Controller
         }
 
         /// <summary>
-        /// Messaggio di errore del parsing, record utilizzato per una corretta serializzazione di ParsingException
-        /// </summary>
-        /// <param name="Code">Codice di errore</param>
-        /// <param name="Message">Messaggio che descrive l'errore</param>
-        internal record ApiError(int Code, string Message);
-
-        /// <summary>
         /// Ritorna un JSON che rappresenta il file di log in ingresso (dopo essere stato filtrato)
         /// </summary>
         /// <param name="file">File di cui deve essere eseguito il parsing</param>
@@ -47,11 +40,11 @@ namespace SmartLogStatistics.Controller
         /// <response code="500">Se non riesce a connettersi al database</response>
         [HttpPost]
         [ProducesResponseType(typeof(Log), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ApiError), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(ApiError), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
-        public IActionResult Upload(IFormFile file)
+        public IActionResult Upload([FromBody]IFormFile file)
         {
             string filename = file.FileName;                                    // Nome del file
             TextReader reader = new StreamReader(file.OpenReadStream());        // Stream di lettura
@@ -67,17 +60,17 @@ namespace SmartLogStatistics.Controller
             catch (ParsingException e)
             {
                 reader.Close();
-                return StatusCode((int)HttpStatusCode.BadRequest, new ApiError(e.Code, e.Message));
+                return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(e.Code, e.Message));
             }
             catch (FileConflictException e)       //TODO cambiare l'exception CONFLICT
             {
                 reader.Close();
-                return StatusCode((int)HttpStatusCode.Conflict, new ApiError(8, e.Message));
+                return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(e.Code, e.Message));
             }
             catch (DbUpdateException e)       //TODO cambiare l'exception ERRORE DATABASE
             {
                 reader.Close();
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ApiError(5, e.Message));
+                return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(e.Code, e.Message));
             }
         }
     }

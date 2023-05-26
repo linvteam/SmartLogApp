@@ -67,6 +67,8 @@ namespace SmartLogStatistics.Migrations
                     date = table.Column<DateOnly>(type: "date", nullable: false),
                     time = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
                     code = table.Column<string>(type: "text", nullable: false),
+                    unit = table.Column<int>(type: "integer", nullable: false),
+                    subunit = table.Column<int>(type: "integer", nullable: false),
                     value = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>

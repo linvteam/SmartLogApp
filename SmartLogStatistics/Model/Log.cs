@@ -20,7 +20,7 @@ public class Log
     /// </summary>
     public DateOnly date { get; set; }
     /// <summary>
-    /// Oggetto di tipo DateOnly che corrisponde alla colonna time nel DB, dotato di getter e setter
+    /// Oggetto di tipo TimeOnly che corrisponde alla colonna time nel DB, dotato di getter e setter
     /// </summary>
     public TimeOnly time { get; set; }
     /// <summary>
