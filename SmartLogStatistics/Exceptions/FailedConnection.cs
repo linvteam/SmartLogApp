@@ -4,7 +4,7 @@
     /// </summary>
     public class FailedConnection: Exception {
         /// <summary>
-        /// Codice numerico associato all'erroe
+        /// Codice numerico associato all'errore
         /// </summary>
         public int Code {  get; private set; }
 
