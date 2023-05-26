@@ -10,6 +10,14 @@
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
+
+  <!-- Configurazione per rimuovere i file non necessari dalla publish del pacchetto -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <AllowedReferenceRelatedFileExtensions>
+      .allowedextension
+    </AllowedReferenceRelatedFileExtensions>
+  </PropertyGroup>
   
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />

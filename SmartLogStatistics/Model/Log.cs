@@ -20,13 +20,21 @@ public class Log
     /// </summary>
     public DateOnly date { get; set; }
     /// <summary>
-    /// Oggetto di tipo DateOnly che corrisponde alla colonna time nel DB, dotato di getter e setter
+    /// Oggetto di tipo TimeOnly che corrisponde alla colonna time nel DB, dotato di getter e setter
     /// </summary>
     public TimeOnly time { get; set; }
     /// <summary>
     /// Oggetto di tipo string che corrisponde alla colonna code nel DB, dotato di getter e setter
     /// </summary>
     public string code { get; set; }
+    /// <summary>
+    /// Oggetto di tipo int che corrisponde alla colonna unit nel DB, dotato di getter e setter
+    /// </summary>
+    public int unit { get; set; }
+    /// <summary>
+    /// Oggetto di tipo int che corrisponde alla colonna subunit nel DB, dotato di getter e setter
+    /// </summary>
+    public int subunit { get; set; }
     /// <summary>
     /// Oggetto di tipo bool che corrisponde alla colonna value nel DB, dotato di getter e setter
     /// </summary>
