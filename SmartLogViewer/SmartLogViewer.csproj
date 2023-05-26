@@ -95,8 +95,4 @@
       <Folder Include="Model\" />
     </ItemGroup>
 
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="Frontend\coverage\front-end_viewer\coverage-summary.json" />
-    </ItemGroup>
-
 </Project>
