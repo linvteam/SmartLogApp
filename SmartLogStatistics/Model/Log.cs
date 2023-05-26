@@ -28,6 +28,14 @@ public class Log
     /// </summary>
     public string code { get; set; }
     /// <summary>
+    /// Oggetto di tipo int che corrisponde alla colonna unit nel DB, dotato di getter e setter
+    /// </summary>
+    public int unit { get; set; }
+    /// <summary>
+    /// Oggetto di tipo int che corrisponde alla colonna subunit nel DB, dotato di getter e setter
+    /// </summary>
+    public int subunit { get; set; }
+    /// <summary>
     /// Oggetto di tipo bool che corrisponde alla colonna value nel DB, dotato di getter e setter
     /// </summary>
     public bool value { get; set; }
