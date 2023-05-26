@@ -2,12 +2,14 @@ using Microsoft.AspNetCore.Mvc;
 using SmartLogStatistics.Repository;
 using SmartLogStatistics.Model;
 using System.Net;
-using SmartLogStatistics.Controller;
 
-[Route("api/statistics")]
-[ApiController]
-public class StatisticsController : ControllerBase
+namespace SmartLogStatistics.Controller
 {
+
+    [Route("api/statistics")]
+    [ApiController]
+    public class StatisticsController : ControllerBase
+    {
         /// <summary>
         /// Oggetto di tipo StatisticsRepository dedicato all'acquisizione di statistiche sui file di log analizzati
         /// </summary>
@@ -40,23 +42,30 @@ public class StatisticsController : ControllerBase
         [Produces("application/json")]
         public IActionResult Statistics(DateTime startDateTime, DateTime endDateTime)
         {
-            if (startDateTime > endDateTime) {
+            if (startDateTime > endDateTime)
+            {
                 return StatusCode((int)HttpStatusCode.BadRequest,
                     new ErrorObject(3, "Le date non sono tra loro compatibili"));
             }
+
             try
             {
                 StatisticsDto statistics = Repository.Statistics(startDateTime, endDateTime);
                 return Ok(statistics);
             }
-            catch (Exception)
+            catch (Exceptions.EmptyOrFailedQuery e)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest,
+                    new ErrorObject(e.Code, e.Message));
+            }
+            catch (Exceptions.FailedConnection e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError,
-                    new ErrorObject(4, "Se è verificato un errore alla connessione"));
+                    new ErrorObject(e.Code, e.Message));
             }
         }
+    }
+
 }
-
-
 
 
