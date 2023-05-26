@@ -13,7 +13,7 @@ namespace SmartLogStatistics.Repository {
         private readonly SmartLogContext context;
 
         /// <summary>
-        /// Costruisce un nuovo oggetto di tipi StatisticRepositoryPgSql
+        /// Costruisce un nuovo oggetto di tipo StatisticRepositoryPgSql
         /// </summary>
         /// <param name="db">Il database da cui prelevare i dati</param>
         public StatisticsRepositoryPgSql(SmartLogContext db) {
@@ -25,7 +25,7 @@ namespace SmartLogStatistics.Repository {
         /// </summary>
         /// <param name="start">Data di inizio degli eventi da considerare</param>
         /// <param name="end">Data di fine degli eventi da considerare</param>
-        /// <returns>Numero di file analizzati, Numero massimo di eventi per log, media di eventi per log, deviazione standard del numero di eventi per file di log</returns>
+        /// <returns>Numero di file analizzati, numero massimo di eventi per log, media di eventi per log, deviazione standard del numero di eventi per file di log</returns>
         public StatisticsDto Statistics(DateTime start, DateTime end) {
 
             /// Questa query ha un potenziale problema di saturazione di memoria. 
@@ -38,7 +38,7 @@ namespace SmartLogStatistics.Repository {
             /// Per ora abbiamo risolto con un array di Integer, ma per sua natura è un potenziale rischio 
             /// di saturazione di memoria.
             /// 
-            /// Abbiamo pensato di risolvere calcolando manualmente i valori cosumando a mano i dati contenti nel
+            /// Abbiamo pensato di risolvere calcolando manualmente i valori consumando a mano i dati contenuti nel
             /// risultato della query. Questa soluzione però non permette di calcolare la deviazione standard 
             /// che prevede di conoscere a priori la media di eventi per file di log.
 
@@ -53,7 +53,7 @@ namespace SmartLogStatistics.Repository {
                                                     .GroupBy(x => x.file_id)
                                                     .Select(x => x.Count()).ToArray();
 
-                // Lancio qusta eccezione quando viene rilevato che la query non ha prodotto risultati
+                // Lancio questa eccezione quando viene rilevato che la query non ha prodotto risultati
                 // Serve per rispettare la specifica tecnica
                 if(filesAndEventCount.Length == 0) {
                     throw new Exceptions.EmptyOrFailedQuery();

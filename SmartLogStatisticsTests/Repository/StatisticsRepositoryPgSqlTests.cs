@@ -10,7 +10,7 @@ namespace SmartLogStatistics.Repository.Tests {
         public void StatisticsTest() {
             // Arrange
             // Inseriamo 10 file di log
-            // Sui quali inserimo X eventi arbitrari
+            // Sui quali inseriamo X eventi arbitrari
 
             double NumberOfLogFile = 10;
             double MaxLogsPerFile = 29;
@@ -152,7 +152,7 @@ namespace SmartLogStatistics.Repository.Tests {
         public void StatisticsWithLogButEmptyDateFilter() {
             // Arrange
             // Inseriamo 10 file di log
-            // Sui quali inserimo X eventi arbitrari
+            // Sui quali inseriamo X eventi arbitrari
 
 
             List<int> numberOfEvents = new() { 5, 7, 10, 4, 25, 15, 29, 20, 10, 20 };
