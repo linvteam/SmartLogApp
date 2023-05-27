@@ -99,6 +99,15 @@ namespace SmartLogStatistics.Repository.Tests {
                 new Model.Log
                 {
                     code = "C001",
+                    date = new DateOnly(2022,03,07),
+                    time = new TimeOnly(08,36,29,618),
+                    unit = 1,
+                    subunit =14,
+                    value = true,
+                },
+                new Model.Log
+                {
+                    code = "C001",
                     date = new DateOnly(2022,04,05),
                     time = new TimeOnly(08,36,29,618),
                     unit = 1,
@@ -155,8 +164,34 @@ namespace SmartLogStatistics.Repository.Tests {
 
         [TestMethod()]
         public void FrequencyTest() {
-            repo.Frequency(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01), true, true, true, true);
+            var result = repo.Frequency(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01), true, true, true, true);
+
+            Assert.AreEqual(10, result.events.Count);
+            var ev = result.events.Find(e => e.Date == new DateOnly(2022, 05, 07));
+            Assert.IsNotNull(ev);
+            Assert.AreEqual(1, ev.Frequency);
+
+            var result2 = repo.Frequency(new DateTime(2022, 04, 01), new DateTime(2024, 01, 01), false, false, false, false);
+
+            var ev2 = result2.events.Find(e => e.Code == "C001");
+            Assert.AreEqual(2, result2.events.Count);
+            Assert.IsNotNull(ev2);
+            Assert.AreEqual(5, ev2.Frequency);
+
+            var result3 = repo.Frequency(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01), false, true, false, false);
+
+            var ev3 = result3.events.Find(e => e.Code == "C001" && e.Firmware == "MAPK_ByPass_v2_04_00.ini");
+            Assert.IsNotNull(ev3);
+            Assert.AreEqual(3, ev3.Frequency);
+
         }
+
+        [TestMethod()]
+        [ExpectedException(typeof(EmptyOrFailedQuery))]
+        public void BlankSearchFrequencyTest() {
+           repo.Frequency(new DateTime(2010, 01, 01), new DateTime(2011, 01, 01), true, true, true, true);
+        }
+
 
         [TestMethod()]
         public void CumulativeTest() {
@@ -171,8 +206,8 @@ namespace SmartLogStatistics.Repository.Tests {
             Assert.IsNotNull(record2);
             Assert.IsNotNull(record3);
             Assert.AreEqual(1,record1.EventOccurencies);
-            Assert.AreEqual(3,record2.EventOccurencies);
-            Assert.AreEqual(6,record3.EventOccurencies);
+            Assert.AreEqual(4,record2.EventOccurencies);
+            Assert.AreEqual(7,record3.EventOccurencies);
         }
 
         [TestMethod()]
@@ -209,7 +244,7 @@ namespace SmartLogStatistics.Repository.Tests {
             Assert.IsNotNull(code3);
             Assert.AreEqual(1, code1.EventOccurrences);
             Assert.AreEqual(2, code2.EventOccurrences);
-            Assert.AreEqual(6, code3.EventOccurrences);
+            Assert.AreEqual(7, code3.EventOccurrences);
         }
 
         [TestMethod()]
@@ -230,7 +265,7 @@ namespace SmartLogStatistics.Repository.Tests {
             Assert.IsNotNull(fw1);
             Assert.IsNotNull(fw2);
             Assert.AreEqual(4,fw1.EventOccurrences);
-            Assert.AreEqual(2,fw2.EventOccurrences);
+            Assert.AreEqual(3,fw2.EventOccurrences);
            
         }
 

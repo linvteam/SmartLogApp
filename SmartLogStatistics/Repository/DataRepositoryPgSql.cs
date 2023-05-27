@@ -8,6 +8,9 @@ using Microsoft.JSInterop;
 
 namespace SmartLogStatistics.Repository {
 
+    /// <summary>
+    /// Classe per ottenere le statistiche sugli eventi prelevati dal database PostgreSQL
+    /// </summary>
     [Core.Injectables.Singleton(typeof(DataRepository))]
     public class DataRepositoryPgSql : DataRepository {
 
@@ -29,18 +32,37 @@ namespace SmartLogStatistics.Repository {
         /// <param name="firmware">Attiva il raggruppamento per firmware</param>
         /// <param name="unit">Attiva il raggruppamento per unit</param>
         /// <param name="subunit">Attiva il raggruppamento per subunit</param>
+        /// <exception cref="EmptyOrFailedQuery">Eccezione lanciata quando non sono stati trovati dati nell'intervallo temporale</exception>
         /// <returns>Oggetto che contiene la frequenza di occorrenza degli eventi, con eventuale raggruppamento</returns>
-        public FrequencyDto Frequency(DateTime start, DateTime end, bool data, bool firmware, bool unit, bool subunit)
-        {
-          
-            var query = from line in context.Log
+        public FrequencyDto Frequency(DateTime start, DateTime end, bool data, bool firmware, bool unit, bool subunit) {
+
+            var filterByDate = (Log log) => {
+                DateTime logdatetime = new(log.date.Year, log.date.Month, log.date.Day, log.time.Hour, log.time.Minute, log.time.Second, log.time.Millisecond);
+                return logdatetime >= start && logdatetime <= end;
+            };
+
+            //Raccolgo i dati nell'intervallo temporale selezionato
+            var eventsFiltered = context.Log.Where(e => filterByDate(e));
+
+            //Se non trovo nulla lancio un eccezione
+            if (eventsFiltered.ToList().Count == 0) {
+                throw new EmptyOrFailedQuery();
+            }
+
+            //Faccio un join con la tabella firmware in caso si è scelto di raggruppare per firmware, poi ottengo le frequenze di occorrenza
+            //Se un campo non è stato scelto il suo valore viene rimpiazzato da un valore fittizio, in modo da simulare un group by condizionale
+            var query = from line in eventsFiltered
                         join firm in context.Firmware
                         on new { line.file_id, line.unit, line.subunit } equals new { firm.file_id, firm.unit, firm.subunit}
-                        group line by new { line.code, data = (data ? line.date : DateOnly.MinValue), firmware = (firmware ? firm.INI_file_name : ""), unit = (unit ? firm.unit : 0), subunit = (subunit ? firm.subunit : 0) } into g
+                        group line by new { line.code, data = (data ? line.date : DateOnly.MinValue), 
+                                            firmware = (firmware ? firm.INI_file_name : ""), 
+                                            unit = (unit ? firm.unit : 0), 
+                                            subunit = (subunit ? firm.subunit : 0) } into g
                         select new { key = g.Key, count = g.Count() };
 
             List<LogRowEnhanced> logRowEnhanceds = new();
 
+            //Creo le righe con le frequenze, mettendo a null i campi non richiesti
             query.ToList().ForEach(r =>
                  logRowEnhanceds.Add(new LogRowEnhanced
                  {
@@ -53,10 +75,8 @@ namespace SmartLogStatistics.Repository {
                  })
             );
 
-            return new FrequencyDto
-            {
-                events = logRowEnhanceds,
-            };
+            //Ritorno i dati al controller
+            return new FrequencyDto { events = logRowEnhanceds };
         }
 
         /// <summary>
@@ -65,29 +85,30 @@ namespace SmartLogStatistics.Repository {
         /// <param name="start">Data di inizio dell'analisi</param>
         /// <param name="end">Data di fine dell'analisi</param>
         /// <param name="code">Code dell'evento da considerare</param>
+        /// <exception cref="EmptyOrFailedQuery">Eccezione lanciata quando non sono stati trovati dati nell'intervallo temporale</exception>
         /// <returns>Oggetto contenente l'andamento cumulativo</returns>
         public CumulativeDto Cumulative(DateTime start, DateTime end, string code)
         {
-            var filterByDateAndCode = (Log log) =>
-            {
+            var filterByDateAndCode = (Log log) => {
                 DateTime logdatetime = new(log.date.Year, log.date.Month, log.date.Day, log.time.Hour, log.time.Minute, log.time.Second, log.time.Millisecond);
                 return logdatetime >= start && logdatetime <= end && log.code == code;
             };
 
+            //Raccolgo i dati nell'intervallo temporale selezionato e cerco il code che mi interessa
             var eventsFiltered = context.Log.Where(e => filterByDateAndCode(e));
 
-            if (eventsFiltered.ToList().Count == 0)
-            {
+            //Se non trovo nulla lancio un eccezione
+            if (eventsFiltered.ToList().Count == 0) {
                 throw new EmptyOrFailedQuery();
             }
 
             var records = new List<CumulativeRecord>();
 
-            //Se l'intervallo temporale
+            //Se end - start è minore di un mese creo un record per ora, altrimenti creo un record per giorno
             int interval = (end - start).TotalDays < 31 ? 1 : 24;
 
-            for (var day = start; day <= end; day = day.AddHours(interval))
-            {
+            //Creo i records
+            for (var day = start; day <= end; day = day.AddHours(interval)) {
                 records.Add(new CumulativeRecord
                 {
                     dateTime = day,
@@ -95,6 +116,7 @@ namespace SmartLogStatistics.Repository {
                 });
             }
 
+            //Ritorno i record al controller
             return new CumulativeDto
             {
                 Code = code,
@@ -107,27 +129,29 @@ namespace SmartLogStatistics.Repository {
         /// </summary>
         /// <param name="start">Data di inizio dell'analisi</param>
         /// <param name="end">Data di fine dell'analisi</param>
+        /// <exception cref="EmptyOrFailedQuery">Eccezione lanciata quando non sono stati trovati dati nell'intervallo temporale</exception>
         /// <returns>Oggetto che raggruppa per ogni code il numero di occorrenze</returns>
         public TotalByCodeDto TotalByCode(DateTime start, DateTime end)
         {
-            var filterByDate = (Log log) =>
-            {
+            var filterByDate = (Log log) => {
                 DateTime logdatetime = new(log.date.Year, log.date.Month, log.date.Day, log.time.Hour, log.time.Minute, log.time.Second, log.time.Millisecond);
                 return logdatetime >= start && logdatetime <= end;
             };
 
+            //Raccolgo i dati nell'intervallo temporale selezionato
             var eventsFiltered = context.Log.Where(e => filterByDate(e));
 
-            if (eventsFiltered.ToList().Count == 0)
-            {
+            //Se non trovo nulla lancio un eccezione
+            if (eventsFiltered.ToList().Count == 0) {
                 throw new EmptyOrFailedQuery();
             }
 
-
+            //Ottengo i ragruppamenti per code e il numero di occorrenze
             var eventGroups = eventsFiltered.GroupBy(e => e.code)
                                             .Select(group => new CodeOccurrence { Code = group.Key, EventOccurrences = group.Count()})
                                             .ToList();
 
+            //Ritorno i dati al controller
             return new TotalByCodeDto { CodeOccurences = eventGroups };
         }
 
@@ -137,21 +161,24 @@ namespace SmartLogStatistics.Repository {
         /// <param name="start">Data di inizio dell'analisi</param>
         /// <param name="end">Data di fine dell'analisi</param>
         /// <param name="code">Codice dell'evento voluto</param>
+        /// <exception cref="EmptyOrFailedQuery">Eccezione lanciata quando non sono stati trovati dati nell'intervallo temporale</exception>
         /// <returns>Ritorna il numero di occorrenze dell'evento raggruppate per firmware</returns>
-        public TotalByFirmwareDto TotalByFirmware(DateTime start, DateTime end, string code)
-        {
-            var filterByDateAndCode = (Log log) =>
-            {
+        public TotalByFirmwareDto TotalByFirmware(DateTime start, DateTime end, string code) {
+
+            var filterByDateAndCode = (Log log) => {
                 DateTime logdatetime = new(log.date.Year, log.date.Month, log.date.Day, log.time.Hour, log.time.Minute, log.time.Second, log.time.Millisecond);
                 return logdatetime >= start && logdatetime <= end && log.code == code;
             };
 
+            //Raccolgo i dati nell'intervallo temporale selezionato e cerco il code che mi interessa
             var eventsFiltered = context.Log.Where(e => filterByDateAndCode(e));
 
+            //Se non trovo nulla lancio un eccezione
             if (eventsFiltered.ToList().Count == 0) {
                 throw new EmptyOrFailedQuery();
             }
 
+            //Faccio il join con Firmware per ottenere i firmare associati agli eventi, poi ottenog il numero di occorenze per firmware
             var result = eventsFiltered.Join(context.Firmware,
                                              line => new { line.file_id, line.unit, line.subunit },
                                              f => new { f.file_id, f.unit, f.subunit },
@@ -166,11 +193,9 @@ namespace SmartLogStatistics.Repository {
                                         .GroupBy(e => e.firmware)
                                         .Select(group => new FirmwareOccurrence { Firmware = group.Key, EventOccurrences = group.Count() })
                                         .ToList();
-                         
-            return new TotalByFirmwareDto
-            {
-                FirmwareOccurrences = result,
-            };
+            
+            //Ritorno i dati al controller
+            return new TotalByFirmwareDto{ FirmwareOccurrences = result };
         }
     }
 }
