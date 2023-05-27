@@ -16,7 +16,7 @@ namespace SmartLogStatistics.Migrations
                 {
                     code = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
-                    color = table.Column<string>(type: "character varying(9)", maxLength: 9, nullable: false)
+                    color = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,8 +30,8 @@ namespace SmartLogStatistics.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     filename = table.Column<string>(type: "text", nullable: false),
-                    PC_datetime = table.Column<byte[]>(type: "bytea", rowVersion: true, nullable: false),
-                    UPS_datetime = table.Column<byte[]>(type: "bytea", rowVersion: true, nullable: false)
+                    PC_datetime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UPS_datetime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,9 +64,11 @@ namespace SmartLogStatistics.Migrations
                 {
                     file_id = table.Column<int>(type: "integer", nullable: false),
                     log_line = table.Column<int>(type: "integer", nullable: false),
-                    date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    date = table.Column<DateOnly>(type: "date", nullable: false),
+                    time = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
                     code = table.Column<string>(type: "text", nullable: false),
+                    unit = table.Column<int>(type: "integer", nullable: false),
+                    subunit = table.Column<int>(type: "integer", nullable: false),
                     value = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
