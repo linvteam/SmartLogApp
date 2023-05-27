@@ -14,27 +14,29 @@ import { PieChartComponent } from './components/pie-chart/pie-chart.component';
 import { TimeComponent } from './components/time/time.component';
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavBarComponent,
-    FileUploadComponent,
-    StatisticsTableComponent,
-    EventTableComponent,
-    HistogramComponent,
-    CumulativeChartComponent,
-    PieChartComponent,
-    TimeComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    NgbModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
+    declarations: [
+        AppComponent,
+        NavBarComponent,
+        FileUploadComponent,
+        StatisticsTableComponent,
+        EventTableComponent,
+        HistogramComponent,
+        CumulativeChartComponent,
+        PieChartComponent,
+        TimeComponent
+    ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        NgbModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MdbAccordionModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
