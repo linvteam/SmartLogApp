@@ -198,9 +198,9 @@ namespace SmartLogStatistics.Repository.Tests {
 
             var result = repo.Cumulative(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01), "C001");
 
-            CumulativeRecord? record1 = result.records.Find(f => f.dateTime > new DateTime(2022,03,06));
-            CumulativeRecord? record2 = result.records.Find(f => f.dateTime > new DateTime(2022,05,06));
-            CumulativeRecord? record3 = result.records.Find(f => f.dateTime > new DateTime(2022,07,06));
+            CumulativeRecord? record1 = result.records[0];
+            CumulativeRecord? record2 = result.records[3];
+            CumulativeRecord? record3 = result.records[6];
 
             Assert.IsNotNull(record1);
             Assert.IsNotNull(record2);
@@ -215,8 +215,8 @@ namespace SmartLogStatistics.Repository.Tests {
 
             var result = repo.Cumulative(new DateTime(2022, 05, 01), new DateTime(2022, 05, 29), "C001");
 
-            CumulativeRecord? record1 = result.records.Find(f => f.dateTime > new DateTime(2022, 05, 06));
-            CumulativeRecord? record2 = result.records.Find(f => f.dateTime > new DateTime(2022, 05, 10));
+            CumulativeRecord? record1 = result.records[0];
+            CumulativeRecord? record2 = result.records[1];
 
             Assert.IsNotNull(record1);
             Assert.IsNotNull(record2);

@@ -99,26 +99,23 @@ namespace SmartLogStatistics.Repository {
             };
 
             //Raccolgo i dati nell'intervallo temporale selezionato e cerco il code che mi interessa
-            var eventsFiltered = context.Log.Where(e => filterByDateAndCode(e));
+            var eventsFiltered = context.Log.Where(e => filterByDateAndCode(e))
+                                            .ToArray();
 
             //Se non trovo nulla lancio un eccezione
-            if (eventsFiltered.ToList().Count == 0) {
+            if (eventsFiltered.Length == 0) {
                 throw new EmptyOrFailedQuery();
             }
 
             var records = new List<CumulativeRecord>();
 
-            //Se end - start è minore di un mese creo un record per ora, altrimenti creo un record per giorno
-            int interval = (end - start).TotalDays < 31 ? 1 : 24;
-
-            //Creo i records
-            for (var day = start; day <= end; day = day.AddHours(interval)) {
+            for(var i = 0;i< eventsFiltered.Length; i++) {
                 records.Add(new CumulativeRecord
                 {
-                    dateTime = day,
-                    EventOccurencies = eventsFiltered.Where(e => e.date < DateOnly.FromDateTime(day)).Count(),
+                    dateTime = eventsFiltered[i].date.ToDateTime(eventsFiltered[i].time),
+                    EventOccurencies = i + 1,
                 });
-            }
+            }   
 
             //Ritorno i record al controller
             return new CumulativeDto
