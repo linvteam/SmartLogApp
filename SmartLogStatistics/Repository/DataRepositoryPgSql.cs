@@ -16,6 +16,10 @@ namespace SmartLogStatistics.Repository {
 
         private readonly SmartLogContext context;
 
+        /// <summary>
+        /// Costruisce un nuovo oggetto di tipo DataRepositoryPgSql
+        /// </summary>
+        /// <param name="context">Il database da cui prelevare i dati</param>
         public DataRepositoryPgSql(SmartLogContext context)
         {
             this.context = context;
