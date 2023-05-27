@@ -135,6 +135,7 @@ namespace SmartLogStatistics.Repository.Tests {
             repo.Upload(logFIle);
 
             transactionMock.Verify( m => m.Rollback(),Times.Once);
+            Assert.AreEqual(1, fileMock.Object.Count());
 
         }
 
