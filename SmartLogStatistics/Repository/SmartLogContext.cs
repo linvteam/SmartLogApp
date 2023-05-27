@@ -18,9 +18,7 @@ namespace SmartLogStatistics.Repository
         {
         }
 
-        public SmartLogContext() 
-        {
-        }
+        public SmartLogContext(): base() { }
 
         /// <summary>
         /// Configura la stringa di connessione al DB
