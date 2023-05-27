@@ -29,7 +29,7 @@ namespace SmartLogStatistics.Controller.Tests
             FormFile file = new FormFile(new MemoryStream(bytes), 0, bytes.Length, null, "name");
 
             UploadController uploadController = new(parser.Object,repository.Object);
-            ObjectResult result = (ObjectResult)uploadController.Upload(file);
+            StatusCodeResult result = (StatusCodeResult)uploadController.Upload(file);
 
             Assert.AreEqual(201, result.StatusCode);
         }
