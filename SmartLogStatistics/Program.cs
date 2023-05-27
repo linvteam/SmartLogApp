@@ -25,6 +25,7 @@ builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(options => {
     var xmlFIlename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFIlename));
@@ -48,7 +49,7 @@ else
 {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
-} 
+}
 
 using (var scope = app.Services.CreateScope())
 {
