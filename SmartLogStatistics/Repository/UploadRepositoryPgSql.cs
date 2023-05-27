@@ -35,7 +35,7 @@ namespace SmartLogStatistics.Repository {
             var logFiles = checkQuery.ToList();
 
             if(logFiles.Any()) {
-                throw new FileConflictException("Il file è già stato salvato nel database");
+                throw new FileConflictException();
             }
 
             context.File.Add(logFile);

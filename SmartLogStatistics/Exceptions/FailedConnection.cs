@@ -1,21 +1,20 @@
 ﻿namespace SmartLogStatistics.Exceptions {
 
     /// <summary>
-    /// Eccezione lanciata quando si tenta di caricare un file già presente nel database
+    /// Eccezione che rappresenta una connesione fallita con il database
     /// </summary>
-    public class FileConflictException : Exception {
-
+    public class FailedConnection : Exception {
         /// <summary>
-        /// Codice numerico associato all'eccezione
+        /// Codice numerico associato all'errore
         /// </summary>
         public int Code { get; private set; }
 
         /// <summary>
         /// Crea un nuovo oggetto impostando codice e messaggio dell'errore
         /// </summary>
-        public FileConflictException() : base("Il file è già stato salvato nel database") {
-            Code = 2;
+        public FailedConnection() : base("Connessione con il database fallita") {
+            Code = 5;
         }
-
     }
+
 }

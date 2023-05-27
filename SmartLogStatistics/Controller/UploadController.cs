@@ -67,7 +67,7 @@ namespace SmartLogStatistics.Controller
                 reader.Close();
                 return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(e.Code, e.Message));
             }
-            catch (DbUpdateException e)       //TODO cambiare l'exception ERRORE DATABASE
+            catch (FailedConnection e)       //TODO cambiare l'exception ERRORE DATABASE
             {
                 reader.Close();
                 return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(e.Code, e.Message));
