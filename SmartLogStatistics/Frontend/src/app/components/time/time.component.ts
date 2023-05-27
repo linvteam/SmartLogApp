@@ -11,7 +11,14 @@ import { FormBuilder } from '@angular/forms';
   styleUrls: ['./time.component.css']
 })
 export class TimeComponent {
+  
+  public startDatetimeValue: string = '2021-05-27T12:00';
+  public endDatetimeValue: string = '2023-05-27T12:00';
 
+  public minDate = this.startDatetimeValue;
+  public maxDate = this.endDatetimeValue;
+  
+  
   /**
    * Gestore del form
    */
@@ -41,6 +48,10 @@ export class TimeComponent {
     console.log("FINE:");
     console.log(endDatetime!.getTime());
     
+  }
+
+  public formatDate(date: string) : string {
+    return (new Date(date)).toISOString().slice(0, 16);
   }
   
 }
