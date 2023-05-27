@@ -1,4 +1,4 @@
-﻿using NuGet.Protocol.Plugins;
+using NuGet.Protocol.Plugins;
 using System.Security.Policy;
 
 namespace SmartLogStatistics.Model {
