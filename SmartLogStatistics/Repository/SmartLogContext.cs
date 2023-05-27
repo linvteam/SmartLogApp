@@ -18,9 +18,7 @@ namespace SmartLogStatistics.Repository
         {
         }
 
-        public SmartLogContext() 
-        {
-        }
+        public SmartLogContext(): base() { }
 
         /// <summary>
         /// Configura la stringa di connessione al DB
@@ -47,7 +45,6 @@ namespace SmartLogStatistics.Repository
         /// Oggetto di tipo DbSet che rappresenta la tabella Event nel DB, dotato di getter e setter
         /// </summary>
         public virtual DbSet<Event> Event { get; set; }
-
         /// <summary>
         /// Crea le tabelle del DB, configurandone le chiavi interne e esterne
         /// </summary>

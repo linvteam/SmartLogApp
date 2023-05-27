@@ -9,13 +9,13 @@ namespace SmartLogStatistics.Repository {
         /// Ottieni una lista dei codici con relative descrizioni
         /// </summary>
         /// <returns>Lista di codici e descrizioni</returns>
-        public List<CodeWithDescriptionDto> GetGodesWithDescription();
+        public List<CodeWithDescriptionDto> GetCodesWithDescription();
 
         /// <summary>
         /// Ottieni l'intervallo temporale dei dati disponibili sul database
         /// </summary>
         /// <returns>Oggetto con una coppia di DateTime per inizo e fine</returns>
-        public DateTimeIntervalDto DateTimeInterval();
+        public DateTimeIntervalDto GetTimeInterval();
 
         /// <summary>
         /// Ottieni i firmware registrati nel database
