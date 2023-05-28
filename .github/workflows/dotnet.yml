@@ -21,8 +21,18 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
+
+    - name: Test Core
       run: dotnet test -p:ExcludeByFile="**/Program.cs" --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover
+      working-directory: ./CoreTests
+
+    - name: Test SmartLogViewer
+      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover /p:Exclude=[*]Core*
+      working-directory: ./SmartLogViewerTests
+
+    - name: Test SmartLogStatistics
+      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover /p:Exclude=[*]Core*
+      working-directory: ./SmartLogStatisticsTests
 
     - name: OpenCover Badge Generator - Core
       uses: danpetitt/open-cover-badge-generator-action@v1.0.9

@@ -70,7 +70,7 @@ ScaffoldingReadMe.txt
 StyleCopReport.xml
 
 # Visual Studio Code
-.vscode/*
+*/.vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -378,3 +378,5 @@ FodyWeavers.xsd
 /SmartLogViewer/Frontend/dist
 /SmartLogViewer/Frontend/documentation
 /SmartLogViewer/Frontend/coverage
+/SmartLogStatistics/Frontend/dist
+/SmartLogStatistics/Frontend/documentation
