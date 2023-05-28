@@ -1,34 +1,18 @@
-<mdb-accordion>
-    <mdb-accordion-item>
-        <ng-template mdbAccordionItemHeader>Inserimento Code</ng-template>
-        <ng-template mdbAccordionItemBody>
-            <div class="container">
-                <form class="row gy-2 gx-3 align-items-center col-auto" [formGroup]="formGroup" (ngSubmit)="submitForm()">
+<div class="container">
+    <form class="row gy-2 gx-3 align-items-center col-auto" [formGroup]="formGroup" (ngSubmit)="submitForm()">
+        
+        <div class="form-group">
+            <label for="codeSelector" class="visually-hidden">Code:</label>
+            <ng-multiselect-dropdown id="codeSelector"
+                                     formControlName="code"
+                                     [placeholder]="'Seleziona il code'"
+                                     [data]='availableCode'
+                                     [(ngModel)]="selectedCode"
+                                     [settings]="dropdownSettings"></ng-multiselect-dropdown>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Inserisci</button>
+    </form>
 
-                    <div class="row">
-                        <div class="col tooltip-parent">
-                            <label for="codeSelector" class="visually-hidden">Code:</label>
-                            <ng-multiselect-dropdown id="codeSelector"
-                                                     formControlName="code"
-                                                     [placeholder]="'Seleziona il code'"
-                                                     [data]='availableCode'
-                                                     [(ngModel)]="selectedCode"
-                                                     [settings]="dropdownSettings"></ng-multiselect-dropdown>
-                            <div class="mytooltip">
-                                Seleziona il code
-                            </div>
-                        </div>
-                    </div>
+</div>
 
-                    <div class="row">
-                        <div aria-hidden="true" class="col-8"></div>
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-primary form-control">Inserisci</button>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
-        </ng-template>
-    </mdb-accordion-item>
-</mdb-accordion>

@@ -17,6 +17,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
 import { CodeComponent } from './components/code/code.component';
 import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
+import { TimeHeaderComponent } from './components/time-header/time-header.component';
+import { TimeCodeHeaderComponent } from './components/time-code-header/time-code-header.component';
 
 @NgModule({
     declarations: [
@@ -29,7 +31,9 @@ import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
         CumulativeChartComponent,
         PieChartComponent,
         TimeComponent,
-        CodeComponent
+        CodeComponent,
+        TimeHeaderComponent,
+        TimeCodeHeaderComponent
     ],
     imports: [
         BrowserModule,
