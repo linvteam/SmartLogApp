@@ -72,6 +72,7 @@ Date ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot 
             Assert.AreEqual(0, parsedLog.Events[0].SubUnit);
             Assert.AreEqual("S009", parsedLog.Events[0].Code);
             Assert.AreEqual("In Service mode", parsedLog.Events[0].Description);
+            Assert.AreEqual(false, parsedLog.Events[0].Value);
             Assert.AreEqual("0xFFE0FFFF", parsedLog.Events[0].Color);
 
         }

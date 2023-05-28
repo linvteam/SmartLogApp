@@ -16,7 +16,7 @@ namespace SmartLogViewerTests.IntegrationTest {
     public class SequencesTest {
 
         [TestMethod()]
-        public void Test() {
+        public void TestEmptySequencesFile() {
 
             Mock<SequenceFileReader> reader = new();
             reader.Setup(x => x.StreamReader()).Returns(new StreamReader(
@@ -73,8 +73,8 @@ namespace SmartLogViewerTests.IntegrationTest {
             Assert.IsNotNull(s);
             Assert.AreEqual("TestSequence", s.Name);
 
-            NotFoundObjectResult notFount = (NotFoundObjectResult)controller.GetSequenceParameters("InvalidName");
-            Assert.AreEqual(404, notFount.StatusCode);
+            NotFoundObjectResult notFound = (NotFoundObjectResult)controller.GetSequenceParameters("InvalidName");
+            Assert.AreEqual(404, notFound.StatusCode);
 
         }
 
