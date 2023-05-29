@@ -37,7 +37,7 @@
         /// <param name="firmware">Configurazione che ha generato l'evento</param>
         /// <param name="unit">Unit che ha generato l'evento</param>
         /// <param name="subUnit">SubUnit che ha generato l'evento</param>
-        public LogRowEnhanced(string code, int frequency, DateOnly? date = null, string? firmware = null, int? unit = null, int? subUnit = null) {
+        public LogRowEnhanced(string code, double frequency, DateOnly? date = null, string? firmware = null, int? unit = null, int? subUnit = null) {
             Code = code;
             Date = date;
             Firmware = firmware;

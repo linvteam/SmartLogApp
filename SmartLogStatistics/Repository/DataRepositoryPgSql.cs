@@ -48,8 +48,10 @@ namespace SmartLogStatistics.Repository {
             //Raccolgo i dati nell'intervallo temporale selezionato
             var eventsFiltered = context.Log.Where(e => filterByDate(e));
 
+            double eventCount = eventsFiltered.Count();
+
             //Se non trovo nulla lancio un eccezione
-            if (eventsFiltered.ToList().Count == 0) {
+            if (eventCount == 0) {
                 throw new EmptyOrFailedQuery();
             }
 
@@ -62,7 +64,7 @@ namespace SmartLogStatistics.Repository {
                                             firmware = (firmware ? firm.INI_file_name : ""), 
                                             unit = (unit ? firm.unit : 0), 
                                             subunit = (subunit ? firm.subunit : 0) } into g
-                        select new { key = g.Key, count = g.Count() };
+                        select new { key = g.Key, count = (g.Count() / eventCount) };
 
             List<LogRowEnhanced> logRowEnhanceds = new();
 

@@ -21,7 +21,7 @@ namespace SmartLogStatistics.Controller.Tests
         public void FrequencyTest()
         {
             Mock<DataRepository> repository = new();
-            repository.Setup(x => x.Frequency(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<Boolean>(), It.IsAny<Boolean>(), It.IsAny<Boolean>(), It.IsAny<Boolean>())).Returns(new FrequencyDto());
+            repository.Setup(x => x.Frequency(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<Boolean>(), It.IsAny<Boolean>(), It.IsAny<Boolean>(), It.IsAny<Boolean>())).Returns(new FrequencyDto(new List<LogRowEnhanced>()));
 
             DataController dataController = new(repository.Object);
             ObjectResult result = (ObjectResult)dataController.Frequency(DateTime.Now, DateTime.Now, false, false, false, false);
@@ -35,7 +35,7 @@ namespace SmartLogStatistics.Controller.Tests
             var startDateTime = DateTime.Parse("Jan 1, 2009");
             var endDateTime = DateTime.Parse("Jan 1, 2008");
             Mock<DataRepository> repository = new();
-            repository.Setup(x => x.Frequency(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<Boolean>(), It.IsAny<Boolean>(), It.IsAny<Boolean>(), It.IsAny<Boolean>())).Returns(new FrequencyDto());
+            repository.Setup(x => x.Frequency(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<Boolean>(), It.IsAny<Boolean>(), It.IsAny<Boolean>(), It.IsAny<Boolean>())).Returns(new FrequencyDto(new List<LogRowEnhanced>()));
 
             DataController dataController = new(repository.Object);
             ObjectResult result = (ObjectResult)dataController.Frequency(startDateTime, endDateTime, false, false, false, false);
@@ -63,7 +63,7 @@ namespace SmartLogStatistics.Controller.Tests
         public void CumulativeTest()
         {
             Mock<DataRepository> repository = new();
-            repository.Setup(x => x.Cumulative(It.IsAny<DateTime>(), It.IsAny<DateTime>(), "AZ")).Returns(new CumulativeDto());
+            repository.Setup(x => x.Cumulative(It.IsAny<DateTime>(), It.IsAny<DateTime>(), "AZ")).Returns(new CumulativeDto("AZ",new List<CumulativeRecord>()));
 
             DataController dataController = new(repository.Object);
             ObjectResult result = (ObjectResult)dataController.Cumulative(DateTime.Now, DateTime.Now, "AZ");
@@ -77,7 +77,7 @@ namespace SmartLogStatistics.Controller.Tests
             var startDateTime = DateTime.Parse("Jan 1, 2009");
             var endDateTime = DateTime.Parse("Jan 1, 2008");
             Mock<DataRepository> repository = new();
-            repository.Setup(x => x.Cumulative(It.IsAny<DateTime>(), It.IsAny<DateTime>(), "AZ")).Returns(new CumulativeDto());
+            repository.Setup(x => x.Cumulative(It.IsAny<DateTime>(), It.IsAny<DateTime>(), "AZ")).Returns(new CumulativeDto("AZ",new List<CumulativeRecord>()));
 
             DataController dataController = new(repository.Object);
             ObjectResult result = (ObjectResult)dataController.Cumulative(startDateTime, endDateTime, "AZ");
@@ -105,7 +105,7 @@ namespace SmartLogStatistics.Controller.Tests
         public void TotalByCodeTest()
         {
             Mock<DataRepository> repository = new();
-            repository.Setup(x => x.TotalByCode(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(new TotalByCodeDto());
+            repository.Setup(x => x.TotalByCode(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(new TotalByCodeDto(new List<CodeOccurrence>()));
 
             DataController dataController = new(repository.Object);
             ObjectResult result = (ObjectResult)dataController.TotalByCode(DateTime.Now, DateTime.Now);
@@ -119,7 +119,7 @@ namespace SmartLogStatistics.Controller.Tests
             var startDateTime = DateTime.Parse("Jan 1, 2009");
             var endDateTime = DateTime.Parse("Jan 1, 2008");
             Mock<DataRepository> repository = new();
-            repository.Setup(x => x.TotalByCode(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(new TotalByCodeDto());
+            repository.Setup(x => x.TotalByCode(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(new TotalByCodeDto(new List<CodeOccurrence>()));
 
             DataController dataController = new(repository.Object);
             ObjectResult result = (ObjectResult)dataController.TotalByCode(startDateTime, endDateTime);
@@ -148,7 +148,7 @@ namespace SmartLogStatistics.Controller.Tests
         public void TotalByFirmwareTest()
         {
             Mock<DataRepository> repository = new();
-            repository.Setup(x => x.TotalByFirmware(It.IsAny<DateTime>(), It.IsAny<DateTime>(), "AZ")).Returns(new TotalByFirmwareDto());
+            repository.Setup(x => x.TotalByFirmware(It.IsAny<DateTime>(), It.IsAny<DateTime>(), "AZ")).Returns(new TotalByFirmwareDto(new List<FirmwareOccurrence>()));
 
             DataController dataController = new(repository.Object);
             ObjectResult result = (ObjectResult)dataController.TotalByFirmware(DateTime.Now, DateTime.Now, "AZ");
@@ -162,7 +162,7 @@ namespace SmartLogStatistics.Controller.Tests
             var startDateTime = DateTime.Parse("Jan 1, 2009");
             var endDateTime = DateTime.Parse("Jan 1, 2008");
             Mock<DataRepository> repository = new();
-            repository.Setup(x => x.TotalByFirmware(It.IsAny<DateTime>(), It.IsAny<DateTime>(), "AZ")).Returns(new TotalByFirmwareDto());
+            repository.Setup(x => x.TotalByFirmware(It.IsAny<DateTime>(), It.IsAny<DateTime>(), "AZ")).Returns(new TotalByFirmwareDto(new List<FirmwareOccurrence>()));
 
             DataController dataController = new(repository.Object);
             ObjectResult result = (ObjectResult)dataController.TotalByFirmware(startDateTime, endDateTime, "AZ");

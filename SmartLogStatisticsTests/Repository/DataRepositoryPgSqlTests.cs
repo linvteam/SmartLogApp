@@ -169,20 +169,20 @@ namespace SmartLogStatistics.Repository.Tests {
             Assert.AreEqual(10, result.events.Count);
             var ev = result.events.Find(e => e.Date == new DateOnly(2022, 05, 07));
             Assert.IsNotNull(ev);
-            Assert.AreEqual(1, ev.Frequency);
+            Assert.AreEqual(1.0d/10.0d, ev.Frequency);
 
             var result2 = repo.Frequency(new DateTime(2022, 04, 01), new DateTime(2024, 01, 01), false, false, false, false);
 
             var ev2 = result2.events.Find(e => e.Code == "C001");
             Assert.AreEqual(2, result2.events.Count);
             Assert.IsNotNull(ev2);
-            Assert.AreEqual(5, ev2.Frequency);
+            Assert.AreEqual(5.0d/6.0d, ev2.Frequency);
 
             var result3 = repo.Frequency(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01), false, true, false, false);
 
             var ev3 = result3.events.Find(e => e.Code == "C001" && e.Firmware == "MAPK_ByPass_v2_04_00.ini");
             Assert.IsNotNull(ev3);
-            Assert.AreEqual(3, ev3.Frequency);
+            Assert.AreEqual(3.0d/10.0d, ev3.Frequency);
 
         }
 
