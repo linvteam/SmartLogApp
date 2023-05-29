@@ -15,10 +15,10 @@
 
 <!-- parte di pagina da mostrare quando si effettua l'upload -->
 <div *ngIf="uploadedFiles != -1">
-    <h1>Caricamento file in corso...</h1>
+    <h1>Caricamento file</h1>
 
     <div class="progress my-progress">
-        <div class="progress-bar bg-success progress-bar-striped"
+        <div class="progress-bar progress-bar-info progress-bar-striped"
              role="progressbar"
              [ngStyle]="{ width: (uploadedFiles * 100 / currentFiles.length) + '%'}">
         </div>
@@ -30,7 +30,7 @@
     </div>
 
     <div class="alert alert-dark my-alert" *ngIf="uploadedFiles ==  currentFiles.length">
-        Caricamento completato
+        Caricamento completato <span *ngIf="errors">con errori</span>
     </div>
 
     <mdb-accordion>
@@ -54,8 +54,8 @@
                         </div>
                     </div>
                     <div class="col-6" *ngIf="file.status == 'uploading'">
-                        <div class="progess my-progress">
-                            <div class="progress-bar progress-bar-stripped bg-success"
+                        <div class="progress my-progress">
+                            <div class="progress-bar progress-bar-striped bg-success"
                                  role="progressbar"
                                  [ngStyle]="{width: file.progress + '%'}">
                             </div>
@@ -64,6 +64,11 @@
                     </div>
                     <div class="col-6" *ngIf="file.status == 'failed'">
                         <div class="alert alert-danger" role="alert">
+                            {{ file.error }}
+                        </div>
+                    </div>
+                    <div class="col-6" *ngIf="file.status == 'warning'">
+                        <div class="alert alert-warning" role="alert">
                             {{ file.error }}
                         </div>
                     </div>

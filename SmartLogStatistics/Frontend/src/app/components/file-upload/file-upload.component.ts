@@ -34,6 +34,8 @@ export class FileUploadComponent {
      */
     public uploadedFiles: number = -1;
 
+    public errors: boolean = false;
+
     /**
      * Costruisce una nuova classe che controlla il comportamento del widget di upload dei file, i parametri vengono passati tramite dependency injector
      * @param uploadService Service che gestisce l'upload dei file sul server
@@ -97,11 +99,14 @@ export class FileUploadComponent {
         return (event: any) => {
             this.currentFiles[fileIndex].status = "failed";
             if (event.error && event.error.message) {
+                if (event.error.code == 8) {
+                    this.currentFiles[fileIndex].status = 'warning';
+                }
                 this.currentFiles[fileIndex].error = event.error.message;
             } else {
-                this.currentFiles[fileIndex].error = "Impossibile caricare il file ";
+                this.currentFiles[fileIndex].error = "Impossibile caricare il file";
             }
-            
+            this.errors = true;
             this.uploadedFiles++;
             if (this.uploadedFiles < this.currentFiles.length)
                 this.upload();
@@ -110,6 +115,7 @@ export class FileUploadComponent {
 
     public upload(): void {
         if (this.uploadedFiles == -1) return;
+        this.currentFiles[this.uploadedFiles].status = "uploading"
         this.uploadService.upload(this.currentFiles[this.uploadedFiles].file).subscribe({
             next: this.uploadEventHandler(this.uploadedFiles),
             error: this.uploadErrorHandler(this.uploadedFiles)

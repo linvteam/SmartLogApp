@@ -42,7 +42,7 @@ import { BaseURL } from './connection-info';
         MdbAccordionModule
     ],
     providers: [
-        { provide: BaseURL, useValue: 'http://localhost:7253/api'}
+        { provide: BaseURL, useValue: 'https://localhost:7253/api'}
     ],
     bootstrap: [AppComponent]
 })
