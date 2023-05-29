@@ -8,12 +8,12 @@
         /// <summary>
         /// Istante upper-bound dell'intervallo di tempo considerato
         /// </summary>
-        public DateTime Instant {  get; set; }
+        public DateTime Instant {  get; private set; }
 
         /// <summary>
         /// Numero di occorrenze dell'evento fino a quel istante
         /// </summary>
-        public int EventOccurencies { get; set; }
+        public int EventOccurencies { get; private set; }
 
         /// <summary>
         /// Costruisce un record di un istante di un evento

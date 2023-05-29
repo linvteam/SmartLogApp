@@ -8,12 +8,12 @@
         /// <summary>
         /// Codice dell'evento
         /// </summary>
-        public string Code { get; set; }
+        public string Code { get; private set; }
 
         /// <summary>
         /// Numero di occorrenze dell'evento
         /// </summary>
-        public int EventOccurrences { get; set; }
+        public int EventOccurrences { get; private set; }
 
         /// <summary>
         /// Costruisce un oggetto contenente il numero di occorrenze di un certo evento

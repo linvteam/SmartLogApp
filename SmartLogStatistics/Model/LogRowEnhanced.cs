@@ -6,27 +6,27 @@
         /// <summary>
         /// Codice dell'evento
         /// </summary>
-        public string Code { get; set; }
+        public string Code { get; private set; }
         /// <summary>
         /// La data nella quale si è scatenato l'evento
         /// </summary>
-        public DateOnly? Date { get; set; }
+        public DateOnly? Date { get; private set; }
         /// <summary>
         /// La configurazione che ha generato l'evento
         /// </summary>
-        public string? Firmware { get; set; }
+        public string? Firmware { get; private set; }
         /// <summary>
         /// La Unit che ha generato l'evento
         /// </summary>
-        public int? Unit { get; set; }
+        public int? Unit { get; private set; }
         /// <summary>
         /// La SubUnit che ha generato l'evento
         /// </summary>
-        public int? SubUnit { get; set; }
+        public int? SubUnit { get; private set; }
         /// <summary>
         /// La frequenza d'occorrenza dell'evento
         /// </summary>
-        public double Frequency { get; set; }
+        public double Frequency { get; private set; }
 
         /// <summary>
         /// Costruisce l'oggetto contenente la frequenza di occorrenza per code e altri campi se richiesti

@@ -8,12 +8,12 @@
         /// <summary>
         /// Stringa che rappresenta il firmware
         /// </summary>
-        public string Firmware { get; set; }
+        public string Firmware { get; private set; }
 
         /// <summary>
         /// Numero di eventi registrati dal firmware
         /// </summary>
-        public int EventOccurrences { get; set; }
+        public int EventOccurrences { get; private set; }
 
         /// <summary>
         /// Costruisce un oggetto che rappresenta il numero di occorrenze registrate da un firmware
