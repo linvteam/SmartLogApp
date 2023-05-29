@@ -1,7 +1,7 @@
 ﻿namespace SmartLogStatistics.Model {
 
     /// <summary>
-    /// Classe che rappresenta un istante di un evento e il numero di occorrenze fino a quel istante
+    /// Classe che rappresenta un istante di un evento e il numero di occorrenze dello stesso evento fino a quell' istante
     /// </summary>
     public class CumulativeRecord {
 
