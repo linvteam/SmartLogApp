@@ -6,7 +6,7 @@
         public int EventOccurencies { get; set; }
 
         public CumulativeRecord(DateTime dateTime, int eventOccurencies) {
-            this.dateTime = dateTime;
+            this.Instant = dateTime;
             this.EventOccurencies = eventOccurencies;
         }
     }
