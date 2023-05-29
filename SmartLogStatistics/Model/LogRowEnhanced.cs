@@ -1,6 +1,6 @@
 ﻿namespace SmartLogStatistics.Model {
     /// <summary>
-    /// Classe che rappresenta un evento e la sua frequenza di occorrenza, raggrupata a seconda dei campi scelti
+    /// Classe che rappresenta un evento e la sua frequenza di occorrenza, raggruppata a seconda dei campi scelti
     /// </summary>
     public class LogRowEnhanced {
         /// <summary>
@@ -16,7 +16,7 @@
         /// </summary>
         public string? Firmware { get; set; }
         /// <summary>
-        /// La unit che ha generato l'evento
+        /// La Unit che ha generato l'evento
         /// </summary>
         public int? Unit { get; set; }
         /// <summary>
@@ -29,10 +29,10 @@
         public double Frequency { get; set; }
 
         /// <summary>
-        /// Costruice l'oggetto contenente la frequenza di occorrenza per code e altri campi se richiesti
+        /// Costruisce l'oggetto contenente la frequenza di occorrenza per code e altri campi se richiesti
         /// </summary>
         /// <param name="code">Codice dell'evento</param>
-        /// <param name="frequency">Frequenza d'occorrenza dell'evento</param>
+        /// <param name="frequency">Frequenza di occorrenza dell'evento</param>
         /// <param name="date">Data in cui si è scatenato l'evento</param>
         /// <param name="firmware">Configurazione che ha generato l'evento</param>
         /// <param name="unit">Unit che ha generato l'evento</param>

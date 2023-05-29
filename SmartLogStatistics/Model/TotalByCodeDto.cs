@@ -11,9 +11,9 @@
         public List<CodeOccurrence> CodeOccurences { get; set; }
 
         /// <summary>
-        /// Crea un oggetto con le occorenze degli eventi per code
+        /// Crea un oggetto con le occorrenze degli eventi per code
         /// </summary>
-        /// <param name="codeOccurences">Le occorrenze dei eventi per code</param>
+        /// <param name="codeOccurences">Le occorrenze degli eventi per code</param>
         public TotalByCodeDto(List<CodeOccurrence> codeOccurences) {
             CodeOccurences = codeOccurences;
         }
