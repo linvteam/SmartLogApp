@@ -18,7 +18,7 @@
         /// <summary>
         /// Costruisce un record di un istante di un evento
         /// </summary>
-        /// <param name="dateTime">Paramnetro dell'istante temporale</param>
+        /// <param name="dateTime">Istante temporale di upper-bound</param>
         /// <param name="eventOccurencies">Numero di occorrenze dell'evento fino a quel istante</param>
         public CumulativeRecord(DateTime dateTime, int eventOccurencies) {
             this.Instant = dateTime;
