@@ -16,7 +16,7 @@
         public int EventOccurrences { get; set; }
 
         /// <summary>
-        /// Costruisce un oggetto contenente il numero di ooccorrenze di un certo codice
+        /// Costruisce un oggetto contenente il numero di occorrenze di un certo evento
         /// </summary>
         /// <param name="code">Codice dell'evento</param>
         /// <param name="eventOccurrences">Numero di occorenze del codice</param>
