@@ -17,9 +17,5 @@
         public FrequencyDto(List<LogRowEnhanced> events) {
             this.events = events;
         }
-
-        public FrequencyDto() {
-            events = new List<LogRowEnhanced>();
-        }
     }
 }
