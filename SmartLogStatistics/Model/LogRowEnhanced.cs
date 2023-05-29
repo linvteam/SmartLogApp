@@ -1,33 +1,42 @@
 ﻿namespace SmartLogStatistics.Model {
     /// <summary>
-    /// Classe che rappresenta un evento e la sua frequenza di occorenza, raggrupata a seconda dei campi scelti
+    /// Classe che rappresenta un evento e la sua frequenza di occorrenza, raggrupata a seconda dei campi scelti
     /// </summary>
     public class LogRowEnhanced {
         /// <summary>
-        /// Oggetto di tipo string che contiene il codice dell'evento
+        /// Codice dell'evento
         /// </summary>
         public string? Code { get; set; }
         /// <summary>
-        /// Oggetto di tipo DateOnly che contiene la data nella quale si è scatenato l'evento
+        /// La data nella quale si è scatenato l'evento
         /// </summary>
         public DateOnly? Date { get; set; }
         /// <summary>
-        /// Oggetto di tipo string che rappresenta la configurazione che ha generato l'evento
+        /// La configurazione che ha generato l'evento
         /// </summary>
         public string? Firmware { get; set; }
         /// <summary>
-        /// Oggetto di tipo unit che corrisponde alla unità che ha generato l'evento
+        /// La unit che ha generato l'evento
         /// </summary>
         public int? Unit { get; set; }
         /// <summary>
-        /// Oggetto di tipo unit che corrisponde alla sotto-unità che ha generato l'evento
+        /// La SubUnit che ha generato l'evento
         /// </summary>
         public int? SubUnit { get; set; }
         /// <summary>
-        /// Oggetto di tipo int che rappresenta la frequenza d'occorenza dell'evento
+        /// La frequenza d'occorrenza dell'evento
         /// </summary>
-        public int Frequency { get; set; }
+        public double Frequency { get; set; }
 
+        /// <summary>
+        /// Costruice l'oggetto contenente la frequenza di occorrenza per code e altri campi se richiesti
+        /// </summary>
+        /// <param name="code">Codice dell'evento</param>
+        /// <param name="frequency">Frequenza d'occorrenza dell'evento</param>
+        /// <param name="date">Data in cui si è scatenato l'evento</param>
+        /// <param name="firmware">Configurazione che ha generato l'evento</param>
+        /// <param name="unit">Unit che ha generato l'evento</param>
+        /// <param name="subUnit">SubUnit che ha generato l'evento</param>
         public LogRowEnhanced(string code, int frequency, DateOnly? date = null, string? firmware = null, int? unit = null, int? subUnit = null) {
             Code = code;
             Date = date;
