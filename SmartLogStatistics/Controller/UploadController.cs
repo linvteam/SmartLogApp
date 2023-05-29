@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using NuGet.Packaging.Licenses;
 using SmartLogStatistics.Repository;
 using System.Net;
+using Microsoft.EntityFrameworkCore;
+using SmartLogStatistics.Exceptions;
 
 namespace SmartLogStatistics.Controller
 {
@@ -62,16 +64,16 @@ namespace SmartLogStatistics.Controller
                 reader.Close();
                 return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(e.Code, e.Message));
             }
-            /* catch (Exception e)       //TODO cambiare l'exception CONFLICT
+            catch (FileConflictException e)       //TODO cambiare l'exception CONFLICT
             {
                 reader.Close();
                 return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(e.Code, e.Message));
             }
-            catch (Exception e)       //TODO cambiare l'exception ERRORE DATABASE
+            catch (FailedConnection e)       //TODO cambiare l'exception ERRORE DATABASE
             {
                 reader.Close();
                 return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(e.Code, e.Message));
-            }*/
+            }
         }
     }
 }
