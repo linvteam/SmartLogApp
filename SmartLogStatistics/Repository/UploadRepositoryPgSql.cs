@@ -103,10 +103,10 @@ namespace SmartLogStatistics.Repository {
                 //Faccio il commit della transazione nel database
                 transaction.Commit();
 
-            } catch(DbUpdateException e) {
+            } catch(DbUpdateException) {
                 //In caso di errore, si fa il rollback e di conseguenza non si salva nulla sul DB
                 transaction.Rollback();
-                throw new FailedConnection();
+                throw new FailedConnectionException();
             } catch(Exception) {
                 transaction.Rollback();
                 throw;

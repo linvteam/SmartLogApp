@@ -1,14 +1,13 @@
 ﻿using Core;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Packaging.Licenses;
 using SmartLogStatistics.Repository;
 using System.Net;
-using Microsoft.EntityFrameworkCore;
 using SmartLogStatistics.Exceptions;
 
-namespace SmartLogStatistics.Controller
-{
+namespace SmartLogStatistics.Controller {
+    /// <summary>
+    /// Controller per la gestione delle chuamate post di 
+    /// </summary>
     [Route("api")]
     [ApiController]
     public class UploadController : ControllerBase {
@@ -17,12 +16,14 @@ namespace SmartLogStatistics.Controller
         /// Oggetto di tipo Parser dedicato al parsing dei file di log
         /// </summary>
         private readonly Parser LogParser;
-        private UploadRepository Repository;
+
+        private readonly UploadRepository Repository;
 
         /// <summary>
         /// Crea una nuova istanza del controller
         /// </summary>
         /// <param name="parser">Parser per i file di log</param>
+        /// <param name="repository">Repository che gestisce l'inseriemento dei dati nel database</param>
         public UploadController(Parser parser,UploadRepository repository)
         {
             LogParser = parser;
@@ -69,7 +70,7 @@ namespace SmartLogStatistics.Controller
                 reader.Close();
                 return StatusCode((int)HttpStatusCode.Conflict, new ErrorObject(e.Code, e.Message));
             }
-            catch (FailedConnection e)       //TODO cambiare l'exception ERRORE DATABASE
+            catch (FailedConnectionException e)       //TODO cambiare l'exception ERRORE DATABASE
             {
                 reader.Close();
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));

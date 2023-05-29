@@ -37,8 +37,6 @@ namespace SmartLogStatistics.Controller.Tests
         [TestMethod()]
         public void UploadTestBadRequest()
         {
-            List<LogRow> logRow = new List<LogRow> { new LogRow(new DateOnly(), new TimeOnly(), 1, 2, "B", "S", false, "0x000000") };
-            Log log = new("Name", new Header(DateTime.Now, DateTime.Now, new List<INIFile> { new INIFile("B", 1, 2) }), logRow);
             Mock<Parser> parser = new();
             Mock<UploadRepository> repository = new();
             parser.Setup(x => x.Parse(It.IsAny<string>(), It.IsAny<TextReader>())).Throws(new ParsingException("parsing Exception"));

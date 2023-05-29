@@ -10,6 +10,9 @@ using Log = Core.Log;
 
 namespace SmartLogStatistics.Controller
 {
+    /// <summary>
+    /// Controller per ottenere delle informazioni generiche necessarie al frontend
+    /// </summary>
     [Route("api/info")]
     [ApiController]
     public class InfoController : ControllerBase{
@@ -17,7 +20,7 @@ namespace SmartLogStatistics.Controller
         /// <summary>
         /// Oggetto di tipo InfoRepository dedicato a ottenere le informazioni dal database
         /// </summary>
-        private InfoRepository Repository;
+        private readonly InfoRepository Repository;
 
         /// <summary>
         /// Crea una nuova istanza del controller
@@ -32,7 +35,6 @@ namespace SmartLogStatistics.Controller
         /// <summary>
         /// Ritorna un JSON che rappresenta la lista di codici degli eventi con le relative descrizioni
         /// </summary>
-        /// <param name="file">File di cui deve essere eseguito il parsing</param>
         /// <returns>Esito della chiamata POST, può essere un file JSON che rappresenta la lista di code con le relative descrizioni o un'eccezione dovuta all'impossibilità di connettersi al database</returns>
         /// <response code="200">Ritorna una lista di codici degli eventi con le relative descrizioni</response>
         /// <response code="500">Se non riesce a connettersi al database</response>

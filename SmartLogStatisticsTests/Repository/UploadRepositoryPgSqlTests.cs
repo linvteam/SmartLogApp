@@ -30,7 +30,6 @@ namespace SmartLogStatistics.Repository.Tests {
             
             var logLineMock = new Mock<DbSet<Model.Log>>();
             var firmwareMock = new Mock<DbSet<Firmware>>();
-            //var eventsMock = new Mock<DbSet<Event>>();
             
             var transactionMock = new Mock<IDbContextTransaction>();
             
