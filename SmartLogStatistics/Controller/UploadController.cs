@@ -46,7 +46,7 @@ namespace SmartLogStatistics.Controller
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
-        public IActionResult Upload([FromBody]IFormFile file)
+        public IActionResult Upload(IFormFile file)
         {
             string filename = file.FileName;                                    // Nome del file
             TextReader reader = new StreamReader(file.OpenReadStream());        // Stream di lettura
@@ -67,12 +67,12 @@ namespace SmartLogStatistics.Controller
             catch (FileConflictException e)       //TODO cambiare l'exception CONFLICT
             {
                 reader.Close();
-                return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(e.Code, e.Message));
+                return StatusCode((int)HttpStatusCode.Conflict, new ErrorObject(e.Code, e.Message));
             }
             catch (FailedConnection e)       //TODO cambiare l'exception ERRORE DATABASE
             {
                 reader.Close();
-                return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(e.Code, e.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));
             }
         }
     }

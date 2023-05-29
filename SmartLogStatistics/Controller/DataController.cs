@@ -40,7 +40,7 @@ namespace SmartLogStatistics.Controller
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
-        [HttpPost]
+        [HttpGet]
         [Route("frequency/{startDateTime}/{endDateTime}")]
         [ProducesResponseType(typeof(FrequencyDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
@@ -78,7 +78,7 @@ namespace SmartLogStatistics.Controller
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
-        [HttpPost]
+        [HttpGet]
         [Route("cumulative/{start-DateTime}/{end-DateTime}/{code}")]
         [ProducesResponseType(typeof(CumulativeDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
@@ -115,7 +115,7 @@ namespace SmartLogStatistics.Controller
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
-        [HttpPost]
+        [HttpGet]
         [Route("totalbycode/{start-DateTime}/{end-DateTime}")]
         [ProducesResponseType(typeof(TotalByCodeDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
@@ -154,7 +154,7 @@ namespace SmartLogStatistics.Controller
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
-        [HttpPost]
+        [HttpGet]
         [Route("totalbyfirmware/{start-DateTime}/{end-DateTime}/{code}")]
         [ProducesResponseType(typeof(TotalByFirmwareDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
