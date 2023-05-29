@@ -11,7 +11,7 @@
         public string Code { get; set; }
 
         /// <summary>
-        /// Numero di occorenze del codice
+        /// Numero di occorrenze dell'evento
         /// </summary>
         public int EventOccurrences { get; set; }
 
