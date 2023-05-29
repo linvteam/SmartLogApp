@@ -36,6 +36,8 @@ export class FileUploadComponent {
 
     public errors: boolean = false;
 
+    public clipPercentage: any = {"clip-path": "inset(0 100% 0 0)"};
+
     /**
      * Costruisce una nuova classe che controlla il comportamento del widget di upload dei file, i parametri vengono passati tramite dependency injector
      * @param uploadService Service che gestisce l'upload dei file sul server
@@ -87,6 +89,9 @@ export class FileUploadComponent {
         return (event: any) => {
             if (event.type == HttpEventType.UploadProgress) {
                 this.currentFiles[fileIndex].progress = Math.round(100 * event.loaded / event.total);
+
+                this.currentFiles[fileIndex].style["clip-path"] = `inset(0 ${100 - this.currentFiles[fileIndex].progress}% 0)`;
+
             } else if (event instanceof HttpResponse<any>) {
                 this.uploadedFiles++;
                 if (this.uploadedFiles < this.currentFiles.length)
@@ -115,6 +120,9 @@ export class FileUploadComponent {
 
     public upload(): void {
         if (this.uploadedFiles == -1) return;
+
+        this.clipPercentage = { "clip-path": `inset(0 ${100 - (this.uploadedFiles / this.currentFiles.length * 100)}% 0 0)` };
+        console.log(this.clipPercentage)
         this.currentFiles[this.uploadedFiles].status = "uploading"
         this.uploadService.upload(this.currentFiles[this.uploadedFiles].file).subscribe({
             next: this.uploadEventHandler(this.uploadedFiles),
@@ -129,6 +137,9 @@ class SelectedFile {
     public status: string= "wating";
     public progress: number = 0;
     public error: string = "";
+    public style: any = {
+        "clip-path": "inset(0 100% 0 0)"
+    }
 
     constructor(file: File) {
         this.file = file;

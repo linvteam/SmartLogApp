@@ -23,6 +23,9 @@
              [ngStyle]="{ width: (uploadedFiles * 100 / currentFiles.length) + '%'}">
         </div>
         <p>Caricati {{ uploadedFiles }} / {{ currentFiles.length }} file</p>
+        <div class="masker" [ngStyle] =" clipPercentage">
+            <p class="masked">Caricati {{ uploadedFiles }} / {{ currentFiles.length }} file</p>
+        </div>
     </div>
 
     <div class="alert alert-dark my-alert" *ngIf="uploadedFiles !=  currentFiles.length">
@@ -60,6 +63,9 @@
                                  [ngStyle]="{width: file.progress + '%'}">
                             </div>
                             <p>{{ file.progress }}%</p>
+                            <div class="masker" [ngStyle]="file.style">
+                                <p class="masked">{{ file.progress }}%</p>
+                            </div>
                         </div>
                     </div>
                     <div class="col-6" *ngIf="file.status == 'failed'">
