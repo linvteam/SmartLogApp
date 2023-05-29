@@ -6,7 +6,7 @@
         /// <summary>
         /// Codice dell'evento
         /// </summary>
-        public string? Code { get; set; }
+        public string Code { get; set; }
         /// <summary>
         /// La data nella quale si è scatenato l'evento
         /// </summary>
