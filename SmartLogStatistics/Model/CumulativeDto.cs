@@ -16,7 +16,7 @@
         public List<CumulativeRecord> records { get; set; }
 
         /// <summary>
-        /// Crea un oggetto con le istanze di un evento e il numero di occorrenze in quei istanti
+        /// Crea un oggetto con le istanze di un evento ed il codice dell'evento
         /// </summary>
         /// <param name="code">Il codice dell'evento</param>
         /// <param name="records"></param>
