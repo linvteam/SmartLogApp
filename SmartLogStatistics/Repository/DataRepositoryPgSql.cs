@@ -68,19 +68,11 @@ namespace SmartLogStatistics.Repository {
 
             //Creo le righe con le frequenze, mettendo a null i campi non richiesti
             query.ToList().ForEach(r =>
-                 logRowEnhanceds.Add(new LogRowEnhanced
-                 {
-                     Code = r.key.code,
-                     Date = data ? r.key.data : null,
-                     Firmware = firmware ? r.key.firmware : null,
-                     Unit = unit ? r.key.unit : null,
-                     SubUnit = subunit ? r.key.subunit : null,
-                     Frequency = r.count
-                 })
+                 logRowEnhanceds.Add(new LogRowEnhanced(r.key.code, r.count, data ? r.key.data : null, firmware ? r.key.firmware : null, unit ? r.key.unit : null, subunit ? r.key.subunit : null))
             );
 
             //Ritorno i dati al controller
-            return new FrequencyDto { events = logRowEnhanceds };
+            return new FrequencyDto(logRowEnhanceds);
         }
 
         /// <summary>
@@ -111,19 +103,11 @@ namespace SmartLogStatistics.Repository {
             var records = new List<CumulativeRecord>();
 
             for(var i = 0;i< eventsFiltered.Length; i++) {
-                records.Add(new CumulativeRecord
-                {
-                    dateTime = eventsFiltered[i].date.ToDateTime(eventsFiltered[i].time),
-                    EventOccurencies = i + 1,
-                });
+                records.Add(new CumulativeRecord(eventsFiltered[i].date.ToDateTime(eventsFiltered[i].time),i + 1));
             }   
 
             //Ritorno i record al controller
-            return new CumulativeDto
-            {
-                Code = code,
-                records = records,
-            };
+            return new CumulativeDto(code,records);
         }
 
         /// <summary>
@@ -150,11 +134,11 @@ namespace SmartLogStatistics.Repository {
 
             //Ottengo i ragruppamenti per code e il numero di occorrenze
             var eventGroups = eventsFiltered.GroupBy(e => e.code)
-                                            .Select(group => new CodeOccurrence { Code = group.Key, EventOccurrences = group.Count()})
+                                            .Select(group => new CodeOccurrence(group.Key,group.Count()))
                                             .ToList();
 
             //Ritorno i dati al controller
-            return new TotalByCodeDto { CodeOccurences = eventGroups };
+            return new TotalByCodeDto(eventGroups);
         }
 
         /// <summary>
@@ -193,11 +177,11 @@ namespace SmartLogStatistics.Repository {
                                                  line.subunit,
                                              })
                                         .GroupBy(e => e.firmware)
-                                        .Select(group => new FirmwareOccurrence { Firmware = group.Key, EventOccurrences = group.Count() })
+                                        .Select(group => new FirmwareOccurrence(group.Key, group.Count()))
                                         .ToList();
             
             //Ritorno i dati al controller
-            return new TotalByFirmwareDto{ FirmwareOccurrences = result };
+            return new TotalByFirmwareDto(result);
         }
     }
 }
