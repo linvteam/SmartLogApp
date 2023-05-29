@@ -6,7 +6,7 @@
     public class CumulativeRecord {
 
         /// <summary>
-        /// Istante nel quale è accaduto un evento
+        /// Istante upper-bound dell'intervallo di tempo considerato
         /// </summary>
         public DateTime Instant {  get; set; }
 
