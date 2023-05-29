@@ -1,10 +1,130 @@
-import { Component } from '@angular/core';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { Component, ViewChild } from '@angular/core';
+import { FileUploadService } from '../../services/file-upload/file-upload.service';
 
 @Component({
-  selector: 'app-file-upload',
-  templateUrl: './file-upload.component.html',
-  styleUrls: ['./file-upload.component.css']
+    selector: 'app-file-upload',
+    templateUrl: './file-upload.component.html',
+    styleUrls: ['./file-upload.component.css']
 })
 export class FileUploadComponent {
 
+    /**
+     * Scritta di default per la selezione dei file
+     */
+    private readonly FileSelectText: string = "Seleziona o trascina qui i file";
+
+    /**
+     * I file attualmente selezionati
+     */
+    public currentFiles: Array<SelectedFile> = new Array<SelectedFile>;
+
+    /**
+     * Gestore del controllo di input
+     */
+    @ViewChild("fileSelector") private fileSelector: any;
+
+    /**
+     * Testo della label sull'input
+     */
+    public labelText: string = this.FileSelectText;
+
+    /**
+     * Numero di file attualmente caricati
+     */
+    public uploadedFiles: number = -1;
+
+    /**
+     * Costruisce una nuova classe che controlla il comportamento del widget di upload dei file, i parametri vengono passati tramite dependency injector
+     * @param uploadService Service che gestisce l'upload dei file sul server
+     */
+    constructor(private uploadService: FileUploadService) {
+
+    }
+
+    /**
+     * Aggiorna la view con le nuove informazioni riguardo i file selezionati
+     * @param files la lista di file che si intende caricare
+     */
+    private updateCurrentFiles(files: Array<File>): void {
+        this.currentFiles = new Array<SelectedFile>();
+        for (let file of files) {
+            if(file.type == "text/csv")
+                this.currentFiles.push(new SelectedFile(file));
+        }
+        this.labelText = `Selezionati ${this.currentFiles.length} file`;
+    }
+
+    /**
+     * Gestisce la selezione dei file tramite dialog
+     * @param event evento lanciato dall'input
+     */
+    public selectFiles(event: any): void {
+        if(event.target.files) // Evito di deselezionare i files se annullo l'operazione
+            this.updateCurrentFiles(event.target.files);
+    }
+
+    /**
+     * Gestisce il drag and drop del file
+     * @param fileList lista dei file rilasciata dall'utente
+     */
+    public filesDrop(fileList: any): void {
+        this.updateCurrentFiles(fileList);
+    }
+
+    public beginUpload(): void {
+        if (!this.currentFiles) return;
+        for (let file of this.currentFiles) {
+            file.status = "waiting";
+        }
+        this.uploadedFiles = 0;
+        this.upload();
+    }
+
+    private uploadEventHandler(fileIndex: number) {
+        return (event: any) => {
+            if (event.type == HttpEventType.UploadProgress) {
+                this.currentFiles[fileIndex].progress = Math.round(100 * event.loaded / event.total);
+            } else if (event instanceof HttpResponse<any>) {
+                this.uploadedFiles++;
+                if (this.uploadedFiles < this.currentFiles.length)
+                    this.upload();
+            }
+        }
+    }
+
+    private uploadErrorHandler(fileIndex: number) {
+        return (event: any) => {
+            this.currentFiles[fileIndex].status = "failed";
+            if (event.error && event.error.message) {
+                this.currentFiles[fileIndex].error = event.error.message;
+            } else {
+                this.currentFiles[fileIndex].error = "Impossibile caricare il file ";
+            }
+            
+            this.uploadedFiles++;
+            if (this.uploadedFiles < this.currentFiles.length)
+                this.upload();
+        }
+    }
+
+    public upload(): void {
+        if (this.uploadedFiles == -1) return;
+        this.uploadService.upload(this.currentFiles[this.uploadedFiles].file).subscribe({
+            next: this.uploadEventHandler(this.uploadedFiles),
+            error: this.uploadErrorHandler(this.uploadedFiles)
+        });
+    }
+
+}
+
+class SelectedFile {
+    public file: File;
+    public status: string= "wating";
+    public progress: number = 0;
+    public error: string = "";
+
+    constructor(file: File) {
+        this.file = file;
+    }
 }
