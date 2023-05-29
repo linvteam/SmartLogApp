@@ -1,9 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SmartLogStatistics.Model;
 using Microsoft.EntityFrameworkCore;
 using Core;
 using SmartLogStatistics.Exceptions;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace SmartLogStatistics.Repository.Tests {
     [TestClass()]
@@ -29,13 +31,17 @@ namespace SmartLogStatistics.Repository.Tests {
             var logLineMock = new Mock<DbSet<Model.Log>>();
             var firmwareMock = new Mock<DbSet<Firmware>>();
             var eventsMock = new Mock<DbSet<Event>>();
-
+            
+            var transactionMock = new Mock<IDbContextTransaction>();
+            
             var mockContext = new Mock<SmartLogContext>();
 
             var files = new List<LogFile>();
-
+            var dbMock = new Mock<DatabaseFacade>(mockContext.Object);
+            dbMock.Setup(m => m.BeginTransaction()).Returns(transactionMock.Object);
             var fileMock = CreateDbSetMock(files);
 
+            mockContext.Setup(m => m.Database).Returns(dbMock.Object);
             mockContext.Setup(m => m.File).Returns(fileMock.Object);
             mockContext.Setup(m => m.Log).Returns(logLineMock.Object);
             mockContext.Setup(m => m.Firmware).Returns(firmwareMock.Object);
@@ -73,11 +79,11 @@ namespace SmartLogStatistics.Repository.Tests {
             mockContext.Verify(m => m.File.Add(It.IsAny<LogFile>()), Times.Once());
             mockContext.Verify(m => m.Event.Add(It.IsAny<Event>()), Times.Exactly(2));
             mockContext.Verify(m => m.Firmware.Add(It.IsAny<Firmware>()), Times.Exactly(4));
+            transactionMock.Verify(m => m.Commit(), Times.Once);
 
 
         }
 
-        
         [TestMethod()]
         [ExpectedException(typeof(FileConflictException))]
         public void ExistingFileUploadTest()
@@ -85,9 +91,15 @@ namespace SmartLogStatistics.Repository.Tests {
             var logLineMock = new Mock<DbSet<Model.Log>>();
             var firmwareMock = new Mock<DbSet<Firmware>>();
             var eventsMock = new Mock<DbSet<Event>>();
+            var transactionMock = new Mock<IDbContextTransaction>();
 
             var mockContext = new Mock<SmartLogContext>();
 
+            var dbMock = new Mock<DatabaseFacade>(mockContext.Object);
+            dbMock.Setup(m => m.BeginTransaction()).Returns(transactionMock.Object);
+
+            mockContext.Setup(m => m.Database).Returns(dbMock.Object);
+            
             var files = new List<LogFile>()
             {
                 new LogFile
@@ -120,7 +132,11 @@ namespace SmartLogStatistics.Repository.Tests {
             Core.Log logFIle = new(fileName, header, logRows);
 
             repo.Upload(logFIle);
+            
+            transactionMock.Verify( m => m.Rollback(),Times.Once);
+            Assert.AreEqual(1, fileMock.Object.Count());
 
         }
+
     }
 }
