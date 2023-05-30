@@ -79,7 +79,7 @@ namespace SmartLogStatistics.Controller
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
         [HttpPost]
-        [Route("cumulative/{start-DateTime}/{end-DateTime}/{code}")]
+        [Route("cumulative/{startDateTime}/{endDateTime}/{code}")]
         [ProducesResponseType(typeof(CumulativeDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
@@ -116,7 +116,7 @@ namespace SmartLogStatistics.Controller
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
         [HttpPost]
-        [Route("totalbycode/{start-DateTime}/{end-DateTime}")]
+        [Route("totalbycode/{startDateTime}/{endDateTime}")]
         [ProducesResponseType(typeof(TotalByCodeDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
@@ -155,7 +155,7 @@ namespace SmartLogStatistics.Controller
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
         [HttpPost]
-        [Route("totalbyfirmware/{start-DateTime}/{end-DateTime}/{code}")]
+        [Route("totalbyfirmware/{startDateTime}/{endDateTime}/{code}")]
         [ProducesResponseType(typeof(TotalByFirmwareDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
