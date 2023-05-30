@@ -1,4 +1,7 @@
-﻿namespace SmartLogStatistics.Model {
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace SmartLogStatistics.Model {
     /// <summary>
     /// Classe che rappresenta un evento e la sua frequenza di occorrenza, raggruppata a seconda dei campi scelti
     /// </summary>
@@ -10,18 +13,22 @@
         /// <summary>
         /// La data nella quale si è scatenato l'evento
         /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public DateOnly? Date { get; private set; }
         /// <summary>
         /// La configurazione che ha generato l'evento
         /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Firmware { get; private set; }
         /// <summary>
         /// La Unit che ha generato l'evento
         /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? Unit { get; private set; }
         /// <summary>
         /// La SubUnit che ha generato l'evento
         /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? SubUnit { get; private set; }
         /// <summary>
         /// La frequenza d'occorrenza dell'evento
