@@ -38,7 +38,7 @@ namespace SmartLogStatistics.Controller
         /// <response code="200">Ritorna una lista di codici degli eventi con le relative descrizioni</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
         [HttpPost]
-        [Route("code-description")]
+        [Route("codedescription")]
         [ProducesResponseType(typeof(List<CodeWithDescriptionDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
