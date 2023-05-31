@@ -23,7 +23,7 @@ export class EventSearchComponent {
     public dropdownSettings = {
         singleSelection: false,
         selectAllText: 'Seleziona tutto',
-        deselectAllText: 'Deseleziona tutto',
+        unSelectAllText: 'Deseleziona tutto',
     }
 
     /**
@@ -55,7 +55,7 @@ export class EventSearchComponent {
     }
 
     /**
-     * Metodo che gestisce il submit del form, se la query string è vuota si manda il manipulator di default
+     * Metodo che gestisce il submit del form, se la query string ï¿½ vuota si manda il manipulator di default
      */
     onSubmit(): void {
         if (this.uploadForm.value.q as string == "" && this.SelectedUnits.length == 0 && this.SelectedSubUnits.length == 0) {

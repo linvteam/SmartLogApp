@@ -31,9 +31,9 @@ export class EventGroupingComponent {
     }
 
     /**
-     * Metodo che gestisce il submit del form, comunica la log manipulation service il nuovo log manipulator. Se il numero di gruppi specificato è 0 verrà impostato il manipulator di default
+     * Metodo che gestisce il submit del form, comunica la log manipulation service il nuovo log manipulator. Se il numero di gruppi specificato ï¿½ 0 verrï¿½ impostato il manipulator di default
      */
-    submitForm() {
+    public submitForm(): void {
         if (Number(this.formGroup.value.valore) <= 0) {
             this.logManipulationService.setManipulation(this.logManipulationService.getDefaultManipulator());
             this.formGroup.reset({ valore: '0' ,  unita: '1' });

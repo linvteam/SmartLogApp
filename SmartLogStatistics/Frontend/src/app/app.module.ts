@@ -11,10 +11,13 @@ import { EventTableComponent } from './components/event-table/event-table.compon
 import { HistogramComponent } from './components/histogram/histogram.component';
 import { CumulativeChartComponent } from './components/cumulative-chart/cumulative-chart.component';
 import { PieChartComponent } from './components/pie-chart/pie-chart.component';
-import { TimeComponent } from './components/time/time.component';
-import { HttpClientModule } from "@angular/common/http";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
+import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
+import { TimeHeaderComponent } from './components/time-header/time-header.component';
+import { TimeCodeHeaderComponent } from './components/time-code-header/time-code-header.component';
+import { RegroupHeaderComponent } from './components/regroup-header/regroup-header.component';
 import { FileDroppedDirective } from './file-dropped.directive';
 
 import { BaseURL } from './connection-info';
@@ -29,7 +32,9 @@ import { BaseURL } from './connection-info';
         HistogramComponent,
         CumulativeChartComponent,
         PieChartComponent,
-        TimeComponent,
+        TimeHeaderComponent,
+        TimeCodeHeaderComponent,
+        RegroupHeaderComponent,
         FileDroppedDirective
     ],
     imports: [
@@ -39,9 +44,10 @@ import { BaseURL } from './connection-info';
         NgbModule,
         FormsModule,
         ReactiveFormsModule,
-        MdbAccordionModule
+        MdbAccordionModule,
+        NgMultiSelectDropDownModule
     ],
-    providers: [
+  providers: [
         { provide: BaseURL, useValue: 'https://localhost:7253/api'}
     ],
     bootstrap: [AppComponent]
