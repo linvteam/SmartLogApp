@@ -34,7 +34,7 @@ import { BaseURL } from './connection-info';
         PieChartComponent,
         TimeHeaderComponent,
         TimeCodeHeaderComponent,
-        RegroupHeaderComponent
+        RegroupHeaderComponent,
         FileDroppedDirective
     ],
     imports: [
