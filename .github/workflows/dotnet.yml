@@ -23,15 +23,15 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Test Core
-      run: dotnet test -p:ExcludeByFile="**/Program.cs" --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover
+      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude=[*]Core.Injectables* -p:ExcludeByFile="**/Program.cs"
       working-directory: ./CoreTests
 
     - name: Test SmartLogViewer
-      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude=[*]Core*
+      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude=[*]Core* -p:ExcludeByFile="**/Program.cs"
       working-directory: ./SmartLogViewerTests
 
     - name: Test SmartLogStatistics
-      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude="[*]Core*%2c[*]SmartLogStatistics.Migrations*"
+      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude="[*]Core*%2c[*]SmartLogStatistics.Migrations*" -p:ExcludeByFile="**/Program.cs"
       working-directory: ./SmartLogStatisticsTests
 
     - name: OpenCover Badge Generator - Core
