@@ -14,9 +14,9 @@ export class FileUploadService {
     /**
      * Crea una nuova istanza del service di upload, i parametri vengono passati tramite dependency injector
      * @param http Il client http che si occupa di effettuare l'upload
-     * @param ConenctionURL URL del backend
+     * @param ConnectionURL URL del backend
      */
-    constructor(private http: HttpClient, @Inject(BaseURL) private ConenctionURL: string) { }
+    constructor(private http: HttpClient, @Inject(BaseURL) private ConnectionURL: string) { }
 
     public upload(file: File): Observable<HttpEvent<any>> {
         const formData: FormData = new FormData();
@@ -26,7 +26,7 @@ export class FileUploadService {
             accept: '*/*'
         });
 
-        const req = new HttpRequest('POST', `${this.ConenctionURL}/upload`, formData, {
+        const req = new HttpRequest('POST', `${this.ConnectionURL}/upload`, formData, {
             headers: headers,
             reportProgress: true,
             responseType: 'json'

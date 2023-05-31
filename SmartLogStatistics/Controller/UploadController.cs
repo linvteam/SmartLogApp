@@ -23,7 +23,7 @@ namespace SmartLogStatistics.Controller {
         /// Crea una nuova istanza del controller
         /// </summary>
         /// <param name="parser">Parser per i file di log</param>
-        /// <param name="repository">Repository che gestisce l'inseriemento dei dati nel database</param>
+        /// <param name="repository">Repository che gestisce l'inserimento dei dati nel database</param>
         public UploadController(Parser parser,UploadRepository repository)
         {
             LogParser = parser;

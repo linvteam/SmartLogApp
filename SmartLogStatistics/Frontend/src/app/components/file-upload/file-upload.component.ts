@@ -134,7 +134,7 @@ export class FileUploadComponent {
 
 class SelectedFile {
     public file: File;
-    public status: string= "wating";
+    public status: string= "waiting";
     public progress: number = 0;
     public error: string = "";
     public style: any = {
