@@ -11,7 +11,7 @@ using System.Net;
 namespace SmartLogStatistics.Controller
 {
     /// <summary>
-    /// Controller per ottenre dei dati estratti dai file di log
+    /// Controller per ottenere dei dati estratti dai file di log
     /// </summary>
     [Route("api/data")]
     [ApiController]

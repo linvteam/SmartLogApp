@@ -182,7 +182,7 @@ namespace SmartLogStatistics.Repository.Tests {
         }
 
         [TestMethod()]
-        [ExpectedException(typeof(EmptyOrFailedQuery))]
+        [ExpectedException(typeof(EmptyOrFailedQueryException))]
         public void BlankSearchFrequencyTest() {
            repo.Frequency(new DateTime(2010, 01, 01), new DateTime(2011, 01, 01), true, true, true, true);
         }
@@ -230,7 +230,7 @@ namespace SmartLogStatistics.Repository.Tests {
         }
 
         [TestMethod()]
-        [ExpectedException(typeof(EmptyOrFailedQuery))]
+        [ExpectedException(typeof(EmptyOrFailedQueryException))]
         public void BlankSearchCumulativeTest() {
           
             repo.Cumulative(new DateTime(2022, 05, 01), new DateTime(2022, 05, 29), "A");
@@ -258,7 +258,7 @@ namespace SmartLogStatistics.Repository.Tests {
         }
 
         [TestMethod()]
-        [ExpectedException(typeof(EmptyOrFailedQuery))]
+        [ExpectedException(typeof(EmptyOrFailedQueryException))]
         public void BlankSearchTotalByCodeTest() {
            repo.TotalByCode(new DateTime(2000, 01, 01), new DateTime(2001, 01, 01));
 
@@ -284,7 +284,7 @@ namespace SmartLogStatistics.Repository.Tests {
         }
 
         [TestMethod()]
-        [ExpectedException(typeof(EmptyOrFailedQuery))]
+        [ExpectedException(typeof(EmptyOrFailedQueryException))]
         public void BlankSearchTotalByFirmwareTest() {
             
             repo.TotalByFirmware(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01), "A");

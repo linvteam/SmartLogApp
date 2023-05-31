@@ -50,7 +50,7 @@ namespace SmartLogStatistics.Repository {
         /// <param name="firmware">Attiva il raggruppamento per firmware</param>
         /// <param name="unit">Attiva il raggruppamento per unit</param>
         /// <param name="subunit">Attiva il raggruppamento per subunit</param>
-        /// <exception cref="EmptyOrFailedQuery">Eccezione lanciata quando non sono stati trovati dati nell'intervallo temporale</exception>
+        /// <exception cref="EmptyOrFailedQueryException">Eccezione lanciata quando non sono stati trovati dati nell'intervallo temporale</exception>
         /// <returns>Oggetto che contiene la frequenza di occorrenza degli eventi, con eventuale raggruppamento</returns>
         public FrequencyDto Frequency(DateTime start, DateTime end, bool date, bool firmware, bool unit, bool subunit) {
 
@@ -82,7 +82,7 @@ namespace SmartLogStatistics.Repository {
             //Se non trovo nulla lancio un eccezione
             double count = events.Sum(x => x.count);
             if(count == 0) {
-                throw new EmptyOrFailedQuery();
+                throw new EmptyOrFailedQueryException();
             }
 
             //Creo le righe con le frequenze, mettendo a null i campi non richiesti
@@ -115,7 +115,7 @@ namespace SmartLogStatistics.Repository {
         /// <param name="start">Data di inizio dell'analisi</param>
         /// <param name="end">Data di fine dell'analisi</param>
         /// <param name="code">Code dell'evento da considerare</param>
-        /// <exception cref="EmptyOrFailedQuery">Eccezione lanciata quando non sono stati trovati dati nell'intervallo temporale</exception>
+        /// <exception cref="EmptyOrFailedQueryException">Eccezione lanciata quando non sono stati trovati dati nell'intervallo temporale</exception>
         /// <returns>Oggetto contenente l'andamento cumulativo</returns>
         public CumulativeDto Cumulative(DateTime start, DateTime end, string code) {
 
@@ -133,7 +133,7 @@ namespace SmartLogStatistics.Repository {
 
             //Se non trovo nulla lancio un eccezione
             if(!eventsFiltered.Any()) {
-                throw new EmptyOrFailedQuery();
+                throw new EmptyOrFailedQueryException();
             }
 
             var records = new List<CumulativeRecord>();
@@ -152,7 +152,7 @@ namespace SmartLogStatistics.Repository {
         /// </summary>
         /// <param name="start">Data di inizio dell'analisi</param>
         /// <param name="end">Data di fine dell'analisi</param>
-        /// <exception cref="EmptyOrFailedQuery">Eccezione lanciata quando non sono stati trovati dati nell'intervallo temporale</exception>
+        /// <exception cref="EmptyOrFailedQueryException">Eccezione lanciata quando non sono stati trovati dati nell'intervallo temporale</exception>
         /// <returns>Oggetto che raggruppa per ogni code il numero di occorrenze</returns>
         public TotalByCodeDto TotalByCode(DateTime start, DateTime end) {
             bool filterByDate(Log log) {
@@ -168,7 +168,7 @@ namespace SmartLogStatistics.Repository {
 
             // Se non ho eventi lancio un'eccezione
             if(eventGroups.Count == 0) {
-                throw new EmptyOrFailedQuery();
+                throw new EmptyOrFailedQueryException();
             }
 
             //Ritorno i dati al controller
@@ -181,7 +181,7 @@ namespace SmartLogStatistics.Repository {
         /// <param name="start">Data di inizio dell'analisi</param>
         /// <param name="end">Data di fine dell'analisi</param>
         /// <param name="code">Codice dell'evento voluto</param>
-        /// <exception cref="EmptyOrFailedQuery">Eccezione lanciata quando non sono stati trovati dati nell'intervallo temporale</exception>
+        /// <exception cref="EmptyOrFailedQueryException">Eccezione lanciata quando non sono stati trovati dati nell'intervallo temporale</exception>
         /// <returns>Ritorna il numero di occorrenze dell'evento raggruppate per firmware</returns>
         public TotalByFirmwareDto TotalByFirmware(DateTime start, DateTime end, string code) {
 
@@ -201,7 +201,7 @@ namespace SmartLogStatistics.Repository {
                                         .ToList();
 
             if(result.Count == 0) {
-                throw new EmptyOrFailedQuery();
+                throw new EmptyOrFailedQueryException();
             }
 
             //Ritorno i dati al controller
