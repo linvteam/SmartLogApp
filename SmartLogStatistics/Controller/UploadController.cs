@@ -17,6 +17,9 @@ namespace SmartLogStatistics.Controller {
         /// </summary>
         private readonly Parser LogParser;
 
+        /// <summary>
+        /// Repositori che gestisce l'inserimento dei dati nel db
+        /// </summary>
         private readonly UploadRepository Repository;
 
         /// <summary>
@@ -65,12 +68,12 @@ namespace SmartLogStatistics.Controller {
                 reader.Close();
                 return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(e.Code, e.Message));
             }
-            catch (FileConflictException e)       //TODO cambiare l'exception CONFLICT
+            catch (FileConflictException e)
             {
                 reader.Close();
                 return StatusCode((int)HttpStatusCode.Conflict, new ErrorObject(e.Code, e.Message));
             }
-            catch (FailedConnectionException e)       //TODO cambiare l'exception ERRORE DATABASE
+            catch (FailedConnectionException e)
             {
                 reader.Close();
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));
