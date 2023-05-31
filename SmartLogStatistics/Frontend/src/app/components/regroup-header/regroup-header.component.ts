@@ -1,5 +1,7 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import {FormBuilder, FormControl} from "@angular/forms";
+import { FormBuilder, FormControl } from "@angular/forms";
+import { InfoService } from '../../services/info/info.service';
 
 @Component({
   selector: 'app-regroup-header',
@@ -11,11 +13,11 @@ export class RegroupHeaderComponent {
   /**
    * Data del primo evento presente nel DB
    */
-  public startDatetimeValue: string = '2021-05-27T12:00';
+  public startDatetimeValue: string = '';
   /**
    * Data dell'ultimo evento presente nel DB
    */
-  public endDatetimeValue: string = '2023-05-27T12:00';
+  public endDatetimeValue: string = '';
   /**
    * Data più piccola inseribile
    */
@@ -53,8 +55,22 @@ export class RegroupHeaderComponent {
    * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale
    * @param formBuilder Servizio di gestione dei form
    */
-  constructor(private formBuilder: FormBuilder) {
-    this.availableRegroup = ["Code","Data","Versione firmware","Unit","Subunit"];
+  constructor(private formBuilder: FormBuilder, private infoRepository: InfoService) {
+      this.availableRegroup = ["Code", "Data", "Versione firmware", "Unit", "Subunit"];
+
+      this.infoRepository.GetTimeInterval().subscribe({
+          next: (event) => {
+              if (event instanceof HttpResponse<any>) {
+                  this.maxDate = event.body.end;
+                  this.minDate = event.body.start;
+                  this.endDatetimeValue = event.body.end;
+                  this.startDatetimeValue = event.body.start;
+              }
+          },
+          error: (error) => {
+              console.log(error);
+          }
+      });
   }
 
   /**
