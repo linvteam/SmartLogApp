@@ -2,6 +2,9 @@ import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { FileUploadService } from '../../services/file-upload/file-upload.service';
 
+/**
+ * Controller dell'interfaccia di caricamento dei file
+ */
 @Component({
     selector: 'app-file-upload',
     templateUrl: './file-upload.component.html',
@@ -30,12 +33,18 @@ export class FileUploadComponent {
     public labelText: string = this.FileSelectText;
 
     /**
-     * Numero di file attualmente caricati
+     * Numero di file attualmente caricati, usato anche come indice di avanzamento nella lista di file da caricare
      */
     public uploadedFiles: number = -1;
 
+    /**
+     * Indica alla vista se mostrare il messaggio di errore a caricamento completato
+     */
     public errors: boolean = false;
 
+    /**
+     * Oggetto JSON che rispecchia lo stile della barra di avanzamento generale, serve per mascherare correttamente i colori del testo
+     */
     public clipPercentage: any = {"clip-path": "inset(0 100% 0 0)"};
 
     /**
@@ -76,6 +85,9 @@ export class FileUploadComponent {
         this.updateCurrentFiles(fileList);
     }
 
+    /**
+     * Imposta lo stato corretto a tutti i file della lista e lancia il caricamento dei file sul db
+     */
     public beginUpload(): void {
         if (!this.currentFiles) return;
         for (let file of this.currentFiles) {
@@ -85,6 +97,11 @@ export class FileUploadComponent {
         this.upload();
     }
 
+    /**
+     * Genera una funzione che gestisce gli eventi del caricamento dei file (avanzamento dell'upload e completamento della richiesta)
+     * @param fileIndex Indice del file che si sta caricando
+     * @returns Funzione che gestisce gli eventi
+     */
     private uploadEventHandler(fileIndex: number) {
         return (event: any) => {
             if (event.type == HttpEventType.UploadProgress) {
@@ -100,6 +117,11 @@ export class FileUploadComponent {
         }
     }
 
+    /**
+     * Genera una funzione che gestisce gli eventi di errore del caricamento
+     * @param fileIndex Indice del file che si sta caricando sul db
+     * @returns Funzione che gestise gli errori della richiesta
+     */
     private uploadErrorHandler(fileIndex: number) {
         return (event: any) => {
             this.currentFiles[fileIndex].status = "failed";
@@ -118,6 +140,9 @@ export class FileUploadComponent {
         }
     }
 
+    /**
+     * Avvia il caricamento di un nuovo file sul db. In particolare utilizza l'indice this.uploadedFiles per scegliere il prossimo file da caricare
+     */
     public upload(): void {
         if (this.uploadedFiles == -1) return;
 
@@ -132,15 +157,42 @@ export class FileUploadComponent {
 
 }
 
+/**
+ * Classe che raccoglie tutte le informazioni dei file che si stanno caricando sul db
+ */
 class SelectedFile {
+    /**
+     * Oggetto File da inviare al backend
+     */
     public file: File;
-    public status: string= "waiting";
+
+    /**
+     * Stringa che definisce lo stato del caricamento, può essere "waiting", "uploading", "error", "warning".
+     * Lo stato uploading rimane anche quando il caricamento è completato con successo
+     */
+    public status: string = "waiting";
+
+    /**
+     * Percentuale di avanzamento dell'upload
+     */
     public progress: number = 0;
+
+    /**
+     * Messaggio di errore/warning ritornato dal backend
+     */
     public error: string = "";
+
+    /**
+     * JSON che rappresenta lo stile da applicare alla view per cambiare il testo sulla progress bar
+     */
     public style: any = {
         "clip-path": "inset(0 100% 0 0)"
     }
 
+    /**
+     * Costruisce un nuovo oggetto che raccoglie tutte le informazioni sul caricamento dei file
+     * @param file File che si vuole caricare sul backend
+     */
     constructor(file: File) {
         this.file = file;
     }
