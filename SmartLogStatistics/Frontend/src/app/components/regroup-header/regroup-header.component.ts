@@ -1,26 +1,52 @@
 import { Component } from '@angular/core';
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, FormControl} from "@angular/forms";
 
 @Component({
-  selector: 'app-time-header',
-  templateUrl: './time-header.component.html',
-  styleUrls: ['./time-header.component.css']
+  selector: 'app-regroup-header',
+  templateUrl: './regroup-header.component.html',
+  styleUrls: ['./regroup-header.component.css']
 })
-export class TimeHeaderComponent {
-  
+export class RegroupHeaderComponent {
+
+  /**
+   * Data del primo evento presente nel DB
+   */
   public startDatetimeValue: string = '2021-05-27T12:00';
+  /**
+   * Data dell'ultimo evento presente nel DB
+   */
   public endDatetimeValue: string = '2023-05-27T12:00';
-
+  /**
+   * Data più piccola inseribile
+   */
   public minDate = this.startDatetimeValue;
+  /**
+   * Data più grande inseribile
+   */
   public maxDate = this.endDatetimeValue;
-
-
+  /**
+   * Lista dei raggruppamenti disponibili
+   */
+  public availableRegroup: string[] = [];
+  /**
+   * Lista dei raggruppamenti selezionati
+   */
+  public selectedRegroup: string[] = [];
+  /**
+   * Impostazioni del menù a tendina
+   */
+  public dropdownSettings = {
+    singleSelection: false,
+    selectAllText: 'Seleziona tutto',
+    unSelectAllText: 'Deseleziona tutto',
+  }
   /**
    * Gestore del form
    */
   formGroup = this.formBuilder.group({
     startDatetime: '0',
-    endDatetime: '1'
+    endDatetime: '1',
+    regroup: new FormControl()
   });
 
   /**
@@ -28,7 +54,7 @@ export class TimeHeaderComponent {
    * @param formBuilder Servizio di gestione dei form
    */
   constructor(private formBuilder: FormBuilder) {
-
+    this.availableRegroup = ["Code","Data","Versione firmware","Unit","Subunit"];
   }
 
   /**
@@ -43,9 +69,15 @@ export class TimeHeaderComponent {
     console.log(startDatetime!.getTime());
     console.log("FINE:");
     console.log(endDatetime!.getTime());
+    console.log("RAGGRUPPAMENTI:");
+    console.log(this.selectedRegroup);
 
   }
-
+  
+  /**
+   * Metodo per la formattazione di una data da string a Date
+   * @param date Data da formattare
+   */
   public formatDate(date: string) : string {
     return (new Date(date)).toISOString().slice(0, 16);
   }

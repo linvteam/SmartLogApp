@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CodeComponent } from './code.component';
+import { RegroupHeaderComponent } from './regroup-header.component';
 
-describe('CodeComponent', () => {
-  let component: CodeComponent;
-  let fixture: ComponentFixture<CodeComponent>;
+describe('RegroupHeaderComponent', () => {
+  let component: RegroupHeaderComponent;
+  let fixture: ComponentFixture<RegroupHeaderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CodeComponent ]
+      declarations: [ RegroupHeaderComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CodeComponent);
+    fixture = TestBed.createComponent(RegroupHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

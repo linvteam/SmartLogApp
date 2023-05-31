@@ -1,6 +1,23 @@
+<div class="container">
+    <form class="row gy-2 gx-3 align-items-center col-auto"  [formGroup]="formGroup" (ngSubmit)="submitForm()">
+        <div class="form-group">
+            <label for="start-datetime">Data/Ora iniziale:</label>
+            <input [(ngModel)]="startDatetimeValue" [min]="formatDate(minDate)" [max]="formatDate(endDatetimeValue)"type="datetime-local" class="form-control" id="start-datetime" name="startDatetime" formControlName="startDatetime">
+        </div>
+        <div class="form-group">
+            <label for="end-datetime">Data/Ora finale:</label>
+            <input [(ngModel)]="endDatetimeValue" [min]="formatDate(startDatetimeValue)" [max]="formatDate(maxDate)"type="datetime-local" class="form-control" id="end-datetime" name="endDatetime" formControlName="endDatetime">
+        </div>
+        <div class="form-group">
+            <label for="codeSelector" >Code:</label>
+            <ng-multiselect-dropdown id="codeSelector"
+                                     formControlName="code"
+                                     [placeholder]="'Seleziona il code'"
+                                     [data]='availableCode'
+                                     [(ngModel)]="selectedCode"
+                                     [settings]="dropdownSettings"></ng-multiselect-dropdown>
+        </div>
+        <button type="submit" class="btn btn-primary">Inserisci</button>
+    </form>
+</div>
 
-<h2>Inserimento intervallo temporale</h2>
-<app-time></app-time>
-
-<h2>Inserimento Code</h2>
-<app-code></app-code>

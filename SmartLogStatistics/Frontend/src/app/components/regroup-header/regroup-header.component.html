@@ -8,10 +8,15 @@
             <label for="end-datetime">Data/Ora finale:</label>
             <input [(ngModel)]="endDatetimeValue" [min]="formatDate(startDatetimeValue)" [max]="formatDate(maxDate)"type="datetime-local" class="form-control" id="end-datetime" name="endDatetime" formControlName="endDatetime">
         </div>
+        <div class="form-group">
+            <label for="regroupSelector" >Campi per il raggruppamento:</label>
+            <ng-multiselect-dropdown id="regroupSelector"
+                                     formControlName="regroup"
+                                     [placeholder]="'Seleziona i campi per il raggruppamento'"
+                                     [data]='availableRegroup'
+                                     [(ngModel)]="selectedRegroup"
+                                     [settings]="dropdownSettings"></ng-multiselect-dropdown>
+        </div>
         <button type="submit" class="btn btn-primary">Inserisci</button>
     </form>
 </div>
-
-
-
-

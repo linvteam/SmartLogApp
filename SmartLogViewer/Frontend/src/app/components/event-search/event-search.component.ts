@@ -23,7 +23,7 @@ export class EventSearchComponent {
     public dropdownSettings = {
         singleSelection: false,
         selectAllText: 'Seleziona tutto',
-        deselectAllText: 'Deseleziona tutto',
+        unSelectAllText: 'Deseleziona tutto',
     }
 
     /**
