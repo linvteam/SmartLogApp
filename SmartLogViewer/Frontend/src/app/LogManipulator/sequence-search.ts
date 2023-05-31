@@ -29,7 +29,7 @@ export class SequenceSearch implements LogManipulator {
      * Imposto il log service ed effettuo la ricerca
      * @param logService il log service che fornisce gli eventi
      */
-    setLogService(logService: LogService): void {
+    public setLogService(logService: LogService): void {
         this.logService = logService;
         this.findSequences(this.actualSequence);
     }
@@ -38,7 +38,7 @@ export class SequenceSearch implements LogManipulator {
      * Ottiene il numero di risultati da mostrare in gruppo
      * @returns Il numero di sequenze trovate nel file di log
      */
-    getNumberOfGroups(): number {
+    public getNumberOfGroups(): number {
         return Math.max(1, this.currentOccurrences.length);
     }
 
@@ -47,7 +47,7 @@ export class SequenceSearch implements LogManipulator {
      * @param index indice del risultato di ricerca voluto
      * @returns Ritorna il risultato di ricerca di indice specificato oppure un array vuoto se non sono state trovate ricerche
      */
-    getGroup(index: number): LogRow[] {
+    public getGroup(index: number): LogRow[] {
         if(this.currentOccurrences.length == 0) 
             return [];
 
@@ -184,7 +184,7 @@ export class SequenceSearch implements LogManipulator {
      * Ordina un insieme di eventi per data/ora crescente
      * @param events eventi da ordinare 
      */
-    private sortEvents(events:LogRow[]) {
+    private sortEvents(events:LogRow[]): void {
         events.sort((e1: LogRow, e2 : LogRow) => {
             let e1DateTime : number = (new Date([e1.Date, e1.Time].join('T').replaceAll("/", "-") + "Z")).getTime();
             let e2DateTime : number = (new Date([e2.Date, e2.Time].join('T').replaceAll("/", "-") + "Z")).getTime();

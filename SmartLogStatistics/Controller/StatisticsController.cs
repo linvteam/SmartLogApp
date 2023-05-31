@@ -26,7 +26,6 @@ namespace SmartLogStatistics.Controller
             Repository = repository;
         }
 
-
         /// <summary>
         /// Ritorna le statistiche sui file analizzati
         /// </summary>

@@ -17,7 +17,7 @@ namespace SmartLogStatistics.Controller.Tests
         {
             DateTime start = new DateTime(2023, 01, 01, 15, 0, 0, 000);
             DateTime end = new DateTime(2023, 01, 10, 15, 0, 0, 000);
-            
+          
             Mock<StatisticsRepository> repository = new();
             StatisticsDto dto = new StatisticsDto(start, end, new List<StatisticsDto.Statistic> {
                 new StatisticsDto.Statistic("Numero di file", 1),
@@ -50,7 +50,6 @@ namespace SmartLogStatistics.Controller.Tests
 
             StatisticsController statisticsController = new(repository.Object);
             ObjectResult result = (ObjectResult)statisticsController.Statistics(start, end);
-
             Assert.AreEqual(400, result.StatusCode);
         }
         

@@ -8,7 +8,7 @@ import { LogRow } from "../log.classes";
 export class Identity implements LogManipulator {
 
     /**
-     * Log service che fornisce gli eventi da mostre successivamente alla view
+     * Log service che fornisce gli eventi da mostrare successivamente alla view
      */
     private logService!: LogService;
 
@@ -16,15 +16,15 @@ export class Identity implements LogManipulator {
      * Imposta il logservice di cui rilanciare gli eventi
      * @param logService Log service con tutti gli eventi da fornire alla view
      */
-    setLogService(logService: LogService): void {
+    public setLogService(logService: LogService): void {
         this.logService = logService;
     }
 
     /**
-     * Ottiene sempre 1 perchË questa funzionalit‡ non prevede il raggruppamento
+     * Ottiene sempre 1 perch√© questa funzionalit√† non prevede il raggruppamento
      * @returns Sempre 1 
      */
-    getNumberOfGroups(): number {
+    public getNumberOfGroups(): number {
         return 1;
     }
 
@@ -33,7 +33,7 @@ export class Identity implements LogManipulator {
      * @param _ Parametro ignorato
      * @returns Lista degli eventi fornita dal logservice
      */
-    getGroup(_: number): LogRow[] {
+    public getGroup(_: number): LogRow[] {
         return this.logService.getLog().Events;
     }
 

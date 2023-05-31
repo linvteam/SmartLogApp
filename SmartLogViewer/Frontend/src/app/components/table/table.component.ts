@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ColDef } from 'ag-grid-community';
+import {ColDef, ColGroupDef} from 'ag-grid-community';
 import { LogRow } from 'src/app/log.classes';
 import { LogManipulationService } from '../../services/LogManipulation/log-manipulation.service';
 import { LogManipulator } from 'src/app/LogManipulator/log-manipulator'
@@ -17,7 +17,7 @@ export class TableComponent {
     /**
      * Elenco dei dati da mostrare sulla tabella
      */
-    rowData: LogRow[] = [];
+    public rowData: LogRow[] = [];
 
     /**
      * LogManipulator che fornisce i dati da mostrare
@@ -27,22 +27,22 @@ export class TableComponent {
     /**
      * Indice del gruppo di dati da visualizzare
      */
-    groupNumber = 1;
+    public groupNumber: number = 1;
 
     /**
      * Numero totale di gruppi di dati visualizzabili
      */
-    numberOfGroups: number = 1;
+    public numberOfGroups: number = 1;
 
     /**
      * Data e ora del primo evento nella tabella
      */
-    startDateTime: string = "";
+    public startDateTime: string = "";
 
     /**
      * Data e ora dell'ultimo evento nella tabella
      */
-    endDateTime: string = "";
+    public endDateTime: string = "";
 
     /**
      * Costruisce un nuovo componente tabella, il parametro viene passato dal dependency injector
@@ -62,7 +62,7 @@ export class TableComponent {
      * Metodo che gestisce il cambio del numero di indice del gruppo da visualizzare dalla view
      * @param event i parametri dell'evento lanciato dal controllo di input
      */
-    changeGroupIndex(event: any) {
+    public changeGroupIndex(event: any): void {
         this.groupNumber = Number((event.target as HTMLInputElement).value);
         this.updateView();
     }
@@ -70,7 +70,7 @@ export class TableComponent {
     /**
      * Aggiorna tutte le informazioni della view
      */
-    private updateView() {
+    private updateView(): void {
         this.rowData = this.logManipulator.getGroup(this.groupNumber);
 
         this.numberOfGroups = this.logManipulator.getNumberOfGroups();
@@ -83,7 +83,7 @@ export class TableComponent {
     /**
      * Definizione dei campi dati da mostrare nella tabella
      */
-    columnDefs = [
+    public columnDefs: ColDef[] = [
         { field: 'date', hide: true },
         { field: 'time', hide: true },
         { headerName: 'Date-Time', valueGetter: 'return data.date + " - " + data.time', field: 'DateTime', width: 250 },
@@ -97,7 +97,7 @@ export class TableComponent {
     /**
      * Impostazione di default dei campi della tabella
      */
-    defaultColDef: ColDef = {
+    public defaultColDef: ColDef = {
         resizable: true, 
         sortable: true, 
         filter: true
@@ -107,7 +107,7 @@ export class TableComponent {
      * Metodo che gestisce l'evento gridReady emesso dalla tabella
      * @param params Parametri dell'evento 
      */
-    onGridReady(params: any) {
+    public onGridReady(params: any): void {
         params.api.sizeColumnsToFit();
     }
 } 

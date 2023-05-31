@@ -21,7 +21,7 @@ export class FileInfoComponent {
     public iniFiles: INIFile[];
 
     /**
-     * Descrizione delle colonne della tabella degli ini file
+     * Descrizione delle colonne della tabella degli INI File
      */
     public columnDefs: ColDef[];
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 /**
- * Questa classe definisce il comportamento del widget che aggrega tutti i widget dell'header del grafico
+ * Classe che definisce il comporamento del widget di header del grafico
  */
 @Component({
   selector: 'app-chart-header',

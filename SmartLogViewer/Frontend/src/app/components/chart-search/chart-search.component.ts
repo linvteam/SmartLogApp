@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 /**
- * Questa classe definisce il comportamento del widget che aggrega tutti i widget di manipilazione del log
+ * Classe che definisce il comportamento del widget che aggrega i controlli di manipolazione dei record del log per il grafico
  */
 @Component({
   selector: 'app-chart-search',
