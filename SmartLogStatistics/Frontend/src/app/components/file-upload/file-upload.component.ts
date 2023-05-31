@@ -120,7 +120,7 @@ export class FileUploadComponent {
     /**
      * Genera una funzione che gestisce gli eventi di errore del caricamento
      * @param fileIndex Indice del file che si sta caricando sul db
-     * @returns Funzione che gestise gli errori della richiesta
+     * @returns Funzione che gestisce gli errori della richiesta
      */
     private uploadErrorHandler(fileIndex: number) {
         return (event: any) => {
@@ -167,8 +167,8 @@ class SelectedFile {
     public file: File;
 
     /**
-     * Stringa che definisce lo stato del caricamento, può essere "waiting", "uploading", "error", "warning".
-     * Lo stato uploading rimane anche quando il caricamento è completato con successo
+     * Stringa che definisce lo stato del caricamento, puÃ² essere "waiting", "uploading", "error", "warning".
+     * Lo stato uploading rimane anche quando il caricamento Ã¨ completato con successo
      */
     public status: string = "waiting";
 

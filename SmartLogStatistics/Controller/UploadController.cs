@@ -18,7 +18,7 @@ namespace SmartLogStatistics.Controller {
         private readonly Parser LogParser;
 
         /// <summary>
-        /// Repositori che gestisce l'inserimento dei dati nel db
+        /// Repository che gestisce l'inserimento dei dati nel db
         /// </summary>
         private readonly UploadRepository Repository;
 

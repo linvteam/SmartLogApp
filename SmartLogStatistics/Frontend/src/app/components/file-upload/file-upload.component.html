@@ -1,4 +1,4 @@
-<!-- Form di upload con possibilità di fare drag and drop -->
+<!-- Form di upload con possibilitÃ  di fare drag and drop -->
 <div id="upload-container" class="row" *ngIf="uploadedFiles == -1">
     <div class="col-12">
         <label class="dropdown-btn btn-default p-0" for="file" appFileDropped (fileDropped)="filesDrop($event)">
@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <!-- Messaggio che mostra il file che si stà attualmente caricando -->
+    <!-- Messaggio che mostra il file che si sta attualmente caricando -->
     <div class="alert alert-dark my-alert" *ngIf="uploadedFiles !=  currentFiles.length">
         Caricamento del file: {{ currentFiles[uploadedFiles].file.name }}
     </div>
@@ -48,11 +48,11 @@
             <ng-template mdbAccordionItemHeader>Dettagli</ng-template>
             <ng-template mdbAccordionItemBody>
                 <div class="row file-row" *ngFor="let file of currentFiles">
-                    <!-- Seprata su due colonne si trova a sinistra il nome del file -->
+                    <!-- Separata su due colonne si trova a sinistra il nome del file -->
                     <div class="col-6 file-name">
                         {{ file.file.name }}
                     </div>
-                    <!-- Una barra grigia animata quando il file è in attesa di essere caricato -->
+                    <!-- Una barra grigia animata quando il file Ã¨ in attesa di essere caricato -->
                     <div class="col-6" *ngIf="file.status == 'waiting'">
                         <div class="progress my-progress">
                             <div class="progress-bar progress-bar-striped progress-bar-animated progress-purple"
@@ -79,16 +79,16 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Un alert rosso se c'è stato un errore grave nel caricamento 
+                    <!-- Un alert rosso se c'Ã¨ stato un errore grave nel caricamento 
                         (ad esempio il backend non raggiungibile oppure un file con contenuto corrotto) -->
                     <div class="col-6" *ngIf="file.status == 'failed'">
                         <div class="alert alert-danger" role="alert">
                             {{ file.error }}
                         </div>
                     </div>
-                    <!-- Un alert giallo se c'è stato un soft-error (non grave, 
-                        normalmente l'utente non dovrà fare nulla per risolvere il problema, 
-                        ad esempio un conflitto per file già presente nel db) -->
+                    <!-- Un alert giallo se c'Ã¨ stato un soft-error (non grave, 
+                        normalmente l'utente non dovrÃ  fare nulla per risolvere il problema, 
+                        ad esempio un conflitto per file giÃ  presente nel db) -->
                     <div class="col-6" *ngIf="file.status == 'warning'">
                         <div class="alert alert-warning" role="alert">
                             {{ file.error }}
