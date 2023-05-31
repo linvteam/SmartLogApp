@@ -127,6 +127,7 @@ namespace SmartLogStatistics.Repository {
             //Raccolgo i dati nell'intervallo temporale selezionato e cerco il code che mi interessa
             var eventsFiltered = context.Log.Where(filterByDateAndCode)
                                             .OrderBy(e => e.date)
+                                            .ThenBy(e => e.time)
                                             .Select(x => new {x.code, x.date, x.time })
                                             .ToList();
 
