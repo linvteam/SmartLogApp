@@ -12,30 +12,38 @@ import { HistogramComponent } from './components/histogram/histogram.component';
 import { CumulativeChartComponent } from './components/cumulative-chart/cumulative-chart.component';
 import { PieChartComponent } from './components/pie-chart/pie-chart.component';
 import { TimeComponent } from './components/time/time.component';
-import {HttpClientModule} from "@angular/common/http";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
+import { FileDroppedDirective } from './file-dropped.directive';
+
+import { BaseURL } from './connection-info';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavBarComponent,
-    FileUploadComponent,
-    StatisticsTableComponent,
-    EventTableComponent,
-    HistogramComponent,
-    CumulativeChartComponent,
-    PieChartComponent,
-    TimeComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    NgbModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        NavBarComponent,
+        FileUploadComponent,
+        StatisticsTableComponent,
+        EventTableComponent,
+        HistogramComponent,
+        CumulativeChartComponent,
+        PieChartComponent,
+        TimeComponent,
+        FileDroppedDirective
+    ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        NgbModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MdbAccordionModule
+    ],
+    providers: [
+        { provide: BaseURL, useValue: 'https://localhost:7253/api'}
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

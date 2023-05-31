@@ -30,16 +30,17 @@ namespace SmartLogStatistics.Repository.Tests {
             
             var logLineMock = new Mock<DbSet<Model.Log>>();
             var firmwareMock = new Mock<DbSet<Firmware>>();
-            var eventsMock = new Mock<DbSet<Event>>();
             
             var transactionMock = new Mock<IDbContextTransaction>();
             
             var mockContext = new Mock<SmartLogContext>();
 
             var files = new List<LogFile>();
+            var events = new List<Event>();
             var dbMock = new Mock<DatabaseFacade>(mockContext.Object);
             dbMock.Setup(m => m.BeginTransaction()).Returns(transactionMock.Object);
             var fileMock = CreateDbSetMock(files);
+            var eventsMock = CreateDbSetMock(events);
 
             mockContext.Setup(m => m.Database).Returns(dbMock.Object);
             mockContext.Setup(m => m.File).Returns(fileMock.Object);
@@ -74,11 +75,11 @@ namespace SmartLogStatistics.Repository.Tests {
 
             repo.Upload(logFIle);
 
-            mockContext.Verify(m => m.SaveChanges(), Times.Exactly(8));
-            mockContext.Verify(m => m.Log.Add(It.IsAny<Model.Log>()), Times.Exactly(3));
+            mockContext.Verify(m => m.SaveChanges(), Times.Exactly(3));
+            mockContext.Verify(m => m.Log.AddRange(It.IsAny<List<Model.Log>>()), Times.Once());
             mockContext.Verify(m => m.File.Add(It.IsAny<LogFile>()), Times.Once());
-            mockContext.Verify(m => m.Event.Add(It.IsAny<Event>()), Times.Exactly(2));
-            mockContext.Verify(m => m.Firmware.Add(It.IsAny<Firmware>()), Times.Exactly(4));
+            mockContext.Verify(m => m.Event.AddRange(It.IsAny<List<Event>>()), Times.Once());
+            mockContext.Verify(m => m.Firmware.AddRange(It.IsAny<List<Firmware>>()), Times.Once());
             transactionMock.Verify(m => m.Commit(), Times.Once);
 
 

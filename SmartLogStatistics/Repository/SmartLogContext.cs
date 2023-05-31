@@ -18,6 +18,9 @@ namespace SmartLogStatistics.Repository
         {
         }
 
+        /// <summary>
+        /// Crea una nuova istanza del context (costruttore usato per i test)
+        /// </summary>
         public SmartLogContext(): base() { }
 
         /// <summary>

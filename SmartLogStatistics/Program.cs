@@ -1,6 +1,5 @@
 using Core;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 using SmartLogStatistics.Repository;
 using System.Reflection;
 
