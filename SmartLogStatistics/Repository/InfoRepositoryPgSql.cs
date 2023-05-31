@@ -7,13 +7,16 @@ using SmartLogStatistics.Exceptions;
 
 namespace SmartLogStatistics.Repository {
 
+    /// <summary>
+    /// Classe che gestisce il fetch dal database delle informazioni aggiuntive sui dati del database
+    /// </summary>
     [Core.Injectables.Singleton(typeof(InfoRepository))]
     public class InfoRepositoryPgSql : InfoRepository {
 
         private readonly SmartLogContext context;
 
         /// <summary>
-        ///
+        /// Costruisce un nuovo oggetto di tipo InfoRepositoryPgSql
         /// </summary>
         /// <param name="db"> Il context che si connette al database</param>
         public InfoRepositoryPgSql(SmartLogContext db) {
