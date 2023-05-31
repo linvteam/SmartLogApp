@@ -118,6 +118,7 @@ namespace SmartLogStatistics.Repository {
         /// <exception cref="EmptyOrFailedQuery">Eccezione lanciata quando non sono stati trovati dati nell'intervallo temporale</exception>
         /// <returns>Oggetto contenente l'andamento cumulativo</returns>
         public CumulativeDto Cumulative(DateTime start, DateTime end, string code) {
+
             bool filterByDateAndCode(Log log) {
                 DateTime logdatetime = new(log.date.Year, log.date.Month, log.date.Day, log.time.Hour, log.time.Minute, log.time.Second, log.time.Millisecond);
                 return logdatetime >= start && logdatetime <= end && log.code == code;
@@ -126,7 +127,8 @@ namespace SmartLogStatistics.Repository {
             //Raccolgo i dati nell'intervallo temporale selezionato e cerco il code che mi interessa
             var eventsFiltered = context.Log.Where(filterByDateAndCode)
                                             .OrderBy(e => e.date)
-                                            .Select(x => new {x.code, x.date, x.time });
+                                            .Select(x => new {x.code, x.date, x.time })
+                                            .ToList();
 
             //Se non trovo nulla lancio un eccezione
             if(!eventsFiltered.Any()) {

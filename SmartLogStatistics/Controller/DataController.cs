@@ -36,11 +36,11 @@ namespace SmartLogStatistics.Controller
         /// <param name="f">Indica se i dati devono essere raggruppati per firmware</param>
         /// <param name="u">Indica se i dati devono essere raggruppati per unit</param>
         /// <param name="s">Indica se i dati devono essere raggruppati per subunit</param>
-        /// <returns>Esito della chiamata POST, può essere un JSON che rappresenta gli eventi raggruppati o un'eccezione dovuta ad errori nella query o con il database</returns>
+        /// <returns>Esito della chiamata GET, può essere un JSON che rappresenta gli eventi raggruppati o un'eccezione dovuta ad errori nella query o con il database</returns>
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
-        [HttpPost]
+        [HttpGet]
         [Route("frequency/{startDateTime}/{endDateTime}")]
         [ProducesResponseType(typeof(FrequencyDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
@@ -74,11 +74,11 @@ namespace SmartLogStatistics.Controller
         /// <param name="startDateTime">Indica la data di inizio degli eventi da prelevare</param>
         /// <param name="endDateTime">Indica la data di fine degli eventi da prelevare</param>
         /// <param name="code">Indica il code degli eventi da prelevare</param>
-        /// <returns>Esito della chiamata POST, può essere un JSON che rappresenta l'andamento cumulativo di un code o un'eccezione dovuta ad errori nella query o con il database</returns>
+        /// <returns>Esito della chiamata GET, può essere un JSON che rappresenta l'andamento cumulativo di un code o un'eccezione dovuta ad errori nella query o con il database</returns>
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
-        [HttpPost]
+        [HttpGet]
         [Route("cumulative/{startDateTime}/{endDateTime}/{code}")]
         [ProducesResponseType(typeof(CumulativeDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
@@ -111,11 +111,11 @@ namespace SmartLogStatistics.Controller
         /// </summary>
         /// <param name="startDateTime">Indica la data di inizio degli eventi da prelevare</param>
         /// <param name="endDateTime">Indica la data di fine degli eventi da prelevare</param>
-        /// <returns>Esito della chiamata POST, può essere un JSON che rappresenta il numero di occorrenze di un certo code o un'eccezione dovuta ad errori nella query o con il database</returns>
+        /// <returns>Esito della chiamata GET, può essere un JSON che rappresenta il numero di occorrenze di un certo code o un'eccezione dovuta ad errori nella query o con il database</returns>
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
-        [HttpPost]
+        [HttpGet]
         [Route("totalbycode/{startDateTime}/{endDateTime}")]
         [ProducesResponseType(typeof(TotalByCodeDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
@@ -150,11 +150,11 @@ namespace SmartLogStatistics.Controller
         /// <param name="startDateTime">Indica la data di inizio degli eventi da prelevare</param>
         /// <param name="endDateTime">Indica la data di fine degli eventi da prelevare</param>
         /// <param name="code">Indica il code degli eventi da prelevare</param>
-        /// <returns>Esito della chiamata POST, può essere un JSON che rappresenta gli eventi di un certo code raggruppati per versioni del firmware o un'eccezione dovuta ad errori nella query o con il database</returns>
+        /// <returns>Esito della chiamata GET, può essere un JSON che rappresenta gli eventi di un certo code raggruppati per versioni del firmware o un'eccezione dovuta ad errori nella query o con il database</returns>
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
-        [HttpPost]
+        [HttpGet]
         [Route("totalbyfirmware/{startDateTime}/{endDateTime}/{code}")]
         [ProducesResponseType(typeof(TotalByFirmwareDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]

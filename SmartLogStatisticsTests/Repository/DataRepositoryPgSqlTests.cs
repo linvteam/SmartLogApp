@@ -117,28 +117,10 @@ namespace SmartLogStatistics.Repository.Tests {
                 new Model.Log
                 {
                     code = "C001",
-                    date = new DateOnly(2022,05,05),
-                    time = new TimeOnly(08,36,29,618),
-                    unit = 1,
-                    subunit = 1,
-                    value = true,
-                },
-                new Model.Log
-                {
-                    code = "C001",
                     date = new DateOnly(2022,05,07),
                     time = new TimeOnly(08,36,29,618),
                     unit = 1,
                     subunit = 1,
-                    value = false,
-                },
-                new Model.Log
-                {
-                    code = "C001",
-                    date = new DateOnly(2022,06,05),
-                    time = new TimeOnly(08,36,29,618),
-                    unit = 1,
-                    subunit = 14,
                     value = false,
                 },
                 new Model.Log
@@ -166,23 +148,36 @@ namespace SmartLogStatistics.Repository.Tests {
         public void FrequencyTest() {
             var result = repo.Frequency(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01), true, true, true, true);
 
-            Assert.AreEqual(10, result.events.Count);
-            var ev = result.events.Find(e => e.Date == new DateOnly(2022, 05, 07));
+            Assert.AreEqual(new DateTime(2022, 01, 01), result.Start);
+            Assert.AreEqual(new DateTime(2024, 01, 01), result.End);
+            Assert.AreEqual(8, result.Events.Count);
+            Assert.AreEqual(5, result.GroupBy.Count);
+
+            var ev = result.Events.Find(e => e.Date == new DateOnly(2022, 05, 07));
             Assert.IsNotNull(ev);
-            Assert.AreEqual(1.0d/10.0d, ev.Frequency);
+            Assert.AreEqual(1.0d/8.0d, ev.Frequency);
 
             var result2 = repo.Frequency(new DateTime(2022, 04, 01), new DateTime(2024, 01, 01), false, false, false, false);
 
-            var ev2 = result2.events.Find(e => e.Code == "C001");
-            Assert.AreEqual(2, result2.events.Count);
+            Assert.AreEqual(new DateTime(2022, 04, 01), result2.Start);
+            Assert.AreEqual(new DateTime(2024, 01, 01), result2.End);
+            Assert.AreEqual(2, result2.Events.Count);
+            Assert.AreEqual(1, result2.GroupBy.Count);
+
+            var ev2 = result2.Events.Find(e => e.Code == "C001");
             Assert.IsNotNull(ev2);
-            Assert.AreEqual(5.0d/6.0d, ev2.Frequency);
+            Assert.AreEqual(3.0d/4.0d, ev2.Frequency);
 
-            var result3 = repo.Frequency(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01), false, true, false, false);
+            var result3 = repo.Frequency(new DateTime(2022, 01, 02), new DateTime(2024, 02, 01), false, true, false, false);
 
-            var ev3 = result3.events.Find(e => e.Code == "C001" && e.Firmware == "MAPK_ByPass_v2_04_00.ini");
+            Assert.AreEqual(new DateTime(2022, 01, 02), result3.Start);
+            Assert.AreEqual(new DateTime(2024, 02, 01), result3.End);
+            Assert.AreEqual(4, result3.Events.Count);
+            Assert.AreEqual(2, result3.GroupBy.Count);
+            
+            var ev3 = result3.Events.Find(e => e.Code == "C001" && e.Firmware == "MAPK_ByPass_v2_04_00.ini");
             Assert.IsNotNull(ev3);
-            Assert.AreEqual(3.0d/10.0d, ev3.Frequency);
+            Assert.AreEqual(2.0d/8.0d, ev3.Frequency);
 
         }
 
@@ -198,25 +193,35 @@ namespace SmartLogStatistics.Repository.Tests {
 
             var result = repo.Cumulative(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01), "C001");
 
-            CumulativeRecord? record1 = result.records[0];
-            CumulativeRecord? record2 = result.records[3];
-            CumulativeRecord? record3 = result.records[6];
+            Assert.AreEqual(new DateTime(2022, 01, 01), result.Start);
+            Assert.AreEqual(new DateTime(2024, 01, 01), result.End);
+            Assert.AreEqual("C001", result.Code);
+            Assert.AreEqual(5, result.Records.Count);
+
+            CumulativeRecord? record1 = result.Records[0];
+            CumulativeRecord? record2 = result.Records[3];
+            CumulativeRecord? record3 = result.Records[4];
 
             Assert.IsNotNull(record1);
             Assert.IsNotNull(record2);
             Assert.IsNotNull(record3);
             Assert.AreEqual(1,record1.EventOccurencies);
             Assert.AreEqual(4,record2.EventOccurencies);
-            Assert.AreEqual(7,record3.EventOccurencies);
+            Assert.AreEqual(5,record3.EventOccurencies);
         }
 
         [TestMethod()]
         public void ShorterTimeIntervalCumulativeTest() {
 
-            var result = repo.Cumulative(new DateTime(2022, 05, 01), new DateTime(2022, 05, 29), "C001");
+            var result = repo.Cumulative(new DateTime(2022, 04, 01), new DateTime(2022, 05, 29), "C001");
 
-            CumulativeRecord? record1 = result.records[0];
-            CumulativeRecord? record2 = result.records[1];
+            Assert.AreEqual(new DateTime(2022, 04, 01), result.Start);
+            Assert.AreEqual(new DateTime(2022, 05, 29), result.End);
+            Assert.AreEqual("C001", result.Code);
+            Assert.AreEqual(2, result.Records.Count);
+
+            CumulativeRecord? record1 = result.Records[0];
+            CumulativeRecord? record2 = result.Records[1];
 
             Assert.IsNotNull(record1);
             Assert.IsNotNull(record2);
@@ -236,15 +241,20 @@ namespace SmartLogStatistics.Repository.Tests {
 
             var result = repo.TotalByCode(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01));
 
+            Assert.AreEqual(new DateTime(2022, 01, 01), result.Start);
+            Assert.AreEqual(new DateTime(2024, 01, 01), result.End);
+            Assert.AreEqual(3, result.CodeOccurences.Count);
+            
             CodeOccurrence? code1 = result.CodeOccurences.Find(c => c.Code == "A001");
             CodeOccurrence? code2 = result.CodeOccurences.Find(c => c.Code == "B001");
             CodeOccurrence? code3 = result.CodeOccurences.Find(c => c.Code == "C001");
+
             Assert.IsNotNull(code1);
             Assert.IsNotNull(code2);
             Assert.IsNotNull(code3);
             Assert.AreEqual(1, code1.EventOccurrences);
             Assert.AreEqual(2, code2.EventOccurrences);
-            Assert.AreEqual(7, code3.EventOccurrences);
+            Assert.AreEqual(5, code3.EventOccurrences);
         }
 
         [TestMethod()]
@@ -258,14 +268,18 @@ namespace SmartLogStatistics.Repository.Tests {
         public void TotalByFirmwareTest() {
 
             var result = repo.TotalByFirmware(new DateTime(2022, 01, 01), new DateTime(2024,01,01),"C001");
+
+            Assert.AreEqual("C001", result.Code);
+            Assert.AreEqual(new DateTime(2022, 01, 01), result.Start);
+            Assert.AreEqual(new DateTime(2024, 01, 01), result.End);
             
             FirmwareOccurrence? fw1 = result.FirmwareOccurrences.Find(f => f.Firmware == "MAPK_Module_RD_IV_v2_04_00.ini");
             FirmwareOccurrence? fw2 = result.FirmwareOccurrences.Find(f => f.Firmware == "MAPK_ByPass_v2_04_00.ini");
             
             Assert.IsNotNull(fw1);
             Assert.IsNotNull(fw2);
-            Assert.AreEqual(4,fw1.EventOccurrences);
-            Assert.AreEqual(3,fw2.EventOccurrences);
+            Assert.AreEqual(3,fw1.EventOccurrences);
+            Assert.AreEqual(2,fw2.EventOccurrences);
            
         }
 
