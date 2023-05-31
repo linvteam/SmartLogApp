@@ -18,6 +18,9 @@ import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
 import { TimeHeaderComponent } from './components/time-header/time-header.component';
 import { TimeCodeHeaderComponent } from './components/time-code-header/time-code-header.component';
 import { RegroupHeaderComponent } from './components/regroup-header/regroup-header.component';
+import { FileDroppedDirective } from './file-dropped.directive';
+
+import { BaseURL } from './connection-info';
 
 @NgModule({
     declarations: [
@@ -32,6 +35,7 @@ import { RegroupHeaderComponent } from './components/regroup-header/regroup-head
         TimeHeaderComponent,
         TimeCodeHeaderComponent,
         RegroupHeaderComponent
+        FileDroppedDirective
     ],
     imports: [
         BrowserModule,
@@ -43,7 +47,9 @@ import { RegroupHeaderComponent } from './components/regroup-header/regroup-head
         MdbAccordionModule,
         NgMultiSelectDropDownModule
     ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+        { provide: BaseURL, useValue: 'https://localhost:7253/api'}
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

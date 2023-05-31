@@ -1,6 +1,5 @@
 using Core;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 using SmartLogStatistics.Repository;
 using System.Reflection;
 
@@ -21,8 +20,6 @@ builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
         policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
     }
 ));
-
-
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

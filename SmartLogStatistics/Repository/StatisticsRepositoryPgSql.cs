@@ -56,7 +56,7 @@ namespace SmartLogStatistics.Repository {
                 // Lancio questa eccezione quando viene rilevato che la query non ha prodotto risultati
                 // Serve per rispettare la specifica tecnica
                 if(filesAndEventCount.Length == 0) {
-                    throw new Exceptions.EmptyOrFailedQuery();
+                    throw new Exceptions.EmptyOrFailedQueryException();
                 }
 
                 int NumberOfFiles = filesAndEventCount.Length;
@@ -70,10 +70,10 @@ namespace SmartLogStatistics.Repository {
                     new StatisticsDto.Statistic("Media di eventi", AverageNumberOfEvents),
                     new StatisticsDto.Statistic("Deviazione standard", StandardDeviation)
                 });
-            } catch(Exceptions.EmptyOrFailedQuery) {
+            } catch(Exceptions.EmptyOrFailedQueryException) {
                 throw;
             } catch {
-                throw new Exceptions.FailedConnection();
+                throw new Exceptions.FailedConnectionException();
             }
         }
     }
