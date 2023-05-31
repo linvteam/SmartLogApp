@@ -23,7 +23,7 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Test Core
-      run: dotnet test -p:ExcludeByFile="**/Program.cs" --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover
+      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude=[*]Core.Injectables* -p:ExcludeByFile="**/Program.cs"
       working-directory: ./CoreTests
 
     - name: Test SmartLogViewer
