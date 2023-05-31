@@ -21,6 +21,7 @@ import { RegroupHeaderComponent } from './components/regroup-header/regroup-head
 import { FileDroppedDirective } from './file-dropped.directive';
 
 import { BaseURL } from './connection-info';
+import {NgIf} from "@angular/common";
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import { BaseURL } from './connection-info';
         FormsModule,
         ReactiveFormsModule,
         MdbAccordionModule,
-        NgMultiSelectDropDownModule
+        NgMultiSelectDropDownModule,
+        NgIf
     ],
   providers: [
         { provide: BaseURL, useValue: 'https://localhost:7253/api'}
