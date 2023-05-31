@@ -47,7 +47,7 @@ import { BaseURL } from './connection-info';
         MdbAccordionModule,
         NgMultiSelectDropDownModule
     ],
-  providers: [
+    providers: [
         { provide: BaseURL, useValue: 'https://localhost:7253/api'}
     ],
     bootstrap: [AppComponent]
