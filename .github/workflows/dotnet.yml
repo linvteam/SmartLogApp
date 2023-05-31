@@ -27,11 +27,11 @@ jobs:
       working-directory: ./CoreTests
 
     - name: Test SmartLogViewer
-      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover /p:Exclude=[*]Core*
+      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude=[*]Core*
       working-directory: ./SmartLogViewerTests
 
     - name: Test SmartLogStatistics
-      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover /p:Exclude=[*]Core*
+      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude="[*]Core*%2c[*]SmartLogStatistics.Migrations*"
       working-directory: ./SmartLogStatisticsTests
 
     - name: OpenCover Badge Generator - Core
