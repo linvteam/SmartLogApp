@@ -1,19 +1,10 @@
-﻿using Core;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using SmartLogStatistics.Controller;
 using SmartLogStatistics.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SmartLogStatistics.Exceptions;
 
-namespace SmartLogStatistics.Controller.Tests
-{
+namespace SmartLogStatistics.Controller.Tests {
     [TestClass()]
     public class InfoControllerTests
     {
@@ -33,7 +24,7 @@ namespace SmartLogStatistics.Controller.Tests
         public void GetCodeWithDescriptionEmptyEventTest()
         {
             Mock<InfoRepository> repository = new();
-            repository.Setup(x => x.GetCodesWithDescription()).Throws(new EmptyOrFailedQuery());
+            repository.Setup(x => x.GetCodesWithDescription()).Throws(new EmptyOrFailedQueryException());
             
 
             InfoController infoController = new(repository.Object);
@@ -46,7 +37,7 @@ namespace SmartLogStatistics.Controller.Tests
         public void GetCodeWithDescriptionInternalServerErrorTest()
         {
             Mock<InfoRepository> repository = new();
-            repository.Setup(x => x.GetCodesWithDescription()).Throws(new FailedConnection());
+            repository.Setup(x => x.GetCodesWithDescription()).Throws(new FailedConnectionException());
             
 
             InfoController infoController = new(repository.Object);
@@ -72,7 +63,7 @@ namespace SmartLogStatistics.Controller.Tests
         public void GetTimeIntervalEmptyLogTest()
         {
             Mock<InfoRepository> repository = new();
-            repository.Setup(x => x.GetTimeInterval()).Throws(new EmptyOrFailedQuery());
+            repository.Setup(x => x.GetTimeInterval()).Throws(new EmptyOrFailedQueryException());
             
 
             InfoController infoController = new(repository.Object);
@@ -85,7 +76,7 @@ namespace SmartLogStatistics.Controller.Tests
         public void GetTimeIntervalInternalServerErrorTest()
         {
             Mock<InfoRepository> repository = new();
-            repository.Setup(x => x.GetTimeInterval()).Throws(new FailedConnection());
+            repository.Setup(x => x.GetTimeInterval()).Throws(new FailedConnectionException());
             
 
             InfoController infoController = new(repository.Object);
@@ -111,7 +102,7 @@ namespace SmartLogStatistics.Controller.Tests
         public void GetFirmwareListEmptyFirmwareTest()
         {
             Mock<InfoRepository> repository = new();
-            repository.Setup(x => x.GetFirmwareList()).Throws(new EmptyOrFailedQuery());
+            repository.Setup(x => x.GetFirmwareList()).Throws(new EmptyOrFailedQueryException());
             
 
             InfoController infoController = new(repository.Object);
@@ -124,7 +115,7 @@ namespace SmartLogStatistics.Controller.Tests
         public void GetFirmwareListInternalServerErrorTest()
         {
             Mock<InfoRepository> repository = new();
-            repository.Setup(x => x.GetFirmwareList()).Throws(new FailedConnection());
+            repository.Setup(x => x.GetFirmwareList()).Throws(new FailedConnectionException());
             
 
             InfoController infoController = new(repository.Object);
