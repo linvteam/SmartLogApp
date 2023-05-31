@@ -11,7 +11,7 @@ using System.Net;
 namespace SmartLogStatistics.Controller
 {
     /// <summary>
-    /// Controller per ottenre dei dati estratti dai file di log
+    /// Controller per ottenere dei dati estratti dai file di log
     /// </summary>
     [Route("api/data")]
     [ApiController]
@@ -40,7 +40,7 @@ namespace SmartLogStatistics.Controller
         /// <param name="f">Indica se i dati devono essere raggruppati per firmware</param>
         /// <param name="u">Indica se i dati devono essere raggruppati per unit</param>
         /// <param name="s">Indica se i dati devono essere raggruppati per subunit</param>
-        /// <returns>Esito della chiamata POST, può essere un JSON che rappresenta gli eventi raggruppati o un'eccezione dovuta ad errori nella query o con il database</returns>
+        /// <returns>Esito della chiamata GET, può essere un JSON che rappresenta gli eventi raggruppati o un'eccezione dovuta ad errori nella query o con il database</returns>
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
@@ -78,12 +78,12 @@ namespace SmartLogStatistics.Controller
         /// <param name="startDateTime">Indica la data di inizio degli eventi da prelevare</param>
         /// <param name="endDateTime">Indica la data di fine degli eventi da prelevare</param>
         /// <param name="code">Indica il code degli eventi da prelevare</param>
-        /// <returns>Esito della chiamata POST, può essere un JSON che rappresenta l'andamento cumulativo di un code o un'eccezione dovuta ad errori nella query o con il database</returns>
+        /// <returns>Esito della chiamata GET, può essere un JSON che rappresenta l'andamento cumulativo di un code o un'eccezione dovuta ad errori nella query o con il database</returns>
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
         [HttpGet]
-        [Route("cumulative/{start-DateTime}/{end-DateTime}/{code}")]
+        [Route("cumulative/{startDateTime}/{endDateTime}/{code}")]
         [ProducesResponseType(typeof(CumulativeDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
@@ -115,12 +115,12 @@ namespace SmartLogStatistics.Controller
         /// </summary>
         /// <param name="startDateTime">Indica la data di inizio degli eventi da prelevare</param>
         /// <param name="endDateTime">Indica la data di fine degli eventi da prelevare</param>
-        /// <returns>Esito della chiamata POST, può essere un JSON che rappresenta il numero di occorrenze di un certo code o un'eccezione dovuta ad errori nella query o con il database</returns>
+        /// <returns>Esito della chiamata GET, può essere un JSON che rappresenta il numero di occorrenze di un certo code o un'eccezione dovuta ad errori nella query o con il database</returns>
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
         [HttpGet]
-        [Route("totalbycode/{start-DateTime}/{end-DateTime}")]
+        [Route("totalbycode/{startDateTime}/{endDateTime}")]
         [ProducesResponseType(typeof(TotalByCodeDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
@@ -149,17 +149,17 @@ namespace SmartLogStatistics.Controller
 
 
         /// <summary>
-        /// Ritorna un JSON che rappresenta il numero di occorrenze, raggruppati per versione firmware, compresi nell’intervallo temporale dato in cui si `e verificato l’evento specificato tramite il cod
+        /// Ritorna un JSON che rappresenta il numero di occorrenze, raggruppati per versione firmware, compresi nell’intervallo temporale dato in cui si è verificato l’evento specificato tramite il code
         /// </summary>
         /// <param name="startDateTime">Indica la data di inizio degli eventi da prelevare</param>
         /// <param name="endDateTime">Indica la data di fine degli eventi da prelevare</param>
         /// <param name="code">Indica il code degli eventi da prelevare</param>
-        /// <returns>Esito della chiamata POST, può essere un JSON che rappresenta gli eventi di un certo code raggruppati per versioni del firmware o un'eccezione dovuta ad errori nella query o con il database</returns>
+        /// <returns>Esito della chiamata GET, può essere un JSON che rappresenta gli eventi di un certo code raggruppati per versioni del firmware o un'eccezione dovuta ad errori nella query o con il database</returns>
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
         [HttpGet]
-        [Route("totalbyfirmware/{start-DateTime}/{end-DateTime}/{code}")]
+        [Route("totalbyfirmware/{startDateTime}/{endDateTime}/{code}")]
         [ProducesResponseType(typeof(TotalByFirmwareDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]

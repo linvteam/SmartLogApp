@@ -13,7 +13,7 @@
         /// <param name="unit">Attiva il raggruppamento per unit</param>
         /// <param name="subunit">Attiva il raggruppamento per subunit</param>
         /// <returns>Oggetto che contiene la frequenza di occorrenza degli eventi, con eventuale raggruppamento</returns>
-        public Model.FrequencyDto Frequency(DateTime start, DateTime end, bool data, bool firmware, bool unit, bool subunit);
+        public Model.FrequencyDto Frequency(DateTime start, DateTime end, bool date, bool firmware, bool unit, bool subunit);
 
         /// <summary>
         /// Ottieni l'analisi cumulativa di log degli eventi

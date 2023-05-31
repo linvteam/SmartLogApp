@@ -49,10 +49,10 @@ namespace SmartLogStatistics.Controller
                 List<CodeWithDescriptionDto> response = Repository.GetCodesWithDescription();
                 return StatusCode((int)HttpStatusCode.OK, response);
             }
-            catch(EmptyOrFailedQuery e) {
+            catch(EmptyOrFailedQueryException e) {
                 return StatusCode((int)HttpStatusCode.NotFound, new ErrorObject(e.Code, e.Message));
             }
-            catch (FailedConnection e)
+            catch (FailedConnectionException e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));
             }
@@ -76,10 +76,10 @@ namespace SmartLogStatistics.Controller
                 DateTimeIntervalDto response = this.Repository.GetTimeInterval();
                 return StatusCode((int)HttpStatusCode.OK, response);
             }
-            catch(EmptyOrFailedQuery e) {
+            catch(EmptyOrFailedQueryException e) {
                 return StatusCode((int)HttpStatusCode.NotFound, new ErrorObject(e.Code, e.Message));
             }
-            catch (FailedConnection e)
+            catch (FailedConnectionException e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));
             }
@@ -101,10 +101,10 @@ namespace SmartLogStatistics.Controller
                 List<string> response = this.Repository.GetFirmwareList();
                 return StatusCode((int)HttpStatusCode.OK, response);
             }
-            catch(EmptyOrFailedQuery e) {
+            catch(EmptyOrFailedQueryException e) {
                 return StatusCode((int)HttpStatusCode.NotFound, new ErrorObject(e.Code, e.Message));
             }
-            catch (FailedConnection e)
+            catch (FailedConnectionException e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));
             }

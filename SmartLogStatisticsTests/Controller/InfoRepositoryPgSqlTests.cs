@@ -60,7 +60,7 @@ namespace SmartLogStatistics.Controller.Tests
         }
 
         [TestMethod()]
-        [ExpectedException(typeof(EmptyOrFailedQuery))]
+        [ExpectedException(typeof(EmptyOrFailedQueryException))]
         public void GetCodeWithDescriptionEmptyEventTest()
         {
             Mock<SmartLogContext> context = new();
@@ -119,7 +119,7 @@ namespace SmartLogStatistics.Controller.Tests
         }
 
         [TestMethod()]
-        [ExpectedException(typeof(EmptyOrFailedQuery))]
+        [ExpectedException(typeof(EmptyOrFailedQueryException))]
         public void GetTimeIntervalEmptyLogTest()
         {
             Mock<SmartLogContext> context = new();
@@ -179,7 +179,7 @@ namespace SmartLogStatistics.Controller.Tests
         }
 
         [TestMethod()]
-        [ExpectedException(typeof(EmptyOrFailedQuery))]
+        [ExpectedException(typeof(EmptyOrFailedQueryException))]
         public void GetFirmwareListEmptyFirmwareTest()
         {
             Mock<SmartLogContext> context = new();

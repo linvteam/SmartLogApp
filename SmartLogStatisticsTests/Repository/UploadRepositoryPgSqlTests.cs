@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SmartLogStatistics.Model;
 using Microsoft.EntityFrameworkCore;
@@ -92,7 +92,6 @@ namespace SmartLogStatistics.Repository.Tests {
             var logLineMock = new Mock<DbSet<Model.Log>>();
             var firmwareMock = new Mock<DbSet<Firmware>>();
             var eventsMock = new Mock<DbSet<Event>>();
-
             var transactionMock = new Mock<IDbContextTransaction>();
 
             var mockContext = new Mock<SmartLogContext>();
@@ -101,7 +100,7 @@ namespace SmartLogStatistics.Repository.Tests {
             dbMock.Setup(m => m.BeginTransaction()).Returns(transactionMock.Object);
 
             mockContext.Setup(m => m.Database).Returns(dbMock.Object);
-
+            
             var files = new List<LogFile>()
             {
                 new LogFile
@@ -134,7 +133,7 @@ namespace SmartLogStatistics.Repository.Tests {
             Core.Log logFIle = new(fileName, header, logRows);
 
             repo.Upload(logFIle);
-
+            
             transactionMock.Verify( m => m.Rollback(),Times.Once);
             Assert.AreEqual(1, fileMock.Object.Count());
 

@@ -26,7 +26,7 @@ namespace SmartLogStatistics.Repository {
         /// <exception cref="DbUpdateException">Eccezione lanciata quando avviene un errore nel caricamento del file sul database</exception>
         /// <exception cref="FileConflictException">Eccezione lanciata quando si tenta di caricare un file sul database già presente</exception>
         public void Upload(Core.Log log) {
-
+        
             using var transaction = context.Database.BeginTransaction();
             try {
                 //Prima di tutto inseriamo il file
