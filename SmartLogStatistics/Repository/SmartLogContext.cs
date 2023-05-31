@@ -18,6 +18,9 @@ namespace SmartLogStatistics.Repository
         {
         }
 
+        /// <summary>
+        /// Crea una nuova istanza del context (costruttore usato per i test)
+        /// </summary>
         public SmartLogContext(): base() { }
 
         /// <summary>
@@ -45,6 +48,7 @@ namespace SmartLogStatistics.Repository
         /// Oggetto di tipo DbSet che rappresenta la tabella Event nel DB, dotato di getter e setter
         /// </summary>
         public virtual DbSet<Event> Event { get; set; }
+
         /// <summary>
         /// Crea le tabelle del DB, configurandone le chiavi interne e esterne
         /// </summary>

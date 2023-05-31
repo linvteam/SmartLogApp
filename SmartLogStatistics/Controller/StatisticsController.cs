@@ -5,7 +5,9 @@ using System.Net;
 
 namespace SmartLogStatistics.Controller
 {
-
+    /// <summary>
+    /// Controller per ottenere le statistiche di base sui log analizzati
+    /// </summary>
     [Route("api/statistics")]
     [ApiController]
     public class StatisticsController : ControllerBase
@@ -13,7 +15,7 @@ namespace SmartLogStatistics.Controller
         /// <summary>
         /// Oggetto di tipo StatisticsRepository dedicato all'acquisizione di statistiche sui file di log analizzati
         /// </summary>
-        private StatisticsRepository Repository;
+        private readonly StatisticsRepository Repository;
 
         /// <summary>
         /// Crea una nuova istanza del controller
@@ -53,12 +55,12 @@ namespace SmartLogStatistics.Controller
                 StatisticsDto statistics = Repository.Statistics(startDateTime, endDateTime);
                 return Ok(statistics);
             }
-            catch (Exceptions.EmptyOrFailedQuery e)
+            catch (Exceptions.EmptyOrFailedQueryException e)
             {
                 return StatusCode((int)HttpStatusCode.BadRequest,
                     new ErrorObject(e.Code, e.Message));
             }
-            catch (Exceptions.FailedConnection e)
+            catch (Exceptions.FailedConnectionException e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError,
                     new ErrorObject(e.Code, e.Message));

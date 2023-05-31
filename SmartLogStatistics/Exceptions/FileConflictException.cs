@@ -16,7 +16,7 @@ namespace SmartLogStatistics.Exceptions {
         /// </summary>
         public FileConflictException() : base("Il file è già stato salvato nel database")
         { 
-            Code = 2;
+            Code = 8;
         }
 
     }

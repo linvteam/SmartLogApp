@@ -72,7 +72,7 @@ namespace SmartLogStatistics.Repository.Tests {
         }
 
         [TestMethod()]
-        [ExpectedException(typeof(Exceptions.EmptyOrFailedQuery))]
+        [ExpectedException(typeof(Exceptions.EmptyOrFailedQueryException))]
         public void TestQueryWithEmptyDatabase() {
             List<Log> logs = new();
 
@@ -148,7 +148,7 @@ namespace SmartLogStatistics.Repository.Tests {
         }
 
         [TestMethod()]
-        [ExpectedException(typeof(Exceptions.EmptyOrFailedQuery))]
+        [ExpectedException(typeof(Exceptions.EmptyOrFailedQueryException))]
         public void StatisticsWithLogButEmptyDateFilter() {
             // Arrange
             // Inseriamo 10 file di log

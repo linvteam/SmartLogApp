@@ -10,6 +10,9 @@ using System.Net;
 
 namespace SmartLogStatistics.Controller
 {
+    /// <summary>
+    /// Controller per ottenre dei dati estratti dai file di log
+    /// </summary>
     [Route("api/data")]
     [ApiController]
     public class DataController : ControllerBase
@@ -17,11 +20,12 @@ namespace SmartLogStatistics.Controller
         /// <summary>
         /// Oggetto di tipo UploadRepository
         /// </summary>
-        private DataRepository Repository;
+        private readonly DataRepository Repository;
 
         /// <summary>
         /// Crea una nuova istanza del controller
         /// </summary>
+        /// <param name="repository">Repository per la gestione delle query</param>
         public DataController(DataRepository repository)
         {
             Repository = repository;

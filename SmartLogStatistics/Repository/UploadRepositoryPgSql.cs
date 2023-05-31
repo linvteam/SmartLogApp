@@ -7,14 +7,14 @@ namespace SmartLogStatistics.Repository {
     /// Classe che definisce la comunicazione con il database PostgreSQL per l'upload del file
     /// </summary>
     [Core.Injectables.Singleton(typeof(UploadRepository))]
-    public class UploadRepositoryPgSql : UploadRepository {
+    public class UploadRepositoryPgSql: UploadRepository {
 
         private readonly SmartLogContext context;
 
         /// <summary>
-        /// Costruisce un nuovo oggetto di tipo UploadRepositoryPgSql
+        /// Crea una nuova istanza del repository di upload
         /// </summary>
-        /// <param name="context">Il database da cui prelevare i dati</param>
+        /// <param name="context">Istanza del database</param>
         public UploadRepositoryPgSql(SmartLogContext context) {
             this.context = context;
         }
@@ -28,11 +28,9 @@ namespace SmartLogStatistics.Repository {
         public void Upload(Core.Log log) {
         
             using var transaction = context.Database.BeginTransaction();
-            try
-            {
+            try {
                 //Prima di tutto inseriamo il file
-                LogFile logFile = new()
-                {
+                LogFile logFile = new() {
                     filename = log.FileName,
                     PC_datetime = log.Header.PCDate.ToUniversalTime(),
                     UPS_datetime = log.Header.UPSDate.ToUniversalTime(),
@@ -42,8 +40,7 @@ namespace SmartLogStatistics.Repository {
                 var logFiles = checkQuery.ToList();
 
                 //Se il file è gia presente nel database allora lancia un eccezione
-                if (logFiles.Any())
-                {
+                if(logFiles.Any()) {
                     throw new FileConflictException();
                 }
 
@@ -53,27 +50,29 @@ namespace SmartLogStatistics.Repository {
                 int fileId = logFile.id;
 
                 //Poi inseriamo i firmware presenti nell'header
-                log.Header.INIFile.ForEach(i =>
-                {
-                    Firmware firmware = new()
-                    {
+                List<Firmware> firmwares = log.Header.INIFile.ConvertAll(i => {
+                    return new Firmware() {
                         file_id = fileId,
                         unit = i.Unit,
                         subunit = i.SubUnit,
                         INI_file_name = i.FileName
                     };
-
-                    context.Firmware.Add(firmware);
-                    context.SaveChanges();
                 });
 
-                List<string> newEvents = new();
-                //Poi salvo le righe di log
-                for (int i = 0; i < log.Events.Count; i++)
-                {
+                context.Firmware.AddRange(firmwares);
+                context.SaveChanges();
 
-                    Log logLine = new()
-                    {
+                // Prendo la lista di eventi già presenti nel db
+                List<Event> dbEvents = context.Event.Select(x => x).ToList();
+
+                List<Log> logs = new();
+
+                List<Event> events = new();
+
+                for(int i = 0; i < log.Events.Count; i++) {
+
+                    // Preparo la riga di log
+                    logs.Add(new() {
                         file_id = fileId,
                         log_line = i,
                         date = log.Events[i].Date,
@@ -82,38 +81,35 @@ namespace SmartLogStatistics.Repository {
                         subunit = log.Events[i].SubUnit,
                         code = log.Events[i].Code,
                         value = log.Events[i].Value,
-                    };
+                    });
 
-                    //Nel caso in cui l'evento trovato nella riga non sia ancora presente nel DB lo aggiungo agli eventi
-                    if (context.Event.Find(log.Events[i].Code) is null && !newEvents.Contains(log.Events[i].Code))
-                    {
-                        Event e = new()
-                        {
+                    // Inserisco un nuovo evento solo se non è già presente nel db
+                    if(dbEvents.Find(x => x.code == log.Events[i].Code) == null && events.Find(x => x.code == log.Events[i].Code) == null ) {
+                        events.Add(new() {
                             code = log.Events[i].Code,
                             description = log.Events[i].Description,
                             color = log.Events[i].Color
-                        };
-
-                        newEvents.Add(log.Events[i].Code);
-                        context.Event.Add(e);
+                        });
                     }
-
-                    context.Log.Add(logLine);
-                    context.SaveChanges();
                 }
+
+                // Salvo gli eventi nel db
+                context.Event.AddRange(events);
+
+                // Salvo i log nel db
+                context.Log.AddRange(logs);
+                context.SaveChanges();
 
                 //Faccio il commit della transazione nel database
                 transaction.Commit();
 
-            }
-            catch (DbUpdateException)
-            {
+            } catch(DbUpdateException) {
                 //In caso di errore, si fa il rollback e di conseguenza non si salva nulla sul DB
                 transaction.Rollback();
-                throw new FailedConnection();
-            }catch (Exception ex) { 
+                throw new FailedConnectionException();
+            } catch(Exception) {
                 transaction.Rollback();
-                throw ex;
+                throw;
             }
         }
     }

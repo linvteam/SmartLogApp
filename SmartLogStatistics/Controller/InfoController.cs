@@ -5,11 +5,15 @@ using NuGet.Packaging.Licenses;
 using SmartLogStatistics.Repository;
 using System.Net;
 using Microsoft.CodeAnalysis.CodeActions;
+using SmartLogStatistics.Exceptions;
 using SmartLogStatistics.Model;
 using Log = Core.Log;
 
 namespace SmartLogStatistics.Controller
 {
+    /// <summary>
+    /// Controller per ottenere delle informazioni generiche necessarie al frontend
+    /// </summary>
     [Route("api/info")]
     [ApiController]
     public class InfoController : ControllerBase{
@@ -17,7 +21,7 @@ namespace SmartLogStatistics.Controller
         /// <summary>
         /// Oggetto di tipo InfoRepository dedicato a ottenere le informazioni dal database
         /// </summary>
-        private InfoRepository Repository;
+        private readonly InfoRepository Repository;
 
         /// <summary>
         /// Crea una nuova istanza del controller
@@ -32,11 +36,10 @@ namespace SmartLogStatistics.Controller
         /// <summary>
         /// Ritorna un JSON che rappresenta la lista di codici degli eventi con le relative descrizioni
         /// </summary>
-        /// <param name="file">File di cui deve essere eseguito il parsing</param>
         /// <returns>Esito della chiamata POST, può essere un file JSON che rappresenta la lista di code con le relative descrizioni o un'eccezione dovuta all'impossibilità di connettersi al database</returns>
         /// <response code="200">Ritorna una lista di codici degli eventi con le relative descrizioni</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
-        [HttpPost]
+        [HttpGet]
         [Route("codedescription")]
         [ProducesResponseType(typeof(List<CodeWithDescriptionDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
@@ -46,7 +49,10 @@ namespace SmartLogStatistics.Controller
                 List<CodeWithDescriptionDto> response = Repository.GetCodesWithDescription();
                 return StatusCode((int)HttpStatusCode.OK, response);
             }
-            catch (ParsingException e) //TODO cambiare l'exception ERRORE DATABASE
+            catch(EmptyOrFailedQuery e) {
+                return StatusCode((int)HttpStatusCode.NotFound, new ErrorObject(e.Code, e.Message));
+            }
+            catch (FailedConnection e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));
             }
@@ -56,10 +62,11 @@ namespace SmartLogStatistics.Controller
         /// <summary>
         /// Ritorna un JSON che rappresenta il DateTime minimo e massimo all'interno dell'intero database
         /// </summary>
-        /// <returns>Esito della chiamata POST, può essere un file JSON che rappresenta l'intervallo di tempo o un'eccezione dovuta all'impossibilità di connettersi al database</returns>
+        /// <returns>Esito della chiamata POST, può essere un file JSON che rappresenta l'intervallo di tempo
+        /// o un'eccezione dovuta all'impossibilità di connettersi al database</returns>
         /// <response code="200">Ritorna il minimo e il massimo DateTime nel database</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
-        [HttpPost]
+        [HttpGet]
         [Route("timeinterval")]
         [ProducesResponseType(typeof(DateTimeIntervalDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
@@ -69,7 +76,10 @@ namespace SmartLogStatistics.Controller
                 DateTimeIntervalDto response = this.Repository.GetTimeInterval();
                 return StatusCode((int)HttpStatusCode.OK, response);
             }
-            catch (ParsingException e) //TODO cambiare l'exception ERRORE DATABASE
+            catch(EmptyOrFailedQuery e) {
+                return StatusCode((int)HttpStatusCode.NotFound, new ErrorObject(e.Code, e.Message));
+            }
+            catch (FailedConnection e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));
             }
@@ -81,7 +91,7 @@ namespace SmartLogStatistics.Controller
         /// <returns>Esito della chiamata POST, può essere un file JSON che rappresenta la lista di firmware o un'eccezione dovuta all'impossibilità di connettersi al database</returns>
         /// <response code="200">Ritorna la lista di firmware</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
-        [HttpPost]
+        [HttpGet]
         [Route("firmwarelist")]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
@@ -91,7 +101,10 @@ namespace SmartLogStatistics.Controller
                 List<string> response = this.Repository.GetFirmwareList();
                 return StatusCode((int)HttpStatusCode.OK, response);
             }
-            catch (ParsingException e) //TODO cambiare l'exception ERRORE DATABASE
+            catch(EmptyOrFailedQuery e) {
+                return StatusCode((int)HttpStatusCode.NotFound, new ErrorObject(e.Code, e.Message));
+            }
+            catch (FailedConnection e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorObject(e.Code, e.Message));
             }

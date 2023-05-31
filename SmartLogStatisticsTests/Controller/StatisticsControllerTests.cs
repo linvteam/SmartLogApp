@@ -58,7 +58,7 @@ namespace SmartLogStatistics.Controller.Tests
         public void StatisticsInternalServerErrorTest()
         {
             Mock<StatisticsRepository> repository = new();
-            repository.Setup(x => x.Statistics(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Throws(new Exceptions.FailedConnection());
+            repository.Setup(x => x.Statistics(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Throws(new Exceptions.FailedConnectionException());
             DateTime start = new DateTime(2023, 01, 05, 15, 0, 0, 000);
             DateTime end = new DateTime(2023, 01, 10, 15, 0, 0, 000);
 
@@ -72,7 +72,7 @@ namespace SmartLogStatistics.Controller.Tests
         public void StatisticsEmptyOrFailedQueryTest()
         {
             Mock<StatisticsRepository> repository = new();
-            repository.Setup(x => x.Statistics(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Throws(new Exceptions.EmptyOrFailedQuery());
+            repository.Setup(x => x.Statistics(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Throws(new Exceptions.EmptyOrFailedQueryException());
             DateTime start = new DateTime(2023, 01, 05, 15, 0, 0, 000);
             DateTime end = new DateTime(2023, 01, 10, 15, 0, 0, 000);
 
