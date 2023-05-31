@@ -71,7 +71,6 @@ export class TimeCodeHeaderComponent {
 
         infoRepository.GetCodesWithDescription().subscribe({
             next: (event) => {
-                console.log(event);
                 if (event instanceof HttpResponse<any>) {
                     this.availableCode = event.body.map((c: any) => c.code);
                 }
