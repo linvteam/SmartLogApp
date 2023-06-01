@@ -100,7 +100,7 @@ namespace SmartLogStatistics.Controller
         {
             if (startDateTime > endDateTime)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, "I parametri non sono corretti");
+                return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(3, "I parametri non sono corretti"));
             }
             else
             {
@@ -142,7 +142,7 @@ namespace SmartLogStatistics.Controller
         {
             if (startDateTime > endDateTime)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, "I parametri non sono corretti");
+                return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(3, "I parametri non sono corretti"));
             }
             else
             {
@@ -186,7 +186,7 @@ namespace SmartLogStatistics.Controller
         {
             if (startDateTime > endDateTime)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, "I parametri non sono corretti");
+                return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(3, "I parametri non sono corretti"));
             }
             else
             {
