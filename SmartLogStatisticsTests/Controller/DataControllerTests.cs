@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SmartLogStatistics.Exceptions;
 
 namespace SmartLogStatistics.Controller.Tests
 {
@@ -41,6 +42,18 @@ namespace SmartLogStatistics.Controller.Tests
             ObjectResult result = (ObjectResult)dataController.Frequency(startDateTime, endDateTime, false, false, false, false);
 
             Assert.AreEqual(400, result.StatusCode);
+        }
+        
+        [TestMethod()]
+        public void FrequencyTestNotFound()
+        {
+            Mock<DataRepository> repository = new();
+            repository.Setup(x => x.Frequency(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<Boolean>(), It.IsAny<Boolean>(), It.IsAny<Boolean>(), It.IsAny<Boolean>())).Throws(new EmptyOrFailedQueryException());
+
+            DataController dataController = new(repository.Object);
+            ObjectResult result = (ObjectResult)dataController.Frequency(DateTime.Now, DateTime.Now, false, false, false, false);
+
+            Assert.AreEqual(404, result.StatusCode);
         }
 
         [TestMethod()]
@@ -84,6 +97,18 @@ namespace SmartLogStatistics.Controller.Tests
 
             Assert.AreEqual(400, result.StatusCode);
         }
+        
+        [TestMethod()]
+        public void CumulativeTestNotFound()
+        {
+            Mock<DataRepository> repository = new();
+            repository.Setup(x => x.Cumulative(It.IsAny<DateTime>(), It.IsAny<DateTime>(), "AZ")).Throws(new EmptyOrFailedQueryException());
+
+            DataController dataController = new(repository.Object);
+            ObjectResult result = (ObjectResult)dataController.Cumulative(DateTime.Now, DateTime.Now, "AZ");
+
+            Assert.AreEqual(404, result.StatusCode);
+        }
 
         [TestMethod()]
         public void CumulativeTestInternalServerError()
@@ -125,6 +150,18 @@ namespace SmartLogStatistics.Controller.Tests
             ObjectResult result = (ObjectResult)dataController.TotalByCode(startDateTime, endDateTime);
 
             Assert.AreEqual(400, result.StatusCode);
+        }
+        
+        [TestMethod()]
+        public void TotalByCodeTestNotFound()
+        {
+            Mock<DataRepository> repository = new();
+            repository.Setup(x => x.TotalByCode(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Throws(new EmptyOrFailedQueryException());
+
+            DataController dataController = new(repository.Object);
+            ObjectResult result = (ObjectResult)dataController.TotalByCode(DateTime.Now, DateTime.Now);
+
+            Assert.AreEqual(404, result.StatusCode);
         }
 
         [TestMethod()]
@@ -168,6 +205,18 @@ namespace SmartLogStatistics.Controller.Tests
             ObjectResult result = (ObjectResult)dataController.TotalByFirmware(startDateTime, endDateTime, "AZ");
 
             Assert.AreEqual(400, result.StatusCode);
+        }
+        
+        [TestMethod()]
+        public void TotalByFirmwareTestNotFound()
+        {
+            Mock<DataRepository> repository = new();
+            repository.Setup(x => x.TotalByFirmware(It.IsAny<DateTime>(), It.IsAny<DateTime>(), "AZ")).Throws(new EmptyOrFailedQueryException());
+
+            DataController dataController = new(repository.Object);
+            ObjectResult result = (ObjectResult)dataController.TotalByFirmware(DateTime.Now, DateTime.Now, "AZ");
+
+            Assert.AreEqual(404, result.StatusCode);
         }
 
         [TestMethod()]
