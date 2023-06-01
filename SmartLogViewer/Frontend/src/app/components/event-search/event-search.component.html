@@ -15,8 +15,8 @@
             <ng-multiselect-dropdown id="unitSelector"
                                      formControlName="units"
                                      [placeholder]="'Seleziona le unit'"
-                                     [data]='AvailableUnits'
-                                     [(ngModel)]="SelectedUnits"
+                                     [data]='availableUnits'
+                                     [(ngModel)]="selectedUnits"
                                      [settings]="dropdownSettings"></ng-multiselect-dropdown>
             <div class="mytooltip">
                 Seleziona le unit sulle quali eseguire la ricerca 
@@ -30,8 +30,8 @@
             <ng-multiselect-dropdown id="subUnitSelector"
                                      formControlName="subunits"
                                      [placeholder]="'Seleziona le subunit'"
-                                     [data]='AvailableSubUnits'
-                                     [(ngModel)]="SelectedSubUnits"
+                                     [data]='availableSubUnits'
+                                     [(ngModel)]="selectedSubUnits"
                                      [settings]="dropdownSettings"></ng-multiselect-dropdown>
             <div class="mytooltip">
                 Seleziona le subunit sulle quali eseguire la ricerca

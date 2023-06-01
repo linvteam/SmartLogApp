@@ -1,4 +1,5 @@
 ﻿namespace SmartLogStatistics.Exceptions {
+
     /// <summary>
     /// Eccezione che rappresenta una connesione fallita con il database
     /// </summary>
@@ -6,7 +7,7 @@
         /// <summary>
         /// Codice numerico associato all'errore
         /// </summary>
-        public int Code {  get; private set; }
+        public int Code { get; private set; }
 
         /// <summary>
         /// Crea un nuovo oggetto impostando codice e messaggio dell'errore
@@ -15,4 +16,5 @@
             Code = 5;
         }
     }
+
 }

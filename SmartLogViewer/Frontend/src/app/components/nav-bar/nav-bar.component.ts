@@ -13,12 +13,12 @@ export class NavBarComponent {
 
     /**
      * Costruttore del componente
-     * @param logService LogService utilizzato per sapere quando ci sono degli eventi caricati ed è possibile attivare la visualizzazione a tabella o grafico
+     * @param logService LogService utilizzato per sapere quando ci sono degli eventi caricati ed ï¿½ possibile attivare la visualizzazione a tabella o grafico
      */
     constructor(public logService: LogService) { }
 
     /**
-     * Indica quando la navbar è chiusa, è necessario per gestire il layout per schermi piccoli
+     * Indica quando la navbar ï¿½ chiusa, ï¿½ necessario per gestire il layout per schermi piccoli
      */
     public isCollapsed = true;
 

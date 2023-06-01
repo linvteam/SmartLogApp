@@ -13,15 +13,17 @@ export class EventSearch implements LogManipulator {
     private logService!: LogService; 
 
     /**
-     * I token di ricerca
+     * Lista dei token di ricerca
      */
     private searchTokens: string[];
-
+    
     /**
-     * Costruisce una classe che fornisce una funzionalit‡ di filtraggio in base alla query di ricerca
-     * @param queryString Query di ricerca 
+     * Costruisce una classe che fornisce una funzionalit√† di filtraggio in base alla query di ricerca
+     * @param queryString Query di ricerca
+     * @param selectedUnits Lista delle Unit selezionate
+     * @param selectedSubUnits Lista delle SubUnit selezionate
      */
-    constructor(queryString: string, private selectedUnits: number[], private selectedSubUnits: number[]) {
+    constructor(private queryString: string, private selectedUnits: number[], private selectedSubUnits: number[]) {
         this.searchTokens = new Array<string>();
 
         if (queryString != "") {
@@ -46,15 +48,15 @@ export class EventSearch implements LogManipulator {
      * Imposta il logService su cui eseguire le ricerche
      * @param logService il log service che fornisce gli eventi
      */
-    setLogService(logService: LogService): void {
+    public setLogService(logService: LogService): void {
         this.logService = logService;
     }
 
     /**
-     * Ottiene sempre 1 perchË la ricerca non produce gruppi multipli
+     * Ottiene sempre 1 perch√® la ricerca non produce gruppi multipli
      * @returns Sempre il numero 1
      */
-    getNumberOfGroups(): number {
+    public getNumberOfGroups(): number {
         return 1;
     }
 
@@ -63,7 +65,7 @@ export class EventSearch implements LogManipulator {
      * @param _ Il numero del gruppo di eventi, in questa classe viene ignorato
      * @returns Gli eventi che rispettano i token di ricerca
      */
-    getGroup(_: number): LogRow[] {
+    public getGroup(_: number): LogRow[] {
 
         let events = this.logService.getLog().Events;
 

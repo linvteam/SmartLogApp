@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import { EventGrouping } from '../../LogManipulator/event-grouping';
 import { LogManipulationService } from '../../services/LogManipulation/log-manipulation.service';
 
 /**
- * Controller che gestisce il widget di raggruppamento degli  eventi
+ * Controller che gestisce il widget di raggruppamento degli eventi
  */
 @Component({
     selector: 'app-event-grouping',
@@ -16,7 +16,7 @@ export class EventGroupingComponent {
     /**
      * Gestore del form 
      */
-    formGroup = this.formBuilder.group({
+    public formGroup: FormGroup = this.formBuilder.group({
         valore: '0',
         unita: '1'
     });

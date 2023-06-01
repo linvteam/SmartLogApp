@@ -66,8 +66,6 @@ export class SequenceSearchComponent {
 
         if (this.sequences == undefined || this.sequences.length == 0) {
             this.getSequencesNames();
-        } else {
-            this.sequences.forEach((sequence) => this.sequences.push(sequence));
         }
 
     }
@@ -90,7 +88,7 @@ export class SequenceSearchComponent {
      * Metodo che gestisce la chiusura del dialog di errore
      */
     public closeModal(): void {
-        this.errorModalRef.close();
+        this.errorModalRef.close(); 
     }
 
     /**

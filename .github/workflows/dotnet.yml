@@ -5,15 +5,14 @@ name: Build and Test
 
 on:
   push:
-  pull_request:
 
 jobs:
-  build:
+  build-test-dotnet:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@a81bbbf8298c0fa03ea29cdc473d45769f953675
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
@@ -22,9 +21,84 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test /p:ExcludeByFile="**/Program.cs" --no-build --verbosity normal --collect:"XPlat Code Coverage"
-    - name: Upload coverage
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      uses: codecov/codecov-action@v3
+
+    - name: Test Core
+      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude=[*]Core.Injectables* -p:ExcludeByFile="**/Program.cs"
+      working-directory: ./CoreTests
+
+    - name: Test SmartLogViewer
+      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude=[*]Core* -p:ExcludeByFile="**/Program.cs"
+      working-directory: ./SmartLogViewerTests
+
+    - name: Test SmartLogStatistics
+      run: dotnet test --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude="[*]Core*%2c[*]SmartLogStatistics.Migrations*" -p:ExcludeByFile="**/Program.cs"
+      working-directory: ./SmartLogStatisticsTests
+
+    - name: OpenCover Badge Generator - Core
+      uses: danpetitt/open-cover-badge-generator-action@v1.0.9
+      with:
+        path-to-opencover-xml: ./CoreTests/TestResults/coverage.opencover.xml
+        path-to-badges: ./.github/badges/core
+        minimum-coverage: 80
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: OpenCover Badge Generator - SmartLogViewer
+      uses: danpetitt/open-cover-badge-generator-action@v1.0.9
+      with:
+        path-to-opencover-xml: ./SmartLogViewerTests/TestResults/coverage.opencover.xml
+        path-to-badges: ./.github/badges/smartlogviewer/backend
+        minimum-coverage: 80
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+
+    - name: OpenCover Badge Generator - Statistics
+      uses: danpetitt/open-cover-badge-generator-action@v1.0.9
+      with:
+        path-to-opencover-xml: ./SmartLogStatisticsTests/TestResults/coverage.opencover.xml
+        path-to-badges: ./.github/badges/smartlogstatistics/backend
+        minimum-coverage: 80
+        repo-token: ${{ secrets.CI_TOKEN }}
+
+    - name: Generate Code Covereage Report
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.1.21
+      with:
+        reports: '*Tests/TestResults/coverage.opencover.xml'
+        targetdir: 'report'
+        reporttypes: 'HTML'
+        verbosity: "Info"
+        title: 'Code Coverage Report'
+        toolpath: 'reportgeneratortool'
+
+    - name: Upload code coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: CodeCoverageReport
+        path: report
+        retention-days: 1
+
+  build-test-angular:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.16.0]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@a81bbbf8298c0fa03ea29cdc473d45769f953675
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+      working-directory: SmartLogViewer/Frontend
+    - run: npm test
+      working-directory: SmartLogViewer/Frontend
+
+    - name: Publish badges
+      uses:  demyanets/angular-coverage-badges-action@v1
+      with:
+        github_token: ${{ secrets.CI_TOKEN }}
+        coverage-summary-path: SmartLogViewer/Frontend/coverage/front-end_viewer/coverage-summary.json
+        badges-directory: /.github/badges/smartlogviewer/frontend
