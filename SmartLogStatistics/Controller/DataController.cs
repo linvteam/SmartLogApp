@@ -7,6 +7,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using SmartLogStatistics.Exceptions;
 
 namespace SmartLogStatistics.Controller
 {
@@ -43,18 +44,20 @@ namespace SmartLogStatistics.Controller
         /// <returns>Esito della chiamata GET, può essere un JSON che rappresenta gli eventi raggruppati o un'eccezione dovuta ad errori nella query o con il database</returns>
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
+        /// <response code="404">Se la query fallisce o ritorna vuota</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
         [HttpGet]
         [Route("frequency/{startDateTime}/{endDateTime}")]
         [ProducesResponseType(typeof(FrequencyDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
         public IActionResult Frequency([FromRoute] DateTime startDateTime, [FromRoute]DateTime endDateTime, [FromQuery, DefaultValue(false)] bool d, [FromQuery, DefaultValue(false)] bool f, [FromQuery, DefaultValue(false)] bool u, [FromQuery, DefaultValue(false)] bool s)
         {
             if (startDateTime > endDateTime)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, "I parametri non sono corretti");
+                return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(3, "I parametri non sono corretti"));
             }
             else
             {
@@ -64,7 +67,10 @@ namespace SmartLogStatistics.Controller
 
                     return StatusCode((int)HttpStatusCode.OK, data);
                 }
-                catch (Exception)
+                catch(EmptyOrFailedQueryException e) {
+                    return StatusCode((int)HttpStatusCode.NotFound, new ErrorObject(e.Code, e.Message));
+                }
+                catch
                 {                           
                     return StatusCode((int)HttpStatusCode.InternalServerError, 
                         new ErrorObject(5, "Si è verificato un errore durante la connessione"));
@@ -81,11 +87,13 @@ namespace SmartLogStatistics.Controller
         /// <returns>Esito della chiamata GET, può essere un JSON che rappresenta l'andamento cumulativo di un code o un'eccezione dovuta ad errori nella query o con il database</returns>
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
+        /// <response code="404">Se la query fallisce o ritorna vuota</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
         [HttpGet]
         [Route("cumulative/{startDateTime}/{endDateTime}/{code}")]
         [ProducesResponseType(typeof(CumulativeDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
         public IActionResult Cumulative([FromRoute]DateTime startDateTime, [FromRoute] DateTime endDateTime, [FromRoute]string code)
@@ -102,9 +110,12 @@ namespace SmartLogStatistics.Controller
 
                     return StatusCode((int)HttpStatusCode.OK, data);
                 }
-                catch (Exception)         
+                catch(EmptyOrFailedQueryException e) {
+                    return StatusCode((int)HttpStatusCode.NotFound, new ErrorObject(e.Code, e.Message));
+                }
+                catch
                 {                           
-                    return StatusCode((int)HttpStatusCode.InternalServerError,
+                    return StatusCode((int)HttpStatusCode.InternalServerError, 
                         new ErrorObject(5, "Si è verificato un errore durante la connessione"));
                 }
             }
@@ -118,11 +129,13 @@ namespace SmartLogStatistics.Controller
         /// <returns>Esito della chiamata GET, può essere un JSON che rappresenta il numero di occorrenze di un certo code o un'eccezione dovuta ad errori nella query o con il database</returns>
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
+        /// <response code="404">Se la query fallisce o ritorna vuota</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
         [HttpGet]
         [Route("totalbycode/{startDateTime}/{endDateTime}")]
         [ProducesResponseType(typeof(TotalByCodeDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
         public IActionResult TotalByCode([FromRoute] DateTime startDateTime, [FromRoute]DateTime endDateTime)
@@ -139,9 +152,12 @@ namespace SmartLogStatistics.Controller
 
                     return StatusCode((int)HttpStatusCode.OK, data);
                 }
-                catch (Exception)
-                {
-                    return StatusCode((int)HttpStatusCode.InternalServerError,
+                catch(EmptyOrFailedQueryException e) {
+                    return StatusCode((int)HttpStatusCode.NotFound, new ErrorObject(e.Code, e.Message));
+                }
+                catch
+                {                           
+                    return StatusCode((int)HttpStatusCode.InternalServerError, 
                         new ErrorObject(5, "Si è verificato un errore durante la connessione"));
                 }
             }
@@ -157,11 +173,13 @@ namespace SmartLogStatistics.Controller
         /// <returns>Esito della chiamata GET, può essere un JSON che rappresenta gli eventi di un certo code raggruppati per versioni del firmware o un'eccezione dovuta ad errori nella query o con il database</returns>
         /// <response code="200">Ritorna il file convertito</response>
         /// <response code="400">Se c'è stato un errore nelle date</response>
+        /// <response code="404">Se la query fallisce o ritorna vuota</response>
         /// <response code="500">Se non riesce a connettersi al database</response>
         [HttpGet]
         [Route("totalbyfirmware/{startDateTime}/{endDateTime}/{code}")]
         [ProducesResponseType(typeof(TotalByFirmwareDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
         public IActionResult TotalByFirmware([FromRoute] DateTime startDateTime, [FromRoute]DateTime endDateTime, [FromRoute]string code)
@@ -178,9 +196,12 @@ namespace SmartLogStatistics.Controller
 
                     return StatusCode((int)HttpStatusCode.OK, data);
                 }
-                catch (Exception)
-                {
-                    return StatusCode((int)HttpStatusCode.InternalServerError,
+                catch(EmptyOrFailedQueryException e) {
+                    return StatusCode((int)HttpStatusCode.NotFound, new ErrorObject(e.Code, e.Message));
+                }
+                catch
+                {                           
+                    return StatusCode((int)HttpStatusCode.InternalServerError, 
                         new ErrorObject(5, "Si è verificato un errore durante la connessione"));
                 }
             }
