@@ -1,7 +1,9 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl } from "@angular/forms";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
+import { ErrorModalComponent } from '../error-modal/error-modal.component';
 
 @Component({
     selector: 'app-time-code-header',
@@ -29,7 +31,7 @@ export class TimeCodeHeaderComponent {
     /**
      * Lista dei Code disponibili
      */
-    public availableCode: string[] = [];
+    public availableCode: any[] = [];
     /**
      * Code selezionato
      */
@@ -39,7 +41,11 @@ export class TimeCodeHeaderComponent {
      */
     public dropdownSettings = {
         singleSelection: true,
+        allowSearchFilter: true,
+        searchPlaceholderText: "Cerca eventi"
     }
+
+    private dialogRef: NgbModalRef | undefined;
 
     /**
      * Gestore del form
@@ -54,8 +60,12 @@ export class TimeCodeHeaderComponent {
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale
      * @param formBuilder Servizio di gestione dei form
      */
-    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService) {
-        infoRepository.GetTimeInterval().subscribe({
+    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal) {
+        this.loadData();
+    }
+
+    private loadData(): void {
+        this.infoRepository.GetTimeInterval().subscribe({
             next: (event) => {
                 if (event instanceof HttpResponse<any>) {
                     this.startDatetimeValue = event.body.start;
@@ -65,18 +75,24 @@ export class TimeCodeHeaderComponent {
                 }
             },
             error: (error) => {
-                console.log(error)
+                if (!this.dialogRef) {
+                    this.dialogRef = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+                    this.dialogRef.componentInstance.setup(error.body.message, () => { this.loadData(); });
+                }
             }
         });
 
-        infoRepository.GetCodesWithDescription().subscribe({
+        this.infoRepository.GetCodesWithDescription().subscribe({
             next: (event) => {
                 if (event instanceof HttpResponse<any>) {
-                    this.availableCode = event.body.map((c: any) => c.code);
+                    this.availableCode = event.body.map((c: any) => { return { id: c.code, text: `${c.code} - ${c.description}` } });
                 }
             },
             error: (error) => {
-                console.log(error);
+                if (!this.dialogRef) {
+                    this.dialogRef = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+                    this.dialogRef.componentInstance.setup(error.body.message, () => { this.loadData(); });
+                }
             }
         });
     }

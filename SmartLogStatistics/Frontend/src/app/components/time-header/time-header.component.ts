@@ -1,7 +1,9 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder } from "@angular/forms";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
+import { ErrorModalComponent } from '../error-modal/error-modal.component';
 
 @Component({
     selector: 'app-time-header',
@@ -16,7 +18,6 @@ export class TimeHeaderComponent {
     public minDate = this.startDatetimeValue;
     public maxDate = this.endDatetimeValue;
 
-
     /**
      * Gestore del form
      */
@@ -29,8 +30,12 @@ export class TimeHeaderComponent {
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale
      * @param formBuilder Servizio di gestione dei form
      */
-    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService) {
-        infoRepository.GetTimeInterval().subscribe({
+    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal) {
+        this.loadData();
+    }
+
+    private loadData() {
+        this.infoRepository.GetTimeInterval().subscribe({
             next: (event: any) => {
                 if (event instanceof HttpResponse<any>) {
                     this.minDate = event.body.start;
@@ -39,7 +44,8 @@ export class TimeHeaderComponent {
                     this.endDatetimeValue = this.maxDate;
                 }
             }, error: (err) => {
-                console.log(err);
+                let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+                modal.componentInstance.setup(err.body.message, () => { this.loadData() });
             }
         });
     }
