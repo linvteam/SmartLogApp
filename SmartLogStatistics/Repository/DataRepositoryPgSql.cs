@@ -7,7 +7,7 @@ namespace SmartLogStatistics.Repository {
     /// <summary>
     /// Classe per ottenere le statistiche sugli eventi prelevati dal database PostgreSQL
     /// </summary>
-    [Core.Injectables.Singleton(typeof(DataRepository))]
+    [Core.Injectables.Transient(typeof(DataRepository))]
     public class DataRepositoryPgSql: DataRepository {
 
         private readonly SmartLogContext context;
