@@ -25,6 +25,11 @@ namespace Core.Injectables {
             this.baseInterface = baseInterface;
         }
 
+        /// <summary>
+        /// Inietta la classe indicata nel builder
+        /// </summary>
+        /// <param name="builder">Il builder che si occupa di creare la web app</param>
+        /// <param name="actualClass">La classe corrente da registrare</param>
         public override void Inject(WebApplicationBuilder builder, Type actualClass) {
             if(baseInterface == null) {
                 builder.Services.AddTransient(actualClass);
