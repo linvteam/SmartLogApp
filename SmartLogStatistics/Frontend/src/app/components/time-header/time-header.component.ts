@@ -80,6 +80,10 @@ export class TimeHeaderComponent {
 
     }
 
+    /**
+     * Metodo per la formattazione di una data
+     * @param date Data da formattare
+     */
     public formatDate(date: string): string {
         return (new Date(date)).toISOString().slice(0, 16);
     }

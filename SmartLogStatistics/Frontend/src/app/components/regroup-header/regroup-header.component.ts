@@ -97,7 +97,7 @@ export class RegroupHeaderComponent {
     }
 
     /**
-     * Metodo per la formattazione di una data da string a Date
+     * Metodo per la formattazione di una data
      * @param date Data da formattare
      */
     public formatDate(date: string): string {
