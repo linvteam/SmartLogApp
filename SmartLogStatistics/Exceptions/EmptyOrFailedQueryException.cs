@@ -13,7 +13,7 @@
         /// Crea un nuovo oggetto impostando codice e messaggio dell'errore
         /// </summary>
         public EmptyOrFailedQueryException(): base("La query non ha prodotto risultati") {
-            this.Code = 6;
+            this.Code = 5;
         }
 
     }
