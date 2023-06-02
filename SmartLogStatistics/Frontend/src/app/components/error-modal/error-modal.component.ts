@@ -28,20 +28,20 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
       }
   
       /**
-       * Setup del modal di errore
-       * @param errorMessage Messaggio di errore
-       * @param callback Funzione di callback
-       */
-      public setup(errorMessage: string, callback: any) {
-          this.errorMessage = errorMessage;
-          this.callback = callback;
-      }
-  
-      /**
-       * Metodo che chiude il modal aperto e chiama la funzione di callback
-       */
-      public retry() {
-          this.activeModal.close();
-          this.callback();
-      }
+     * Setup del modal di errore
+     * @param errorMessage Messaggio di errore
+     * @param callback Funzione di callback
+     */
+    public setup(errorMessage: string, callback: any): void {
+        this.errorMessage = errorMessage;
+        this.callback = callback;
+    }
+
+    /**
+     * Metodo che chiude il modal aperto e chiama la funzione di callback
+     */
+    public retry(): void {
+        this.activeModal.close();
+        this.callback();
+    }
   }
