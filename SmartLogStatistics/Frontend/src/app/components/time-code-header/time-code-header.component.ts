@@ -15,11 +15,11 @@ export class TimeCodeHeaderComponent {
     /**
      * Data del primo evento presente nel DB
      */
-    public startDatetimeValue: string = '';
+    public startDatetimeValue: string = new Date().toISOString().slice(0, 16);
     /**
      * Data dell'ultimo evento presente nel DB
      */
-    public endDatetimeValue: string = '';
+    public endDatetimeValue: string = new Date().toISOString().slice(0, 16);
     /**
      * Data più piccola inseribile
      */

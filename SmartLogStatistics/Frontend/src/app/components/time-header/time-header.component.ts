@@ -12,8 +12,8 @@ import { ErrorModalComponent } from '../error-modal/error-modal.component';
 })
 export class TimeHeaderComponent {
 
-    public startDatetimeValue: string = '';
-    public endDatetimeValue: string = '';
+    public startDatetimeValue: string = new Date().toISOString().slice(0, 16);
+    public endDatetimeValue: string = new Date().toISOString().slice(0, 16);
 
     public minDate = this.startDatetimeValue;
     public maxDate = this.endDatetimeValue;
