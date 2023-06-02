@@ -34,7 +34,11 @@ export class TimeHeaderComponent {
         this.loadData();
     }
 
-    private loadData() {
+    /**
+     * Ottiene i valori minimi, massimi e di default da poter inserire nelle date
+     * @private
+     */
+    private loadData() : void{
         this.infoRepository.GetTimeInterval().subscribe({
             next: (event: any) => {
                 if (event instanceof HttpResponse<any>) {
