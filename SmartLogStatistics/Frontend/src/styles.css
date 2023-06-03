@@ -27,6 +27,7 @@ app-root > div {
 
 .multiselect-dropdown .dropdown-list {
     padding-top: 0 !important;
+    z-index: 500!important;
 }
 
 .multiselect-dropdown .dropdown-btn:focus {
