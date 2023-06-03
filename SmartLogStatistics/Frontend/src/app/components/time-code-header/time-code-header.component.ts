@@ -4,6 +4,8 @@ import { FormBuilder, FormControl } from "@angular/forms";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
+import {TotalByFirmwareService} from "../../services/total-by-firmware/total-by-firmware.service";
+import {PieChartComponent} from "../pie-chart/pie-chart.component";
 
 @Component({
     selector: 'app-time-code-header',
@@ -35,7 +37,7 @@ export class TimeCodeHeaderComponent {
     /**
      * Code selezionato
      */
-    public selectedCode: string = "";
+    public selectedCode: any;
     /**
      * Impostazioni del menù a tendina
      */
@@ -44,6 +46,8 @@ export class TimeCodeHeaderComponent {
         allowSearchFilter: true,
         searchPlaceholderText: "Cerca eventi"
     }
+    
+    public alert: boolean = false;
 
     private dialogRef: NgbModalRef | undefined;
 
@@ -60,7 +64,7 @@ export class TimeCodeHeaderComponent {
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale
      * @param formBuilder Servizio di gestione dei form
      */
-    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal) {
+    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal, private totalByFirmwareService: TotalByFirmwareService) {
         this.loadData();
     }
 
@@ -86,6 +90,7 @@ export class TimeCodeHeaderComponent {
             next: (event) => {
                 if (event instanceof HttpResponse<any>) {
                     this.availableCode = event.body.map((c: any) => { return { id: c.code, text: `${c.code} - ${c.description}` } });
+                    this.selectedCode = this.availableCode[0];
                 }
             },
             error: (error) => {
@@ -95,22 +100,38 @@ export class TimeCodeHeaderComponent {
                 }
             }
         });
+        
+        this.totalByFirmwareService.setValues(new Date(this.startDatetimeValue),new Date(this.endDatetimeValue), this.availableCode[0])
     }
 
     /**
      * Metodo che gestisce il submit del form.
      */
     public submitForm(): void {
-
+        
+        this.alert = false;
+        
         const startDatetime = this.formGroup.value.startDatetime ? new Date(this.formGroup.value.startDatetime) : null;
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
 
-        console.log("INIZIO:");
+        /*console.log("INIZIO:");
         console.log(startDatetime!.getTime());
         console.log("FINE:");
         console.log(endDatetime!.getTime());
         console.log("CODE:");
-        console.log(this.selectedCode);
+        console.log(this.selectedCode[0].id);
+*/
+        if(this.selectedCode[0] != null) {
+            this.totalByFirmwareService.setValues(startDatetime!, endDatetime!, this.selectedCode[0].id);
+            let chart = new PieChartComponent(this.totalByFirmwareService);
+            chart.loadData();
+        }
+        else{
+            this.alert=true;
+            
+        }
+        
+        
 
     }
 
