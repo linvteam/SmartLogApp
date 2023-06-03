@@ -1,0 +1,11 @@
+
+<div class="modal-header">
+    <h5 class="modal-title"> Errore durante il caricamento dei dati </h5>
+</div>
+<div class="modal-body">
+    <p>Non &egrave; stato possibile caricare i dati dal server.</p>
+    <p>{{ errorMessage }}</p>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="retry()">Riprova</button>
+</div>
