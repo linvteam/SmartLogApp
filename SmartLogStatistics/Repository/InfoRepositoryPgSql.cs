@@ -10,7 +10,7 @@ namespace SmartLogStatistics.Repository {
     /// <summary>
     /// Classe che gestisce il fetch dal database delle informazioni aggiuntive sui dati del database
     /// </summary>
-    [Core.Injectables.Singleton(typeof(InfoRepository))]
+    [Core.Injectables.Transient(typeof(InfoRepository))]
     public class InfoRepositoryPgSql : InfoRepository {
 
         private readonly SmartLogContext context;
@@ -28,6 +28,8 @@ namespace SmartLogStatistics.Repository {
         /// ordinata per code in ordine alfabetico
         /// </summary>
         /// <returns>La lista di codici con le descrizioni</returns>
+        /// <exception cref="EmptyOrFailedQueryException">Eccezione lancaiata quando la quary fallisce o ritorna un risultato vuoto</exception>
+        /// <exception cref="FailedConnectionException">Ritornata quando non è possibile stabilire la connessione con il database</exception>
         public List<CodeWithDescriptionDto> GetCodesWithDescription() {
             try{
                 List<CodeWithDescriptionDto> result = this.context.Event
@@ -69,7 +71,7 @@ namespace SmartLogStatistics.Repository {
                 
                 return new DateTimeIntervalDto(timestamps.First(), timestamps.Last());
             }
-            catch(EmptyOrFailedQueryException e){
+            catch(EmptyOrFailedQueryException){
                 throw;
             }
             catch {
@@ -98,7 +100,7 @@ namespace SmartLogStatistics.Repository {
                 if(!(result.Any())) throw new EmptyOrFailedQueryException();
                 return result;
             }
-            catch(EmptyOrFailedQueryException e) {
+            catch(EmptyOrFailedQueryException) {
                 throw;
             }
             catch {

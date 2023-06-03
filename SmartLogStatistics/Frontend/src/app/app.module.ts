@@ -21,6 +21,7 @@ import { RegroupHeaderComponent } from './components/regroup-header/regroup-head
 import { FileDroppedDirective } from './file-dropped.directive';
 
 import { BaseURL } from './connection-info';
+import { ErrorModalComponent } from './components/error-modal/error-modal.component';
 
 @NgModule({
     declarations: [
@@ -47,9 +48,12 @@ import { BaseURL } from './connection-info';
         MdbAccordionModule,
         NgMultiSelectDropDownModule
     ],
-  providers: [
+    providers: [
         { provide: BaseURL, useValue: 'https://localhost:7253/api'}
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [
+        ErrorModalComponent
+    ]
 })
 export class AppModule { }
