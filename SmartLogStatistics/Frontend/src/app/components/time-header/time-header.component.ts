@@ -4,6 +4,8 @@ import { FormBuilder } from "@angular/forms";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
+import { Observable, Subject } from 'rxjs';
+import { StatisticsService } from 'src/app/services/statistics/statistics.service';
 
 @Component({
     selector: 'app-time-header',
@@ -41,7 +43,7 @@ export class TimeHeaderComponent {
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale
      * @param formBuilder Servizio di gestione dei form
      */
-    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal) {
+    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal, private statisticsService: StatisticsService) {
         this.loadData();
     }
 
@@ -73,10 +75,10 @@ export class TimeHeaderComponent {
         const startDatetime = this.formGroup.value.startDatetime ? new Date(this.formGroup.value.startDatetime) : null;
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
 
-        console.log("INIZIO:");
-        console.log(startDatetime!.getTime());
-        console.log("FINE:");
-        console.log(endDatetime!.getTime());
+        if(startDatetime != null && endDatetime != null) {
+            this.statisticsService.GetStatistics(startDatetime, endDatetime)
+        }
+        
 
     }
 
