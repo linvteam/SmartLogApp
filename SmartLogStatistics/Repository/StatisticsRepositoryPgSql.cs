@@ -7,7 +7,7 @@ namespace SmartLogStatistics.Repository {
     /// <summary>
     /// Classe che gestisce il fetch dal database delle statistiche generali
     /// </summary>
-    [Core.Injectables.Singleton(typeof(StatisticsRepository))]
+    [Core.Injectables.Transient(typeof(StatisticsRepository))]
     public class StatisticsRepositoryPgSql: StatisticsRepository {
 
         private readonly SmartLogContext context;

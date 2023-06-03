@@ -1,19 +1,10 @@
-﻿using Core;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using SmartLogStatistics.Controller;
 using SmartLogStatistics.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SmartLogStatistics.Exceptions;
 
-namespace SmartLogStatistics.Controller.Tests
-{
+namespace SmartLogStatistics.Controller.Tests {
     [TestClass()]
     public class InfoControllerTests
     {
