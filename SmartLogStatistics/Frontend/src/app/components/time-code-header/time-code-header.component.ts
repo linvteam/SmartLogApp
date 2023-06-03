@@ -4,6 +4,7 @@ import { FormBuilder, FormControl } from "@angular/forms";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CumulativeService } from '../../services/cumulative/cumulative.service';
 import { InfoService } from '../../services/info/info.service';
+import { CumulativeChartComponent } from '../cumulative-chart/cumulative-chart.component';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 
 @Component({
@@ -96,6 +97,8 @@ export class TimeCodeHeaderComponent {
                 }
             }
         });
+        if (this.availableCode[0] != null)
+        this.cumService.sendData(this.availableCode[0].id, new Date(this.startDatetimeValue), new Date(this.endDatetimeValue))
     }
 
     /**
@@ -105,8 +108,11 @@ export class TimeCodeHeaderComponent {
 
         const startDatetime = this.formGroup.value.startDatetime ? new Date(this.formGroup.value.startDatetime) : null;
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
-        if (startDatetime != null && endDatetime != null)
+        if (startDatetime != null && endDatetime != null && this.selectedCode[0] != null) {
             this.cumService.sendData(this.selectedCode[0].id, startDatetime, endDatetime)
+            let chart = new CumulativeChartComponent(this.cumService);
+            chart.loadData()
+        }
         console.log("INIZIO:");
         console.log(startDatetime!.getTime());
         console.log("FINE:");

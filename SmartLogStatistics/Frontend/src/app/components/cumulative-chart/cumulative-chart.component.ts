@@ -11,7 +11,7 @@ import { CumulativeService } from '../../services/cumulative/cumulative.service'
   templateUrl: './cumulative-chart.component.html',
   styleUrls: ['./cumulative-chart.component.css']
 })
-export class CumulativeChartComponent implements OnInit {
+export class CumulativeChartComponent {
 
     private Code: string = "";
 
@@ -19,35 +19,33 @@ export class CumulativeChartComponent implements OnInit {
 
     private endDate: Date = new Date();
 
-    private records: any[] = [];
-    constructor(private cumulativeService: CumulativeService, private modalService: NgbModal) { }
+    private modalService?: NgbModal;
 
-    ngOnInit(): void {
+    private records: any[] = [];
+    constructor(private cumulativeService: CumulativeService) {
         this.loadData();
-        this.drawChart();
     }
 
-    private loadData() {
-        this.cumulativeService.serviceObs.subscribe(e =>
-            e.GetCumulativeRecords().subscribe({
-                next: (event: any) => {
-                    if (event instanceof HttpResponse<any>) {
-                        this.startDate = new Date(Date.parse(event.body.start));
-                        this.endDate = new Date(Date.parse(event.body.end));
-                        this.Code = event.body.code;
-                        this.records = event.body.records.map((e: any) => {
-                            return {
-                                instant: new Date(e.instant),
-                                eventOccurencies: e.eventOccurencies
-                            }
-                        });
-                        this.drawChart()
-                    }
-                }, error: (err) => {
-                    let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-                    modal.componentInstance.setup(err.body.message, () => { this.loadData() });
+    public loadData() {
+        this.cumulativeService.GetCumulativeRecords().subscribe({
+            next: (event: any) => {
+                if (event instanceof HttpResponse<any>) {
+                    this.startDate = new Date(Date.parse(event.body.start));
+                    this.endDate = new Date(Date.parse(event.body.end));
+                    this.Code = event.body.code;
+                    this.records = event.body.records.map((e: any) => {
+                        return {
+                            instant: new Date(e.instant),
+                            eventOccurencies: e.eventOccurencies
+                        }
+                    });
+                    this.drawChart()
                 }
-            })
+            }, error: (err) => {
+                let modal = this.modalService?.open(ErrorModalComponent, { size: 'sm' });
+               modal?.componentInstance.setup(err.body.message, () => { this.loadData() });
+                }
+            }
 
         )
         //this.cumulativeService.GetCumulativeRecords().subscribe({
@@ -75,7 +73,7 @@ export class CumulativeChartComponent implements OnInit {
         const xDomain = d3.extent(X) as [Date, Date];
         const yDomain = d3.extent(Y) as [Number, Number];
 
-        let margin = { top: 20, right: 30, bottom: 30, left: 65 },
+        let margin = { top: 60, right: 30, bottom: 30, left: 65 },
             width = 1060 - margin.left - margin.right,
             height = 600 - margin.top - margin.bottom;
 
@@ -93,8 +91,17 @@ export class CumulativeChartComponent implements OnInit {
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")");
-       
+                "translate(" + margin.left + "," + (margin.top) + ")");
+
+        svg.append('text')
+            .attr('class', 'title')
+            .attr('x', width / 2)
+            .attr('y', 0)
+            .attr('text-anchor', 'middle')
+            .attr("transform",
+                "translate(0," + -10 + ")")
+            .text(`Occorrenze di ${this.Code} nel periodo tra ${this.startDate.toLocaleString()} e ${this.endDate.toLocaleString()}`);
+
         svg.append("g")
             .attr("class", "xAxis")
             .attr("transform", "translate(0," + height + ")")
@@ -140,5 +147,7 @@ export class CumulativeChartComponent implements OnInit {
             .attr("stroke-linecap", "round")
             .attr("stroke-width", 1.5)
             .attr("d", line);
+
+        
     }
 }
