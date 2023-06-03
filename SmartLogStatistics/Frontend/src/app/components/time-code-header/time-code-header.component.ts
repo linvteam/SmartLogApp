@@ -2,6 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl } from "@angular/forms";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CumulativeService } from '../../services/cumulative/cumulative.service';
 import { InfoService } from '../../services/info/info.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 
@@ -35,7 +36,7 @@ export class TimeCodeHeaderComponent {
     /**
      * Code selezionato
      */
-    public selectedCode: string = "";
+    public selectedCode: any = "";
     /**
      * Impostazioni del menù a tendina
      */
@@ -60,7 +61,7 @@ export class TimeCodeHeaderComponent {
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale
      * @param formBuilder Servizio di gestione dei form
      */
-    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal) {
+    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private cumService: CumulativeService, private modalService: NgbModal) {
         this.loadData();
     }
 
@@ -104,13 +105,14 @@ export class TimeCodeHeaderComponent {
 
         const startDatetime = this.formGroup.value.startDatetime ? new Date(this.formGroup.value.startDatetime) : null;
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
-
+        if (startDatetime != null && endDatetime != null)
+            this.cumService.sendData(this.selectedCode[0].id, startDatetime, endDatetime)
         console.log("INIZIO:");
         console.log(startDatetime!.getTime());
         console.log("FINE:");
         console.log(endDatetime!.getTime());
         console.log("CODE:");
-        console.log(this.selectedCode);
+        console.log(this.selectedCode[0].id);
 
     }
 
