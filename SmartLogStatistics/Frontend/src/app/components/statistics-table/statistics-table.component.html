@@ -1,4 +1,21 @@
 
 <app-time-header></app-time-header>
 
-<p>statistics-table works!</p>
+<table>
+    <tr>
+        <th> Numero di file </th>
+        <td> {{fileNumber}}</td>
+    </tr>
+    <tr>
+        <th> Massimo numero di eventi per file </th>
+        <td> {{maxEventsNumber}}</td>
+    </tr>
+    <tr>
+        <th> Numero medio di eventi per file </th>
+        <td> {{averageEventsNumber}}</td>
+    </tr>
+    <tr>
+        <th> Deviazione standard del numero di eventi per file </th>
+        <td> {{standardDeviationEvents}}</td>
+    </tr>
+</table>

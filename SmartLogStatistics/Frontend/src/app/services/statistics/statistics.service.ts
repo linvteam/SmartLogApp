@@ -1,6 +1,6 @@
 import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { BaseURL } from '../../connection-info';
 import { formatDate, registerLocaleData } from "@angular/common";
 import localeIT from "@angular/common/locales/it"
@@ -14,7 +14,11 @@ registerLocaleData(localeIT, "it");
 })
 export class StatisticsService {
 
-  public request : Observable<HttpEvent<any>> = new Observable<HttpEvent<any>>();
+    private signal: Subject<boolean> = new Subject<boolean>();
+
+    public aux: Observable<boolean> = this.signal.asObservable();
+
+    public request : Observable<HttpEvent<any>> = new Observable<HttpEvent<any>>();
 
     /**
      * Costruttore
@@ -44,6 +48,7 @@ export class StatisticsService {
         });
 
         this.request = this.http.request(req);
+        this.signal.next(true);
     }
 
 }
