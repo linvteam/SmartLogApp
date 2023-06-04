@@ -58,32 +58,45 @@ export class CumulativeChartComponent {
         )
     }
 
+    /**
+     * Funzione che ripulisce il grafico e lo resetta
+     * @private
+     */
     private clean(): void {
         d3.selectAll("figure#cumulative-chart svg").remove();
         d3.selectAll("figure#cumulative-chart .tooltip").remove();
     }
 
-    private getFormattedDate(date: Date) {
+    /**
+     * Funzione che ritorna la data formattata secondo il formato, il locale e il fuso orario impostati
+     * @param date Data da formattare
+     * @returns La data formattata come stringa
+     * @private
+     */
+    private getFormattedDate(date: Date): string {
         return formatDate(date, this.dateFormat, this.locale, this.timezone)
     }
 
     private drawChart(): void {
 
-
+        //Pulisco il grafico precedente se c'era
         this.clean();
+
+        let margin = { top: 60, right: 30, bottom: 30, left: 65 },
+            width = 1060 - margin.left - margin.right,
+            height = 600 - margin.top - margin.bottom;
+
+        //Imposto gli assi e i domini
         const X = d3.map(this.records, d => d.instant);
         const Y = d3.map(this.records, p => p.eventOccurencies);
 
         const xDomain = d3.extent(X) as Array<Date>;
         const yDomain = d3.extent(Y) as Array<Number>;
 
-        let margin = { top: 60, right: 30, bottom: 30, left: 65 },
-            width = 1060 - margin.left - margin.right,
-            height = 600 - margin.top - margin.bottom;
-
         const xScale = d3.scaleTime(xDomain, [0, width]);
         const yScale = d3.scaleLinear(yDomain, [height, 0]);
 
+        //Imposto i dati del grafico
         const line = d3.line()
             .x((d: any) => xScale(d.instant))
             .y((d: any) => yScale(d.eventOccurencies));
@@ -106,14 +119,18 @@ export class CumulativeChartComponent {
                 "translate(0," + -10 + ")")
             .text(`Occorrenze di ${this.Code} nel periodo tra ${this.getFormattedDate(this.startDate)} e ${this.getFormattedDate(this.endDate)}`);
 
+        //Creo l'asse X nel grafico
         svg.append("g")
             .attr("class", "xAxis")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(xScale));
+
+        //Creo l'asse Y nel grafico
         svg.append("g")
             .attr("class", "yAxis")
             .call(d3.axisLeft(yScale));
 
+        //Crea le linee della griglia (asse X)
         d3.selectAll("g.xAxis g.tick")
             .append("line")
             .attr("class", "gridline")
@@ -121,9 +138,10 @@ export class CumulativeChartComponent {
             .attr("y1", -height)
             .attr("x2", 0)
             .attr("y2", 0)
-            .attr("stroke", "#9ca5aecf") // line color
-            .attr("stroke-dasharray", "4") // make it dashed;
+            .attr("stroke", "#9ca5aecf")
+            .attr("stroke-dasharray", "4") 
 
+        // Crea le linee della griglia (asse Y)
         d3.selectAll("g.yAxis g.tick")
             .append("line")
             .attr("class", "gridline")
@@ -131,9 +149,10 @@ export class CumulativeChartComponent {
             .attr("y1", 0)
             .attr("x2", width)
             .attr("y2", 0)
-            .attr("stroke", "#9ca5aecf") // line color
-            .attr("stroke-dasharray", "4") // make it dashed;
+            .attr("stroke", "#9ca5aecf")
+            .attr("stroke-dasharray", "4") 
 
+        //Inserico il testo nell'asse Y
         svg.append("text")
             .attr("transform", "rotate(-90)")
             .attr("y", 0 - margin.left)
@@ -143,6 +162,7 @@ export class CumulativeChartComponent {
             .style("text-anchor", "middle")
             .text("Occorrenze");
 
+        //Inserisco i dati nel grafico
         svg.append("path")
             .datum(this.records)
             .attr("fill", "none")
@@ -152,7 +172,7 @@ export class CumulativeChartComponent {
             .attr("stroke-width", 1.5)
             .attr("d", line);
 
-
+        //Aggiunto i punti che rappresentano gli istanti
         let dots = svg
             .append("g")
             .selectAll("dot")
@@ -164,6 +184,7 @@ export class CumulativeChartComponent {
             .attr("r", 5)
             .attr("fill", "#69b3a2")
 
+        //Inserisco il tooltip per i punti
         const Tooltip = d3.select("figure#cumulative-chart")
             .append("div")
             .attr("class","tooltip")
@@ -175,16 +196,19 @@ export class CumulativeChartComponent {
             .style("border-radius", "5px")
             .style("padding", "10px")
 
+        //Ci aggiungo i campi nel tooltip
         Tooltip.append("p").attr("id", "instant")
 
         Tooltip.append("p").attr("id", "occurrencies")
 
+        //Evento che accade quando passo sopra un punto e mostra il tooltip
         const mouseOver = (e: any, d: any) => {
             Tooltip.select("p#instant").text("Istante: " + this.getFormattedDate(d.instant))
             Tooltip.select("p#occurrencies").text("Occorrenze: " + d.eventOccurencies)
             return Tooltip.style("opacity", 1);
         }
 
+        //Evento che accade quando mi muovo sopra un punto e sposto il tooltip
         const mouseMove = (event: any) => {
             let x = event.pageX
             let y = event.pageY
@@ -199,17 +223,16 @@ export class CumulativeChartComponent {
             return Tooltip.style("top", (y + 20) + "px").style("left", (x - 100) + "px");
         }
 
+        //Evento che accade quando mi sposto dal punto e nascondo il tooltip
         const mouseOut = () => {
             Tooltip.style("top", 0 + "px").style("left", 0 + "px")
             return Tooltip.style("opacity", 0);
         }
 
+        //Imposto gli eventi con il mouse sui punti        
         dots.on("mouseover", mouseOver)
             .on("mousemove", mouseMove)
             .on("mouseout", mouseOut);
-
-        // Imposta gli eventi con il mouse
-        
     }
 
     /**
