@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StatisticsService } from 'src/app/services/statistics/statistics.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
-import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-statistics-table',
@@ -11,14 +10,31 @@ import { HttpResponse } from '@angular/common/http';
 })
 export class StatisticsTableComponent {
 
+  /**
+   * Numero di file del periodo in analisi
+   */
   public fileNumber: number = 0;
 
+  /**
+   * Massimo numero di eventi per file del periodo in analisi
+   */
   public maxEventsNumber: number = 0;
 
+  /**
+   * Numero medio di eventi per file del periodo in analisi
+   */
   public averageEventsNumber: number = 0;
 
+  /**
+   * Deviazione standard del numero di eventi per file del periodo in analisi
+   */
   public standardDeviationEvents: number = 0;
 
+  /**
+   * Costruisce un oggetto che rappresenta la tabella delle statistiche
+   * @param statisticsService Servizio di fetch delle statistiche
+   * @param modalService Dialog di errore
+   */
   constructor(statisticsService: StatisticsService, private modalService: NgbModal) {
     statisticsService.aux.subscribe(
           {
@@ -31,9 +47,12 @@ export class StatisticsTableComponent {
             error: this.errorHandler()
           }
         )
-    console.log("Costruzione funziona");
   }
 
+  /**
+   * Genera una funzione per la gestione della richiesta HTTP di ottenimento delle statistiche
+   * @returns Una funzione per la gestione della richiesta HTTP di ottenimento delle statistiche
+   */
   private updateData(): any {
     return (event: any) => {
       if(event.body != undefined) {
@@ -45,15 +64,18 @@ export class StatisticsTableComponent {
     };
   }
 
+  /**
+   * Genera una funzione per la gestione degli errori sulla richiesta HTTP di ottenimento delle statistiche
+   * @returns Una funzione per la gestione degli errori sulla richiesta HTTP di ottenimento delle statistiche
+   */
   private errorHandler(): any {
     return (err: any) => {
       let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-      modal.componentInstance.setup(err.body.message, () => { 
+      modal.componentInstance.setup("Non è stato possibile ottenere le statistiche", () => { 
         this.fileNumber = 0;
         this.maxEventsNumber = 0;
         this.averageEventsNumber = 0;
-        this.standardDeviationEvents = 0; 
-        console.log("Funziona un cazzo");
+        this.standardDeviationEvents = 0;
       });
     }
   }

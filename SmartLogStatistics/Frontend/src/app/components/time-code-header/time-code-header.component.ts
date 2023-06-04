@@ -91,7 +91,7 @@ export class TimeCodeHeaderComponent {
             error: (error) => {
                 if (!this.dialogRef) {
                     this.dialogRef = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-                    this.dialogRef.componentInstance.setup(error.body.message, () => { this.loadData(); });
+                    this.dialogRef.componentInstance.setup(error.body != undefined? error.body.message : "Non è stato possibile prelevare le date di inizio/fine o i codici", () => { this.loadData(); });
                 }
             }
         });

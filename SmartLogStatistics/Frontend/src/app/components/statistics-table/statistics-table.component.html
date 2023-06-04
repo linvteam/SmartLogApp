@@ -1,21 +1,22 @@
 
 <app-time-header></app-time-header>
-
-<table>
-    <tr>
-        <th> Numero di file </th>
-        <td> {{fileNumber}}</td>
-    </tr>
-    <tr>
-        <th> Massimo numero di eventi per file </th>
-        <td> {{maxEventsNumber}}</td>
-    </tr>
-    <tr>
-        <th> Numero medio di eventi per file </th>
-        <td> {{averageEventsNumber}}</td>
-    </tr>
-    <tr>
-        <th> Deviazione standard del numero di eventi per file </th>
-        <td> {{standardDeviationEvents}}</td>
-    </tr>
-</table>
+<div id="statistics">
+    <table class="ag-theme-alpine textCenter" id="statistics-table">
+        <tr>
+            <th id="fileNumber-header"> Numero di file </th>
+            <td id="fileNumber"> {{fileNumber}}</td>
+        </tr>
+        <tr>
+            <th id="maxEvents-header"> Massimo numero di eventi per file </th>
+            <td id="maxEvents"> {{maxEventsNumber}}</td>
+        </tr>
+        <tr>
+            <th id="averageEvents-header"> Numero medio di eventi per file </th>
+            <td id="averageEvents"> {{averageEventsNumber}}</td>
+        </tr>
+        <tr>
+            <th id="standardDeviation-header"> Deviazione standard del numero di eventi per file </th>
+            <td id="standardDeviation"> {{standardDeviationEvents}}</td>
+        </tr>
+    </table>
+</div>

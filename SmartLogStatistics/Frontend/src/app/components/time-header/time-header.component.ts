@@ -62,7 +62,7 @@ export class TimeHeaderComponent {
                 }
             }, error: (err) => {
                 let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-                modal.componentInstance.setup(err.body.message, () => { this.loadData() });
+                modal.componentInstance.setup(err.body != undefined? err.body.message : "Non è stato possibile prelevare le date di inizio/fine", () => { this.loadData() });
             }
         });
     }
