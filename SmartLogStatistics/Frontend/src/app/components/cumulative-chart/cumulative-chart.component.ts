@@ -22,59 +22,55 @@ export class CumulativeChartComponent {
 
     private endDate: Date = new Date();
 
-    private modalService?: NgbModal;
+    private readonly dateFormat = 'yyyy/MM/dd - HH:mm:ss.SSS';
+
+    private readonly locale = "it-IT";
+
+    private readonly timezone = "UTC";
 
     private records: any[] = [];
-    constructor(private cumulativeService: CumulativeService) {
-        this.loadData();
+    constructor(private cumulativeService: CumulativeService, private modalService: NgbModal) {
+        this.loadData()
     }
 
-    public loadData() {
-        this.cumulativeService.GetCumulativeRecords().subscribe({
-            next: (event: any) => {
-                if (event instanceof HttpResponse<any>) {
-                    this.startDate = new Date(Date.parse(event.body.start));
-                    this.endDate = new Date(Date.parse(event.body.end));
-                    this.Code = event.body.code;
-                    this.records = event.body.records.map((e: any) => {
-                        return {
-                            instant: new Date(e.instant),
-                            eventOccurencies: e.eventOccurencies
-                        }
-                    });
-                    this.drawChart()
+    private loadData() {
+        this.cumulativeService.serviceObs.subscribe(e =>
+            e.GetCumulativeRecords().subscribe({
+                next: (event: any) => {
+                    if (event instanceof HttpResponse<any>) {
+                        this.startDate = new Date(Date.parse(event.body.start));
+                        this.endDate = new Date(Date.parse(event.body.end));
+                        this.Code = event.body.code;
+                        this.records = event.body.records.map((e: any) => {
+                            return {
+                                instant: new Date(e.instant),
+                                eventOccurencies: e.eventOccurencies
+                            }
+                        });
+                        this.drawChart()
+                    }
+                }, error: (err) => {
+                    let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+                    modal.componentInstance.setup(err.body.message, () => { this.loadData() });
                 }
-            }, error: (err) => {
-                let modal = this.modalService?.open(ErrorModalComponent, { size: 'sm' });
-               modal?.componentInstance.setup(err.body.message, () => { this.loadData() });
-                }
-            }
+            })
 
         )
-        //this.cumulativeService.GetCumulativeRecords().subscribe({
-        //    next: (event: any) => {
-        //        if (event instanceof HttpResponse<any>) {
-        //            this.startDate = new Date(Date.parse(event.body.start));
-        //            this.endDate = new Date(Date.parse(event.body.end));
-        //            this.Code = event.body.code;
-        //            this.records = event.body.records;
-        //        }
-        //    }, error: (err) => {
-        //        let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-        //        modal.componentInstance.setup(err.body.message, () => { this.loadData() });
-        //        }
-        //    }
-        //)
+    }
+
+    private clean(): void {
+        d3.selectAll("figure#cumulative-chart svg").remove();
+        d3.selectAll("figure#cumulative-chart .tooltip").remove();
+    }
+
+    private getFormattedDate(date: Date) {
+        return formatDate(date, this.dateFormat, this.locale, this.timezone)
     }
 
     private drawChart(): void {
 
-        const dateFormat = 'yyyy/MM/dd - HH:mm:ss.SSS';
-        const locale = "it-IT";
-        const timezone = "UTC";
- 
-        d3.selectAll("figure#cumulative-chart svg").remove();
-        d3.selectAll("figure#cumulative-chart .tooltip").remove();
+
+        this.clean();
         const X = d3.map(this.records, d => d.instant);
         const Y = d3.map(this.records, p => p.eventOccurencies);
 
@@ -108,7 +104,7 @@ export class CumulativeChartComponent {
             .attr('text-anchor', 'middle')
             .attr("transform",
                 "translate(0," + -10 + ")")
-            .text(`Occorrenze di ${this.Code} nel periodo tra ${formatDate(this.startDate, dateFormat, locale, timezone)} e ${formatDate(this.startDate, dateFormat, locale, timezone)}`);
+            .text(`Occorrenze di ${this.Code} nel periodo tra ${this.getFormattedDate(this.startDate)} e ${this.getFormattedDate(this.endDate)}`);
 
         svg.append("g")
             .attr("class", "xAxis")
@@ -184,16 +180,16 @@ export class CumulativeChartComponent {
         Tooltip.append("p").attr("id", "occurrencies")
 
         const mouseOver = (e: any, d: any) => {
-            Tooltip.select("p#instant").text("Istante: " + formatDate(d.instant, dateFormat, locale, timezone);
+            Tooltip.select("p#instant").text("Istante: " + this.getFormattedDate(d.instant))
             Tooltip.select("p#occurrencies").text("Occorrenze: " + d.eventOccurencies)
             return Tooltip.style("opacity", 1);
         }
 
         const mouseMove = (event: any) => {
-            let x = event.clientX
-            let y = event.clientY
+            let x = event.pageX
+            let y = event.pageY
             if (this.tooltipCollideX(x)) { //se è troppo a destra lo sposta a sinistra del mouse
-                x -= 390;
+                x -= 130;
             }
 
             if (this.tooltipCollideY(y)) {  //se è troppo in basso lo sposta in sopra al mouse
@@ -222,7 +218,7 @@ export class CumulativeChartComponent {
      * @private
      */
     private tooltipCollideX(x: number) {
-        return 365 + x > window.innerWidth;
+        return 165 + x > window.innerWidth;
     }
 
     /**

@@ -97,8 +97,6 @@ export class TimeCodeHeaderComponent {
                 }
             }
         });
-        if (this.availableCode[0] != null)
-        this.cumService.sendData(this.availableCode[0].id, new Date(this.startDatetimeValue), new Date(this.endDatetimeValue))
     }
 
     /**
@@ -110,8 +108,6 @@ export class TimeCodeHeaderComponent {
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
         if (startDatetime != null && endDatetime != null && this.selectedCode[0] != null) {
             this.cumService.sendData(this.selectedCode[0].id, startDatetime, endDatetime)
-            let chart = new CumulativeChartComponent(this.cumService);
-            chart.loadData()
         }
         console.log("INIZIO:");
         console.log(startDatetime!.getTime());

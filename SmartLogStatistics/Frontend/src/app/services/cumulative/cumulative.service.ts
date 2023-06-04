@@ -10,6 +10,10 @@ import { BaseURL } from '../../connection-info';
 })
 export class CumulativeService {
 
+    private service: Subject<CumulativeService> = new Subject<CumulativeService>();
+
+    public serviceObs: Observable<CumulativeService> = this.service.asObservable();
+
     private Code: string = "";
 
     private Start: Date = new Date();
@@ -28,6 +32,7 @@ export class CumulativeService {
         this.Code = code
         this.Start = start
         this.End = end
+        this.service.next(this)
     }
 
     public GetCumulativeRecords(): Observable<HttpEvent<any>> {
