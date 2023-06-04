@@ -233,6 +233,4 @@ export class CumulativeChartComponent {
     private tooltipCollideY(y: number) {
         return 120 + y > window.innerHeight;
     }
-
-    private formatDate()
 }
