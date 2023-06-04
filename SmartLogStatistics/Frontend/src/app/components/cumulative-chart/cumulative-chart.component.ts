@@ -29,6 +29,10 @@ export class CumulativeChartComponent {
     private readonly timezone = "UTC";
 
     private records: any[] = [];
+
+    private svg: any;
+
+    private tooltip: any;
     constructor(private cumulativeService: CumulativeService, private modalService: NgbModal) {
         this.loadData()
     }
@@ -51,7 +55,7 @@ export class CumulativeChartComponent {
                     }
                 }, error: (err) => {
                     let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-                    modal.componentInstance.setup(err.body.message, () => { this.loadData() });
+                    modal.componentInstance.setup(err.error.message);
                 }
             })
 
@@ -102,7 +106,7 @@ export class CumulativeChartComponent {
             .y((d: any) => yScale(d.eventOccurencies));
 
         // append the svg object to the body of the page
-        let svg = d3.select("figure#cumulative-chart")
+        this.svg = d3.select("figure#cumulative-chart")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -110,7 +114,7 @@ export class CumulativeChartComponent {
             .attr("transform",
                 "translate(" + margin.left + "," + (margin.top) + ")");
 
-        svg.append('text')
+        this.svg.append('text')
             .attr('class', 'title')
             .attr('x', width / 2)
             .attr('y', 0)
@@ -120,13 +124,13 @@ export class CumulativeChartComponent {
             .text(`Occorrenze di ${this.Code} nel periodo tra ${this.getFormattedDate(this.startDate)} e ${this.getFormattedDate(this.endDate)}`);
 
         //Creo l'asse X nel grafico
-        svg.append("g")
+        this.svg.append("g")
             .attr("class", "xAxis")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(xScale));
 
         //Creo l'asse Y nel grafico
-        svg.append("g")
+        this.svg.append("g")
             .attr("class", "yAxis")
             .call(d3.axisLeft(yScale));
 
@@ -153,7 +157,7 @@ export class CumulativeChartComponent {
             .attr("stroke-dasharray", "4") 
 
         //Inserico il testo nell'asse Y
-        svg.append("text")
+        this.svg.append("text")
             .attr("transform", "rotate(-90)")
             .attr("y", 0 - margin.left)
             .attr("x", 0 - (height / 2))
@@ -162,30 +166,8 @@ export class CumulativeChartComponent {
             .style("text-anchor", "middle")
             .text("Occorrenze");
 
-        //Inserisco i dati nel grafico
-        svg.append("path")
-            .datum(this.records)
-            .attr("fill", "none")
-            .attr("stroke", "#69b3a2")
-            .attr("stroke-linejoin", "round")
-            .attr("stroke-linecap", "round")
-            .attr("stroke-width", 1.5)
-            .attr("d", line);
-
-        //Aggiunto i punti che rappresentano gli istanti
-        let dots = svg
-            .append("g")
-            .selectAll("dot")
-            .data(this.records)
-            .enter()
-            .append("circle")
-            .attr("cx", (d: any) => xScale(d.instant))
-            .attr("cy", (d: any) => yScale(d.eventOccurencies))
-            .attr("r", 5)
-            .attr("fill", "#69b3a2")
-
         //Inserisco il tooltip per i punti
-        const Tooltip = d3.select("figure#cumulative-chart")
+        this.tooltip = d3.select("figure#cumulative-chart")
             .append("div")
             .attr("class","tooltip")
             .style("position", "absolute")
@@ -197,15 +179,42 @@ export class CumulativeChartComponent {
             .style("padding", "10px")
 
         //Ci aggiungo i campi nel tooltip
-        Tooltip.append("p").attr("id", "instant")
+        this.tooltip.append("p").attr("id", "instant")
 
-        Tooltip.append("p").attr("id", "occurrencies")
+        this.tooltip.append("p").attr("id", "occurrencies")
+
+        // Inserisco i dati nel grafico
+        this.putNewData(line, xScale, yScale);
+
+    }
+
+    private putNewData(line: d3.Line<[number, number]>, xScale: d3.ScaleTime<number, number, never>, yScale: d3.ScaleLinear<number, number, never>) {
+        this.svg.append("path")
+            .datum(this.records)
+            .attr("fill", "none")
+            .attr("stroke", "#69b3a2")
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        //Aggiunto i punti che rappresentano gli istanti
+        let dots = this.svg
+            .append("g")
+            .selectAll("dot")
+            .data(this.records)
+            .enter()
+            .append("circle")
+            .attr("cx", (d: any) => xScale(d.instant))
+            .attr("cy", (d: any) => yScale(d.eventOccurencies))
+            .attr("r", 5)
+            .attr("fill", "#69b3a2");
 
         //Evento che accade quando passo sopra un punto e mostra il tooltip
         const mouseOver = (e: any, d: any) => {
-            Tooltip.select("p#instant").text("Istante: " + this.getFormattedDate(d.instant))
-            Tooltip.select("p#occurrencies").text("Occorrenze: " + d.eventOccurencies)
-            return Tooltip.style("opacity", 1);
+            this.tooltip.select("p#instant").text("Istante: " + this.getFormattedDate(d.instant))
+            this.tooltip.select("p#occurrencies").text("Occorrenze: " + d.eventOccurencies)
+            return this.tooltip.style("opacity", 1);
         }
 
         //Evento che accade quando mi muovo sopra un punto e sposto il tooltip
@@ -220,19 +229,21 @@ export class CumulativeChartComponent {
                 y -= 130;
             }
 
-            return Tooltip.style("top", (y + 20) + "px").style("left", (x - 100) + "px");
+            return this.tooltip.style("top", (y + 20) + "px").style("left", (x - 100) + "px");
         }
 
         //Evento che accade quando mi sposto dal punto e nascondo il tooltip
         const mouseOut = () => {
-            Tooltip.style("top", 0 + "px").style("left", 0 + "px")
-            return Tooltip.style("opacity", 0);
+            this.tooltip.style("top", 0 + "px").style("left", 0 + "px")
+            return this.tooltip.style("opacity", 0);
         }
 
         //Imposto gli eventi con il mouse sui punti        
         dots.on("mouseover", mouseOver)
             .on("mousemove", mouseMove)
             .on("mouseout", mouseOut);
+
+        return dots;
     }
 
     /**
@@ -240,7 +251,7 @@ export class CumulativeChartComponent {
      * @param x coordinata x del cursore
      * @private
      */
-    private tooltipCollideX(x: number) {
+    private tooltipCollideX(x: number): boolean {
         return 165 + x > window.innerWidth;
     }
 
@@ -249,7 +260,7 @@ export class CumulativeChartComponent {
      * @param y coordinata y del cursore
      * @private
      */
-    private tooltipCollideY(y: number) {
+    private tooltipCollideY(y: number): boolean {
         return 120 + y > window.innerHeight;
     }
 }

@@ -4,7 +4,6 @@ import { FormBuilder, FormControl } from "@angular/forms";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CumulativeService } from '../../services/cumulative/cumulative.service';
 import { InfoService } from '../../services/info/info.service';
-import { CumulativeChartComponent } from '../cumulative-chart/cumulative-chart.component';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 
 @Component({
@@ -107,6 +106,7 @@ export class TimeCodeHeaderComponent {
         const startDatetime = this.formGroup.value.startDatetime ? new Date(this.formGroup.value.startDatetime) : null;
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
         if (startDatetime != null && endDatetime != null && this.selectedCode[0] != null) {
+            console.log("Ciaone")
             this.cumService.sendData(this.selectedCode[0].id, startDatetime, endDatetime)
         }
         console.log("INIZIO:");
