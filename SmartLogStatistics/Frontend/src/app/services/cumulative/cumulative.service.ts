@@ -10,16 +10,6 @@ import { BaseURL } from '../../connection-info';
 })
 export class CumulativeService {
 
-    private service: Subject<CumulativeService> = new Subject<CumulativeService>();
-
-    public serviceObs: Observable<CumulativeService> = this.service.asObservable();
-
-    private Code: string = "";
-
-    private Start: Date = new Date();
-
-    private End: Date = new Date();
-
     /**
        * Costruttore
        * @param http Il client http che effettua la chiamata al server
@@ -28,19 +18,12 @@ export class CumulativeService {
     constructor(private http: HttpClient, @Inject(BaseURL) private ConnectionURL: string) {
     }
 
-    public sendData(code: string, start: Date, end: Date) {
-        this.Code = code
-        this.Start = start
-        this.End = end
-        this.service.next(this)
-    }
-
-    public GetCumulativeRecords(): Observable<HttpEvent<any>> {
+    public GetCumulativeRecords(code: string, start: Date, end: Date): Observable<HttpEvent<any>> {
         const headers = new HttpHeaders({
             accept: "*/*"
         });
 
-        const req = new HttpRequest("GET", `${this.ConnectionURL}/data/cumulative/${this.Start.toISOString()}/${this.End.toISOString()}/${this.Code}`, {
+        const req = new HttpRequest("GET", `${this.ConnectionURL}/data/cumulative/${start.toISOString()}/${end.toISOString()}/${code}`, {
             headers: headers,
             responseType: "json"
         });

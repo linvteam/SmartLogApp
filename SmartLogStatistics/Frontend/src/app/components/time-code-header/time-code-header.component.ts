@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControl } from "@angular/forms";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CumulativeService } from '../../services/cumulative/cumulative.service';
@@ -13,6 +13,7 @@ import { ErrorModalComponent } from '../error-modal/error-modal.component';
 })
 export class TimeCodeHeaderComponent {
 
+    @Output() submit: EventEmitter<any> = new EventEmitter<any>();
     /**
      * Data del primo evento presente nel DB
      */
@@ -105,9 +106,8 @@ export class TimeCodeHeaderComponent {
 
         const startDatetime = this.formGroup.value.startDatetime ? new Date(this.formGroup.value.startDatetime) : null;
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
-        if (startDatetime != null && endDatetime != null && this.selectedCode[0] != null) {
-            console.log("Ciaone")
-            this.cumService.sendData(this.selectedCode[0].id, startDatetime, endDatetime)
+        if (startDatetime != null && endDatetime != null) {
+            this.submit.emit({ code: this.selectedCode[0].id, start: startDatetime, end: endDatetime });
         }
         console.log("INIZIO:");
         console.log(startDatetime!.getTime());

@@ -34,31 +34,41 @@ export class CumulativeChartComponent {
 
     private tooltip: any;
     constructor(private cumulativeService: CumulativeService, private modalService: NgbModal) {
-        this.loadData()
     }
 
-    private loadData() {
-        this.cumulativeService.serviceObs.subscribe(e =>
-            e.GetCumulativeRecords().subscribe({
-                next: (event: any) => {
-                    if (event instanceof HttpResponse<any>) {
-                        this.startDate = new Date(Date.parse(event.body.start));
-                        this.endDate = new Date(Date.parse(event.body.end));
-                        this.Code = event.body.code;
-                        this.records = event.body.records.map((e: any) => {
-                            return {
-                                instant: new Date(e.instant),
-                                eventOccurencies: e.eventOccurencies
-                            }
-                        });
-                        this.drawChart()
-                    }
-                }, error: (err) => {
-                    let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-                    modal.componentInstance.setup(err.error.message);
-                }
+    onSubmit(value: any): void {
+        const errorHandler = (err: any) => {
+            let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+            modal.componentInstance.setup(err.error.message, () => {
+                this.records = [];
+                this.Code = "";
             })
+        };
 
+        /**
+        * Genera una funzione per la gestione della richiesta HTTP di ottenimento dei dati
+        * @returns Una funzione per la gestione della richiesta HTTP di ottenimento dei dati
+        */
+        const loadData = (ev: any) => {
+            if (ev instanceof HttpResponse<any>) {
+                this.startDate = new Date(Date.parse(ev.body.start));
+                this.endDate = new Date(Date.parse(ev.body.end));
+                this.Code = ev.body.code;
+                this.records = ev.body.records.map((e: any) => {
+                    return {
+                        instant: new Date(e.instant),
+                        eventOccurencies: e.eventOccurencies
+                    }
+                });
+                this.drawChart()
+            }
+        }
+
+        this.cumulativeService.GetCumulativeRecords(value.code, value.start, value.end).subscribe(
+            {
+                next: (ev: any) => loadData(ev),
+                error: (ev: any) => errorHandler(ev)
+            }
         )
     }
 
