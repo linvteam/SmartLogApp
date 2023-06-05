@@ -35,7 +35,7 @@ export class RegroupHeaderComponent {
     /**
      * Lista dei raggruppamenti disponibili
      */
-    public availableRegroup: string[] = ["Code", "Data", "Versione firmware", "Unit", "Subunit"];
+    public availableRegroup: string[] = ["Data", "Versione firmware", "Unit", "Subunit"];
     /**
      * Lista dei raggruppamenti selezionati
      */
