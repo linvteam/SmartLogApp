@@ -1,10 +1,9 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder } from "@angular/forms";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
-import { StatisticsService } from 'src/app/services/statistics/statistics.service';
 
 @Component({
     selector: 'app-time-header',
@@ -12,6 +11,11 @@ import { StatisticsService } from 'src/app/services/statistics/statistics.servic
     styleUrls: ['./time-header.component.css']
 })
 export class TimeHeaderComponent {
+
+    /**
+     * Segnale per indicare che è avvenuto il submit
+     */
+    @Output() submit: EventEmitter<any> = new EventEmitter<any>();
     
     /**
      * Data del primo evento presente nel DB
@@ -45,7 +49,7 @@ export class TimeHeaderComponent {
      * @param modalService Servizio che si occupa di gestire i modal di bootstrap
      * @param statisticsService Servizio che si occupa di ottenere le statistiche
      */
-    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal, private statisticsService: StatisticsService) {
+    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal) {
         this.loadData();
     }
 
@@ -78,7 +82,7 @@ export class TimeHeaderComponent {
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
 
         if(startDatetime != null && endDatetime != null) {
-            this.statisticsService.GetStatistics(startDatetime, endDatetime)
+            this.submit.emit({startDatetime, endDatetime});
         } else {
             let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
             modal.componentInstance.setup("Le date di inizio/fine hanno valore nullo");

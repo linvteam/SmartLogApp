@@ -35,18 +35,7 @@ export class StatisticsTableComponent {
    * @param statisticsService Servizio di fetch delle statistiche
    * @param modalService Dialog di errore
    */
-  constructor(statisticsService: StatisticsService, private modalService: NgbModal) {
-    statisticsService.observableSignal.subscribe(
-          {
-            next: () => {statisticsService.request.subscribe(
-              {
-                next: this.updateData(),
-                error: this.errorHandler()
-              }
-            )},
-            error: this.errorHandler()
-          }
-        )
+  constructor(private statisticsService: StatisticsService, private modalService: NgbModal) {
   }
 
   /**
@@ -78,6 +67,19 @@ export class StatisticsTableComponent {
         this.standardDeviationEvents = 0;
       });
     }
+  }
+
+  /**
+   * Gestisce la richiesta al back-end per ottenere le statistiche
+   * @param event Evento proveniente dal form di header (scelta dell'intervallo di cui ottenere le statistiche)
+   */
+  public onSubmit(event: any): void {
+    if(event.startDatetime != undefined && event.endDatetime != null) {
+      this.statisticsService.GetStatistics(event.startDatetime, event.endDatetime).subscribe({
+        next: this.updateData(),
+        error: this.errorHandler()
+      });
+    } 
   }
 
 }

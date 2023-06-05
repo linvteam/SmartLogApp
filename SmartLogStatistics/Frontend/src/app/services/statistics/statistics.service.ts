@@ -15,21 +15,6 @@ registerLocaleData(localeIT, "it");
 export class StatisticsService {
 
     /**
-     * Subject per la notifica del component statistics-table
-     */
-    private signal: Subject<boolean> = new Subject<boolean>();
-
-    /**
-     *  Observable per la notifica del component statistics-table
-     */
-    public observableSignal: Observable<boolean> = this.signal.asObservable();
-
-    /**
-     * Richiesta HTTP per ottenere le statistiche
-     */
-    public request : Observable<HttpEvent<any>> = new Observable<HttpEvent<any>>();
-
-    /**
      * Costruttore
      * @param http Il client http che effettua la chiamata al server
      * @param ConnectionURL URL del backend
@@ -41,7 +26,7 @@ export class StatisticsService {
      * @param start Lower bound dell'intervallo di ricerca
      * @param end Upper bound dell'intervallo di ricerca
      */
-    public GetStatistics(start: Date, end: Date): void {
+    public GetStatistics(start: Date, end: Date): Observable<HttpEvent<unknown>> {
         const headers = new HttpHeaders({
             accept: "*/*"
         });
@@ -57,8 +42,7 @@ export class StatisticsService {
             responseType: "json"
         });
 
-        this.request = this.http.request(req);
-        this.signal.next(true);
+        return this.http.request(req);
     }
 
 }
