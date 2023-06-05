@@ -79,6 +79,9 @@ export class TimeHeaderComponent {
 
         if(startDatetime != null && endDatetime != null) {
             this.statisticsService.GetStatistics(startDatetime, endDatetime)
+        } else {
+            let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+            modal.componentInstance.setup("Le date di inizio/fine hanno valore nullo");
         }
         
 
