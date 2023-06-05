@@ -22,6 +22,7 @@ import { FileDroppedDirective } from './file-dropped.directive';
 
 import { BaseURL } from './connection-info';
 import {NgIf} from "@angular/common";
+import { ErrorModalComponent } from './components/error-modal/error-modal.component';
 
 @NgModule({
     declarations: [
@@ -46,8 +47,7 @@ import {NgIf} from "@angular/common";
         FormsModule,
         ReactiveFormsModule,
         MdbAccordionModule,
-        NgMultiSelectDropDownModule,
-        NgIf
+        NgMultiSelectDropDownModule
     ],
   providers: [
         { provide: BaseURL, useValue: 'https://localhost:7253/api'}

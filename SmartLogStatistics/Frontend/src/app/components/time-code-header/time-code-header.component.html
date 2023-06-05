@@ -12,10 +12,10 @@
             <label for="codeSelector" >Code:</label>
             <ng-multiselect-dropdown id="codeSelector"
                                      formControlName="code"
+                                     [settings]="dropdownSettings"
                                      [placeholder]="'Seleziona il code'"
                                      [data]='availableCode'
-                                     [(ngModel)]="selectedCode"
-                                     [settings]="dropdownSettings"></ng-multiselect-dropdown>
+                                     [(ngModel)]="selectedCode"></ng-multiselect-dropdown>
         </div>
         <button type="submit" class="btn btn-primary">Inserisci</button>
     </form>

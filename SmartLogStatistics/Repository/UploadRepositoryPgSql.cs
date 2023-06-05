@@ -6,7 +6,7 @@ namespace SmartLogStatistics.Repository {
     /// <summary>
     /// Classe che definisce la comunicazione con il database PostgreSQL per l'upload del file
     /// </summary>
-    [Core.Injectables.Singleton(typeof(UploadRepository))]
+    [Core.Injectables.Transient(typeof(UploadRepository))]
     public class UploadRepositoryPgSql: UploadRepository {
 
         private readonly SmartLogContext context;
