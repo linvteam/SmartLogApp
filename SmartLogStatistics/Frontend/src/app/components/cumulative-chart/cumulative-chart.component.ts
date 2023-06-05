@@ -16,26 +16,57 @@ import { CumulativeService } from '../../services/cumulative/cumulative.service'
 })
 export class CumulativeChartComponent {
 
+    /**
+     * Codice dell'evento
+     */
     private Code: string = "";
 
+    /**
+     * Data di lower-bound del intervallo temporale preso in esame
+     */
     private startDate: Date = new Date();
 
+    /**
+     * Data di upper-bound del intervallo temporale preso in esame
+     */
     private endDate: Date = new Date();
 
+    /**
+     * Formato della data usato per la formattazione
+     */
     private readonly dateFormat = 'yyyy/MM/dd - HH:mm:ss.SSS';
 
+    /**
+     * Locale usato per formattare le date
+     */
     private readonly locale = "it-IT";
 
+    /**
+     * Fuso orario usato per formattare le date
+     */
     private readonly timezone = "UTC";
 
+    /**
+     * I dati da visualizzare nel grafico
+     */
     private records: any[] = [];
 
+    /**
+     * Il grafico da disegnare a schermo
+     */
     private svg: any;
 
+    /**
+     * Il tooltip mostrato quando si passa sopra un punto
+     */
     private tooltip: any;
     constructor(private cumulativeService: CumulativeService, private modalService: NgbModal) {
     }
 
+    /**
+     * Funzione invocata alla submit della form di time-code-header
+     * @param value
+     */
     onSubmit(value: any): void {
         const errorHandler = (err: any) => {
             let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });

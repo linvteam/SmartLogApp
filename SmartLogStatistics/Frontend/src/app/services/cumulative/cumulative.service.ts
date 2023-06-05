@@ -18,6 +18,13 @@ export class CumulativeService {
     constructor(private http: HttpClient, @Inject(BaseURL) private ConnectionURL: string) {
     }
 
+    /**
+     * Invoca una richiesta HTTP per prelevare l'andamento cumulativo di un evento dato un intervallo temporale
+     * @param code Codice dell'evento
+     * @param start Lower-bound del intervallo temporale da prendere in esame
+     * @param end Upper-bound del intervallo temporale da prendere in esame
+     * @returns
+     */
     public GetCumulativeRecords(code: string, start: Date, end: Date): Observable<HttpEvent<any>> {
         const headers = new HttpHeaders({
             accept: "*/*"
