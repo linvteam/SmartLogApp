@@ -14,10 +14,19 @@ registerLocaleData(localeIT, "it");
 })
 export class StatisticsService {
 
+    /**
+     * Subject per la notifica del component statistics-table
+     */
     private signal: Subject<boolean> = new Subject<boolean>();
 
-    public aux: Observable<boolean> = this.signal.asObservable();
+    /**
+     *  Observable per la notifica del component statistics-table
+     */
+    public observableSignal: Observable<boolean> = this.signal.asObservable();
 
+    /**
+     * Richiesta HTTP per ottenere le statistiche
+     */
     public request : Observable<HttpEvent<any>> = new Observable<HttpEvent<any>>();
 
     /**
@@ -29,7 +38,8 @@ export class StatisticsService {
 
     /**
      * Metodo che ottiene il minimo e il massimo DateTime nel database
-     * @constructor
+     * @param start Lower bound dell'intervallo di ricerca
+     * @param end Upper bound dell'intervallo di ricerca
      */
     public GetStatistics(start: Date, end: Date): void {
         const headers = new HttpHeaders({

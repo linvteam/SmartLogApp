@@ -36,7 +36,7 @@ export class StatisticsTableComponent {
    * @param modalService Dialog di errore
    */
   constructor(statisticsService: StatisticsService, private modalService: NgbModal) {
-    statisticsService.aux.subscribe(
+    statisticsService.observableSignal.subscribe(
           {
             next: () => {statisticsService.request.subscribe(
               {
