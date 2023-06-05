@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import { FormBuilder } from "@angular/forms";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
@@ -12,6 +12,7 @@ import { ErrorModalComponent } from '../error-modal/error-modal.component';
 })
 export class TimeHeaderComponent {
     
+    @Output()submit: EventEmitter<any> = new EventEmitter<any>();
     /**
      * Data del primo evento presente nel DB
      */
@@ -73,10 +74,9 @@ export class TimeHeaderComponent {
         const startDatetime = this.formGroup.value.startDatetime ? new Date(this.formGroup.value.startDatetime) : null;
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
 
-        console.log("INIZIO:");
-        console.log(startDatetime!.getTime());
-        console.log("FINE:");
-        console.log(endDatetime!.getTime());
+        if(startDatetime != null && endDatetime != null){
+            this.submit.emit({startDatetime, endDatetime});
+        }
 
     }
 

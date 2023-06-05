@@ -2,27 +2,13 @@ import {Inject, Injectable} from '@angular/core';
 import {Observable, Subject} from "rxjs";
 import {HttpClient, HttpEvent, HttpHeaders, HttpRequest} from "@angular/common/http";
 import {BaseURL} from "../../connection-info";
-import {formatDate} from "@angular/common";
-
+import {formatDate, registerLocaleData} from "@angular/common";
+import localeIT from "@angular/common/locales/it"
+registerLocaleData(localeIT, "it");
 @Injectable({
   providedIn: 'root'
 })
 export class TotalByCodeService {
-
-  /**
-   * Subject per la notifica del component statistics-table
-   */
-  private signal: Subject<boolean> = new Subject<boolean>();
-
-  /**
-   *  Observable per la notifica del component statistics-table
-   */
-  public observableSignal: Observable<boolean> = this.signal.asObservable();
-
-  /**
-   * Richiesta HTTP per ottenere le statistiche
-   */
-  public request : Observable<HttpEvent<any>> = new Observable<HttpEvent<any>>();
 
   /**
    * Costruttore
@@ -36,24 +22,23 @@ export class TotalByCodeService {
    * @param start Lower bound dell'intervallo di ricerca
    * @param end Upper bound dell'intervallo di ricerca
    */
-  public GetStatistics(start: Date, end: Date): void {
+  public GetTotalByCode(start: Date, end: Date):  Observable<HttpEvent<unknown>> {
     const headers = new HttpHeaders({
       accept: "*/*"
     });
 
     const format = 'yyyy-MM-dd HH:mm:ss.SSS';
     const locale = 'it-IT';
-
+    
     const startDatetime : string = formatDate(start, format, locale);
     const endDatetime : string = formatDate(end, format, locale);
-
-    const req = new HttpRequest("GET", `${this.ConnectionURL}/totalbycode/${startDatetime}/${endDatetime}`, {
+    
+    const req = new HttpRequest("GET", `${this.ConnectionURL}/data/totalbycode/${startDatetime}/${endDatetime}`, {
       headers: headers,
       responseType: "json"
     });
 
-    this.request = this.http.request(req);
-    this.signal.next(true);
+    return this.http.request(req);
   }
   
 }

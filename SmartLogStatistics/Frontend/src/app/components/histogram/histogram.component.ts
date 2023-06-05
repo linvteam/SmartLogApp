@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {TotalByCodeService} from "../../services/total-by-code/total-by-code.service";
 import * as d3 from "d3";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ErrorModalComponent} from "../error-modal/error-modal.component";
 
 @Component({
   selector: 'app-histogram',
@@ -38,20 +39,10 @@ export class HistogramComponent implements OnInit{
   private svg: any;
     
   constructor(private totalByCode: TotalByCodeService, private modal: NgbModal) {
+    this.x = [1,2];
+    this.y = ["A","B"];
     this.totalByCodeService = totalByCode;
     this.modalService = modal;
-
-    this.totalByCodeService.observableSignal.subscribe(
-        {
-          next: () => {this.totalByCodeService.request.subscribe(
-              {
-                next: this.updateData(),
-                error: this.errorHandler()
-              }
-          )},
-          error: this.errorHandler()
-        }
-    )
     
     this.xDomain = [0, Math.max(...this.x)];
     this.xLabel = "N. di occorrenze";
@@ -83,13 +74,13 @@ export class HistogramComponent implements OnInit{
     d3.select("figure#histogram-chart svg").remove();
     
     // this.xScale = d3.scaleOrdinal(this.xDomain, this.xRange);
+    this.xDomain = [0, Math.max(...this.x)];
 
     this.xScale = d3.scaleLinear(this.xDomain, this.xRange);
     this.yScale = d3.scaleBand(this.y, this.yRange).padding(this.yPadding);
     this.xAxis = d3.axisTop(this.xScale).ticks(this.x.length);
     this.yAxis = d3.axisLeft(this.yScale).tickSizeOuter(0);
 
-    this.xDomain = [0, Math.max(...this.x)];
   
     this.svg = d3.select("figure#histogram-chart")
         .insert("svg")
@@ -141,14 +132,21 @@ export class HistogramComponent implements OnInit{
 
   private errorHandler() {
     return (err: any) => {
-      // let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-      // modal.componentInstance.setup("Non è stato possibile ottenere le statistiche", () => {
-      //   this.fileNumber = 0;
-      //   this.maxEventsNumber = 0;
-      //   this.averageEventsNumber = 0;
-      //   this.standardDeviationEvents = 0;
-      // });
-      alert("Non è stato possibile ottenere i dati");
+      let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+      modal.componentInstance.setup("", () => {
+        this.x = [];
+        this.y = [];
+      });
+      // alert("Non è stato possibile ottenere i dati");
+    }
+  }
+
+  onSubmit(value: any) {
+    if(value.startDatetime != null && value.endDatetime != null){
+      this.totalByCodeService.GetTotalByCode(value.startDatetime, value.endDatetime).subscribe({
+        next:this.updateData(),
+        error: this.errorHandler()
+      });
     }
   }
 }
