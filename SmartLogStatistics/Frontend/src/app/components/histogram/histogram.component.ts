@@ -66,12 +66,11 @@ export class HistogramComponent implements OnInit{
   }
   
   ngOnInit(): void {
-    this.drawChart();
   }
   
   drawChart(): void{
 
-    d3.select("figure#histogram-chart svg").remove();
+    this.deleteChart();
     
     // this.xScale = d3.scaleOrdinal(this.xDomain, this.xRange);
     this.xDomain = [0, Math.max(...this.x)];
@@ -124,9 +123,28 @@ export class HistogramComponent implements OnInit{
         .attr("y", (i: number) => this.yScale(this.y[i]))
         .attr("width", (i: number) => this.xScale(this.x[i]) - this.xScale(0))
         .attr("height", this.yScale.bandwidth());
-
-    //TODO Aggiungere scritte coi valori di ogni barra
-
+    
+    
+    this.svg.append("g")
+        .attr("fill", "#fff")
+        .attr("text-anchor", "end")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 17)
+        .attr('font-weight', 'bold')
+        .selectAll("text")
+        .data(d3.range(this.x.length))
+        .join("text")
+        .attr("x", (i: any) => this.xScale(this.x[i]))
+        .attr("y", (i: any) => this.yScale(this.y[i]) + this.yScale.bandwidth() / 2)
+        .attr("dy", "0.35em")
+        .attr("dx", -4)
+        .text((i: number) => this.x[i])
+        .call((text: any) => text.filter((i:any) => this.xScale(this.x[i]) - this.xScale(0) < 20) // short bars
+            .attr("dx", +4)
+            .attr("fill", "#000")
+            .attr("text-anchor", "start"));
+    
+    
     this.svg.append("g")
         .attr("transform", `translate(${this.marginLeft},0)`)
         .call(this.yAxis)
@@ -138,23 +156,23 @@ export class HistogramComponent implements OnInit{
   private updateData(): any {
     return (event: any) => {
       if(event.body != undefined) {
-        this.y = event.body.codeOccurences.map((l: any) => l.code);
         this.x = event.body.codeOccurences.map((l: any) => l.eventOccurrences);
-        // this.x = [3,7,2,4,6,3,4,15];
-        // this.y = ["A","B","C","D","E","F","G","H"];
+        this.y = event.body.codeOccurences.map((l: any) => l.code);
         this.drawChart();
       }
     };
   }
 
+  private deleteChart(){d3.select("figure#histogram-chart svg").remove();}
+  
   private errorHandler() {
     return (err: any) => {
       let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-      modal.componentInstance.setup("", () => {
+      modal.componentInstance.setup(err.status + " " + err.error.message, () => {
         this.x = [];
         this.y = [];
+        this.deleteChart();
       });
-      // alert("Non è stato possibile ottenere i dati");
     }
   }
 
