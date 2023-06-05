@@ -11,7 +11,7 @@ import {ErrorModalComponent} from "../error-modal/error-modal.component";
 })
 export class HistogramComponent implements OnInit{
   
-  private x: any;
+  protected x: any;
   private y: any;
   private xDomain: any;
   private xLabel: string;
@@ -39,8 +39,8 @@ export class HistogramComponent implements OnInit{
   private svg: any;
     
   constructor(private totalByCode: TotalByCodeService, private modal: NgbModal) {
-    this.x = [1,2];
-    this.y = ["A","B"];
+    this.x = [];
+    this.y = [];
     this.totalByCodeService = totalByCode;
     this.modalService = modal;
     
@@ -51,7 +51,7 @@ export class HistogramComponent implements OnInit{
     this.width = 1500;
     this.barHeight = 50;
     
-    this.marginTop = 20;
+    this.marginTop = 40;
     this.marginRight = 0;
     this.marginBottom = 0;
     this.marginLeft = 100;
@@ -78,7 +78,7 @@ export class HistogramComponent implements OnInit{
 
     this.height = ((this.y.length) * this.barHeight) + this.marginTop + this.marginBottom;
 
-    this.xRange = [this.marginLeft, this.width - this.marginRight - 2];
+    this.xRange = [this.marginLeft, this.width - this.marginRight - 7];
     this.yRange = [this.marginTop, this.height - this.marginBottom];
     
     this.xScale = d3.scaleLinear(this.xDomain, this.xRange);
@@ -87,8 +87,10 @@ export class HistogramComponent implements OnInit{
                     .range(this.yRange)
                     .padding(this.yPadding);
 
-    const yAxisTicks = this.yScale.ticks(15).filter((tick:any)=> Number.isInteger(tick));
-    this.xAxis = d3.axisTop(this.xScale).tickValues(yAxisTicks).tickFormat(d3.format('d'));
+    const xAxisTicks = this.xScale.ticks(15).filter((tick:any)=> Number.isInteger(tick));
+    this.xAxis =  d3.axisTop(this.xScale)
+                    .tickValues(xAxisTicks)
+                    .tickFormat((d) => d3.format("d")(d as number));
     this.yAxis = d3.axisLeft(this.yScale).tickSizeOuter(0);
 
   
@@ -104,6 +106,9 @@ export class HistogramComponent implements OnInit{
     this.svg.append("g")
         .attr("transform", `translate(0,${this.marginTop})`)
         .call(this.xAxis)
+          .style('font-size', '17px')
+          .style('font-weight', 'bold');
+    
         // .call((g: any) => g.append("text")
         //     .attr("x", this.width/2)
         //     .attr("y", 22)

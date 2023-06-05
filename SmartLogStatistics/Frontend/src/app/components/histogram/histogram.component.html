@@ -1,12 +1,10 @@
 
 <app-time-header (submit)="onSubmit($event)"></app-time-header>
 
-<p>histogram works!</p>
-
 <div style="position:relative" id="chart-container">
-    <figure id="histogram-chart">
-        <div id="no-events">
+    <figure id="histogram-chart" *ngIf="this.x.length!=0">
+    </figure>
+        <div id="no-events" *ngIf="this.x.length==0">
             <p>Nessun evento da visualizzare</p>
         </div>
-    </figure>
 </div>

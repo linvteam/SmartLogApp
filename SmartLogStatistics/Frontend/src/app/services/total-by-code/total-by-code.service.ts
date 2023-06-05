@@ -22,7 +22,7 @@ export class TotalByCodeService {
    * @param start Lower bound dell'intervallo di ricerca
    * @param end Upper bound dell'intervallo di ricerca
    */
-  public GetTotalByCode(start: Date, end: Date):  Observable<HttpEvent<unknown>> {
+  public GetTotalByCode(start: Date, end: Date):  Observable<HttpEvent<any>> {
     const headers = new HttpHeaders({
       accept: "*/*"
     });
