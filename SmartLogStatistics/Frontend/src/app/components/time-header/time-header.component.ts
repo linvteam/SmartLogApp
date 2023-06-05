@@ -4,7 +4,6 @@ import { FormBuilder } from "@angular/forms";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
-import { Observable, Subject } from 'rxjs';
 import { StatisticsService } from 'src/app/services/statistics/statistics.service';
 
 @Component({
@@ -42,6 +41,9 @@ export class TimeHeaderComponent {
     /**
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale
      * @param formBuilder Servizio di gestione dei form
+     * @param infoRepository Servizio per ottenere le informazioni dal database
+     * @param modalService Servizio che si occupa di gestire i modal di bootstrap
+     * @param statisticsService Servizio che si occupa di ottenere le statistiche
      */
     constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal, private statisticsService: StatisticsService) {
         this.loadData();

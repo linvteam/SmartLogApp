@@ -37,7 +37,7 @@ export class StatisticsService {
     constructor(private http: HttpClient, @Inject(BaseURL) private ConnectionURL: string) { }
 
     /**
-     * Metodo che ottiene il minimo e il massimo DateTime nel database
+     * Metodo che ottiene le statistiche comprese tra il lower bound e l'upper bound dell'intervallo di ricerca
      * @param start Lower bound dell'intervallo di ricerca
      * @param end Upper bound dell'intervallo di ricerca
      */
