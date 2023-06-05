@@ -1,12 +1,15 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl } from "@angular/forms";
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 import {TotalByFirmwareService} from "../../services/total-by-firmware/total-by-firmware.service";
-import {PieChartComponent} from "../pie-chart/pie-chart.component";
 
+
+/**
+ * Classe che crea un component in cui inserire l'intervallo temporale e il Code di cui si vogliono ottenere i dati
+ */
 @Component({
     selector: 'app-time-code-header',
     templateUrl: './time-code-header.component.html',
@@ -46,11 +49,10 @@ export class TimeCodeHeaderComponent {
         allowSearchFilter: true,
         searchPlaceholderText: "Cerca eventi"
     }
-    
+    /**
+     * Variabile che indica se mostrare o no l'alert di inserimento dei dati
+     */
     public alert: boolean = false;
-
-    private dialogRef: NgbModalRef | undefined;
-
     /**
      * Gestore del form
      */
@@ -61,28 +63,33 @@ export class TimeCodeHeaderComponent {
     });
 
     /**
-     * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale
+     * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale e dei Code
      * @param formBuilder Servizio di gestione dei form
+     * @param infoRepository Servizio per ottenere le informazioni dal database
+     * @param modalService Servizio che si occupa di gestire i modal di bootstrap
+     * @param totalByFirmwareService Servizio che si occupa di ottenere le informazioni sui firmware per evento
      */
     constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal, private totalByFirmwareService: TotalByFirmwareService) {
         this.loadData();
     }
 
+    /**
+     * Ottiene i valori minimi, massimi e di default da poter inserire nelle date e i Code da ricercare
+     * @private
+     */
     private loadData(): void {
         this.infoRepository.GetTimeInterval().subscribe({
             next: (event) => {
                 if (event instanceof HttpResponse<any>) {
                     this.startDatetimeValue = event.body.start;
-                    this.minDate = event.body.start;
                     this.endDatetimeValue = event.body.end;
+                    this.minDate = event.body.start;
                     this.maxDate = event.body.end;
                 }
             },
             error: (error) => {
-                if (!this.dialogRef) {
-                    this.dialogRef = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-                    this.dialogRef.componentInstance.setup(error.body.message, () => { this.loadData(); });
-                }
+                let errorModal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+                errorModal.componentInstance.setup(error.body != undefined? error.body.message : "Non è stato possibile prelevare le date di inizio/fine", () => { this.loadData(); });
             }
         });
 
@@ -90,48 +97,30 @@ export class TimeCodeHeaderComponent {
             next: (event) => {
                 if (event instanceof HttpResponse<any>) {
                     this.availableCode = event.body.map((c: any) => { return { id: c.code, text: `${c.code} - ${c.description}` } });
-                    this.selectedCode = this.availableCode[0];
                 }
             },
             error: (error) => {
-                if (!this.dialogRef) {
-                    this.dialogRef = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-                    this.dialogRef.componentInstance.setup(error.body.message, () => { this.loadData(); });
-                }
+                let errorModal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+                errorModal.componentInstance.setup(error.body != undefined? error.body.message : "Non è stato possibile prelevare i codici", () => { this.loadData(); });
             }
         });
-        
-        this.totalByFirmwareService.setValues(new Date(this.startDatetimeValue),new Date(this.endDatetimeValue), this.availableCode[0])
     }
 
     /**
      * Metodo che gestisce il submit del form.
      */
     public submitForm(): void {
-        
+
         this.alert = false;
-        
+
         const startDatetime = this.formGroup.value.startDatetime ? new Date(this.formGroup.value.startDatetime) : null;
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
 
-        /*console.log("INIZIO:");
-        console.log(startDatetime!.getTime());
-        console.log("FINE:");
-        console.log(endDatetime!.getTime());
-        console.log("CODE:");
-        console.log(this.selectedCode[0].id);
-*/
-        if(this.selectedCode[0] != null) {
-            this.totalByFirmwareService.setValues(startDatetime!, endDatetime!, this.selectedCode[0].id);
-            let chart = new PieChartComponent(this.totalByFirmwareService);
-            chart.loadData();
-        }
-        else{
+        if(startDatetime != null && endDatetime != null && this.selectedCode && this.selectedCode[0] != null) {
+            this.totalByFirmwareService.GetTotalByFirmware(startDatetime, endDatetime, this.selectedCode[0].id);
+        } else {
             this.alert=true;
-            
         }
-        
-        
 
     }
 

@@ -1,25 +1,28 @@
 import {Inject, Injectable} from '@angular/core';
-import {HttpClient, HttpEvent, HttpHeaders, HttpRequest, HttpResponse} from "@angular/common/http";
+import {HttpClient, HttpEvent, HttpHeaders, HttpRequest} from "@angular/common/http";
 import {BaseURL} from "../../connection-info";
-import {Observable} from "rxjs";
-import {ErrorModalComponent} from "../../components/error-modal/error-modal.component";
+import {Observable, Subject} from "rxjs";
 
+/**
+ * Servizio per l'ottenimento dal backend di un JSON che rappresenta il numero di occorrenze dell'evento selezionato, comprese nell’intervallo temporale dato, raggruppate per versione firmware
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class TotalByFirmwareService {
 
-  private startDate :any;//= (new Date('2011-05-27T12:00'));
-  private endDate :any;//= (new Date('2025-05-27T12:00'));
-  private code :any;//= "S009";
-
-  public setValues(start: Date, end: Date, code: string){
-    this.startDate = start;
-    this.endDate = end;
-    this.code = code;
-    //console.log(code);
-    //this.GetTotalByFirmware();
-  }
+  /**
+   * Subject per la notifica del component PieChartComponent
+   */
+  public signal: Subject<boolean> = new Subject<boolean>();
+  /**
+   *  Observable per la notifica del component PieChartComponent
+   */
+  public observableSignal: Observable<boolean> = this.signal.asObservable();
+  /**
+   *  Richiesta HTTP per ottenere i dati
+   */
+  public request: Observable<HttpEvent<any>> = new Observable<HttpEvent<any>>();
 
   /**
    * Crea una nuova istanza del service TotalByFirmwareService, i parametri vengono passati tramite dependency injector
@@ -28,17 +31,25 @@ export class TotalByFirmwareService {
    */
   constructor(private http: HttpClient, @Inject(BaseURL) private ConnectionURL: string) { }
 
-  public GetTotalByFirmware(): Observable<HttpEvent<any>> {
+  /**
+   * Metodo che ottiene tramite richesta http un JSON che rappresenta il numero di occorrenze dell'evento selezionato, comprese nell’intervallo temporale dato, raggruppate per versione firmware
+   * @param start Data di inizio
+   * @param end Data di fine
+   * @param code Code dell'evento
+   * @constructor
+   */
+  public GetTotalByFirmware(start: Date, end: Date, code: string): void {
     const headers = new HttpHeaders({
       accept: "*/*"
     });
 
-    const req = new HttpRequest("GET", `${this.ConnectionURL}/data/totalbyfirmware/${this.startDate.toISOString().slice(0, 16)}/${this.endDate.toISOString().slice(0, 16)}/${this.code}`, {
+    const req = new HttpRequest("GET", `${this.ConnectionURL}/data/totalbyfirmware/${start.toISOString().slice(0, 16)}/${end.toISOString().slice(0, 16)}/${code}`, {
       headers: headers,
       responseType: "json"
     });
-    
-    return this.http.request(req);
+
+    this.request = this.http.request(req);
+    this.signal.next(true);
   }
-  
+
 }

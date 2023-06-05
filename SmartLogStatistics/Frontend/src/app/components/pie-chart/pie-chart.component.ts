@@ -2,45 +2,75 @@ import { Component } from '@angular/core';
 import * as d3 from "d3";
 import {TotalByFirmwareService} from "../../services/total-by-firmware/total-by-firmware.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {HttpResponse} from "@angular/common/http";
 import {ErrorModalComponent} from "../error-modal/error-modal.component";
 
+/**
+ * Classe per la rappresentazione dei dati in un grafico a torta
+ */
 @Component({
-  selector: 'app-pie-chart',
-  templateUrl: './pie-chart.component.html',
-  styleUrls: ['./pie-chart.component.css']
+    selector: 'app-pie-chart',
+    templateUrl: './pie-chart.component.html',
+    styleUrls: ['./pie-chart.component.css']
 })
 export class PieChartComponent{
 
-    public data: any[] = [];
+    /**
+     * Dati da rappresentare nel grafico
+     */
+    private data: any[] = [];
 
-    private modalService?: NgbModal;
-
-    constructor(private totalByFirmware: TotalByFirmwareService) {
-        //this.loadData();
-        console.log(this.data);
-    }
-
-    public loadData(): void {
-        this.totalByFirmware.GetTotalByFirmware().subscribe({
-            next: (event) => {
-                if (event instanceof HttpResponse<any>) {
-                    console.log("AAAAAAA");
-                    this.data = event.body.firmwareOccurrences;
-                    console.log(this.data);
-                    this.draw();
-                }
-            },
-            error: (err) => {
-                let modal = this.modalService?.open(ErrorModalComponent, { size: 'sm' });
-                modal?.componentInstance.setup(err.body.message, () => { this.loadData() });
+    /**
+     * Costruisce un oggetto per generare un grafico a torta
+     * @param totalByFirmwareService Servizio che ottiene i dati dal backend
+     * @param modalService Dialog di errore
+     */
+    constructor(private totalByFirmwareService: TotalByFirmwareService, private modalService: NgbModal) {
+        totalByFirmwareService.observableSignal.subscribe(
+            {
+                next: () => {totalByFirmwareService.request.subscribe(
+                    {
+                        next: this.updateData(),
+                        error: this.errorHandler()
+                    }
+                )},
+                error: this.errorHandler()
             }
-        });
+        )
     }
 
+    /**
+     * Genera una funzione per la gestione della richiesta HTTP di ottenimento dei dati
+     * @returns Una funzione per la gestione della richiesta HTTP di ottenimento dei dati
+     */
+    private updateData(): any {
+        return (event: any) => {
+            if(event.body != undefined) {
+                this.data = event.body.firmwareOccurrences;
+                this.draw();
+            }
+        };
+    }
+
+    /**
+     * Genera una funzione per la gestione degli errori sulla richiesta HTTP di ottenimento dei dati
+     * @returns Una funzione per la gestione degli errori sulla richiesta HTTP di ottenimento dei dati
+     */
+    private errorHandler(): any {
+        return (err: any) => {
+            let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+            modal.componentInstance.setup("Non è stato possibile ottenere i dati", () => {
+                this.data = [];
+            });
+        }
+    }
+
+    /**
+     * Metodo per disegnare il grafico
+     * @private
+     */
     private draw(): void {
-        
-        
+
+
         d3.select('#pieChart').selectAll('*').remove();
 
         const width = 1000;
@@ -146,6 +176,12 @@ export class PieChartComponent{
             .style('visibility', 'hidden');
     }
 
+    /**
+     * Metodo per la gestione dell' hovering
+     * @param event Evento di hovering
+     * @param d Dati associati all'elemento in cui si verifica l'hovering
+     * @private
+     */
     private handleMouseOver(event: any, d: any) {
         const currentSlice = d3.select(event.currentTarget);
         currentSlice.style('opacity', 1.0);
@@ -163,6 +199,12 @@ export class PieChartComponent{
             .style('visibility', 'visible');
     }
 
+    /**
+     * Metodo per la gestione del mouseout
+     * @param event Evento di mouseout
+     * @param d Dati associati all'elemento in cui si verifica il mouseout
+     * @private
+     */
     private handleMouseOut(event: any, d: any) {
         const currentSlice = d3.select(event.currentTarget);
         currentSlice.style('opacity', 0.7);
@@ -198,6 +240,12 @@ export class PieChartComponent{
             });
     }
 
+    /**
+     * Metodo per la gestione del click
+     * @param event Evento in cui si effettua il click
+     * @param d Dati associati all'elemento in cui si verifica il click
+     * @private
+     */
     private handleClick(event: any, d: any) {
         const currentSlice = d3.select(event.currentTarget);
         const parentNode = currentSlice.node().parentNode;
