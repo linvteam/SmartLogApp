@@ -12,7 +12,7 @@ import { ErrorModalComponent } from '../error-modal/error-modal.component';
 })
 export class TimeHeaderComponent {
     
-    @Output()submit: EventEmitter<any> = new EventEmitter<any>();
+    @Output() submit: EventEmitter<any> = new EventEmitter<any>();
     /**
      * Data del primo evento presente nel DB
      */

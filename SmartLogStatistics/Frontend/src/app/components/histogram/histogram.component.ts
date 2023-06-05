@@ -44,23 +44,23 @@ export class HistogramComponent implements OnInit{
     this.totalByCodeService = totalByCode;
     this.modalService = modal;
     
-    this.xDomain = [0, Math.max(...this.x)];
+    this.xDomain = [];
     this.xLabel = "N. di occorrenze";
     this.yLabel = "Codici";
     
     this.width = 1500;
-    this.barHeight = 200;
+    this.barHeight = 50;
     
     this.marginTop = 20;
     this.marginRight = 0;
     this.marginBottom = 0;
-    this.marginLeft = 20;
-    this.height = ((this.y.length) * this.barHeight) + this.marginTop + this.marginBottom;
+    this.marginLeft = 100;
     
-    this.yPadding = 0;
+    this.yPadding = 0.1; //valore compreso fra 0 e 1
     
-    this.xRange = [this.marginLeft, this.width - this.marginRight - 2];
-    this.yRange = [this.marginTop, this.barHeight - this.marginBottom];
+    this.height=0;
+    this.xRange=[];
+    this.yRange=[];
     
     
   }
@@ -76,9 +76,19 @@ export class HistogramComponent implements OnInit{
     // this.xScale = d3.scaleOrdinal(this.xDomain, this.xRange);
     this.xDomain = [0, Math.max(...this.x)];
 
+    this.height = ((this.y.length) * this.barHeight) + this.marginTop + this.marginBottom;
+
+    this.xRange = [this.marginLeft, this.width - this.marginRight - 2];
+    this.yRange = [this.marginTop, this.height - this.marginBottom];
+    
     this.xScale = d3.scaleLinear(this.xDomain, this.xRange);
-    this.yScale = d3.scaleBand(this.y, this.yRange).padding(this.yPadding);
-    this.xAxis = d3.axisTop(this.xScale).ticks(this.x.length);
+    this.yScale = d3.scaleBand()
+                    .domain(this.y)
+                    .range(this.yRange)
+                    .padding(this.yPadding);
+
+    const yAxisTicks = this.yScale.ticks(15).filter((tick:any)=> Number.isInteger(tick));
+    this.xAxis = d3.axisTop(this.xScale).tickValues(yAxisTicks).tickFormat(d3.format('d'));
     this.yAxis = d3.axisLeft(this.yScale).tickSizeOuter(0);
 
   
@@ -94,10 +104,10 @@ export class HistogramComponent implements OnInit{
     this.svg.append("g")
         .attr("transform", `translate(0,${this.marginTop})`)
         .call(this.xAxis)
-        .call((g: any) => g.append("text")
-            .attr("x", this.width - this.marginRight)
-            .attr("y", -22)
-            .text(this.xLabel));
+        // .call((g: any) => g.append("text")
+        //     .attr("x", this.width/2)
+        //     .attr("y", 22)
+        //     .text(this.xLabel));
 
 
     this.svg.append("g")
@@ -114,17 +124,19 @@ export class HistogramComponent implements OnInit{
 
     this.svg.append("g")
         .attr("transform", `translate(${this.marginLeft},0)`)
-        .call(this.yAxis);
+        .call(this.yAxis)
+          .style('font-size', '17px')
+          .style('font-weight', 'bold');
     
   }
 
   private updateData(): any {
     return (event: any) => {
       if(event.body != undefined) {
-        // this.x = event.body.codeOccurences.map((l: any) => l.code);
-        // this.y = event.body.codeOccurences.map((l: any) => l.eventOccurrences);
-        this.x = [3,7,2,4,6,3,4,15];
-        this.y = ["A","B","C","D","E","F","G","H"];
+        this.y = event.body.codeOccurences.map((l: any) => l.code);
+        this.x = event.body.codeOccurences.map((l: any) => l.eventOccurrences);
+        // this.x = [3,7,2,4,6,3,4,15];
+        // this.y = ["A","B","C","D","E","F","G","H"];
         this.drawChart();
       }
     };
