@@ -25,7 +25,7 @@
     margin: 3em;
 }
 
-#fileNumber-header, #maxEvents-header, #averageEvents-header, #standardDeviation-header {
+th {
     border-bottom: 1px solid #babfc7;
     background-color: #fcfcfc;
     max-width: 50px;
