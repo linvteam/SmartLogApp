@@ -1,4 +1,14 @@
 
 <app-regroup-header></app-regroup-header>
 
-<p>event-table works!</p>
+<div class="table-container">
+    <ag-grid-angular
+            class="ag-theme-alpine"
+            [rowData]="rowData"
+            [columnDefs]="columnDefs"
+            [defaultColDef]="defaultColDef"
+            [rowSelection]="'multiple'"
+            [animateRows]="true"
+            (gridReady)="onGridReady($event)">
+    </ag-grid-angular>
+</div>
