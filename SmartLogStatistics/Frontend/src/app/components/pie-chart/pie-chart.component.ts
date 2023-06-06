@@ -98,7 +98,7 @@ export class PieChartComponent{
         slice.append('path')
             .attr('d', arcGenerator)
             .style('fill', (d: any, i: number) => {
-                if (dataReady.length === colors.length + 1 && i === dataReady.length - 1) {
+                if (dataReady.length % colors.length === 1 && i === dataReady.length - 1) {
                     return colors[1];
                 } else {
                     return colors[i % colors.length];
