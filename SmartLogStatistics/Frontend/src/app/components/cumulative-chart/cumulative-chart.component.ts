@@ -49,7 +49,7 @@ export class CumulativeChartComponent {
     /**
      * I dati da visualizzare nel grafico
      */
-    private records: any[] = [];
+    public records: any[] = [];
 
     /**
      * Il grafico da disegnare a schermo
