@@ -63,7 +63,7 @@ export class PieChartComponent{
 
         const width = 1000;
         const height = 700;
-        const radius = (Math.min(width, height) / 2) - 50; //i 50 px hard-coded servono per non far tagliare il grafico e le etichette
+        const radius = (Math.min(width, height) / 2) - 80; //gli 80 px hard-coded servono per non far tagliare il grafico e le etichette
 
         const svg = d3.select('#pieChart')
             .append('svg')
