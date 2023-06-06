@@ -82,11 +82,9 @@ export class EventTableComponent {
    * @param value Valore emesso dall'evento proveniente dal form di header
    */
   public onSubmit(value: any) {
-    if(value.startDatetime != null && value.endDatetime != null && value.regroups != null){
-      this.frequencyService.GetTotalByFrequency(value.startDatetime, value.endDatetime, value.regroups).subscribe({
-        next:this.updateData(),
-        error: this.errorHandler()
-      });
-    }
+    this.frequencyService.GetTotalByFrequency(value.startDatetime, value.endDatetime, value.regroups).subscribe({
+      next:this.updateData(),
+      error: this.errorHandler()
+    });
   }
 }

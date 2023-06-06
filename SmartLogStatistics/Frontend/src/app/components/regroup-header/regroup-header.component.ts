@@ -58,7 +58,7 @@ export class RegroupHeaderComponent {
     /**
      * Enitter dei dati del form
      */
-    @Output() submit: EventEmitter<any> = new EventEmitter<any>();
+    @Output() submitEmitter: EventEmitter<any> = new EventEmitter<any>();
 
     /**
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale e dei campi per il raggruppamento
@@ -106,7 +106,7 @@ export class RegroupHeaderComponent {
         };
         
         if(startDatetime != null && endDatetime != null) {
-            this.submit.emit({startDatetime, endDatetime, regroups});
+            this.submitEmitter.emit({startDatetime, endDatetime, regroups});
         } else {
             let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
             modal.componentInstance.setup("Inserisci tutti i dati richiesti.");
