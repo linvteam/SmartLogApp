@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {TotalByCodeService} from "../../services/total-by-code/total-by-code.service";
 import * as d3 from "d3";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -45,7 +45,7 @@ export class HistogramComponent implements OnInit{
 
     
   constructor(private totalByCode: TotalByCodeService, private modal: NgbModal) {
-    this.sortForm = new FormGroup({sortSelection: new FormControl()});
+    this.sortForm = new FormGroup({sortSelection: new FormControl("0")});
     this.x = [];
     this.y = [];
     this.totalByCodeService = totalByCode;
@@ -73,6 +73,7 @@ export class HistogramComponent implements OnInit{
   }
   
   ngOnInit(): void {
+      
   }
   
   drawChart(): void{
@@ -122,17 +123,36 @@ export class HistogramComponent implements OnInit{
         //     .text(this.xLabel));
 
 
-    this.svg.append("g")
-        .attr("fill", "#04e")
-        .selectAll("rect")
-        .data(d3.range(this.x.length))
-        .join("rect")
-        .attr("x", this.xScale(0))
-        .attr("y", (i: number) => this.yScale(this.y[i]))
-        .attr("width", (i: number) => this.xScale(this.x[i]) - this.xScale(0))
-        .attr("height", this.yScale.bandwidth());
+    // this.svg.append("g")
+    //     .attr("fill", "#04e")
+    //     .selectAll("rect")
+    //     .data(d3.range(this.x.length))
+    //     .join("rect")
+    //     .attr("x", this.xScale(0))
+    //     .attr("y", (i: number) => this.yScale(this.y[i]))
+    //     .attr("width", (i: number) => this.xScale(this.x[i]) - this.xScale(0))
+    //     .attr("height", this.yScale.bandwidth());
+
+      this.svg.append("g")
+          .attr("fill", "#04e")    .selectAll("path")
+          .data(d3.range(this.x.length))    .join("path")
+          .attr("d", (i: number) => {      
+                const x = this.xScale(0);
+                const y = this.yScale(this.y[i]);      
+                const width = this.xScale(this.x[i]) - this.xScale(0);
+                const height = this.yScale.bandwidth();      
+                const radius = 5; // Adjust the radius as needed
+                return `  M ${x},${y}
+                          H ${x + width - radius}    
+                          Q ${x + width},${y} ${x + width},${y + radius}
+                          V ${y + height - radius}    
+                          Q ${x + width},${y + height} ${x + width - radius},${y + height}
+                          H ${x}    V ${y} Z  `;
+          })
+          .style("opacity", 0.8);
     
-    
+      
+      
     this.svg.append("g")
         .attr("fill", "#fff")
         .attr("text-anchor", "end")
@@ -158,6 +178,7 @@ export class HistogramComponent implements OnInit{
         .call(this.yAxis)
           .style('font-size', '17px')
           .style('font-weight', 'bold');
+
     
   }
 
@@ -197,8 +218,6 @@ export class HistogramComponent implements OnInit{
 
   protected sortValues() {
     const type = this.sortForm.value.sortSelection;
-    console.log(this.sortForm.value.sortSelection);
-    console.log(type);
     
     if(type==0){
       this.x = [...this.xOriginal];

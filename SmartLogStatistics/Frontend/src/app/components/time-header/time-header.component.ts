@@ -12,7 +12,7 @@ import { ErrorModalComponent } from '../error-modal/error-modal.component';
 })
 export class TimeHeaderComponent {
     
-    @Output() submit: EventEmitter<any> = new EventEmitter<any>();
+    @Output() customEmitter: EventEmitter<any> = new EventEmitter<any>();
     /**
      * Data del primo evento presente nel DB
      */
@@ -75,7 +75,7 @@ export class TimeHeaderComponent {
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
 
         if(startDatetime != null && endDatetime != null){
-            this.submit.emit({startDatetime, endDatetime});
+            this.customEmitter.emit({startDatetime, endDatetime});
         }
 
     }

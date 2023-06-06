@@ -22,7 +22,6 @@ label[for="sort-tab-opener"]{
     display: block;
     height: 3vh;
     width: 4vw;
-    background-color: blue;
     top:0;
     transition: 1s;
     color:white;
@@ -30,7 +29,12 @@ label[for="sort-tab-opener"]{
     border-bottom-left-radius:15px;
     text-align: center;
     font-size: 1vw;
-    
+    cursor: pointer;
+    background-color: #0d6efd;
+}
+
+label[for="sort-tab-opener"]:hover{
+    background-color: #0b5ed7;
 }
 
 
