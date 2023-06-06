@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TotalByCodeService} from "../../services/total-by-code/total-by-code.service";
 import * as d3 from "d3";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -11,51 +11,164 @@ import {FormControl, FormGroup} from "@angular/forms";
   styleUrls: ['./histogram.component.css']
 })
 export class HistogramComponent implements OnInit{
-  
-  protected x: any;
-  private y: any;
-  private xOriginal: any;
-  private yOriginal: any;
+
+  /**
+   * Variabile contenente i valori della frequenza dei vari codici
+   * @protected
+   */
+  protected x: number[];
+
+  /**
+   * Variabile contenente i nomi dei vari codici
+   * @private
+   */
+  private y: string[];
+
+  /**
+   * Variabile che contiene l'ordine originale dei dati della frequenza
+   * per utilizzarla quando non si usa nessun ordinamento
+   * @private
+   */
+  private xOriginal: number[];
+
+  /**
+   * Variabile che contiene l'ordine originale dei codici
+   * per utilizzarla quando non si usa nessun ordinamento
+   * @private
+   */
+  private yOriginal: string[];
+
+  /**
+   * Minimo (0) e massimo delle frequenza
+   * @private
+   */
   private xDomain: any;
-  private xLabel: string;
-  private yLabel: string;
-  private width: number;
-  private barHeight: number;
+
+  /**
+   * Larghezza totale dell'svg
+   * @private
+   */
+  private readonly width: number;
+
+  /**
+   * Spessore di ogni singola barra
+   * @private
+   */
+  private readonly barHeight: number;
+
+  /**
+   * Il service che fornisce i dati
+   * @private
+   */
   private totalByCodeService: TotalByCodeService;
+
+  /**
+   * Il dialog che serve per segnalare errori
+   * @private
+   */
   private modalService: NgbModal;
-  
-  private marginTop: number;
-  private marginRight: number;
-  private marginBottom: number;
-  private marginLeft: number;
-  
+
+  /**
+   * Margine superiore dell'svg
+   * @private
+   */
+  private readonly marginTop: number;
+
+  /**
+   * Margine destro dell'svg
+   * @private
+   */
+  private readonly marginRight: number;
+
+  /**
+   * Margine inferiore dell'svg
+   * @private
+   */
+  private readonly marginBottom: number;
+
+  /**
+   * Margine sinistro dell'svg
+   * @private
+   */
+  private readonly marginLeft: number;
+
+  /**
+   * Scala per posizionare i valori rispetto all'asse orizzontale
+   * @private
+   */
   private xScale: any;
+
+  /**
+   * Scala per posizionare i codici sull'asse verticale
+   * @private
+   */
   private yScale: any;
-  private yPadding: number;
-  
+
+  /**
+   * Distanza fra una barra e l'altra.
+   * Importante: È un valore compreso fra 0 e 1 in modo da rappresentare una percentuale
+   * @private
+   */
+  private readonly yPadding: number;
+
+  /**
+   * Range di valori presenti sull'asse x
+   * @private
+   */
   private xRange: number[];
+
+  /**
+   * Altezza totale dell'svg
+   * @private
+   */
   private height: number;
+
+  /**
+   * Range di valori dell'asse y
+   * @private
+   */
   private yRange: number[];
+
+  /**
+   * L'effettivo asse x
+   * @private
+   */
   private xAxis: any;
+
+  /**
+   * L'effettivo asse y
+   * @private
+   */
   private yAxis: any;
 
+  /**
+   * L'effettivo svg
+   * @private
+   */
   private svg: any;
-  
+
+  /**
+   * Il form group contenente il form di ordinamento dei dati
+   * @protected
+   */
   protected sortForm: any;
   
-  private colorList: string[];
-
-    
+  /**
+   * Costruisce il componente inizializzando le variabili utili a stabilire le dimensioni 
+   * delle varie parti del grafico
+   * @param totalByCode il service per ottenere i dati dall'API
+   * @param modal il pop-up per segnalare un errore nel fetch dei dati dall'API
+   */
   constructor(private totalByCode: TotalByCodeService, private modal: NgbModal) {
     this.sortForm = new FormGroup({sortSelection: new FormControl("0")});
     this.x = [];
     this.y = [];
+    this.xOriginal = [];
+    this.yOriginal = [];
     this.totalByCodeService = totalByCode;
     this.modalService = modal;
     
     this.xDomain = [];
-    this.xLabel = "N. di occorrenze";
-    this.yLabel = "Codici";
     
     this.width = 1500;
     this.barHeight = 50;
@@ -73,13 +186,16 @@ export class HistogramComponent implements OnInit{
     
     // this.colorList = ["#D169F0","#68B1F7","#69E17F","#F7E568","#ED8F64"];
     // this.colorList = ["#602AEB","#3A24F2","#2C37DB","#2455F2","#2F7BEB"];
-    this.colorList = [];
   }
   
   ngOnInit(): void {
       
   }
-  
+
+  /**
+   * Metodo che imposta i valori necessari a disegnare il grafico secondo i dati attuali
+   * e lo disegna
+   */
   drawChart(): void{
 
     this.deleteChart();
@@ -120,22 +236,6 @@ export class HistogramComponent implements OnInit{
         .call(this.xAxis)
           .style('font-size', '17px')
           .style('font-weight', 'bold');
-    
-        // .call((g: any) => g.append("text")
-        //     .attr("x", this.width/2)
-        //     .attr("y", 22)
-        //     .text(this.xLabel));
-
-
-    // this.svg.append("g")
-    //     .attr("fill", "#04e")
-    //     .selectAll("rect")
-    //     .data(d3.range(this.x.length))
-    //     .join("rect")
-    //     .attr("x", this.xScale(0))
-    //     .attr("y", (i: number) => this.yScale(this.y[i]))
-    //     .attr("width", (i: number) => this.xScale(this.x[i]) - this.xScale(0))
-    //     .attr("height", this.yScale.bandwidth());
 
     
       const seed =Math.random()*360;

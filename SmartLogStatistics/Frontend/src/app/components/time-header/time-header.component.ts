@@ -11,8 +11,12 @@ import { ErrorModalComponent } from '../error-modal/error-modal.component';
     styleUrls: ['./time-header.component.css']
 })
 export class TimeHeaderComponent {
-    
+
+    /**
+     * Variabile che serve ad emettere eventi manualmente quando vengono ottenuti valori dal submit del form
+     */
     @Output() customEmitter: EventEmitter<any> = new EventEmitter<any>();
+    
     /**
      * Data del primo evento presente nel DB
      */
@@ -41,6 +45,8 @@ export class TimeHeaderComponent {
     /**
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale
      * @param formBuilder Servizio di gestione dei form
+     * @param infoRepository Service che ottiene le Info per inizializzare il form
+     * @param modalService Servizio per generare il modal utile a segnalare gli errori comunicati dalle API
      */
     constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal) {
         this.loadData();

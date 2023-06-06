@@ -1,5 +1,5 @@
 import {Inject, Injectable} from '@angular/core';
-import {Observable, Subject} from "rxjs";
+import {Observable} from "rxjs";
 import {HttpClient, HttpEvent, HttpHeaders, HttpRequest} from "@angular/common/http";
 import {BaseURL} from "../../connection-info";
 import {formatDate, registerLocaleData} from "@angular/common";
@@ -18,7 +18,7 @@ export class TotalByCodeService {
   constructor(private http: HttpClient, @Inject(BaseURL) private ConnectionURL: string) { }
 
   /**
-   * Metodo che ottiene le statistiche comprese tra il lower bound e l'upper bound dell'intervallo di ricerca
+   * Metodo che ottiene una lista di codici con le relative frequenze
    * @param start Lower bound dell'intervallo di ricerca
    * @param end Upper bound dell'intervallo di ricerca
    */
