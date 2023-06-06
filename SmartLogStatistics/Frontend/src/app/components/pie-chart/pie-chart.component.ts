@@ -58,7 +58,6 @@ export class PieChartComponent{
      */
     private draw(): void {
 
-
         d3.select('#pieChart').selectAll('*').remove();
 
         const width = 1000;
@@ -75,6 +74,10 @@ export class PieChartComponent{
         const pieGenerator = d3.pie<any>().value((d: any) => d.eventOccurrences);
         const dataReady = pieGenerator(this.data);
 
+        dataReady.sort((a: any, b: any) => {
+            return b.data.eventOccurrences - a.data.eventOccurrences;
+        });
+
         const arcGenerator = d3.arc<any>()
             .innerRadius(0)
             .outerRadius(radius);
@@ -87,6 +90,8 @@ export class PieChartComponent{
             .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"]);
 
 
+        const colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"];
+        
         svg.selectAll('whatever')
             .data(dataReady)
             .enter()
@@ -116,7 +121,13 @@ export class PieChartComponent{
 
         slice.append('path')
             .attr('d', arcGenerator)
-            .style('fill', (d: any, i: number) => `url(#gradient-${i})`)
+            .style('fill', (d: any, i: number) => {
+                if (dataReady.length === colors.length + 1 && i === dataReady.length - 1) {
+                    return colors[1];
+                } else {
+                    return colors[i % colors.length];
+                }
+            })
             .attr('stroke', 'black')
             .style('stroke-width', '2px')
             .style('opacity', 0.7)
@@ -151,7 +162,7 @@ export class PieChartComponent{
                 const centroid = labelArc.centroid(d);
                 const midAngle = Math.atan2(centroid[1], centroid[0]);
                 const labelX = Math.cos(midAngle) * (radius + 40);
-                const labelY = Math.sin(midAngle) * (radius + 40) + 16; // Adjust the y position for percentage
+                const labelY = Math.sin(midAngle) * (radius + 40) + 16;
                 return `translate(${labelX},${labelY})`;
             })
             .style('text-anchor', (d: any) => {
