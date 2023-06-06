@@ -58,10 +58,9 @@ th {
     color: white;
     pointer-events: none;
     padding: .75em;
-    top: calc(100% + 7px);
+    right: calc(100% + 10px);
+    top: -50px;
     border-radius: 10px;
-    left: 50%;
-    transform: translateX(-50%);
   }
 
   th:hover span.CellComment::before {
@@ -70,8 +69,8 @@ th {
     height: 10px;
     transform: translateX(-50%) rotate(45deg);
     background: #191919fa;
-    left: 50%;
-    top: -5px;
+    right: -10px;
+    top: 80px;
     position: absolute;
     display: block;
   }
