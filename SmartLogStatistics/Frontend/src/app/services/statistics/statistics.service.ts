@@ -1,6 +1,6 @@
 import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { BaseURL } from '../../connection-info';
 import { formatDate, registerLocaleData } from "@angular/common";
 import localeIT from "@angular/common/locales/it"

@@ -47,7 +47,6 @@ export class TimeHeaderComponent {
      * @param formBuilder Servizio di gestione dei form
      * @param infoRepository Servizio per ottenere le informazioni dal database
      * @param modalService Servizio che si occupa di gestire i modal di bootstrap
-     * @param statisticsService Servizio che si occupa di ottenere le statistiche
      */
     constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal) {
         this.loadData();
