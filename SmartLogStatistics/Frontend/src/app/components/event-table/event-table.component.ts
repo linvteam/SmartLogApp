@@ -33,7 +33,8 @@ export class EventTableComponent {
   public defaultColDef: ColDef = {
     resizable: true,
     sortable: true,
-    filter: true
+    filter: true,
+    flex: 1
   }
 
   /**
@@ -51,6 +52,10 @@ export class EventTableComponent {
   private updateData(): any {
     return (event: any) => {
       if(event.body != undefined) {
+        this.columnDefs = event.body.groupBy.map((i:string) => {
+          return {field: i};
+        });
+        this.columnDefs.push({ field: 'frequency' });
         this.rowData = event.body.events;
       }
     };
@@ -67,14 +72,6 @@ export class EventTableComponent {
         this.rowData = [];
       });
     }
-  }
-  
-  /**
-   * Metodo che gestisce l'evento gridReady emesso dalla tabella
-   * @param params Parametri dell'evento
-   */
-  public onGridReady(params: any): void {
-    params.api.sizeColumnsToFit();
   }
 
   /**
