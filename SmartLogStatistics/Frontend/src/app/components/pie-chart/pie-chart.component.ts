@@ -84,13 +84,8 @@ export class PieChartComponent{
             .outerRadius(radius * 0.6);
 
         const color = d3.scaleOrdinal()
-            .range(["#98abc5",
-                "#8a89a6",
-                "#7b6888",
-                "#6b486b",
-                "#a05d56",
-                "#d0743c",
-                "#ff8c00"]);
+            .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"]);
+
 
         svg.selectAll('whatever')
             .data(dataReady)
