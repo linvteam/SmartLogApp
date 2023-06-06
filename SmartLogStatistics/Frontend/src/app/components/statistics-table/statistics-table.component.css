@@ -1,0 +1,87 @@
+#statistics-table {
+    border: 1px solid #babfc7;
+    border-bottom: none;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#statistics-table th {
+    background-color: #f8f8f8;
+    border-right: 1px solid #babfc7;
+}
+
+#statistics-table td, #statistics-table th {
+    padding: 0.75em;
+}
+
+.textCenter {
+    text-align: center;
+    font-size: 1.2em;
+}
+
+#statistics {
+    width: 90%;
+    height: 100%;
+    margin: 3em;
+}
+
+th {
+    border-bottom: 1px solid #babfc7;
+    background-color: #fcfcfc;
+    max-width: 50px;
+}
+
+#fileNumber, #maxEvents, #averageEvents {
+    border-bottom: 1px solid #dde2eb;
+    max-width: 50px;
+}
+
+#standardDeviation {
+    border-bottom: 1px solid #babfc7;
+    max-width: 50px;
+}
+  
+#statistics-table th{
+    position:relative;
+  }
+  
+  .CellComment{
+    display:none;
+  }
+  
+  th:hover span.CellComment{
+    display:block;
+    position: absolute;
+    z-index: 100;
+    max-width: calc(100% - 1.5em);
+    background: #191919fa;
+    color: white;
+    pointer-events: none;
+    padding: 0.75em;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    bottom: -50px;
+    border-radius: 10px;
+  }
+
+  th:hover span.CellComment::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    transform: translateX(-50%) rotate(45deg);
+    background: #191919fa;
+    top: -5px;
+    left: 50%;
+    position: absolute;
+    display: block;
+  }
+
+  span.CellComment {
+    font-size: 0.8em;
+    font-weight: normal;
+  }
+  
+  #maxEvents, #standardDeviation{
+      background-color: #fcfcfc;
+  }
