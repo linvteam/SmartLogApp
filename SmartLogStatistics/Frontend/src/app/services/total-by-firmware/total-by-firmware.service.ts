@@ -12,19 +12,6 @@ import {Observable, Subject} from "rxjs";
 export class TotalByFirmwareService {
 
   /**
-   * Subject per la notifica del component PieChartComponent
-   */
-  public signal: Subject<boolean> = new Subject<boolean>();
-  /**
-   *  Observable per la notifica del component PieChartComponent
-   */
-  public observableSignal: Observable<boolean> = this.signal.asObservable();
-  /**
-   *  Richiesta HTTP per ottenere i dati
-   */
-  public request: Observable<HttpEvent<any>> = new Observable<HttpEvent<any>>();
-
-  /**
    * Crea una nuova istanza del service TotalByFirmwareService, i parametri vengono passati tramite dependency injector
    * @param http Il client http che si occupa di effettuare l'upload
    * @param ConnectionURL URL del backend
@@ -38,7 +25,7 @@ export class TotalByFirmwareService {
    * @param code Code dell'evento
    * @constructor
    */
-  public GetTotalByFirmware(start: Date, end: Date, code: string): void {
+  public GetTotalByFirmware(start: Date, end: Date, code: string): Observable<HttpEvent<any>> {
     const headers = new HttpHeaders({
       accept: "*/*"
     });
@@ -48,8 +35,7 @@ export class TotalByFirmwareService {
       responseType: "json"
     });
 
-    this.request = this.http.request(req);
-    this.signal.next(true);
+    return this.http.request(req);
   }
 
 }

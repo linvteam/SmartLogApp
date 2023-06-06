@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import { FormBuilder, FormControl } from "@angular/forms";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
@@ -50,10 +50,6 @@ export class TimeCodeHeaderComponent {
         searchPlaceholderText: "Cerca eventi"
     }
     /**
-     * Variabile che indica se mostrare o no l'alert di inserimento dei dati
-     */
-    public alert: boolean = false;
-    /**
      * Gestore del form
      */
     formGroup = this.formBuilder.group({
@@ -61,15 +57,18 @@ export class TimeCodeHeaderComponent {
         endDatetime: '1',
         code: new FormControl()
     });
-
+    /**
+     * Enitter dei dati del form
+     */
+    @Output() submit: EventEmitter<any> = new EventEmitter<any>();
+    
     /**
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale e dei Code
      * @param formBuilder Servizio di gestione dei form
      * @param infoRepository Servizio per ottenere le informazioni dal database
      * @param modalService Servizio che si occupa di gestire i modal di bootstrap
-     * @param totalByFirmwareService Servizio che si occupa di ottenere le informazioni sui firmware per evento
      */
-    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal, private totalByFirmwareService: TotalByFirmwareService) {
+    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal) {
         this.loadData();
     }
 
@@ -111,15 +110,15 @@ export class TimeCodeHeaderComponent {
      */
     public submitForm(): void {
 
-        this.alert = false;
-
         const startDatetime = this.formGroup.value.startDatetime ? new Date(this.formGroup.value.startDatetime) : null;
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
 
         if(startDatetime != null && endDatetime != null && this.selectedCode && this.selectedCode[0] != null) {
-            this.totalByFirmwareService.GetTotalByFirmware(startDatetime, endDatetime, this.selectedCode[0].id);
+            let selectedCode = this.selectedCode[0].id;
+            this.submit.emit({startDatetime, endDatetime, selectedCode});
         } else {
-            this.alert=true;
+            let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+            modal.componentInstance.setup("Inserisci tutti i dati richiesti.");
         }
 
     }

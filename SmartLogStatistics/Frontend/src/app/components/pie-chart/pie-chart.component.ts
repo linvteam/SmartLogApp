@@ -24,19 +24,7 @@ export class PieChartComponent{
      * @param totalByFirmwareService Servizio che ottiene i dati dal backend
      * @param modalService Dialog di errore
      */
-    constructor(private totalByFirmwareService: TotalByFirmwareService, private modalService: NgbModal) {
-        totalByFirmwareService.observableSignal.subscribe(
-            {
-                next: () => {totalByFirmwareService.request.subscribe(
-                    {
-                        next: this.updateData(),
-                        error: this.errorHandler()
-                    }
-                )},
-                error: this.errorHandler()
-            }
-        )
-    }
+    constructor(private totalByFirmwareService: TotalByFirmwareService, private modalService: NgbModal) {  }
 
     /**
      * Genera una funzione per la gestione della richiesta HTTP di ottenimento dei dati
@@ -275,6 +263,19 @@ export class PieChartComponent{
         });
     }
 
+    /**
+     * Metodo che gestisce il submit del form 
+     * @param value Valore emesso dall'evento proveniente dal form di header
+     */
+    public onSubmit(value: any) {
+        if(value.startDatetime != null && value.endDatetime != null && value.selectedCode != null){
+            this.totalByFirmwareService.GetTotalByFirmware(value.startDatetime, value.endDatetime, value.selectedCode).subscribe({
+                next:this.updateData(),
+                error: this.errorHandler()
+            });
+        }
+    }
+    
 }
 
 
