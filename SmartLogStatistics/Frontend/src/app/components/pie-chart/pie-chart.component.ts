@@ -86,31 +86,7 @@ export class PieChartComponent{
             .innerRadius(radius * 0.6)
             .outerRadius(radius * 0.6);
 
-        const color = d3.scaleOrdinal()
-            .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"]);
-
-
         const colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"];
-        
-        svg.selectAll('whatever')
-            .data(dataReady)
-            .enter()
-            .append('linearGradient')
-            .attr('id', (d: any, i: number) => `gradient-${i}`)
-            .attr('gradientUnits', 'userSpaceOnUse')
-            .attr('x1', 0)
-            .attr('y1', 0)
-            .attr('x2', 0)
-            .attr('y2', 0)
-            .selectAll('stop')
-            .data((d: any) => [
-                {offset: '0%', color: color(d.data.firmware)},
-                {offset: '100%', color: '#ffffff'}
-            ])
-            .enter()
-            .append('stop')
-            .attr('offset', (d: any) => d.offset)
-            .attr('stop-color', (d: any) => d.color);
 
         const slice = svg.selectAll('.arc')
             .data(dataReady)
