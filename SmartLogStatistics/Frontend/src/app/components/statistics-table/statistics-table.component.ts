@@ -74,12 +74,10 @@ export class StatisticsTableComponent {
    * @param event Evento proveniente dal form di header (scelta dell'intervallo di cui ottenere le statistiche)
    */
   public onSubmit(event: any): void {
-    if(event.startDatetime != undefined && event.endDatetime != null) {
-      this.statisticsService.GetStatistics(event.startDatetime, event.endDatetime).subscribe({
+      this.statisticsService.GetStatistics(new Date(event.startDatetime), new Date(event.endDatetime)).subscribe({
         next: this.updateData(),
         error: this.errorHandler()
       });
-    } 
   }
 
 }

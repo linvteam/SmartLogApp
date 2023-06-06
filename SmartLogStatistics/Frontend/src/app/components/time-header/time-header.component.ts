@@ -15,7 +15,7 @@ export class TimeHeaderComponent {
     /**
      * Segnale per indicare che è avvenuto il submit
      */
-    @Output() submit: EventEmitter<any> = new EventEmitter<any>();
+    @Output() submitEmitter: EventEmitter<any> = new EventEmitter<any>();
     
     /**
      * Data del primo evento presente nel DB
@@ -55,7 +55,6 @@ export class TimeHeaderComponent {
 
     /**
      * Ottiene i valori minimi, massimi e di default da poter inserire nelle date
-     * @private
      */
     private loadData() : void{
         this.infoRepository.GetTimeInterval().subscribe({
@@ -82,7 +81,7 @@ export class TimeHeaderComponent {
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
 
         if(startDatetime != null && endDatetime != null) {
-            this.submit.emit({startDatetime, endDatetime});
+            this.submitEmitter.emit({startDatetime, endDatetime});
         } else {
             let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
             modal.componentInstance.setup("Le date di inizio/fine hanno valore nullo");
