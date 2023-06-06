@@ -24,7 +24,7 @@ export class EventTableComponent {
     { field: 'firmware' },
     { field: 'unit' },
     { field: 'subUnit'},
-    { field: 'frequency' },
+    { field: 'frequency', headerName: 'Frequency %' },
   ];
 
   /**
@@ -55,8 +55,10 @@ export class EventTableComponent {
         this.columnDefs = event.body.groupBy.map((i:string) => {
           return {field: i};
         });
-        this.columnDefs.push({ field: 'frequency' });
-        this.rowData = event.body.events;
+        this.columnDefs.push({ field: 'frequency' , headerName: 'Frequency %'});
+        this.rowData = event.body.events.map((event: any) => {
+          return {...event, frequency: event.frequency * 100};
+        });
       }
     };
   }
