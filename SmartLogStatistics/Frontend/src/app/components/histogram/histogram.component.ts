@@ -42,6 +42,8 @@ export class HistogramComponent implements OnInit{
   private svg: any;
   
   protected sortForm: any;
+  
+  private colorList: string[];
 
     
   constructor(private totalByCode: TotalByCodeService, private modal: NgbModal) {
@@ -69,7 +71,9 @@ export class HistogramComponent implements OnInit{
     this.xRange=[];
     this.yRange=[];
     
-    
+    // this.colorList = ["#D169F0","#68B1F7","#69E17F","#F7E568","#ED8F64"];
+    // this.colorList = ["#602AEB","#3A24F2","#2C37DB","#2455F2","#2F7BEB"];
+    this.colorList = [];
   }
   
   ngOnInit(): void {
@@ -133,8 +137,11 @@ export class HistogramComponent implements OnInit{
     //     .attr("width", (i: number) => this.xScale(this.x[i]) - this.xScale(0))
     //     .attr("height", this.yScale.bandwidth());
 
+    
+      const seed =Math.random()*360;
       this.svg.append("g")
-          .attr("fill", "#04e")    .selectAll("path")
+          // .attr("fill", "#04e")
+          .selectAll("path")
           .data(d3.range(this.x.length))    .join("path")
           .attr("d", (i: number) => {      
                 const x = this.xScale(0);
@@ -149,12 +156,13 @@ export class HistogramComponent implements OnInit{
                           Q ${x + width},${y + height} ${x + width - radius},${y + height}
                           H ${x}    V ${y} Z  `;
           })
+          .attr("fill", (d: any, i:number) => `hsl(${seed+(i*137.51)}deg 50% 50%)`) 
           .style("opacity", 0.8);
     
       
       
     this.svg.append("g")
-        .attr("fill", "#fff")
+        .attr("fill", "#000")
         .attr("text-anchor", "end")
         .attr("font-family", "sans-serif")
         .attr("font-size", 17)
