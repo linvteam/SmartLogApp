@@ -56,7 +56,7 @@ export class RegroupHeaderComponent {
         regroup: new FormControl()
     });
     /**
-     * Enitter dei dati del form
+     * Emitter dei dati del form
      */
     @Output() submitEmitter: EventEmitter<any> = new EventEmitter<any>();
 
