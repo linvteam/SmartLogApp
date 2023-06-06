@@ -74,7 +74,7 @@ export class RegroupHeaderComponent {
             },
             error: (error) => {
                 let ref = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-                ref.componentInstance.setup(error.error.message, () => { this.loadData() });
+                ref.componentInstance.setup(error.body != undefined? error.body.message : "Non è stato possibile prelevare le date di inizio/fine o i campi da raggruppare", () => { this.loadData() });
             }
         });
     }

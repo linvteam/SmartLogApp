@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import {Component, EventEmitter, Output} from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder } from "@angular/forms";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
@@ -13,9 +13,9 @@ import { ErrorModalComponent } from '../error-modal/error-modal.component';
 export class TimeHeaderComponent {
 
     /**
-     * Variabile che serve ad emettere eventi manualmente quando vengono ottenuti valori dal submit del form
+     * Segnale per indicare che è avvenuto il submit
      */
-    @Output() customEmitter: EventEmitter<any> = new EventEmitter<any>();
+    @Output() submitEmitter: EventEmitter<any> = new EventEmitter<any>();
     
     /**
      * Data del primo evento presente nel DB
@@ -45,8 +45,8 @@ export class TimeHeaderComponent {
     /**
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale
      * @param formBuilder Servizio di gestione dei form
-     * @param infoRepository Service che ottiene le Info per inizializzare il form
-     * @param modalService Servizio per generare il modal utile a segnalare gli errori comunicati dalle API
+     * @param infoRepository Servizio per ottenere le informazioni dal database per inizializzare il form
+     * @param modalService Servizio che si occupa di gestire i modal di bootstrap
      */
     constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal) {
         this.loadData();
@@ -54,7 +54,6 @@ export class TimeHeaderComponent {
 
     /**
      * Ottiene i valori minimi, massimi e di default da poter inserire nelle date
-     * @private
      */
     private loadData() : void{
         this.infoRepository.GetTimeInterval().subscribe({
@@ -67,7 +66,7 @@ export class TimeHeaderComponent {
                 }
             }, error: (err) => {
                 let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-                modal.componentInstance.setup(err.body.message, () => { this.loadData() });
+                modal.componentInstance.setup(err.body != undefined? err.body.message : "Non è stato possibile prelevare le date di inizio/fine", () => { this.loadData() });
             }
         });
     }
@@ -80,8 +79,11 @@ export class TimeHeaderComponent {
         const startDatetime = this.formGroup.value.startDatetime ? new Date(this.formGroup.value.startDatetime) : null;
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
 
-        if(startDatetime != null && endDatetime != null){
-            this.customEmitter.emit({startDatetime, endDatetime});
+        if(startDatetime != null && endDatetime != null) {
+            this.submitEmitter.emit({startDatetime, endDatetime});
+        } else {
+            let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+            modal.componentInstance.setup("Le date di inizio/fine hanno valore nullo");
         }
 
     }
