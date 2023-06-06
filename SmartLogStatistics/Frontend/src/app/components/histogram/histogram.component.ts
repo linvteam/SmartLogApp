@@ -3,6 +3,7 @@ import {TotalByCodeService} from "../../services/total-by-code/total-by-code.ser
 import * as d3 from "d3";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ErrorModalComponent} from "../error-modal/error-modal.component";
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-histogram',
@@ -13,6 +14,8 @@ export class HistogramComponent implements OnInit{
   
   protected x: any;
   private y: any;
+  private xOriginal: any;
+  private yOriginal: any;
   private xDomain: any;
   private xLabel: string;
   private yLabel: string;
@@ -37,8 +40,12 @@ export class HistogramComponent implements OnInit{
   private yAxis: any;
 
   private svg: any;
+  
+  protected sortForm: any;
+
     
   constructor(private totalByCode: TotalByCodeService, private modal: NgbModal) {
+    this.sortForm = new FormGroup({sortSelection: new FormControl()});
     this.x = [];
     this.y = [];
     this.totalByCodeService = totalByCode;
@@ -101,6 +108,7 @@ export class HistogramComponent implements OnInit{
         .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
         .attr("font-family", "sans-serif")
         .attr("font-size", 10)
+        .attr("background-color", "#f00")
       
     this.svg.append("g")
         .attr("transform", `translate(0,${this.marginTop})`)
@@ -158,6 +166,8 @@ export class HistogramComponent implements OnInit{
       if(event.body != undefined) {
         this.x = event.body.codeOccurences.map((l: any) => l.eventOccurrences);
         this.y = event.body.codeOccurences.map((l: any) => l.code);
+        this.xOriginal = [...this.x];
+        this.yOriginal = [...this.y];
         this.drawChart();
       }
     };
@@ -184,4 +194,51 @@ export class HistogramComponent implements OnInit{
       });
     }
   }
+
+  protected sortValues() {
+    const type = this.sortForm.value.sortSelection;
+    console.log(this.sortForm.value.sortSelection);
+    console.log(type);
+    
+    if(type==0){
+      this.x = [...this.xOriginal];
+      this.y = [...this.yOriginal];
+      
+      this.drawChart()
+      return;
+    }
+    const compare = ( a: any, b:any ) => {
+      if(type%2!=0){
+        if ( a.code < b.code ){
+          return (-1)*type;
+        }
+        if ( a.code > b.code ){
+          return (1)*type;
+        }
+        return 0;
+      } else {
+        if ( a.value < b.value ){
+          return (-1)*type;
+        }
+        if ( a.value > b.value ){
+          return (1)*type;
+        }
+        return 0;
+      }
+    }
+    
+    const temp = this.x.map((v: number, i: number) => {
+      return { code: this.y[i], value: v }
+    });
+    temp.sort(compare);
+
+    this.x = temp.map((l: any) => l.value);
+    this.y = temp.map((l: any) => l.code);
+    
+    this.drawChart();
+    
+    
+  }
+
+  
 }
