@@ -26,14 +26,6 @@ export class EventTableComponent {
     { field: 'subUnit'},
     { field: 'frequency' },
   ];
-  /*public columnDefs: ColDef[] = [
-    { field: 'code', width: 150 },
-    { field: 'date', width: 150 },
-    { field: 'firmware', width: 300 },
-    { field: 'unit', width: 100 },
-    { field: 'subUnit', width: 125 },
-    { field: 'frequency', width: 250 },
-  ];*/
 
   /**
    * Impostazione di default dei campi della tabella
@@ -46,22 +38,10 @@ export class EventTableComponent {
 
   /**
    * Costruisce un oggetto per generare la tabella
-   * @param totalByFirmwareService Servizio che ottiene i dati dal backend
+   * @param frequencyService Servizio che ottiene i dati dal backend
    * @param modalService Dialog di errore
    */
-  constructor(frequencyService : FrequencyService, private modalService: NgbModal) {
-    frequencyService.observableSignal.subscribe(
-        {
-          next: () => {frequencyService.request.subscribe(
-              {
-                next: this.updateData(),
-                error: this.errorHandler()
-              }
-          )},
-          error: this.errorHandler()
-        }
-    )
-  }
+  constructor(private frequencyService : FrequencyService, private modalService: NgbModal) {  }
 
 
   /**
@@ -95,5 +75,18 @@ export class EventTableComponent {
    */
   public onGridReady(params: any): void {
     params.api.sizeColumnsToFit();
+  }
+
+  /**
+   * Metodo che gestisce il submit del form
+   * @param value Valore emesso dall'evento proveniente dal form di header
+   */
+  public onSubmit(value: any) {
+    if(value.startDatetime != null && value.endDatetime != null && value.regroups != null){
+      this.frequencyService.GetTotalByFrequency(value.startDatetime, value.endDatetime, value.regroups).subscribe({
+        next:this.updateData(),
+        error: this.errorHandler()
+      });
+    }
   }
 }

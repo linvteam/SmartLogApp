@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import { FormBuilder, FormControl } from "@angular/forms";
 import { InfoService } from '../../services/info/info.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -56,15 +56,18 @@ export class RegroupHeaderComponent {
         endDatetime: '1',
         regroup: new FormControl()
     });
+    /**
+     * Enitter dei dati del form
+     */
+    @Output() submit: EventEmitter<any> = new EventEmitter<any>();
 
     /**
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale e dei campi per il raggruppamento
      * @param formBuilder Servizio di gestione dei form
      * @param infoRepository Servizio per ottenere le informazioni dal database
      * @param modalService Servizio che si occupa di gestire i modal di bootstrap
-     * @param frequencyService Servizio che si occupa di ottenere le informazioni sui firmware per evento
      */
-    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal, private frequencyService: FrequencyService) {
+    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal) {
         this.loadData();
     }
 
@@ -103,10 +106,11 @@ export class RegroupHeaderComponent {
             subunit: this.selectedRegroup.includes("Subunit")
         };
         
-        if(startDatetime != null && endDatetime != null && this.selectedRegroup) {
-            this.frequencyService.GetTotalByFrequency(startDatetime, endDatetime, regroups);
+        if(startDatetime != null && endDatetime != null) {
+            this.submit.emit({startDatetime, endDatetime, regroups});
         } else {
-            //GESTIONE ERRORE
+            let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+            modal.componentInstance.setup("Inserisci tutti i dati richiesti.");
         }
 
     }

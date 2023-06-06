@@ -12,19 +12,6 @@ import {BaseURL} from "../../connection-info";
 export class FrequencyService {
 
   /**
-   * Subject per la notifica del component PieChartComponent
-   */
-  public signal: Subject<boolean> = new Subject<boolean>();
-  /**
-   *  Observable per la notifica del component PieChartComponent
-   */
-  public observableSignal: Observable<boolean> = this.signal.asObservable();
-  /**
-   *  Richiesta HTTP per ottenere i dati
-   */
-  public request: Observable<HttpEvent<any>> = new Observable<HttpEvent<any>>();
-
-  /**
    * Crea una nuova istanza del service TotalByFirmwareService, i parametri vengono passati tramite dependency injector
    * @param http Il client http che si occupa di effettuare l'upload
    * @param ConnectionURL URL del backend
@@ -38,7 +25,7 @@ export class FrequencyService {
    * @param regroups Campi per il raggruppamento
    * @constructor
    */
-  GetTotalByFrequency(start: Date, end: Date, regroups: any) {
+  GetTotalByFrequency(start: Date, end: Date, regroups: any): Observable<HttpEvent<any>> {
     const headers = new HttpHeaders({
       accept: "*/*"
     });
@@ -53,7 +40,6 @@ export class FrequencyService {
       responseType: "json"
     });
 
-    this.request = this.http.request(req);
-    this.signal.next(true);
+    return this.http.request(req);
   }
 }
