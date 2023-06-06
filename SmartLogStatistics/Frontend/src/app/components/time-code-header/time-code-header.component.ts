@@ -4,8 +4,6 @@ import { FormBuilder, FormControl } from "@angular/forms";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
-import {TotalByFirmwareService} from "../../services/total-by-firmware/total-by-firmware.service";
-
 
 /**
  * Classe che crea un component in cui inserire l'intervallo temporale e il Code di cui si vogliono ottenere i dati
