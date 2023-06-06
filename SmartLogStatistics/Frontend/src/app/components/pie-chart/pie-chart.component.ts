@@ -128,7 +128,10 @@ export class PieChartComponent{
             .on('mouseover', this.handleMouseOver)
             .on('mouseout', this.handleMouseOut);
 
-        slice.append('text')
+        const labelPercentageGroup = slice.append('g')
+            .attr('class', 'label-percentage-group');
+
+        labelPercentageGroup.append('text')
             .attr('class', 'firmware')
             .attr('transform', (d: any) => {
                 const centroid = labelArc.centroid(d);
@@ -146,6 +149,27 @@ export class PieChartComponent{
             .style('font-weight', 'bold')
             .text((d: any) => d.data.firmware)
             .style('visibility', 'hidden');
+
+        labelPercentageGroup.append('text')
+            .attr('class', 'percentage')
+            .attr('transform', (d: any) => {
+                const centroid = labelArc.centroid(d);
+                const midAngle = Math.atan2(centroid[1], centroid[0]);
+                const labelX = Math.cos(midAngle) * (radius + 40);
+                const labelY = Math.sin(midAngle) * (radius + 40) + 16; // Adjust the y position for percentage
+                return `translate(${labelX},${labelY})`;
+            })
+            .style('text-anchor', (d: any) => {
+                const centroid = labelArc.centroid(d);
+                const midAngle = Math.atan2(centroid[1], centroid[0]);
+                return Math.cos(midAngle) >= 0 ? 'start' : 'end';
+            })
+            .style('font-size', '10px')
+            .style('visibility', 'hidden')
+            .text((d: any) => {
+                const percentage = (d.data.eventOccurrences / this.data.reduce((sum: number, d: any) => sum + d.eventOccurrences, 0)) * 100;
+                return `${percentage.toFixed(2)}%`;
+            });
 
         slice.append('path')
             .attr('d', (d: any) => {
@@ -177,6 +201,12 @@ export class PieChartComponent{
         const parentNode = event.currentTarget.parentNode;
         d3.select(parentNode)
             .selectAll('.firmware')
+            .filter((labelData: any) => labelData === d)
+            .style('visibility', 'visible')
+            .style('opacity', 1.0)
+
+        d3.select(parentNode)
+            .selectAll('.percentage')
             .filter((labelData: any) => labelData === d)
             .style('visibility', 'visible')
             .style('opacity', 1.0)
@@ -226,6 +256,17 @@ export class PieChartComponent{
                     return 'hidden';
                 }
             });
+
+        d3.select(parentNode)
+            .selectAll('.percentage')
+            .filter((lineData: any) => lineData === d)
+            .style('visibility', (lineData: any) => {
+                if (lineData.clicked) {
+                    return 'visible';
+                } else {
+                    return 'hidden';
+                }
+            });
     }
 
     /**
@@ -245,6 +286,10 @@ export class PieChartComponent{
             .selectAll('.line')
             .filter((lineData: any) => lineData === d);
 
+        const clickedPercentage = d3.select(parentNode)
+            .selectAll('.percentage')
+            .filter((labelData: any) => labelData === d);
+
         d.clicked = !d.clicked;
         clickedLabel.style('visibility', (labelData: any) => {
             if (labelData.clicked) {
@@ -256,6 +301,14 @@ export class PieChartComponent{
 
         clickedLine.style('visibility', (lineData: any) => {
             if (lineData.clicked) {
+                return 'visible';
+            } else {
+                return 'hidden';
+            }
+        });
+
+        clickedPercentage.style('visibility', (percentageData: any) => {
+            if (percentageData.clicked) {
                 return 'visible';
             } else {
                 return 'hidden';
