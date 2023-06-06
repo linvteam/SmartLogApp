@@ -58,7 +58,7 @@ export class TimeCodeHeaderComponent {
     /**
      * Enitter dei dati del form
      */
-    @Output() submit: EventEmitter<any> = new EventEmitter<any>();
+    @Output() submitEmitter: EventEmitter<any> = new EventEmitter<any>();
     
     /**
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale e dei Code
@@ -113,7 +113,7 @@ export class TimeCodeHeaderComponent {
 
         if(startDatetime != null && endDatetime != null && this.selectedCode && this.selectedCode[0] != null) {
             let selectedCode = this.selectedCode[0].id;
-            this.submit.emit({startDatetime, endDatetime, selectedCode});
+            this.submitEmitter.emit({startDatetime, endDatetime, selectedCode});
         } else {
             let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
             modal.componentInstance.setup("Inserisci tutti i dati richiesti.");

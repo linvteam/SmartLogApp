@@ -316,12 +316,10 @@ export class PieChartComponent{
      * @param value Valore emesso dall'evento proveniente dal form di header
      */
     public onSubmit(value: any) {
-        if(value.startDatetime != null && value.endDatetime != null && value.selectedCode != null){
-            this.totalByFirmwareService.GetTotalByFirmware(value.startDatetime, value.endDatetime, value.selectedCode).subscribe({
-                next:this.updateData(),
-                error: this.errorHandler()
-            });
-        }
+        this.totalByFirmwareService.GetTotalByFirmware(value.startDatetime, value.endDatetime, value.selectedCode).subscribe({
+            next:this.updateData(),
+            error: this.errorHandler()
+        });
     }
     
 }
