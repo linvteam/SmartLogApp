@@ -215,6 +215,15 @@ export class CumulativeChartComponent {
             .style("text-anchor", "middle")
             .text("Occorrenze");
 
+        const area = d3.area()
+            .x((d: any) => xScale(d.instant)).y0(height)
+            .y1((d: any) => yScale(d.eventOccurencies));
+        this.svg.append("path").datum(this.records)
+            .attr("stroke", "#69b3a2").attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round").attr("stroke-width", 1.5)
+            .attr("d", line).attr("fill", "#69b3a2")
+            .attr("fill-opacity", 0.4).attr("d", area);
+
         //Inserisco il tooltip per i punti
         this.tooltip = d3.select("figure#cumulative-chart")
             .append("div")
