@@ -42,11 +42,6 @@ export class CumulativeChartComponent {
     private readonly locale = "it-IT";
 
     /**
-     * Fuso orario usato per formattare le date
-     */
-    private readonly timezone = "UTC";
-
-    /**
      * I dati da visualizzare nel grafico
      */
     public records: any[] = [];
@@ -133,7 +128,7 @@ export class CumulativeChartComponent {
      * @private
      */
     private getFormattedDate(date: Date): string {
-        return formatDate(date, this.dateFormat, this.locale, this.timezone)
+        return formatDate(date, this.dateFormat, this.locale)
     }
 
     private drawChart(): void {
