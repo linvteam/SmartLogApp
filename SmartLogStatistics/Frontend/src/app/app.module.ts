@@ -22,7 +22,8 @@ import { FileDroppedDirective } from './file-dropped.directive';
 
 import { BaseURL } from './connection-info';
 import { ErrorModalComponent } from './components/error-modal/error-modal.component';
-import {AgGridModule} from "ag-grid-angular";
+import { AgGridModule } from "ag-grid-angular";
+import { environment } from "../environments/environment";
 
 @NgModule({
     declarations: [
@@ -51,7 +52,7 @@ import {AgGridModule} from "ag-grid-angular";
         AgGridModule
     ],
     providers: [
-        { provide: BaseURL, useValue: 'https://localhost:7253/api'}
+        { provide: BaseURL, useValue: environment.BaseURL }
     ],
     bootstrap: [AppComponent],
     entryComponents: [
