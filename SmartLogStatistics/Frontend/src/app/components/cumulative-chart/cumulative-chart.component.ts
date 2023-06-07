@@ -51,6 +51,12 @@ export class CumulativeChartComponent {
      */
     public records: any[] = [];
 
+    private margin: any = { top: 60, right: 30, bottom: 30, left: 65 };
+
+    private width: number = 1100 - this.margin.left - this.margin.right;
+
+    private height: number = 600 - this.margin.top - this.margin.bottom;
+
     /**
      * Il grafico da disegnare a schermo
      */
@@ -134,11 +140,7 @@ export class CumulativeChartComponent {
 
         //Pulisco il grafico precedente se c'era
         this.clean();
-
-        let margin = { top: 60, right: 30, bottom: 30, left: 65 },
-            width = 1060 - margin.left - margin.right,
-            height = 600 - margin.top - margin.bottom;
-
+            
         //Imposto gli assi e i domini
         const X = d3.map(this.records, d => d.instant);
         const Y = d3.map(this.records, p => p.eventOccurencies);
@@ -146,26 +148,27 @@ export class CumulativeChartComponent {
         const xDomain = d3.extent(X) as Array<Date>;
         const yDomain = d3.extent(Y) as Array<Number>;
 
-        const xScale = d3.scaleTime(xDomain, [0, width]);
-        const yScale = d3.scaleLinear(yDomain, [height, 0]);
+        const xScale = d3.scaleTime(xDomain, [0, this.width]);
+        const yScale = d3.scaleLinear(yDomain, [this.height, 0]);
 
         //Imposto i dati del grafico
         const line = d3.line()
             .x((d: any) => xScale(d.instant))
-            .y((d: any) => yScale(d.eventOccurencies));
+            .y((d: any) => yScale(d.eventOccurencies))
+            .curve(d3.curveStepAfter);
 
         // append the svg object to the body of the page
         this.svg = d3.select("figure#cumulative-chart")
             .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("width", this.width + this.margin.left + this.margin.right)
+            .attr("height", this.height + this.margin.top + this.margin.bottom)
             .append("g")
             .attr("transform",
-                "translate(" + margin.left + "," + (margin.top) + ")");
+                "translate(" + this.margin.left + "," + (this.margin.top) + ")");
 
         this.svg.append('text')
             .attr('class', 'title')
-            .attr('x', width / 2)
+            .attr('x', this.width / 2)
             .attr('y', 0)
             .attr('text-anchor', 'middle')
             .attr("transform",
@@ -175,7 +178,7 @@ export class CumulativeChartComponent {
         //Creo l'asse X nel grafico
         this.svg.append("g")
             .attr("class", "xAxis")
-            .attr("transform", "translate(0," + height + ")")
+            .attr("transform", "translate(0," + this.height + ")")
             .call(d3.axisBottom(xScale));
 
         //Creo l'asse Y nel grafico
@@ -188,7 +191,7 @@ export class CumulativeChartComponent {
             .append("line")
             .attr("class", "gridline")
             .attr("x1", 0)
-            .attr("y1", -height)
+            .attr("y1", -this.height)
             .attr("x2", 0)
             .attr("y2", 0)
             .attr("stroke", "#9ca5aecf")
@@ -200,7 +203,7 @@ export class CumulativeChartComponent {
             .attr("class", "gridline")
             .attr("x1", 0)
             .attr("y1", 0)
-            .attr("x2", width)
+            .attr("x2", this.width)
             .attr("y2", 0)
             .attr("stroke", "#9ca5aecf")
             .attr("stroke-dasharray", "4") 
@@ -208,21 +211,12 @@ export class CumulativeChartComponent {
         //Inserico il testo nell'asse Y
         this.svg.append("text")
             .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left)
-            .attr("x", 0 - (height / 2))
+            .attr("y", 0 - this.margin.left)
+            .attr("x", 0 - (this.height / 2))
             .attr("dy", "1em")
             .attr("font-size", "1.5em")
             .style("text-anchor", "middle")
             .text("Occorrenze");
-
-        const area = d3.area()
-            .x((d: any) => xScale(d.instant)).y0(height)
-            .y1((d: any) => yScale(d.eventOccurencies));
-        this.svg.append("path").datum(this.records)
-            .attr("stroke", "#69b3a2").attr("stroke-linejoin", "round")
-            .attr("stroke-linecap", "round").attr("stroke-width", 1.5)
-            .attr("d", line).attr("fill", "#69b3a2")
-            .attr("fill-opacity", 0.4).attr("d", area);
 
         //Inserisco il tooltip per i punti
         this.tooltip = d3.select("figure#cumulative-chart")
@@ -247,14 +241,22 @@ export class CumulativeChartComponent {
     }
 
     private putNewData(line: d3.Line<[number, number]>, xScale: d3.ScaleTime<number, number, never>, yScale: d3.ScaleLinear<number, number, never>) {
-        this.svg.append("path")
-            .datum(this.records)
-            .attr("fill", "none")
-            .attr("stroke", "#69b3a2")
-            .attr("stroke-linejoin", "round")
-            .attr("stroke-linecap", "round")
-            .attr("stroke-width", 1.5)
-            .attr("d", line);
+
+
+        const area = d3.area()
+            .x((d: any) => xScale(d.instant)).y0(this.height)
+            .y1((d: any) => yScale(d.eventOccurencies))
+            .curve(d3.curveStepAfter);
+
+        const path = this.svg.append("path")
+            .attr("stroke", "#69b3a2").attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round").attr("stroke-width", 1.5)
+            .attr("d", line(this.records))
+
+        if (this.records.length > 1) {
+            path.attr("fill", "#8ad875")
+                .attr("fill-opacity", 0.4).attr("d", area(this.records));
+        }
 
         //Aggiunto i punti che rappresentano gli istanti
         let dots = this.svg
