@@ -96,12 +96,12 @@ export class CumulativeChartComponent {
         */
         const loadData = (ev: any) => {
             if (ev instanceof HttpResponse<any>) {
-                this.startDate = new Date(ev.body.start);
-                this.endDate = new Date(ev.body.end);
+                this.startDate = new Date(Date.parse(ev.body.start));
+                this.endDate = new Date(Date.parse(ev.body.end));
                 this.Code = ev.body.code;
                 this.records = ev.body.records.map((e: any) => {
                     return {
-                        instant: new Date(e.instant),
+                        instant: new Date(Date.parse(e.instant)),
                         eventOccurencies: e.eventOccurencies
                     }
                 });
