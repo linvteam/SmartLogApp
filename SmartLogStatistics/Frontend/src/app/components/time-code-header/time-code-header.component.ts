@@ -1,10 +1,13 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import { FormBuilder, FormControl } from "@angular/forms";
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 
+/**
+ * Classe che crea un component in cui inserire l'intervallo temporale e il Code di cui si vogliono ottenere i dati
+ */
 @Component({
     selector: 'app-time-code-header',
     templateUrl: './time-code-header.component.html',
@@ -35,7 +38,7 @@ export class TimeCodeHeaderComponent {
     /**
      * Code selezionato
      */
-    public selectedCode: string = "";
+    public selectedCode: any;
     /**
      * Impostazioni del menù a tendina
      */
@@ -44,9 +47,6 @@ export class TimeCodeHeaderComponent {
         allowSearchFilter: true,
         searchPlaceholderText: "Cerca eventi"
     }
-
-    private dialogRef: NgbModalRef | undefined;
-
     /**
      * Gestore del form
      */
@@ -55,30 +55,38 @@ export class TimeCodeHeaderComponent {
         endDatetime: '1',
         code: new FormControl()
     });
-
     /**
-     * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale
+     * Enitter dei dati del form
+     */
+    @Output() submitEmitter: EventEmitter<any> = new EventEmitter<any>();
+    
+    /**
+     * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale e dei Code
      * @param formBuilder Servizio di gestione dei form
+     * @param infoRepository Servizio per ottenere le informazioni dal database
+     * @param modalService Servizio che si occupa di gestire i modal di bootstrap
      */
     constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal) {
         this.loadData();
     }
 
+    /**
+     * Ottiene i valori minimi, massimi e di default da poter inserire nelle date e i Code da ricercare
+     * @private
+     */
     private loadData(): void {
         this.infoRepository.GetTimeInterval().subscribe({
             next: (event) => {
                 if (event instanceof HttpResponse<any>) {
                     this.startDatetimeValue = event.body.start;
-                    this.minDate = event.body.start;
                     this.endDatetimeValue = event.body.end;
+                    this.minDate = event.body.start;
                     this.maxDate = event.body.end;
                 }
             },
             error: (error) => {
-                if (!this.dialogRef) {
-                    this.dialogRef = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-                    this.dialogRef.componentInstance.setup(error.body.message, () => { this.loadData(); });
-                }
+                let errorModal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+                errorModal.componentInstance.setup(error != undefined? error.error.message : "Non è stato possibile prelevare le date di inizio/fine", () => { this.loadData(); });
             }
         });
 
@@ -89,10 +97,8 @@ export class TimeCodeHeaderComponent {
                 }
             },
             error: (error) => {
-                if (!this.dialogRef) {
-                    this.dialogRef = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-                    this.dialogRef.componentInstance.setup(error.body.message, () => { this.loadData(); });
-                }
+                let errorModal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+                errorModal.componentInstance.setup(error != undefined? error.error.message : "Non è stato possibile prelevare i codici", () => { this.loadData(); });
             }
         });
     }
@@ -105,12 +111,13 @@ export class TimeCodeHeaderComponent {
         const startDatetime = this.formGroup.value.startDatetime ? new Date(this.formGroup.value.startDatetime) : null;
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
 
-        console.log("INIZIO:");
-        console.log(startDatetime!.getTime());
-        console.log("FINE:");
-        console.log(endDatetime!.getTime());
-        console.log("CODE:");
-        console.log(this.selectedCode);
+        if(startDatetime != null && endDatetime != null && this.selectedCode && this.selectedCode[0] != null) {
+            let selectedCode = this.selectedCode[0].id;
+            this.submitEmitter.emit({startDatetime, endDatetime, selectedCode});
+        } else {
+            let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
+            modal.componentInstance.setup("Inserisci tutti i dati richiesti.");
+        }
 
     }
 
