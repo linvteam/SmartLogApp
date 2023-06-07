@@ -47,6 +47,7 @@ export class TimeCodeHeaderComponent {
     public dropdownSettings = {
         singleSelection: true,
         allowSearchFilter: true,
+        closeDropDownOnSelection: true,
         searchPlaceholderText: "Cerca eventi"
     }
     /**
