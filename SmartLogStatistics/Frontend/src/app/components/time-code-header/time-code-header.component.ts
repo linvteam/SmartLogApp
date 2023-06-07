@@ -15,7 +15,7 @@ import { ErrorModalComponent } from '../error-modal/error-modal.component';
 })
 export class TimeCodeHeaderComponent {
 
-    @Output() submit: EventEmitter<any> = new EventEmitter<any>();
+    @Output() submitEmitter: EventEmitter<any> = new EventEmitter<any>();
     /**
      * Data del primo evento presente nel DB
      */
@@ -57,10 +57,6 @@ export class TimeCodeHeaderComponent {
         endDatetime: '1',
         code: new FormControl()
     });
-    /**
-     * Enitter dei dati del form
-     */
-    @Output() submitEmitter: EventEmitter<any> = new EventEmitter<any>();
     
     /**
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale e dei Code
@@ -68,7 +64,7 @@ export class TimeCodeHeaderComponent {
      * @param infoRepository Servizio per ottenere le informazioni dal database
      * @param modalService Servizio che si occupa di gestire i modal di bootstrap
      */
-    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private cumService: CumulativeService, private modalService: NgbModal) {
+    constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal) {
         this.loadData();
     }
 

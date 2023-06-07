@@ -63,14 +63,22 @@ export class CumulativeChartComponent {
     constructor(private cumulativeService: CumulativeService, private modalService: NgbModal) {
     }
 
+    public getNoRecordsMessage(): string {
+        if (this.Code == "")
+            return "Seleziona un code per visualizzare il grafico"
+        else
+            return "Nessuna occorrenza da visualizzare"
+    }
+
     /**
      * Funzione invocata alla submit della form di time-code-header
      * @param value
      */
     onSubmit(value: any): void {
+
         const errorHandler = (err: any) => {
             let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-            modal.componentInstance.setup(err.error.message, () => {
+            modal.componentInstance.setup(err.error.message ? err.error.message : "C'è stato un errore nel caricamento dati", () => {
                 this.records = [];
                 this.Code = "";
             })
@@ -95,7 +103,7 @@ export class CumulativeChartComponent {
             }
         }
 
-        this.cumulativeService.GetCumulativeRecords(value.code, value.start, value.end).subscribe(
+        this.cumulativeService.GetCumulativeRecords(value.selectedCode, value.startDatetime, value.endDatetime).subscribe(
             {
                 next: (ev: any) => loadData(ev),
                 error: (ev: any) => errorHandler(ev)
