@@ -5,11 +5,20 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj" />
-  </ItemGroup>
+    <PublishRelease>true</PublishRelease>
+    <!--PublishSingleFile>true</PublishSingleFile-->
+    <Authors>Alessandro Baldissera, Alberto Casado Moreno, Mauro Carnuccio, Matteo Cusin, Nicola Ravagna, Riccardo Rossi, Alessandro Santin</Authors>
+    <Company>LINV Team</Company>
+    <ProductName>SmartLogStatistics</ProductName>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+    <Title>SmartLogStatistics</Title>
+    <RepositoryUrl>https://github.com/linvteam/SmartLogApp.git</RepositoryUrl>
+    <AssemblyVersion>1.0</AssemblyVersion>
+    <FileVersion>1.0</FileVersion>
+    <ApplicationIcon>SmartLogStatistics.ico</ApplicationIcon>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
 
   <!-- Configurazione per rimuovere i file non necessari dalla publish del pacchetto -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -18,7 +27,24 @@
       .allowedextension
     </AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Frontend\src\favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Frontend\src\favicon.ico" />
+    <Content Include="SmartLogStatistics.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update=".\Frontend\**">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+    <Content Update="appsettings.*.json" CopyToPublishDirectory="Never" />
+    <Content Update="appsettings.${MSBuildThisFileName}.json" CopyToPublishDirectory="Never" />
+  </ItemGroup>
   
+  <!-- Dipendenze esterne -->
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.16" />
@@ -38,6 +64,45 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.8" />
   </ItemGroup>
 
+  <!-- Dipendenze interne -->
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="SmartLogStatistics.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  
+  <!-- Fasi custom del processo di build -->
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- Check NodeJS installed -->
+    <Exec WorkingDirectory=".\Frontend" Command="node --version">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    
+    <!-- Check npm installed -->
+    <Exec WorkingDirectory=".\Frontend" Command="npm --version">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    
+    <!-- Install NodeJS dependencies and build Angular app -->
+    <Exec WorkingDirectory=".\Frontend" Command="npm install" />
+    <Exec WorkingDirectory=".\Frontend" Command="npm run build -- --configuration=production" />
+    
+    <!-- Include Angular build files to output directory -->
+    <ItemGroup>
+      <DistFiles Include=".\Frontend\dist\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+  
+  
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Firmware\Create.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Firmware\Delete.cshtml" />

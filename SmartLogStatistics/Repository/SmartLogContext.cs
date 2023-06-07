@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Configuration;
 using Microsoft.EntityFrameworkCore;
 using SmartLogStatistics.Model;
 
@@ -10,12 +11,19 @@ namespace SmartLogStatistics.Repository
     public class SmartLogContext : DbContext
     {
         /// <summary>
+        /// Oggetto contenente la configurazione dell'applicazione
+        /// </summary>
+        protected readonly IConfiguration Configuration;
+
+        /// <summary>
         /// Crea una nuova istanza del context
         /// </summary>
+        /// <param name="configuration">La configurazione dell'applicazione</param>
         /// <param name="options">Opzioni usate dal context</param>
-        public SmartLogContext(DbContextOptions<SmartLogContext> options)
+        public SmartLogContext(IConfiguration configuration, DbContextOptions<SmartLogContext> options)
             : base(options)
         {
+            Configuration = configuration;
         }
 
         /// <summary>
@@ -29,7 +37,8 @@ namespace SmartLogStatistics.Repository
         /// <param name="optionsBuilder">Oggetto per configurare le opzioni del context</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Database=Statistics;Username=Utente;Password=Password");
+            optionsBuilder.UseNpgsql(Configuration.GetConnectionString("SmartLogContext"));
+            //optionsBuilder.UseNpgsql("Host=localhost;Database=Statistics;Username=Utente;Password=Password");
         }
         
         /// <summary>
