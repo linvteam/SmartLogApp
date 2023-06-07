@@ -242,7 +242,8 @@ export class HistogramComponent implements OnInit{
       this.svg.append("g")
           // .attr("fill", "#04e")
           .selectAll("path")
-          .data(d3.range(this.x.length))    .join("path")
+          .data(d3.range(this.x.length))
+          .join("path")
           .attr("d", (i: number) => {      
                 const x = this.xScale(0);
                 const y = this.yScale(this.y[i]);      
