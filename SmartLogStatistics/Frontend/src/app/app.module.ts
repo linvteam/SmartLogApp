@@ -23,6 +23,7 @@ import { FileDroppedDirective } from './file-dropped.directive';
 import { BaseURL } from './connection-info';
 import {NgIf} from "@angular/common";
 import { ErrorModalComponent } from './components/error-modal/error-modal.component';
+import {AgGridModule} from "ag-grid-angular";
 
 @NgModule({
     declarations: [
@@ -47,7 +48,8 @@ import { ErrorModalComponent } from './components/error-modal/error-modal.compon
         FormsModule,
         ReactiveFormsModule,
         MdbAccordionModule,
-        NgMultiSelectDropDownModule
+        NgMultiSelectDropDownModule,
+        AgGridModule
     ],
   providers: [
         { provide: BaseURL, useValue: 'https://localhost:7253/api'}
