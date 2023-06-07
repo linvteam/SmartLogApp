@@ -21,6 +21,7 @@ import { RegroupHeaderComponent } from './components/regroup-header/regroup-head
 import { FileDroppedDirective } from './file-dropped.directive';
 
 import { BaseURL } from './connection-info';
+import {NgIf} from "@angular/common";
 import { ErrorModalComponent } from './components/error-modal/error-modal.component';
 import {AgGridModule} from "ag-grid-angular";
 
@@ -50,7 +51,7 @@ import {AgGridModule} from "ag-grid-angular";
         NgMultiSelectDropDownModule,
         AgGridModule
     ],
-    providers: [
+  providers: [
         { provide: BaseURL, useValue: 'https://localhost:7253/api'}
     ],
     bootstrap: [AppComponent],

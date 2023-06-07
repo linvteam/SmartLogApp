@@ -45,7 +45,7 @@ export class TimeHeaderComponent {
     /**
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale
      * @param formBuilder Servizio di gestione dei form
-     * @param infoRepository Servizio per ottenere le informazioni dal database
+     * @param infoRepository Servizio per ottenere le informazioni dal database per inizializzare il form
      * @param modalService Servizio che si occupa di gestire i modal di bootstrap
      */
     constructor(private formBuilder: FormBuilder, private infoRepository: InfoService, private modalService: NgbModal) {
@@ -85,7 +85,6 @@ export class TimeHeaderComponent {
             let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
             modal.componentInstance.setup("Le date di inizio/fine hanno valore nullo");
         }
-        
 
     }
 

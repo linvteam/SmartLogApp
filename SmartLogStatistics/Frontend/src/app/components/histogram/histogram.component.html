@@ -1,4 +1,27 @@
+<app-time-header id="header-histogram" (submitEmitter)="onSubmit($event)"></app-time-header>
 
-<app-time-header></app-time-header>
-
-<p>histogram works!</p>
+<div style="position:relative" id="chart-container">
+    <figure id="histogram-chart" >
+        <div class="sort-div" *ngIf="this.x.length!=0">
+            <input type="checkbox" id="sort-tab-opener">
+            <label for="sort-tab-opener">Ordina</label>
+            <div class="form">
+                <form [formGroup]="sortForm" (change)="sortValues()" class="form-check">
+                    <input type="radio" formControlName="sortSelection" id="NoSort" value="0" class="form-check-input"/>
+                        <label for="NoSort">Nessun Ordinamento</label> <br/>
+                    <input type="radio" formControlName="sortSelection" id="AlfAsc" value="1" class="form-check-input"/>
+                        <label for="AlfAsc">Alfabetico Crescente</label> <br/>
+                    <input type="radio" formControlName="sortSelection" id="AlfDesc" value="-1" class="form-check-input"/>
+                        <label for="AlfDesc">Alfabetico Decrescente</label> <br/>
+                    <input type="radio" formControlName="sortSelection" id="FreqAsc" value="2" class="form-check-input"/>
+                        <label for="FreqAsc">Frequenza Crescente</label> <br/>
+                    <input type="radio" formControlName="sortSelection" id="FreqDesc" value="-2" class="form-check-input"/>
+                        <label for="FreqDesc">Frequenza Decrescente</label> <br/>
+                </form>
+            </div>
+        </div>
+    </figure>
+    <div id="no-events" class ="alert alert-info" *ngIf="this.x.length==0">
+        Nessun evento da visualizzare
+    </div>
+</div>
