@@ -86,7 +86,7 @@ export class PieChartComponent{
             .innerRadius(radius * 0.6)
             .outerRadius(radius * 0.6);
 
-        const colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"];
+        const seed =Math.random()*360;
 
         const slice = svg.selectAll('.arc')
             .data(dataReady)
@@ -97,13 +97,7 @@ export class PieChartComponent{
 
         slice.append('path')
             .attr('d', arcGenerator)
-            .style('fill', (d: any, i: number) => {
-                if (dataReady.length % colors.length === 1 && i === dataReady.length - 1) {
-                    return colors[1];
-                } else {
-                    return colors[i % colors.length];
-                }
-            })
+            .style('fill', (d: any, i: number) => `hsl(${seed+(i*137.51)}deg 50% 50%)`)
             .attr('stroke', 'black')
             .style('stroke-width', '2px')
             .style('opacity', 0.7)
