@@ -54,6 +54,9 @@ import {AgGridModule} from "ag-grid-angular";
   providers: [
         { provide: BaseURL, useValue: 'https://localhost:7253/api'}
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [
+        ErrorModalComponent
+    ]
 })
 export class AppModule { }
