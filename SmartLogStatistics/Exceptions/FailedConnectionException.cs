@@ -13,7 +13,7 @@
         /// Crea un nuovo oggetto impostando codice e messaggio dell'errore
         /// </summary>
         public FailedConnectionException(): base("Connessione con il database fallita") {
-            Code = 5;
+            Code = 4;
         }
     }
 
