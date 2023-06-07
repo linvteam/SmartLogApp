@@ -322,6 +322,8 @@ export class HistogramComponent implements OnInit{
         next:this.updateData(),
         error: this.errorHandler()
       });
+      
+      this.sortForm.reset({sortSelection: "0"});
     }
   }
 
