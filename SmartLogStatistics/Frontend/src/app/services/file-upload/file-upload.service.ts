@@ -19,7 +19,7 @@ export class FileUploadService {
     constructor(private http: HttpClient, @Inject(BaseURL) private ConnectionURL: string) { }
 
     /**
-     * Metodo che, tramite POST HTTP, carica uno o più file nel database
+     * Effettua la chiamata al server
      * @param file File da caricare
      */
     public upload(file: File): Observable<HttpEvent<any>> {
