@@ -67,9 +67,34 @@ export class CumulativeChartComponent {
     private svg: any;
 
     /**
+    * Il grafico da disegnare
+    */
+    private g: any;
+
+    /**
      * Il tooltip mostrato quando si passa sopra un punto
      */
     private tooltip: any;
+
+    /**
+     * L'asse X
+     */
+    private gXAxis: any;
+
+    /**
+    * La linea disegnata sul grafico
+    */
+    private path: any;
+
+    /**
+     * I punti disegnati sul grafico
+     */
+    private dots: any;
+
+    /**
+     * L'area colorata sotto la linea del grafico
+     */
+    private area: any;
     constructor(private cumulativeService: CumulativeService, private modalService: NgbModal) {
     }
 
@@ -171,11 +196,19 @@ export class CumulativeChartComponent {
             .append("svg")
             .attr("width", this.width + this.margin.left + this.margin.right)
             .attr("height", this.height + this.margin.top + this.margin.bottom)
-            .append("g")
-            .attr("transform",
-                "translate(" + this.margin.left + "," + (this.margin.top) + ")");
+            .call((svg: any) => this.zoom(svg, xScale, yScale));
 
-        this.svg.append('text')
+        const defs = this.svg.append("defs");
+        const clipTag = defs.append("clipPath").attr("id", "clip");
+
+        clipTag.append("rect")
+            .attr("width", this.width)
+            .attr("height", this.height)
+
+        this.g = this.svg.append("g")
+                         .attr("transform","translate(" + this.margin.left + "," + (this.margin.top) + ")");
+
+        this.g.append('text')
             .attr('class', 'title')
             .attr('x', this.width / 2)
             .attr('y', 0)
@@ -185,40 +218,25 @@ export class CumulativeChartComponent {
             .text(`Occorrenze di ${this.Code} nel periodo tra ${this.getFormattedDate(this.startDate)} e ${this.getFormattedDate(this.endDate)}`);
 
         //Creo l'asse X nel grafico
-        this.svg.append("g")
-            .attr("class", "xAxis")
-            .attr("transform", "translate(0," + this.height + ")")
-            .call(d3.axisBottom(xScale));
+        this.gXAxis =this.g.append("g")
+                            .attr("class", "xAxis")
+                            .attr("transform", "translate(0," + this.height + ")")
+                            .call(d3.axisBottom(xScale))
+                            .call((g: any) => g.selectAll(".tick line").clone()
+                                .attr("y1", -this.height)
+                                .attr("stroke-opacity", 0.2)
+                                .attr("class", "grid-line"));
 
         //Creo l'asse Y nel grafico
-        this.svg.append("g")
+        this.g.append("g")
             .attr("class", "yAxis")
-            .call(d3.axisLeft(yScale));
-
-        //Crea le linee della griglia (asse X)
-        d3.selectAll("g.xAxis g.tick")
-            .append("line")
-            .attr("class", "gridline")
-            .attr("x1", 0)
-            .attr("y1", -this.height)
-            .attr("x2", 0)
-            .attr("y2", 0)
-            .attr("stroke", "#9ca5aecf")
-            .attr("stroke-dasharray", "4") 
-
-        // Crea le linee della griglia (asse Y)
-        d3.selectAll("g.yAxis g.tick")
-            .append("line")
-            .attr("class", "gridline")
-            .attr("x1", 0)
-            .attr("y1", 0)
-            .attr("x2", this.width)
-            .attr("y2", 0)
-            .attr("stroke", "#9ca5aecf")
-            .attr("stroke-dasharray", "4") 
+            .call(d3.axisLeft(yScale))
+            .call((g: any) => g.selectAll(".tick line").clone()
+                .attr("x2", this.width)
+                .attr("stroke-opacity", 0.2))
 
         //Inserico il testo nell'asse Y
-        this.svg.append("text")
+        this.g.append("text")
             .attr("transform", "rotate(-90)")
             .attr("y", 0 - this.margin.left)
             .attr("x", 0 - (this.height / 2))
@@ -249,6 +267,51 @@ export class CumulativeChartComponent {
 
     }
 
+    private zoom(svg: any, xScale: d3.ScaleTime<number, number, never>, yScale: d3.ScaleLinear<number, number, never>): void {
+        svg.call(d3.zoom()
+            //limiti del moltiplicatore di zoom/de-zoom, da 0x a infinito
+            .scaleExtent([0, Infinity])
+            //operazione da eseguire quando si effettua lo zoom/trascinamento
+            .on("zoom", (event: any) => this.zoomed(event, yScale, xScale)));
+    }
+
+    private zoomed(event: any, y: any, x: any): void {
+        let new_x = event.transform.rescaleX(x);
+        this.gXAxis.call(d3.axisBottom(new_x))
+
+        const area = d3.area()
+            .x((d: any) => new_x(d.instant)).y0(this.height)
+            .y1((d: any) => y(d.eventOccurencies))
+            .curve(d3.curveStepAfter);
+
+        //ridò la definizione di come dev'essere creata la linea con la nuova scala
+        const line = d3.line()
+            .x((d: any) => new_x(d.x))
+            .y((d: any) => y(d.y))
+            .curve(d3.curveStepAfter);
+
+        const tickTags: any = d3.select(".xAxis").selectAll(".tick");
+
+        //prendo tutte le linee della griglia, le rimuove e le ridisegno
+        //così che ci siano anche sulle nuove tacche che si sono formate
+        //in seguito allo zoom o al trascinamento
+        tickTags.selectAll(".grid-line").remove();
+        tickTags.selectAll("line").clone()
+            .attr("y1", -this.height)
+            .attr("stroke-opacity", 0.2)
+            .attr("class", "grid-line");
+
+        //riplotto la parabola
+        this.path.attr("d", line(this.records));
+
+        this.dots.attr("cx", (d: any) => new_x(d.instant))
+            .attr("cy", (d: any) => y(d.eventOccurencies))
+
+        if (this.records.length > 1) {
+            this.area.attr("d", area(this.records))
+        }
+    }
+
     private putNewData(line: d3.Line<[number, number]>, xScale: d3.ScaleTime<number, number, never>, yScale: d3.ScaleLinear<number, number, never>) {
 
         const area = d3.area()
@@ -256,18 +319,19 @@ export class CumulativeChartComponent {
             .y1((d: any) => yScale(d.eventOccurencies))
             .curve(d3.curveStepAfter);
 
-        const path = this.svg.append("path")
+        this.path = this.g.append("path")
             .attr("stroke", "#69b3a2").attr("stroke-linejoin", "round")
             .attr("stroke-linecap", "round").attr("stroke-width", 1.5)
             .attr("d", line(this.records))
+            .attr("clip-path", "url(#clip)")
 
         if (this.records.length > 1) {
-            path.attr("fill", "#8ad875")
-                .attr("fill-opacity", 0.4).attr("d", area(this.records));
+         this.area = this.path.attr("fill", "#8ad875")
+                              .attr("fill-opacity", 0.4).attr("d", area(this.records));
         }
 
         //Aggiunto i punti che rappresentano gli istanti
-        let dots = this.svg
+        this.dots = this.g
             .append("g")
             .selectAll("dot")
             .data(this.records)
@@ -276,6 +340,7 @@ export class CumulativeChartComponent {
             .attr("cx", (d: any) => xScale(d.instant))
             .attr("cy", (d: any) => yScale(d.eventOccurencies))
             .attr("r", 5)
+            .attr("clip-path", "url(#clip)")
             .attr("fill", "#69b3a2");
 
         //Evento che accade quando passo sopra un punto e mostra il tooltip
@@ -307,11 +372,11 @@ export class CumulativeChartComponent {
         }
 
         //Imposto gli eventi con il mouse sui punti        
-        dots.on("mouseover", mouseOver)
+        this.dots.on("mouseover", mouseOver)
             .on("mousemove", mouseMove)
             .on("mouseout", mouseOut);
 
-        return dots;
+        return this.dots;
     }
 
     /**
