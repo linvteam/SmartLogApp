@@ -34,7 +34,7 @@ export class CumulativeChartComponent {
     /**
      * Formato della data usato per la formattazione
      */
-    private readonly dateFormat = 'yyyy/MM/dd - HH:mm:ss.SSS';
+    private readonly dateFormat = 'dd/MM/yyyy - HH:mm:ss.SSS';
 
     /**
      * Locale usato per formattare le date
@@ -46,10 +46,19 @@ export class CumulativeChartComponent {
      */
     public records: any[] = [];
 
+    /**
+     * Margine del grafico
+     */
     private margin: any = { top: 60, right: 30, bottom: 30, left: 65 };
 
+    /**
+     * Larghezza del grafico
+     */
     private width: number = 1100 - this.margin.left - this.margin.right;
 
+    /**
+     * Altezza del grafico
+     */
     private height: number = 600 - this.margin.top - this.margin.bottom;
 
     /**

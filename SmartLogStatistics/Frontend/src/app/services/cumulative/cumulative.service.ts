@@ -4,6 +4,9 @@ import { Data } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { TimeCodeHeaderComponent } from '../../components/time-code-header/time-code-header.component';
 import { BaseURL } from '../../connection-info';
+import { formatDate, registerLocaleData } from "@angular/common";
+import localeIT from "@angular/common/locales/it";
+registerLocaleData(localeIT, "it");
 
 @Injectable({
   providedIn: 'root'
@@ -29,8 +32,12 @@ export class CumulativeService {
         const headers = new HttpHeaders({
             accept: "*/*"
         });
+        const dateFormat = "yyy-MM-dd HH:mm:ss.SSS"
 
-        const req = new HttpRequest("GET", `${this.ConnectionURL}/data/cumulative/${start.toISOString()}/${end.toISOString()}/${code}`, {
+        const formattedStart = formatDate(start, dateFormat, "it-IT")
+        const formattedEnd = formatDate(end, dateFormat, "it-IT")
+
+        const req = new HttpRequest("GET", `${this.ConnectionURL}/data/cumulative/${formattedStart}/${formattedEnd}/${code}`, {
             headers: headers,
             responseType: "json"
         });
