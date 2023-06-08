@@ -15,7 +15,7 @@ import {ErrorModalComponent} from "../error-modal/error-modal.component";
 export class EventTableComponent {
 
   /**
-   * Elenco dei dati da mostrare sulla tabella
+   * Elenco dei dati da mostrare nella tabella
    */
   public rowData: any[] = [];
   /**
@@ -31,7 +31,7 @@ export class EventTableComponent {
   ];
 
   /**
-   * Impostazione di default dei campi della tabella
+   * Impostazioni di default dei campi della tabella
    */
   public defaultColDef: ColDef = {
     resizable: true,
@@ -83,7 +83,7 @@ export class EventTableComponent {
    * Metodo che gestisce il submit del form
    * @param value Valore emesso dall'evento proveniente dal form di header
    */
-  public onSubmit(value: any) {
+  public onSubmit(value: any): void {
     this.frequencyService.GetTotalByFrequency(value.startDatetime, value.endDatetime, value.regroups).subscribe({
       next:this.updateData(),
       error: this.errorHandler()
