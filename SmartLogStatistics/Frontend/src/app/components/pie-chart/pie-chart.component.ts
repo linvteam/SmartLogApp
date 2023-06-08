@@ -16,8 +16,9 @@ export class PieChartComponent{
 
     /**
      * Dati da rappresentare nel grafico
+     * @protected
      */
-    private data: any[] = [];
+    protected data: any[] = [];
 
     /**
      * Costruisce un oggetto per generare un grafico a torta
@@ -293,10 +294,10 @@ export class PieChartComponent{
     }
 
     /**
-     * Metodo che gestisce il submit del form 
+     * Metodo che gestisce il submit del form
      * @param value Valore emesso dall'evento proveniente dal form di header
      */
-    public onSubmit(value: any) {
+    public onSubmit(value: any): void {
         this.totalByFirmwareService.GetTotalByFirmware(value.startDatetime, value.endDatetime, value.selectedCode).subscribe({
             next:this.updateData(),
             error: this.errorHandler()
