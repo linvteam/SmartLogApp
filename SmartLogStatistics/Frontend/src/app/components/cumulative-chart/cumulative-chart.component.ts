@@ -144,22 +144,27 @@ export class CumulativeChartComponent {
 
         //Pulisco il grafico precedente se c'era
         this.clean();
-            
+
         //Imposto gli assi e i domini
         const X = d3.map(this.records, d => d.instant);
         const Y = d3.map(this.records, p => p.eventOccurencies);
 
         const xDomain = d3.extent(X) as Array<Date>;
-        const yDomain = d3.extent(Y) as Array<Number>;
+        const yDomain = d3.extent(Y) as Array<number>;
 
-        const xScale = d3.scaleTime(xDomain, [0, this.width]);
-        const yScale = d3.scaleLinear(yDomain, [this.height, 0]);
+        //const xOffset = (xDomain[1].getTime() - xDomain[0].getTime()) * 0.05
+        const yOffset = (yDomain[1] - yDomain[0]) * 0.05
+
+        /*const offsetDate = new Date(xDomain[1]).setTime(xDomain[1].getTime() + xOffset)*/
+
+        const xScale = d3.scaleTime([xDomain[0], xDomain[1]], [0, this.width]);
+        const yScale = d3.scaleLinear([yDomain[0] - yOffset, yDomain[1]], [this.height, 0]);
 
         //Imposto i dati del grafico
         const line = d3.line()
             .x((d: any) => xScale(d.instant))
             .y((d: any) => yScale(d.eventOccurencies))
-            .curve(d3.curveStepAfter);
+            .curve(d3.curveStep);
 
         // append the svg object to the body of the page
         this.svg = d3.select("figure#cumulative-chart")
@@ -247,7 +252,7 @@ export class CumulativeChartComponent {
     private putNewData(line: d3.Line<[number, number]>, xScale: d3.ScaleTime<number, number, never>, yScale: d3.ScaleLinear<number, number, never>) {
 
 
-        const area = d3.area()
+        const area = d3.area().
             .x((d: any) => xScale(d.instant)).y0(this.height)
             .y1((d: any) => yScale(d.eventOccurencies))
             .curve(d3.curveStepAfter);
