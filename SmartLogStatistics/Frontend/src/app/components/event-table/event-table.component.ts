@@ -4,6 +4,9 @@ import {FrequencyService} from "../../services/frequency/frequency.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ErrorModalComponent} from "../error-modal/error-modal.component";
 
+/**
+ * Classe che definisce il comportamento della tabella di visualizzazione degli eventi raggruppati almeno per code
+ */
 @Component({
   selector: 'app-event-table',
   templateUrl: './event-table.component.html',

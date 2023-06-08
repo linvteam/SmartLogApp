@@ -5,6 +5,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 
+/**
+ * Classe che crea un component in cui inserire l'intervallo temporale
+ */
 @Component({
     selector: 'app-time-header',
     templateUrl: './time-header.component.html',

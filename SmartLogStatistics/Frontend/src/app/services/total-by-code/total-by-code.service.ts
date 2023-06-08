@@ -5,6 +5,10 @@ import {BaseURL} from "../../connection-info";
 import {formatDate, registerLocaleData} from "@angular/common";
 import localeIT from "@angular/common/locales/it"
 registerLocaleData(localeIT, "it");
+
+/**
+ * Servizio per l'ottenimento dal backend di un JSON contenente i codici con le relative frequenze
+ */
 @Injectable({
   providedIn: 'root'
 })
