@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
 export class NavBarComponent {
 
   /**
-   * Indica quando la navbar � chiusa, � necessario per gestire il layout per schermi piccoli
+   * Indica quando la navbar è chiusa, è necessario per gestire il layout per schermi piccoli
    */
   public isCollapsed = true;
 

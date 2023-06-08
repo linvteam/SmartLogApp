@@ -7,7 +7,7 @@ import localeIT from "@angular/common/locales/it"
 registerLocaleData(localeIT, "it");
 
 /**
- * Service per l'ottenimento dei dati di info dal backend
+ * Service per l'ottenimento delle statistiche dal backend
  */
 @Injectable({
     providedIn: 'root'
@@ -26,7 +26,7 @@ export class StatisticsService {
      * @param start Lower bound dell'intervallo di ricerca
      * @param end Upper bound dell'intervallo di ricerca
      */
-    public GetStatistics(start: Date, end: Date): Observable<HttpEvent<unknown>> {
+    public GetStatistics(start: Date, end: Date): Observable<HttpEvent<any>> {
         const headers = new HttpHeaders({
             accept: "*/*"
         });
