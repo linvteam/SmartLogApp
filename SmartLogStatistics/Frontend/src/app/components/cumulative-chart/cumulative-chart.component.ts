@@ -251,8 +251,7 @@ export class CumulativeChartComponent {
 
     private putNewData(line: d3.Line<[number, number]>, xScale: d3.ScaleTime<number, number, never>, yScale: d3.ScaleLinear<number, number, never>) {
 
-
-        const area = d3.area().
+        const area = d3.area()
             .x((d: any) => xScale(d.instant)).y0(this.height)
             .y1((d: any) => yScale(d.eventOccurencies))
             .curve(d3.curveStepAfter);
