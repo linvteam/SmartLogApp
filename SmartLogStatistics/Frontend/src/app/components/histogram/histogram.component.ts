@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {TotalByCodeService} from "../../services/total-by-code/total-by-code.service";
 import * as d3 from "d3";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -28,15 +28,13 @@ export class HistogramComponent{
   private y: string[];
 
   /**
-   * Variabile che contiene l'ordine originale dei dati della frequenza
-   * per utilizzarla quando non si usa nessun ordinamento
+   * Variabile che contiene l'ordine originale dei dati della frequenza per utilizzarla quando non si usa nessun ordinamento
    * @private
    */
   private xOriginal: number[];
 
   /**
-   * Variabile che contiene l'ordine originale dei codici
-   * per utilizzarla quando non si usa nessun ordinamento
+   * Variabile che contiene l'ordine originale dei codici per utilizzarla quando non si usa nessun ordinamento
    * @private
    */
   private yOriginal: string[];
@@ -108,7 +106,7 @@ export class HistogramComponent{
   private yScale: any;
 
   /**
-   * Distanza fra una barra e l'altra.
+   * Distanza fra una barra e l'altra
    * Importante: È un valore compreso fra 0 e 1 in modo da rappresentare una percentuale
    * @private
    */
@@ -157,10 +155,9 @@ export class HistogramComponent{
   protected sortForm: any;
 
   /**
-   * Costruisce il componente inizializzando le variabili utili a stabilire le dimensioni
-   * delle varie parti del grafico
-   * @param totalByCode il service per ottenere i dati dall'API
-   * @param modal il pop-up per segnalare un errore nel fetch dei dati dall'API
+   * Costruisce il componente inizializzando le variabili utili a stabilire le dimensioni delle varie parti del grafico
+   * @param totalByCode Il service per ottenere i dati dall'API
+   * @param modal Il pop-up per segnalare un errore nel fetch dei dati dall'API
    */
   constructor(private totalByCode: TotalByCodeService, private modal: NgbModal) {
     this.sortForm = new FormGroup({sortSelection: new FormControl("0")});
@@ -236,7 +233,6 @@ export class HistogramComponent{
 
     const seed =Math.random()*360;
     this.svg.append("g")
-        // .attr("fill", "#04e")
         .selectAll("path")
         .data(d3.range(this.x.length))
         .join("path")
