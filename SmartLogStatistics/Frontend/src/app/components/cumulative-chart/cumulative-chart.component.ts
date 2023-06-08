@@ -152,12 +152,12 @@ export class CumulativeChartComponent {
         const xDomain = d3.extent(X) as Array<Date>;
         const yDomain = d3.extent(Y) as Array<number>;
 
-        //const xOffset = (xDomain[1].getTime() - xDomain[0].getTime()) * 0.05
+        const xOffset = (xDomain[1].getTime() - xDomain[0].getTime()) * 0.04
         const yOffset = (yDomain[1] - yDomain[0]) * 0.05
 
-        /*const offsetDate = new Date(xDomain[1]).setTime(xDomain[1].getTime() + xOffset)*/
+        const offsetDate = new Date(xDomain[0]).setTime(xDomain[0].getTime() - xOffset)
 
-        const xScale = d3.scaleTime([xDomain[0], xDomain[1]], [0, this.width]);
+        const xScale = d3.scaleTime([offsetDate, xDomain[1]], [0, this.width]);
         const yScale = d3.scaleLinear([yDomain[0] - yOffset, yDomain[1]], [this.height, 0]);
 
         //Imposto i dati del grafico
