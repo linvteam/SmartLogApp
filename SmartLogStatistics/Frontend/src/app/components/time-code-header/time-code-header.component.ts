@@ -1,9 +1,10 @@
 import { HttpResponse } from '@angular/common/http';
 import {Component, EventEmitter, Output} from '@angular/core';
-import { FormBuilder, FormControl } from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
+import {IDropdownSettings} from "ng-multiselect-dropdown";
 
 /**
  * Classe che crea un component in cui inserire l'intervallo temporale e il Code di cui si vogliono ottenere i dati
@@ -42,7 +43,7 @@ export class TimeCodeHeaderComponent {
     /**
      * Impostazioni del menù a tendina
      */
-    public dropdownSettings = {
+    public dropdownSettings: IDropdownSettings = {
         singleSelection: true,
         allowSearchFilter: true,
         searchPlaceholderText: "Cerca eventi"
@@ -50,7 +51,7 @@ export class TimeCodeHeaderComponent {
     /**
      * Gestore del form
      */
-    formGroup = this.formBuilder.group({
+    public formGroup: FormGroup = this.formBuilder.group({
         startDatetime: '0',
         endDatetime: '1',
         code: new FormControl()
@@ -58,7 +59,7 @@ export class TimeCodeHeaderComponent {
     /**
      * Enitter dei dati del form
      */
-    @Output() submitEmitter: EventEmitter<any> = new EventEmitter<any>();
+    @Output() public submitEmitter: EventEmitter<any> = new EventEmitter<any>();
     
     /**
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale e dei Code
@@ -104,7 +105,7 @@ export class TimeCodeHeaderComponent {
     }
 
     /**
-     * Metodo che gestisce il submit del form.
+     * Metodo che gestisce il submit del form
      */
     public submitForm(): void {
 
