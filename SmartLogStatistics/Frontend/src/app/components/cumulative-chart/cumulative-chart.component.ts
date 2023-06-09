@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { formatDate, registerLocaleData } from "@angular/common";
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 import localeIT from "@angular/common/locales/it";
-registerLocaleData(localeIT, "it");
-
 import * as d3 from 'd3';
 import { CumulativeService } from '../../services/cumulative/cumulative.service';
+registerLocaleData(localeIT, "it");
 
+/**
+ * Classe per la rappresentazione dei dati in un grafico cumulativo
+ */
 @Component({
   selector: 'app-cumulative-chart',
   templateUrl: './cumulative-chart.component.html',
@@ -19,7 +21,7 @@ export class CumulativeChartComponent {
     /**
      * Codice dell'evento
      */
-    private Code: string = "";
+    private code: string = "";
 
     /**
      * Data di lower-bound del intervallo temporale preso in esame
@@ -34,12 +36,12 @@ export class CumulativeChartComponent {
     /**
      * Formato della data usato per la formattazione
      */
-    private readonly dateFormat = 'dd/MM/yyyy - HH:mm:ss.SSS';
+    private readonly dateFormat: string = 'dd/MM/yyyy - HH:mm:ss.SSS';
 
     /**
      * Locale usato per formattare le date
      */
-    private readonly locale = "it-IT";
+    private readonly locale: string = "it-IT";
 
     /**
      * I dati da visualizzare nel grafico
@@ -77,7 +79,7 @@ export class CumulativeChartComponent {
     private tooltip: any;
 
     /**
-     * L'asse X
+     * L'asse x
      */
     private gXAxis: any;
 
@@ -95,27 +97,36 @@ export class CumulativeChartComponent {
      * L'area colorata sotto la linea del grafico
      */
     private area: any;
+
+    /**
+     * Costruttore
+     * @param cumulativeService Servizio che ottiene i dati dal backend
+     * @param modalService Dialog di errore
+     */
     constructor(private cumulativeService: CumulativeService, private modalService: NgbModal) {
     }
 
+    /**
+     * Metodo per l'ottenimento del messaggio da visualizzare in caso di mancanza di dati
+     */
     public getNoRecordsMessage(): string {
-        if (this.Code == "")
+        if (this.code == "")
             return "Seleziona un code per visualizzare il grafico"
         else
             return "Nessuna occorrenza da visualizzare"
     }
 
     /**
-     * Funzione invocata alla submit della form di time-code-header
-     * @param value
+     * Metodo che gestisce il submit del form
+     * @param value Valore emesso dall'evento proveniente dal form di header
      */
-    onSubmit(value: any): void {
+    public onSubmit(value: any): void {
 
         const errorHandler = (err: any) => {
             let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-            modal.componentInstance.setup(err.error.message ? err.error.message : "C'è stato un errore nel caricamento dati", () => {
+            modal.componentInstance.setup(err.error.message ? err.error.message : "C'ï¿½ stato un errore nel caricamento dati", () => {
                 this.records = [];
-                this.Code = "";
+                this.code = "";
             })
         };
 
@@ -127,7 +138,7 @@ export class CumulativeChartComponent {
             if (ev instanceof HttpResponse<any>) {
                 this.startDate = new Date(Date.parse(ev.body.start));
                 this.endDate = new Date(Date.parse(ev.body.end));
-                this.Code = ev.body.code;
+                this.code = ev.body.code;
                 this.records = ev.body.records.map((e: any) => {
                     return {
                         instant: new Date(Date.parse(e.instant)),
@@ -165,6 +176,10 @@ export class CumulativeChartComponent {
         return formatDate(date, this.dateFormat, this.locale)
     }
 
+    /**
+     * Metodo per disegnare il grafico
+     * @private
+     */
     private drawChart(): void {
 
         //Pulisco il grafico precedente se c'era
@@ -216,7 +231,7 @@ export class CumulativeChartComponent {
             .attr('text-anchor', 'middle')
             .attr("transform",
                 "translate(0," + -10 + ")")
-            .text(`Occorrenze di ${this.Code} nel periodo tra ${this.getFormattedDate(this.startDate)} e ${this.getFormattedDate(this.endDate)}`);
+            .text(`Occorrenze di ${this.code} nel periodo tra ${this.getFormattedDate(this.startDate)} e ${this.getFormattedDate(this.endDate)}`);
 
         //Creo l'asse X nel grafico
         this.gXAxis =this.g.append("g")
@@ -268,6 +283,13 @@ export class CumulativeChartComponent {
 
     }
 
+    /**
+     * Funzione di supporto per zoomed(), stabilisce i limiti di zoom
+     * @param svg Grafico
+     * @param xScale Scala dell'asse x
+     * @param yScale Scala dell'asse y
+     * @private
+     */
     private zoom(svg: any, xScale: d3.ScaleTime<number, number, never>, yScale: d3.ScaleLinear<number, number, never>): void {
         svg.call(d3.zoom()
             //limiti del moltiplicatore di zoom/de-zoom, da 0x a infinito
@@ -276,6 +298,13 @@ export class CumulativeChartComponent {
             .on("zoom", (event: any) => this.zoomed(event, yScale, xScale)));
     }
 
+    /**
+     * Funzione che implementa la funzionalitÃ  di zoom scalando gli assi ed il grafico
+     * @param event Evento
+     * @param y Scala dell'asse y
+     * @param x Scala dell'asse x
+     * @private
+     */
     private zoomed(event: any, y: any, x: any): void {
         let new_x = event.transform.rescaleX(x);
         this.gXAxis.call(d3.axisBottom(new_x))
@@ -285,7 +314,7 @@ export class CumulativeChartComponent {
             .y1((d: any) => y(d.eventOccurencies))
             .curve(d3.curveStepAfter);
 
-        //ridò la definizione di come dev'essere creata la linea con la nuova scala
+        //ridï¿½ la definizione di come dev'essere creata la linea con la nuova scala
         const line = d3.line()
             .x((d: any) => new_x(d.x))
             .y((d: any) => y(d.y))
@@ -294,7 +323,7 @@ export class CumulativeChartComponent {
         const tickTags: any = d3.select(".xAxis").selectAll(".tick");
 
         //prendo tutte le linee della griglia, le rimuove e le ridisegno
-        //così che ci siano anche sulle nuove tacche che si sono formate
+        //cosï¿½ che ci siano anche sulle nuove tacche che si sono formate
         //in seguito allo zoom o al trascinamento
         tickTags.selectAll(".grid-line").remove();
         tickTags.selectAll("line").clone()
@@ -313,7 +342,14 @@ export class CumulativeChartComponent {
         }
     }
 
-    private putNewData(line: d3.Line<[number, number]>, xScale: d3.ScaleTime<number, number, never>, yScale: d3.ScaleLinear<number, number, never>) {
+    /**
+     * Metodo per inserire i nuovi dati
+     * @param line Linea del grafico
+     * @param xScale Scala dell'asse x
+     * @param yScale Scala dell'asse y
+     * @private
+     */
+    private putNewData(line: d3.Line<[number, number]>, xScale: d3.ScaleTime<number, number, never>, yScale: d3.ScaleLinear<number, number, never>): any {
 
         const area = d3.area()
             .x((d: any) => xScale(d.instant)).y0(this.height)
@@ -355,11 +391,11 @@ export class CumulativeChartComponent {
         const mouseMove = (event: any) => {
             let x = event.pageX
             let y = event.pageY
-            if (this.tooltipCollideX(x)) { //se è troppo a destra lo sposta a sinistra del mouse
+            if (this.tooltipCollideX(x)) { //se ï¿½ troppo a destra lo sposta a sinistra del mouse
                 x -= 130;
             }
 
-            if (this.tooltipCollideY(y)) {  //se è troppo in basso lo sposta in sopra al mouse
+            if (this.tooltipCollideY(y)) {  //se ï¿½ troppo in basso lo sposta in sopra al mouse
                 y -= 130;
             }
 
@@ -381,7 +417,7 @@ export class CumulativeChartComponent {
     }
 
     /**
-     * Funzione che ritorna true se la posizione del mouse è vicina al margine destro
+     * Metodo che ritorna true se la posizione del mouse Ã¨ vicina al margine destro
      * @param x coordinata x del cursore
      * @private
      */
@@ -390,7 +426,7 @@ export class CumulativeChartComponent {
     }
 
     /**
-     * Funzione che ritorna true se la posizione del mouse è vicina al margine inferiore
+     * Metodo che ritorna true se la posizione del mouse Ã¨ vicina al margine inferiore
      * @param y coordinata y del cursore
      * @private
      */

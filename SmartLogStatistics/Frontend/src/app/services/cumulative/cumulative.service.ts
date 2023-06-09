@@ -1,13 +1,14 @@
 import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Data } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
-import { TimeCodeHeaderComponent } from '../../components/time-code-header/time-code-header.component';
+import { Observable } from 'rxjs';
 import { BaseURL } from '../../connection-info';
 import { formatDate, registerLocaleData } from "@angular/common";
 import localeIT from "@angular/common/locales/it";
 registerLocaleData(localeIT, "it");
 
+/**
+ * Service per l'ottenimento dei dati dal backend
+ */
 @Injectable({
   providedIn: 'root'
 })
