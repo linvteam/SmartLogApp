@@ -122,5 +122,29 @@ describe('TimeCodeHeaderComponent', () => {
 
     expect(component['modalService'].hasOpenModals()).toBeTruthy();    
   });
+
+  it('should submit only start date null', () => {
+    component.formGroup.setValue({
+      startDatetime: null,
+      endDatetime: "2020-07-21T17:00:28.047",
+      code: "S009"
+    });
+
+    component.submitForm();
+
+    expect(component['modalService'].hasOpenModals()).toBeTruthy();    
+  });
+
+  it('should submit only end date null', () => {
+    component.formGroup.setValue({
+      startDatetime: "2020-07-21T17:00:28.047",
+      endDatetime: null,
+      code: "S009"
+    });
+
+    component.submitForm();
+
+    expect(component['modalService'].hasOpenModals()).toBeTruthy();    
+  });
   
 });

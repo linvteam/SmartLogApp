@@ -52,7 +52,7 @@ describe('RegroupHeaderComponent', () => {
   it('should handle error', () => {
     const req = httpTestingController.expectOne(`${environment.BaseURL}/info/timeinterval`);
     expect(req.request.method).toBe("GET");
-    req.flush("", { 
+    req.flush("Error", { 
       status: 404, 
       statusText: "Not Found" 
     });
@@ -62,6 +62,42 @@ describe('RegroupHeaderComponent', () => {
   it('should submit null dates', () => {
     component.formGroup.setValue({
       startDatetime: null,
+      endDatetime: null,
+      regroup: {
+        data: false,
+        firmware: false,
+        unit: false,
+        subunit: false
+      }
+    });
+    component.selectedRegroup = [];
+
+    component.submitForm();
+
+    expect(component['modalService'].hasOpenModals()).toBeTruthy();    
+  });
+
+  it('should submit only start date null', () => {
+    component.formGroup.setValue({
+      startDatetime: null,
+      endDatetime: "2020-07-21T17:00:28.047",
+      regroup: {
+        data: false,
+        firmware: false,
+        unit: false,
+        subunit: false
+      }
+    });
+    component.selectedRegroup = [];
+
+    component.submitForm();
+
+    expect(component['modalService'].hasOpenModals()).toBeTruthy();    
+  });
+
+  it('should submit only end date null', () => {
+    component.formGroup.setValue({
+      startDatetime: "2020-07-21T17:00:28.047",
       endDatetime: null,
       regroup: {
         data: false,

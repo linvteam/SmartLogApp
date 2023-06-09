@@ -61,4 +61,5 @@ describe('PieChartComponent', () => {
     expect(spy).toHaveBeenCalledWith(new Date("2020-07-21T17:00:28.047"), new Date("2025-11-22T06:30:03.762"), code);
     
   }));
+
 });
