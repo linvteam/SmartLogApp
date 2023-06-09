@@ -15,6 +15,7 @@ import { ErrorModalComponent } from '../error-modal/error-modal.component';
 })
 export class TimeCodeHeaderComponent {
 
+    @Output() submitEmitter: EventEmitter<any> = new EventEmitter<any>();
     /**
      * Data del primo evento presente nel DB
      */
@@ -38,6 +39,7 @@ export class TimeCodeHeaderComponent {
     /**
      * Code selezionato
      */
+
     public selectedCode: any;
     /**
      * Impostazioni del menù a tendina
@@ -45,6 +47,7 @@ export class TimeCodeHeaderComponent {
     public dropdownSettings = {
         singleSelection: true,
         allowSearchFilter: true,
+        closeDropDownOnSelection: true,
         searchPlaceholderText: "Cerca eventi"
     }
     /**
@@ -55,10 +58,6 @@ export class TimeCodeHeaderComponent {
         endDatetime: '1',
         code: new FormControl()
     });
-    /**
-     * Enitter dei dati del form
-     */
-    @Output() submitEmitter: EventEmitter<any> = new EventEmitter<any>();
     
     /**
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale e dei Code
