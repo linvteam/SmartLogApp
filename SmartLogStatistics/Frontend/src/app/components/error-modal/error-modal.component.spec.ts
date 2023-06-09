@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ErrorModalComponent } from './error-modal.component';
+import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 describe('ErrorModalComponent', () => {
   let component: ErrorModalComponent;
@@ -8,7 +9,9 @@ describe('ErrorModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ErrorModalComponent ]
+      imports: [ NgbModule ],
+      declarations: [ ErrorModalComponent ],
+      providers: [ NgbActiveModal ]
     })
     .compileComponents();
 

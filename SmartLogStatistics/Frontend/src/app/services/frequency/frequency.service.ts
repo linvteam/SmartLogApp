@@ -2,6 +2,9 @@ import {Inject, Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpEvent, HttpHeaders, HttpRequest} from "@angular/common/http";
 import {BaseURL} from "../../connection-info";
+import {formatDate, registerLocaleData} from "@angular/common";
+import localeIT from "@angular/common/locales/it"
+registerLocaleData(localeIT, "it");
 
 /**
  * Servizio per l'ottenimento dal backend di un JSON che rappresenta gli eventi nell'intervallo temporale dato, raggruppati per i campi specificati
@@ -35,7 +38,13 @@ export class FrequencyService {
     const u = regroups.unit;
     const s = regroups.subunit;
 
-    const req = new HttpRequest("GET", `${this.ConnectionURL}/data/frequency/${start.toISOString().slice(0, 16)}/${end.toISOString().slice(0, 16)}/?d=${d}&f=${f}&u=${u}&s=${s}`, {
+    const format = 'yyyy-MM-dd HH:mm:ss.SSS';
+    const locale = 'it-IT';
+    
+    const startDatetime : string = formatDate(start, format, locale).replace(" ", "T");
+    const endDatetime : string = formatDate(end, format, locale).replace(" ", "T");
+
+    const req = new HttpRequest("GET", `${this.ConnectionURL}/data/frequency/${startDatetime}/${endDatetime}/?d=${d}&f=${f}&u=${u}&s=${s}`, {
       headers: headers,
       responseType: "json"
     });

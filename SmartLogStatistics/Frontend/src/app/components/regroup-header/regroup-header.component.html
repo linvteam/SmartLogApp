@@ -4,7 +4,7 @@
             <label for="start-datetime">Data/Ora iniziale:</label>
             <input [(ngModel)]="startDatetimeValue" [min]="formatDate(minDate)" [max]="formatDate(endDatetimeValue)"type="datetime-local" class="form-control" id="start-datetime" name="startDatetime" formControlName="startDatetime">
         </div>
-        <div class="form-group">
+        <div class="form-group"> 
             <label for="end-datetime">Data/Ora finale:</label>
             <input [(ngModel)]="endDatetimeValue" [min]="formatDate(startDatetimeValue)" [max]="formatDate(maxDate)"type="datetime-local" class="form-control" id="end-datetime" name="endDatetime" formControlName="endDatetime">
         </div>

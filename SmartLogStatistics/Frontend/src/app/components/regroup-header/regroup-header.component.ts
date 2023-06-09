@@ -99,10 +99,10 @@ export class RegroupHeaderComponent {
         const startDatetime = this.formGroup.value.startDatetime ? new Date(this.formGroup.value.startDatetime) : null;
         const endDatetime = this.formGroup.value.endDatetime ? new Date(this.formGroup.value.endDatetime) : null;
         const regroups = {
-            data: this.selectedRegroup.includes("Data"),
-            firmware: this.selectedRegroup.includes("Versione firmware"),
-            unit: this.selectedRegroup.includes("Unit"),
-            subunit: this.selectedRegroup.includes("Subunit")
+            data: this.selectedRegroup.indexOf("Data") > -1,
+            firmware: this.selectedRegroup.indexOf("Versione firmware") > -1,
+            unit: this.selectedRegroup.indexOf("Unit") > -1,
+            subunit: this.selectedRegroup.indexOf("Subunit") > -1
         };
         
         if(startDatetime != null && endDatetime != null) {
