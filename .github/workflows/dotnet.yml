@@ -96,9 +96,21 @@ jobs:
     - run: npm test
       working-directory: SmartLogViewer/Frontend
 
-    - name: Publish badges
+    - name: Publish badges Viewer
       uses:  demyanets/angular-coverage-badges-action@v1
       with:
         github_token: ${{ secrets.CI_TOKEN }}
         coverage-summary-path: SmartLogViewer/Frontend/coverage/front-end_viewer/coverage-summary.json
         badges-directory: /.github/badges/smartlogviewer/frontend
+    
+    - run: npm ci
+      working-directory: SmartLogStatistics/Frontend
+    - run: npm test
+      working-directory: SmartLogStatistics/Frontend
+
+    - name: Publish badges Statistics
+      uses:  demyanets/angular-coverage-badges-action@v1
+      with:
+        github_token: ${{ secrets.CI_TOKEN }}
+        coverage-summary-path: SmartLogStatistics/Frontend/coverage/front-end_statistics/coverage-summary.json
+        badges-directory: /.github/badges/smartlogstatistics/frontend
