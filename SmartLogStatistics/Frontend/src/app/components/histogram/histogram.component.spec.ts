@@ -64,4 +64,37 @@ describe('HistogramComponent', () => {
     expect(component['xDomain']).toEqual([0,0.3]);
   });
 
+  it('should not modify x and y', () => {
+    component['sortValues']();
+    expect(component['x']).toHaveSize(0);
+    expect(component['y']).toHaveSize(0);
+  });
+
+  it('should not modify x and y with values', () => {
+    component['x'] = [0.2,0.2,0.1,0.3];
+    component['y'] = ["S009","S010","S011", "S012"];
+    component['sortForm'].reset({sortSelection: "1"});
+    component['sortValues']();
+    expect(component['x']).toEqual([ 0.2, 0.2, 0.1, 0.3 ]);
+    expect(component['y']).toEqual([ 'S009', 'S010', 'S011', 'S012' ]);
+  });
+
+  it('should order x and y with values - code', () => {
+    component['x'] = [0.2,0.2,0.1,0.3];
+    component['y'] = ["S010","S011", "S012", "S009"];
+    component['sortForm'].reset({sortSelection: "1"});
+    component['sortValues']();
+    expect(component['x']).toEqual([ 0.3, 0.2, 0.2, 0.1 ]);
+    expect(component['y']).toEqual([ 'S009', 'S010', 'S011', 'S012' ]);
+  });
+
+  it('should order x and y with values - frequency', () => {
+    component['x'] = [0.2,0.2,0.1,0.3];
+    component['y'] = ["S010","S011", "S012", "S009"];
+    component['sortForm'].reset({sortSelection: "2"});
+    component['sortValues']();
+    expect(component['x']).toEqual([ 0.1, 0.2, 0.2, 0.3 ]);
+    expect(component['y']).toEqual([ 'S012', 'S010', 'S011', 'S009' ]);
+  });
+
 });

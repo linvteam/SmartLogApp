@@ -34,8 +34,8 @@ export class CumulativeService {
         });
         const dateFormat = "yyy-MM-dd HH:mm:ss.SSS"
 
-        const formattedStart = formatDate(start, dateFormat, "it-IT")
-        const formattedEnd = formatDate(end, dateFormat, "it-IT")
+        const formattedStart = formatDate(start, dateFormat, "it-IT").replace(" ", "T");
+        const formattedEnd = formatDate(end, dateFormat, "it-IT").replace(" ", "T");
 
         const req = new HttpRequest("GET", `${this.ConnectionURL}/data/cumulative/${formattedStart}/${formattedEnd}/${code}`, {
             headers: headers,

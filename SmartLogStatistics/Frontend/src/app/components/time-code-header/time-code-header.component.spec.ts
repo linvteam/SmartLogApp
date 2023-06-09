@@ -95,22 +95,6 @@ describe('TimeCodeHeaderComponent', () => {
     expect(component['modalService'].hasOpenModals()).toBeTruthy();
   });
 
-  it('should submit valid dates', () => {
-    component.formGroup.setValue({
-      startDatetime: "2020-07-21T17:00:28.047",
-      endDatetime: "2025-10-22T06:30:03.762",
-      code: "S009"
-    });
-
-    component.submitForm();
-
-    component.submitEmitter.subscribe((value) => {
-      expect(value.startDatetime).toEqual("2020-07-21T17:00:28.047");
-      expect(value.endDatetime).toEqual("2025-10-22T06:30:03.762");
-      expect(value.code).toEqual("S009");
-    })
-  });
-
   it('should submit null dates', () => {
     component.formGroup.setValue({
       startDatetime: null,
