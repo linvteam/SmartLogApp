@@ -39,6 +39,7 @@ export class TimeCodeHeaderComponent {
     /**
      * Code selezionato
      */
+
     public selectedCode: any;
     /**
      * Impostazioni del menù a tendina
@@ -46,6 +47,7 @@ export class TimeCodeHeaderComponent {
     public dropdownSettings: IDropdownSettings = {
         singleSelection: true,
         allowSearchFilter: true,
+        closeDropDownOnSelection: true,
         searchPlaceholderText: "Cerca eventi"
     }
     /**
