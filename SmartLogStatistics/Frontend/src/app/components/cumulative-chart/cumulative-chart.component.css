@@ -1,6 +1,8 @@
+#no-events{
+    text-align: center;
+}
 
-
-##cumulative-chart {
+#cumulative-chart {
     position: relative;
     overflow: hidden;
 }
