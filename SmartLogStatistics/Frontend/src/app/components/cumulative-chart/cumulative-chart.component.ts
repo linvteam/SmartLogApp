@@ -124,7 +124,7 @@ export class CumulativeChartComponent {
 
         const errorHandler = (err: any) => {
             let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-            modal.componentInstance.setup(err.error.message ? err.error.message : "C'� stato un errore nel caricamento dati", () => {
+            modal.componentInstance.setup(err.error.message ? err.error.message : "C'è stato un errore nel caricamento dati", () => {
                 this.records = [];
                 this.code = "";
             })
@@ -286,8 +286,8 @@ export class CumulativeChartComponent {
     /**
      * Funzione di supporto per zoomed(), stabilisce i limiti di zoom
      * @param svg Grafico
-     * @param xScale Scala dell'asse x
-     * @param yScale Scala dell'asse y
+     * @param xScale Funzione per scalare l'asse x
+     * @param yScale Funzione per scalare l'asse y
      * @private
      */
     private zoom(svg: any, xScale: d3.ScaleTime<number, number, never>, yScale: d3.ScaleLinear<number, number, never>): void {
@@ -301,8 +301,8 @@ export class CumulativeChartComponent {
     /**
      * Funzione che implementa la funzionalità di zoom scalando gli assi ed il grafico
      * @param event Evento
-     * @param y Scala dell'asse y
-     * @param x Scala dell'asse x
+     * @param y Funzione per scalare l'asse y
+     * @param x Funzione per scalare l'asse x
      * @private
      */
     private zoomed(event: any, y: any, x: any): void {
@@ -314,7 +314,7 @@ export class CumulativeChartComponent {
             .y1((d: any) => y(d.eventOccurencies))
             .curve(d3.curveStepAfter);
 
-        //rid� la definizione di come dev'essere creata la linea con la nuova scala
+        //ridefinizione di come dev'essere creata la linea con la nuova scala
         const line = d3.line()
             .x((d: any) => new_x(d.x))
             .y((d: any) => y(d.y))
@@ -323,7 +323,7 @@ export class CumulativeChartComponent {
         const tickTags: any = d3.select(".xAxis").selectAll(".tick");
 
         //prendo tutte le linee della griglia, le rimuove e le ridisegno
-        //cos� che ci siano anche sulle nuove tacche che si sono formate
+        //in modo che ci siano anche sulle nuove tacche che si sono formate
         //in seguito allo zoom o al trascinamento
         tickTags.selectAll(".grid-line").remove();
         tickTags.selectAll("line").clone()
@@ -345,8 +345,8 @@ export class CumulativeChartComponent {
     /**
      * Metodo per inserire i nuovi dati
      * @param line Linea del grafico
-     * @param xScale Scala dell'asse x
-     * @param yScale Scala dell'asse y
+     * @param xScale Funzione per scalare l'asse x
+     * @param yScale Funzione per scalare l'asse y
      * @private
      */
     private putNewData(line: d3.Line<[number, number]>, xScale: d3.ScaleTime<number, number, never>, yScale: d3.ScaleLinear<number, number, never>): any {
@@ -391,11 +391,11 @@ export class CumulativeChartComponent {
         const mouseMove = (event: any) => {
             let x = event.pageX
             let y = event.pageY
-            if (this.tooltipCollideX(x)) { //se � troppo a destra lo sposta a sinistra del mouse
+            if (this.tooltipCollideX(x)) { //se troppo a destra, lo sposta a sinistra del mouse
                 x -= 130;
             }
 
-            if (this.tooltipCollideY(y)) {  //se � troppo in basso lo sposta in sopra al mouse
+            if (this.tooltipCollideY(y)) {  //se troppo in basso, lo sposta in sopra al mouse
                 y -= 130;
             }
 

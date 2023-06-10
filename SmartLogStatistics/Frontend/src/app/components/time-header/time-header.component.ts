@@ -1,12 +1,12 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Output } from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 
 /**
- * Classe che crea un component in cui inserire l'intervallo temporale
+ * Classe che crea un component in cui inserire un intervallo temporale
  */
 @Component({
     selector: 'app-time-header',

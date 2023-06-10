@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
-import {TotalByCodeService} from "../../services/total-by-code/total-by-code.service";
+import { Component } from '@angular/core';
+import { TotalByCodeService } from "../../services/total-by-code/total-by-code.service";
 import * as d3 from "d3";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {ErrorModalComponent} from "../error-modal/error-modal.component";
-import {FormControl, FormGroup} from "@angular/forms";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ErrorModalComponent } from "../error-modal/error-modal.component";
+import { FormControl, FormGroup } from "@angular/forms";
 
 /**
  * Classe per la rappresentazione dei dati in un istogramma
@@ -156,7 +156,7 @@ export class HistogramComponent{
 
   /**
    * Costruisce il componente inizializzando le variabili utili a stabilire le dimensioni delle varie parti del grafico
-   * @param totalByCode Il service per ottenere i dati dall'API
+   * @param totalByCode Il service per ottenere il numero di eventi (per codice) nell'intervallo selezionato
    * @param modal Il pop-up per segnalare un errore nel fetch dei dati dall'API
    */
   constructor(private totalByCode: TotalByCodeService, private modal: NgbModal) {

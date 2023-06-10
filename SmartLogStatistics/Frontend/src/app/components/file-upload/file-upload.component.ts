@@ -191,7 +191,7 @@ class SelectedFile {
 
     /**
      * Costruisce un nuovo oggetto che raccoglie tutte le informazioni sul caricamento dei file
-     * @param file File che si vuole caricare sul backend
+     * @param fileToUpload File che si vuole caricare sul backend
      */
     constructor(private fileToUpload: File) {
         this.file = fileToUpload;

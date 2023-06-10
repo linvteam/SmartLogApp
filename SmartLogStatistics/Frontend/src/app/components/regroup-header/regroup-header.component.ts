@@ -1,10 +1,10 @@
 import { HttpResponse } from '@angular/common/http';
 import {Component, EventEmitter, Output} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { InfoService } from '../../services/info/info.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
-import {IDropdownSettings} from "ng-multiselect-dropdown";
+import { IDropdownSettings } from "ng-multiselect-dropdown";
 
 /**
  * Classe che crea un component in cui inserire l'intervallo temporale e i campi di cui si vogliono ottenere i raggruppamenti

@@ -7,7 +7,7 @@ import localeIT from "@angular/common/locales/it";
 registerLocaleData(localeIT, "it");
 
 /**
- * Service per l'ottenimento dei dati dal backend
+ * Servizio per l'ottenimento dal backend di un JSON che rappresenta il numero di occorrenze degli eventi nell'intervallo temporale dato in modo cumulativo
  */
 @Injectable({
   providedIn: 'root'

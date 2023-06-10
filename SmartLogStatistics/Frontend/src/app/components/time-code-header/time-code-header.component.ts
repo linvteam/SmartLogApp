@@ -1,10 +1,10 @@
 import { HttpResponse } from '@angular/common/http';
 import {Component, EventEmitter, Output} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
-import {IDropdownSettings} from "ng-multiselect-dropdown";
+import { IDropdownSettings } from "ng-multiselect-dropdown";
 
 /**
  * Classe che crea un component in cui inserire l'intervallo temporale e il Code di cui si vogliono ottenere i dati
@@ -59,7 +59,7 @@ export class TimeCodeHeaderComponent {
         code: new FormControl()
     });
     /**
-     * Enitter dei dati del form
+     * Segnale per indicare che è avvenuto il submit
      */
     @Output() public submitEmitter: EventEmitter<any> = new EventEmitter<any>();
     
