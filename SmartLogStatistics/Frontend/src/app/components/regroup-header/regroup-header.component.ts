@@ -1,9 +1,10 @@
 import { HttpResponse } from '@angular/common/http';
 import {Component, EventEmitter, Output} from '@angular/core';
-import { FormBuilder, FormControl } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { InfoService } from '../../services/info/info.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
+import { IDropdownSettings } from "ng-multiselect-dropdown";
 
 /**
  * Classe che crea un component in cui inserire l'intervallo temporale e i campi di cui si vogliono ottenere i raggruppamenti
@@ -42,7 +43,7 @@ export class RegroupHeaderComponent {
     /**
      * Impostazioni del menù a tendina
      */
-    public dropdownSettings = {
+    public dropdownSettings: IDropdownSettings = {
         singleSelection: false,
         selectAllText: 'Seleziona tutto',
         unSelectAllText: 'Deseleziona tutto',
@@ -50,7 +51,7 @@ export class RegroupHeaderComponent {
     /**
      * Gestore del form
      */
-    formGroup = this.formBuilder.group({
+    public formGroup: FormGroup = this.formBuilder.group({
         startDatetime: '0',
         endDatetime: '1',
         regroup: new FormControl()
@@ -58,7 +59,7 @@ export class RegroupHeaderComponent {
     /**
      * Emitter dei dati del form
      */
-    @Output() submitEmitter: EventEmitter<any> = new EventEmitter<any>();
+    @Output() public submitEmitter: EventEmitter<any> = new EventEmitter<any>();
 
     /**
      * Crea una nuova istanza del controller del widget di inserimento dell'intervallo temporale e dei campi per il raggruppamento
@@ -74,7 +75,7 @@ export class RegroupHeaderComponent {
      * Ottiene i valori minimi, massimi e di default da poter inserire nelle date da ricercare
      * @private
      */
-    public loadData(): void {
+    private loadData(): void {
         this.infoRepository.GetTimeInterval().subscribe({
             next: (event) => {
                 if (event instanceof HttpResponse<any>) {
@@ -92,7 +93,7 @@ export class RegroupHeaderComponent {
     }
 
     /**
-     * Metodo che gestisce il submit del form.
+     * Metodo che gestisce il submit del form
      */
     public submitForm(): void {
 

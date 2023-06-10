@@ -1,10 +1,13 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoService } from '../../services/info/info.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 
+/**
+ * Classe che crea un component in cui inserire un intervallo temporale
+ */
 @Component({
     selector: 'app-time-header',
     templateUrl: './time-header.component.html',
@@ -15,7 +18,7 @@ export class TimeHeaderComponent {
     /**
      * Segnale per indicare che è avvenuto il submit
      */
-    @Output() submitEmitter: EventEmitter<any> = new EventEmitter<any>();
+    @Output() public submitEmitter: EventEmitter<any> = new EventEmitter<any>();
     
     /**
      * Data del primo evento presente nel DB
@@ -28,16 +31,16 @@ export class TimeHeaderComponent {
     /**
      * Data più piccola inseribile
      */
-    public minDate = this.startDatetimeValue;
+    public minDate: string = this.startDatetimeValue;
     /**
      * Data più grande inseribile
      */
-    public maxDate = this.endDatetimeValue;
+    public maxDate: string = this.endDatetimeValue;
 
     /**
      * Gestore del form
      */
-    formGroup = this.formBuilder.group({
+    public formGroup: FormGroup = this.formBuilder.group({
         startDatetime: '0',
         endDatetime: '1'
     });
@@ -72,7 +75,7 @@ export class TimeHeaderComponent {
     }
 
     /**
-     * Metodo che gestisce il submit del form.
+     * Metodo che gestisce il submit del form
      */
     public submitForm(): void {
 

@@ -102,7 +102,7 @@ export class FileUploadComponent {
      * @param fileIndex Indice del file che si sta caricando
      * @returns Funzione che gestisce gli eventi
      */
-    private uploadEventHandler(fileIndex: number) {
+    private uploadEventHandler(fileIndex: number): any {
         return (event: any) => {
             if (event.type == HttpEventType.UploadProgress) {
                 this.currentFiles[fileIndex].progress = Math.round(100 * event.loaded / event.total);
@@ -122,7 +122,7 @@ export class FileUploadComponent {
      * @param fileIndex Indice del file che si sta caricando sul db
      * @returns Funzione che gestisce gli errori della richiesta
      */
-    private uploadErrorHandler(fileIndex: number) {
+    private uploadErrorHandler(fileIndex: number): any {
         return (event: any) => {
             this.currentFiles[fileIndex].status = "failed";
             if (event.error && event.error.message) {
@@ -190,9 +190,9 @@ class SelectedFile {
 
     /**
      * Costruisce un nuovo oggetto che raccoglie tutte le informazioni sul caricamento dei file
-     * @param file File che si vuole caricare sul backend
+     * @param fileToUpload File che si vuole caricare sul backend
      */
-    constructor(file: File) {
-        this.file = file;
+    constructor(private fileToUpload: File) {
+        this.file = fileToUpload;
     }
 }

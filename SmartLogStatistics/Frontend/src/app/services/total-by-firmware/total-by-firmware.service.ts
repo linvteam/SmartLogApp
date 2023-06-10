@@ -16,7 +16,7 @@ export class TotalByFirmwareService {
 
   /**
    * Crea una nuova istanza del service TotalByFirmwareService, i parametri vengono passati tramite dependency injector
-   * @param http Il client http che si occupa di effettuare l'upload
+   * @param http Il client http che effettua la chiamata al server
    * @param ConnectionURL URL del backend
    */
   constructor(private http: HttpClient, @Inject(BaseURL) private ConnectionURL: string) { }
