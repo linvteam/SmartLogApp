@@ -24,10 +24,10 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
        * Costruttore
        * @param activeModal Modal attivo
        */
-      constructor(public activeModal: NgbActiveModal) {
+      constructor(private activeModal: NgbActiveModal) {
       }
-  
-      /**
+
+    /**
      * Setup del modal di errore
      * @param errorMessage Messaggio di errore
      * @param callback Funzione di callback

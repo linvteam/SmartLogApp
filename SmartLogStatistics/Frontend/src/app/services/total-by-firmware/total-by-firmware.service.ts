@@ -2,6 +2,9 @@ import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpEvent, HttpHeaders, HttpRequest} from "@angular/common/http";
 import {BaseURL} from "../../connection-info";
 import {Observable} from "rxjs";
+import {formatDate, registerLocaleData} from "@angular/common";
+import localeIT from "@angular/common/locales/it"
+registerLocaleData(localeIT, "it");
 
 /**
  * Servizio per l'ottenimento dal backend di un JSON che rappresenta il numero di occorrenze dell'evento selezionato, comprese nell’intervallo temporale dato, raggruppate per versione firmware
@@ -13,7 +16,7 @@ export class TotalByFirmwareService {
 
   /**
    * Crea una nuova istanza del service TotalByFirmwareService, i parametri vengono passati tramite dependency injector
-   * @param http Il client http che si occupa di effettuare l'upload
+   * @param http Il client http che effettua la chiamata al server
    * @param ConnectionURL URL del backend
    */
   constructor(private http: HttpClient, @Inject(BaseURL) private ConnectionURL: string) { }
@@ -30,7 +33,13 @@ export class TotalByFirmwareService {
       accept: "*/*"
     });
 
-    const req = new HttpRequest("GET", `${this.ConnectionURL}/data/totalbyfirmware/${start.toISOString().slice(0, 16)}/${end.toISOString().slice(0, 16)}/${code}`, {
+    const format = 'yyyy-MM-dd HH:mm:ss.SSS';
+    const locale = 'it-IT';
+
+    const startDatetime : string = formatDate(start, format, locale);
+    const endDatetime : string = formatDate(end, format, locale);
+
+    const req = new HttpRequest("GET", `${this.ConnectionURL}/data/totalbyfirmware/${startDatetime}/${endDatetime}/${code}`, {
       headers: headers,
       responseType: "json"
     });

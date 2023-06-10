@@ -1,16 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {TotalByCodeService} from "../../services/total-by-code/total-by-code.service";
+import { Component } from '@angular/core';
+import { TotalByCodeService } from "../../services/total-by-code/total-by-code.service";
 import * as d3 from "d3";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {ErrorModalComponent} from "../error-modal/error-modal.component";
-import {FormControl, FormGroup} from "@angular/forms";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ErrorModalComponent } from "../error-modal/error-modal.component";
+import { FormControl, FormGroup } from "@angular/forms";
 
+/**
+ * Classe per la rappresentazione dei dati in un istogramma
+ */
 @Component({
   selector: 'app-histogram',
   templateUrl: './histogram.component.html',
   styleUrls: ['./histogram.component.css']
 })
-export class HistogramComponent implements OnInit{
+export class HistogramComponent{
 
   /**
    * Variabile contenente i valori della frequenza dei vari codici
@@ -25,15 +28,13 @@ export class HistogramComponent implements OnInit{
   private y: string[];
 
   /**
-   * Variabile che contiene l'ordine originale dei dati della frequenza
-   * per utilizzarla quando non si usa nessun ordinamento
+   * Variabile che contiene l'ordine originale dei dati della frequenza per utilizzarla quando non si usa nessun ordinamento
    * @private
    */
   private xOriginal: number[];
 
   /**
-   * Variabile che contiene l'ordine originale dei codici
-   * per utilizzarla quando non si usa nessun ordinamento
+   * Variabile che contiene l'ordine originale dei codici per utilizzarla quando non si usa nessun ordinamento
    * @private
    */
   private yOriginal: string[];
@@ -105,7 +106,7 @@ export class HistogramComponent implements OnInit{
   private yScale: any;
 
   /**
-   * Distanza fra una barra e l'altra.
+   * Distanza fra una barra e l'altra
    * Importante: È un valore compreso fra 0 e 1 in modo da rappresentare una percentuale
    * @private
    */
@@ -152,12 +153,11 @@ export class HistogramComponent implements OnInit{
    * @protected
    */
   protected sortForm: any;
-  
+
   /**
-   * Costruisce il componente inizializzando le variabili utili a stabilire le dimensioni 
-   * delle varie parti del grafico
-   * @param totalByCode il service per ottenere i dati dall'API
-   * @param modal il pop-up per segnalare un errore nel fetch dei dati dall'API
+   * Costruisce il componente inizializzando le variabili utili a stabilire le dimensioni delle varie parti del grafico
+   * @param totalByCode Il service per ottenere il numero di eventi (per codice) nell'intervallo selezionato
+   * @param modal Il pop-up per segnalare un errore nel fetch dei dati dall'API
    */
   constructor(private totalByCode: TotalByCodeService, private modal: NgbModal) {
     this.sortForm = new FormGroup({sortSelection: new FormControl("0")});
@@ -167,60 +167,53 @@ export class HistogramComponent implements OnInit{
     this.yOriginal = [];
     this.totalByCodeService = totalByCode;
     this.modalService = modal;
-    
+
     this.xDomain = [];
-    
+
     this.width = 1500;
     this.barHeight = 50;
-    
+
     this.marginTop = 40;
     this.marginRight = 0;
     this.marginBottom = 0;
     this.marginLeft = 100;
-    
+
     this.yPadding = 0.1; //valore compreso fra 0 e 1
-    
+
     this.height=0;
     this.xRange=[];
     this.yRange=[];
-    
-    // this.colorList = ["#D169F0","#68B1F7","#69E17F","#F7E568","#ED8F64"];
-    // this.colorList = ["#602AEB","#3A24F2","#2C37DB","#2455F2","#2F7BEB"];
-  }
-  
-  ngOnInit(): void {
-      
+
   }
 
   /**
    * Metodo che imposta i valori necessari a disegnare il grafico secondo i dati attuali
    * e lo disegna
    */
-  drawChart(): void{
+  private drawChart(): void{
 
     this.deleteChart();
-    
-    // this.xScale = d3.scaleOrdinal(this.xDomain, this.xRange);
+
     this.xDomain = [0, Math.max(...this.x)];
 
     this.height = ((this.y.length) * this.barHeight) + this.marginTop + this.marginBottom;
 
     this.xRange = [this.marginLeft, this.width - this.marginRight - 7];
     this.yRange = [this.marginTop, this.height - this.marginBottom];
-    
+
     this.xScale = d3.scaleLinear(this.xDomain, this.xRange);
     this.yScale = d3.scaleBand()
-                    .domain(this.y)
-                    .range(this.yRange)
-                    .padding(this.yPadding);
+        .domain(this.y)
+        .range(this.yRange)
+        .padding(this.yPadding);
 
     const xAxisTicks = this.xScale.ticks(15).filter((tick:any)=> Number.isInteger(tick));
     this.xAxis =  d3.axisTop(this.xScale)
-                    .tickValues(xAxisTicks)
-                    .tickFormat((d) => d3.format("d")(d as number));
+        .tickValues(xAxisTicks)
+        .tickFormat((d) => d3.format("d")(d as number));
     this.yAxis = d3.axisLeft(this.yScale).tickSizeOuter(0);
 
-  
+
     this.svg = d3.select("figure#histogram-chart")
         .insert("svg")
         .attr("width", this.width)
@@ -230,38 +223,37 @@ export class HistogramComponent implements OnInit{
         .attr("font-family", "sans-serif")
         .attr("font-size", 10)
         .attr("background-color", "#f00")
-      
+
     this.svg.append("g")
         .attr("transform", `translate(0,${this.marginTop})`)
         .call(this.xAxis)
-          .style('font-size', '17px')
-          .style('font-weight', 'bold');
+        .style('font-size', '17px')
+        .style('font-weight', 'bold');
 
-    
-      const seed =Math.random()*360;
-      this.svg.append("g")
-          // .attr("fill", "#04e")
-          .selectAll("path")
-          .data(d3.range(this.x.length))
-          .join("path")
-          .attr("d", (i: number) => {      
-                const x = this.xScale(0);
-                const y = this.yScale(this.y[i]);      
-                const width = this.xScale(this.x[i]) - this.xScale(0);
-                const height = this.yScale.bandwidth();      
-                const radius = 5; // Adjust the radius as needed
-                return `  M ${x},${y}
+
+    const seed =Math.random()*360;
+    this.svg.append("g")
+        .selectAll("path")
+        .data(d3.range(this.x.length))
+        .join("path")
+        .attr("d", (i: number) => {
+          const x = this.xScale(0);
+          const y = this.yScale(this.y[i]);
+          const width = this.xScale(this.x[i]) - this.xScale(0);
+          const height = this.yScale.bandwidth();
+          const radius = 5;
+          return `  M ${x},${y}
                           H ${x + width - radius}    
                           Q ${x + width},${y} ${x + width},${y + radius}
                           V ${y + height - radius}    
                           Q ${x + width},${y + height} ${x + width - radius},${y + height}
                           H ${x}    V ${y} Z  `;
-          })
-          .attr("fill", (d: any, i:number) => `hsl(${seed+(i*137.51)}deg 50% 50%)`) 
-          .style("opacity", 0.8);
-    
-      
-      
+        })
+        .attr("fill", (d: any, i:number) => `hsl(${seed+(i*137.51)}deg 50% 50%)`)
+        .style("opacity", 0.8);
+
+
+
     this.svg.append("g")
         .attr("fill", "#000")
         .attr("text-anchor", "end")
@@ -280,17 +272,19 @@ export class HistogramComponent implements OnInit{
             .attr("dx", +4)
             .attr("fill", "#000")
             .attr("text-anchor", "start"));
-    
-    
+
+
     this.svg.append("g")
         .attr("transform", `translate(${this.marginLeft},0)`)
         .call(this.yAxis)
-          .style('font-size', '17px')
-          .style('font-weight', 'bold');
-
-    
+        .style('font-size', '17px')
+        .style('font-weight', 'bold');
   }
 
+  /**
+   * Genera una funzione per la gestione della richiesta HTTP di ottenimento dei dati
+   * @returns Una funzione per la gestione della richiesta HTTP di ottenimento dei dati
+   */
   private updateData(): any {
     return (event: any) => {
       if(event.body != undefined) {
@@ -303,9 +297,17 @@ export class HistogramComponent implements OnInit{
     };
   }
 
-  private deleteChart(){d3.select("figure#histogram-chart svg").remove();}
-  
-  private errorHandler() {
+  /**
+   * Metodo utilizzato per la rimozione del grafico
+   * @private
+   */
+  private deleteChart() : void {d3.select("figure#histogram-chart svg").remove();}
+
+  /**
+   * Genera una funzione per la gestione degli errori sulla richiesta HTTP di ottenimento dei dati
+   * @returns Una funzione per la gestione degli errori sulla richiesta HTTP di ottenimento dei dati
+   */
+  private errorHandler(): any {
     return (err: any) => {
       let modal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
       modal.componentInstance.setup(err.status + " " + err.error.message, () => {
@@ -316,24 +318,32 @@ export class HistogramComponent implements OnInit{
     }
   }
 
-  onSubmit(value: any) {
+  /**
+   * Metodo che gestisce il submit del form
+   * @param value Valore emesso dall'evento proveniente dal form di header
+   */
+  public onSubmit(value: any): void {
     if(value.startDatetime != null && value.endDatetime != null){
       this.totalByCodeService.GetTotalByCode(value.startDatetime, value.endDatetime).subscribe({
         next:this.updateData(),
         error: this.errorHandler()
       });
-      
+
       this.sortForm.reset({sortSelection: "0"});
     }
   }
 
-  protected sortValues() {
+  /**
+   * Metodo che ordina i dati
+   * @protected
+   */
+  protected sortValues(): void {
     const type = this.sortForm.value.sortSelection;
-    
+
     if(type==0){
       this.x = [...this.xOriginal];
       this.y = [...this.yOriginal];
-      
+
       this.drawChart()
       return;
     }
@@ -356,7 +366,7 @@ export class HistogramComponent implements OnInit{
         return 0;
       }
     }
-    
+
     const temp = this.x.map((v: number, i: number) => {
       return { code: this.y[i], value: v }
     });
@@ -364,11 +374,8 @@ export class HistogramComponent implements OnInit{
 
     this.x = temp.map((l: any) => l.value);
     this.y = temp.map((l: any) => l.code);
-    
+
     this.drawChart();
-    
-    
   }
 
-  
 }

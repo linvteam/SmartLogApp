@@ -2,6 +2,9 @@ import {Inject, Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpEvent, HttpHeaders, HttpRequest} from "@angular/common/http";
 import {BaseURL} from "../../connection-info";
+import { formatDate, registerLocaleData } from "@angular/common";
+import localeIT from "@angular/common/locales/it"
+registerLocaleData(localeIT, "it");
 
 /**
  * Servizio per l'ottenimento dal backend di un JSON che rappresenta gli eventi nell'intervallo temporale dato, raggruppati per i campi specificati
@@ -13,7 +16,7 @@ export class FrequencyService {
 
   /**
    * Crea una nuova istanza del service TotalByFirmwareService, i parametri vengono passati tramite dependency injector
-   * @param http Il client http che si occupa di effettuare l'upload
+   * @param http Il client http che effettua la chiamata al server
    * @param ConnectionURL URL del backend
    */
   constructor(private http: HttpClient, @Inject(BaseURL) private ConnectionURL: string) { }
@@ -25,17 +28,23 @@ export class FrequencyService {
    * @param regroups Campi per il raggruppamento
    * @constructor
    */
-  GetTotalByFrequency(start: Date, end: Date, regroups: any): Observable<HttpEvent<any>> {
+  public GetTotalByFrequency(start: Date, end: Date, regroups: any): Observable<HttpEvent<any>> {
     const headers = new HttpHeaders({
       accept: "*/*"
     });
+
+    const format = 'yyyy-MM-dd HH:mm:ss.SSS';
+    const locale = 'it-IT';
+
+    const startDatetime : string = formatDate(start, format, locale);
+    const endDatetime : string = formatDate(end, format, locale);
     
     const d = regroups.data;
     const f = regroups.firmware;
     const u = regroups.unit;
     const s = regroups.subunit;
 
-    const req = new HttpRequest("GET", `${this.ConnectionURL}/data/frequency/${start.toISOString().slice(0, 16)}/${end.toISOString().slice(0, 16)}/?d=${d}&f=${f}&u=${u}&s=${s}`, {
+    const req = new HttpRequest("GET", `${this.ConnectionURL}/data/frequency/${startDatetime}/${endDatetime}/?d=${d}&f=${f}&u=${u}&s=${s}`, {
       headers: headers,
       responseType: "json"
     });

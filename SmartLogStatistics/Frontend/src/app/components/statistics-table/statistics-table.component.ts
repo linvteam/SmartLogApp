@@ -3,6 +3,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StatisticsService } from 'src/app/services/statistics/statistics.service';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 
+/**
+ * Classe che definisce il comportamento della tabella delle statistiche
+ */
 @Component({
   selector: 'app-statistics-table',
   templateUrl: './statistics-table.component.html',
