@@ -56,7 +56,7 @@ describe('HistogramComponent', () => {
   it('should set correctly domain, height, range', () => {
     component['x'] = [0.2,0.2,0.1,0.3];
     component['y'] = ["S009","S010","S011"];
-    component.drawChart();
+    component['drawChart']();
     
     expect(component['height']).toEqual(190);
     expect(component['xRange']).toEqual([100,1493]);
