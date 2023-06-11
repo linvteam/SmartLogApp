@@ -89,7 +89,7 @@ export class TimeCodeHeaderComponent {
             },
             error: (error) => {
                 let errorModal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-                errorModal.componentInstance.setup(error != undefined? error.error.message : "Non è stato possibile prelevare le date di inizio/fine", () => { this.loadData(); });
+                errorModal.componentInstance.setup(error.body != undefined? error.body.message : "Non è stato possibile prelevare le date di inizio/fine", () => { this.loadData(); });
             }
         });
 
@@ -101,7 +101,7 @@ export class TimeCodeHeaderComponent {
             },
             error: (error) => {
                 let errorModal = this.modalService.open(ErrorModalComponent, { size: 'sm' });
-                errorModal.componentInstance.setup(error != undefined? error.error.message : "Non è stato possibile prelevare i codici", () => { this.loadData(); });
+                errorModal.componentInstance.setup(error.body != undefined? error.body.message : "Non è stato possibile prelevare i codici", () => { this.loadData(); });
             }
         });
     }

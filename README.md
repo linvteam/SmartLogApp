@@ -23,6 +23,11 @@
 [![Statements Coverage SmartLogViewer Status](./.github/badges/smartlogviewer/frontend/coverage-statements.svg)](./.github/badges/smartlogviewer/frontend/coverage-statements.svg)
 
 ### SmartLogStatistics
+[![General Coverage SmartLogStatistics Status](./.github/badges/smartlogstatistics/frontend/coverage.svg)](./.github/badges/smartlogstatistics/frontend/coverage.svg)
+[![Branch Coverage SmartLogStatistics Status](./.github/badges/smartlogstatistics/frontend/coverage-branches.svg)](./.github/badges/smartlogstatistics/frontend/coverage-branches.svg)
+[![Functions Coverage SmartLogStatistics Status](./.github/badges/smartlogstatistics/frontend/coverage-functions.svg)](./.github/badges/smartlogstatistics/frontend/coverage-functions.svg)
+[![Lines Coverage SmartLogStatistics Status](./.github/badges/smartlogstatistics/frontend/coverage-lines.svg)](./.github/badges/smartlogstatistics/frontend/coverage-lines.svg)
+[![Statements Coverage SmartLogStatistics Status](./.github/badges/smartlogstatistics/frontend/coverage-statements.svg)](./.github/badges/smartlogstatistics/frontend/coverage-statements.svg)
 
 ## Comandi
 

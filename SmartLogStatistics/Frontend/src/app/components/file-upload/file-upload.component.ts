@@ -89,7 +89,7 @@ export class FileUploadComponent {
      * Imposta lo stato corretto a tutti i file della lista e lancia il caricamento dei file sul db
      */
     public beginUpload(): void {
-        if (!this.currentFiles) return;
+        if (this.currentFiles.length == 0) return;
         for (let file of this.currentFiles) {
             file.status = "waiting";
         }
@@ -147,7 +147,6 @@ export class FileUploadComponent {
         if (this.uploadedFiles == -1) return;
 
         this.clipPercentage = { "clip-path": `inset(0 ${100 - (this.uploadedFiles / this.currentFiles.length * 100)}% 0 0)` };
-        console.log(this.clipPercentage)
         this.currentFiles[this.uploadedFiles].status = "uploading"
         this.uploadService.upload(this.currentFiles[this.uploadedFiles].file).subscribe({
             next: this.uploadEventHandler(this.uploadedFiles),

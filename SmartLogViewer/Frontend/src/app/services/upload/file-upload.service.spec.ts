@@ -20,6 +20,7 @@ describe('FileUploadService', () => {
       ]
     });
     service = TestBed.inject(FileUploadService);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   it('should be created', () => {
@@ -29,7 +30,6 @@ describe('FileUploadService', () => {
   it('should construct a valid http request', () => {
     const file = new File([""], "filename");
     const response = { message: 'File uploaded successfully' };
-    httpTestingController = TestBed.inject(HttpTestingController);
 
     service.upload(file).subscribe((event) => {
       switch (event.type) {

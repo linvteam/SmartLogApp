@@ -35,9 +35,9 @@ export class TotalByFirmwareService {
 
     const format = 'yyyy-MM-dd HH:mm:ss.SSS';
     const locale = 'it-IT';
-
-    const startDatetime : string = formatDate(start, format, locale);
-    const endDatetime : string = formatDate(end, format, locale);
+    
+    const startDatetime : string = formatDate(start, format, locale).replace(" ", "T");
+    const endDatetime : string = formatDate(end, format, locale).replace(" ", "T");
 
     const req = new HttpRequest("GET", `${this.ConnectionURL}/data/totalbyfirmware/${startDatetime}/${endDatetime}/${code}`, {
       headers: headers,
