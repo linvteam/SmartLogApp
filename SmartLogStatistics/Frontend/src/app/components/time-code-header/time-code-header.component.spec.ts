@@ -129,6 +129,5 @@ describe('TimeCodeHeaderComponent', () => {
     component.submitForm();
 
     expect(component['modalService'].hasOpenModals()).toBeTruthy();    
-  });
-  
+  });  
 });
