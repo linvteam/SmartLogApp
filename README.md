@@ -31,13 +31,56 @@
 
 ## Comandi
 
-Build:
+### Build
 ```bash
 dotnet restore
 dotnet build
 ```
 
-Run tests & get test report:
+### Run tests & get test report
+
+Core library:
+
 ```bash
-dotnet test -p:ExcludeByFile="**/Program.cs" --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover
+dotnet test CoreTests --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude=[]Core.Injectables -p:ExcludeByFile="**/Program.cs"
+```
+
+SmartLogViewer:
+
+```bash
+dotnet test SmartLogViewerTests --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude=[*]Core* -p:ExcludeByFile="**/Program.cs"
+```
+
+SmartLogViewer Frontend:
+```bash
+cd SmartLogViewer\Frontend
+npm install
+npm test
+```
+
+SmartLogStatistics:
+
+```bash
+dotnet test SmartLogStatisticsTests --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude="[*]Core*%2c[*]SmartLogStatistics.Migrations*" -p:ExcludeByFile="**/Program.cs"
+```
+
+SmartLogStatistics Frontend:
+```bash
+cd SmartLogStatistics\Frontend
+npm install
+npm test
+```
+
+### Publish:
+
+SmartLogViewer:
+
+```bash
+dotnet publish SmartLogViewer -c Release --self-contained=true -p:PublishSingleFile=true -p:PublishTrimmed=true
+```
+
+SmartLogStatistics:
+
+```bash
+dotnet publish SmartLogStatistics -c Release --self-contained=true -p:PublishSingleFile=true -p:PublishTrimmed=true
 ```

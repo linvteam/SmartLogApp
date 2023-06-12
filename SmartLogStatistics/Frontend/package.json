@@ -26,7 +26,6 @@
     "ag-grid-angular": "^29.3.5",
     "ag-grid-community": "^29.3.5",
     "bootstrap": "^5.2.3",
-    "compodoc": "^0.0.41",
     "d3": "^7.8.4",
     "jquery": "^3.7.0",
     "mdb-angular-ui-kit": "^4.1.0",
@@ -40,7 +39,6 @@
     "@angular/cli": "~15.2.0",
     "@angular/compiler-cli": "^15.2.0",
     "@angular/localize": "^15.2.0",
-    "@compodoc/compodoc": "^1.1.21",
     "@types/d3": "^7.4.0",
     "@types/jasmine": "~4.3.0",
     "jasmine-core": "~4.5.0",
@@ -49,6 +47,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
-    "typescript": "~4.9.4"
+    "typescript": "~4.9.4",
+    "@compodoc/compodoc": "^1.1.19"
   }
 }
