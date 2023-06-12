@@ -378,8 +378,6 @@ FodyWeavers.xsd
 /SmartLogViewer/Frontend/dist
 /SmartLogViewer/Frontend/documentation
 /SmartLogViewer/Frontend/coverage
-/SmartLogViewer/Frontend/package-lock.json
 /SmartLogStatistics/Frontend/dist
 /SmartLogStatistics/Frontend/documentation
 /SmartLogStatistics/Frontend/coverage
-/SmartLogStatistics/Frontend/package-lock.json
