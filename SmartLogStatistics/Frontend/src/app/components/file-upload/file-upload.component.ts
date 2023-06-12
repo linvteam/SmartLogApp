@@ -126,7 +126,7 @@ export class FileUploadComponent {
         return (event: any) => {
             this.currentFiles[fileIndex].status = "failed";
             if (event.error && event.error.message) {
-                if (event.error.code == 8) {
+                if (event.error.code == 6) {
                     this.currentFiles[fileIndex].status = 'warning';
                 }
                 this.currentFiles[fileIndex].error = event.error.message;
