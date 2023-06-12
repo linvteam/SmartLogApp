@@ -12,9 +12,9 @@ registerLocaleData(localeIT, "it");
  * Classe per la rappresentazione dei dati in un grafico cumulativo
  */
 @Component({
-  selector: 'app-cumulative-chart',
-  templateUrl: './cumulative-chart.component.html',
-  styleUrls: ['./cumulative-chart.component.css']
+    selector: 'app-cumulative-chart',
+    templateUrl: './cumulative-chart.component.html',
+    styleUrls: ['./cumulative-chart.component.css']
 })
 export class CumulativeChartComponent {
 
@@ -222,7 +222,7 @@ export class CumulativeChartComponent {
             .attr("height", this.height)
 
         this.g = this.svg.append("g")
-                         .attr("transform","translate(" + this.margin.left + "," + (this.margin.top) + ")");
+            .attr("transform", "translate(" + this.margin.left + "," + (this.margin.top) + ")");
 
         this.g.append('text')
             .attr('class', 'title')
@@ -234,14 +234,14 @@ export class CumulativeChartComponent {
             .text(`Occorrenze di ${this.code} nel periodo tra ${this.getFormattedDate(this.startDate)} e ${this.getFormattedDate(this.endDate)}`);
 
         //Creo l'asse X nel grafico
-        this.gXAxis =this.g.append("g")
-                            .attr("class", "xAxis")
-                            .attr("transform", "translate(0," + this.height + ")")
-                            .call(d3.axisBottom(xScale))
-                            .call((g: any) => g.selectAll(".tick line").clone()
-                                .attr("y1", -this.height)
-                                .attr("stroke-opacity", 0.2)
-                                .attr("class", "grid-line"));
+        this.gXAxis = this.g.append("g")
+            .attr("class", "xAxis")
+            .attr("transform", "translate(0," + this.height + ")")
+            .call(d3.axisBottom(xScale))
+            .call((g: any) => g.selectAll(".tick line").clone()
+                .attr("y1", -this.height)
+                .attr("stroke-opacity", 0.2)
+                .attr("class", "grid-line"));
 
         //Creo l'asse Y nel grafico
         this.g.append("g")
@@ -264,8 +264,8 @@ export class CumulativeChartComponent {
         //Inserisco il tooltip per i punti
         this.tooltip = d3.select("figure#cumulative-chart")
             .append("div")
-            .attr("class","tooltip")
-            .style("position", "absolute")
+            .attr("class", "tooltip")
+            .style("position", "fixed")
             .style("opacity", 0)
             .style("background-color", "white")
             .style("border", "solid")
@@ -363,8 +363,8 @@ export class CumulativeChartComponent {
             .attr("clip-path", "url(#clip)")
 
         if (this.records.length > 1) {
-         this.area = this.path.attr("fill", "#8ad875")
-                              .attr("fill-opacity", 0.4).attr("d", area(this.records));
+            this.area = this.path.attr("fill", "#8ad875")
+                .attr("fill-opacity", 0.4).attr("d", area(this.records));
         }
 
         //Aggiunto i punti che rappresentano gli istanti
@@ -389,8 +389,8 @@ export class CumulativeChartComponent {
 
         //Evento che accade quando mi muovo sopra un punto e sposto il tooltip
         const mouseMove = (event: any) => {
-            let x = event.pageX
-            let y = event.pageY
+            let x = event.clientX;
+            let y = event.clientY;
             if (this.tooltipCollideX(x)) { //se troppo a destra, lo sposta a sinistra del mouse
                 x -= 130;
             }
