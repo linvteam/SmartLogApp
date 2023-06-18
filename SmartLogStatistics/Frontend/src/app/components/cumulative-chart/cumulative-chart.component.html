@@ -1,0 +1,9 @@
+
+<app-time-code-header (submitEmitter)="onSubmit($event)"></app-time-code-header>
+<div class="d-flex flex-column align-items-center">
+    <figure id="cumulative-chart"></figure>
+</div>
+
+<div id="no-events" class="alert alert-info" *ngIf="this.records.length==0">
+    {{ this.getNoRecordsMessage() }}
+</div>

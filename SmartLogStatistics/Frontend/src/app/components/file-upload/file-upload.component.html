@@ -1,0 +1,102 @@
+<!-- Form di upload con possibilità di fare drag and drop -->
+<div id="upload-container" class="row" *ngIf="uploadedFiles == -1">
+    <div class="col-12">
+        <label class="dropdown-btn btn-default p-0" for="file" appFileDropped (fileDropped)="filesDrop($event)">
+            {{ labelText }}
+            <input id="file" #fileSelector type="file" (change)="selectFiles($event)" accept="text/csv" multiple />
+        </label>
+    </div>
+
+    <div class="col-12">
+        <button class="btn btn-success btn-sm" [disabled]="currentFiles.length == 0" (click)="beginUpload()">
+            Carica file
+        </button>
+    </div>
+</div>
+
+<!-- Parte di pagina da mostrare quando si effettua l'upload -->
+<div *ngIf="uploadedFiles != -1">
+    <!-- Questa prima sezione mostra una barra di andamento generale del caricamento -->
+    <h1>Caricamento file</h1>
+
+    <div class="progress my-progress">
+        <!-- Progress bar che mostra l'andamento del caricamento dei file con relativo testo -->
+        <div class="progress-bar progress-bar-info progress-bar-striped"
+             role="progressbar"
+             [ngStyle]="{ width: (uploadedFiles * 100 / currentFiles.length) + '%'}">
+        </div>
+        <p>Caricati {{ uploadedFiles }} / {{ currentFiles.length }} file</p>
+        <!-- Questo div con lo stesso testo appena sopra serve per far cambiare il colore al testo quando la barra di caricamento ci passa sopra -->
+        <div class="masker" [ngStyle] =" clipPercentage">
+            <p class="masked">Caricati {{ uploadedFiles }} / {{ currentFiles.length }} file</p>
+        </div>
+    </div>
+
+    <!-- Messaggio che mostra il file che si sta attualmente caricando -->
+    <div class="alert alert-dark my-alert" *ngIf="uploadedFiles !=  currentFiles.length">
+        Caricamento del file: {{ currentFiles[uploadedFiles].file.name }}
+    </div>
+
+    <!-- Messaggio di completamento del caricamento -->
+    <div class="alert alert-dark my-alert" *ngIf="uploadedFiles ==  currentFiles.length">
+        Caricamento completato <span *ngIf="errors">con errori</span>
+    </div>
+
+    <!-- In questa sezione a scomparsa ci sono i dettagli del caricamento per ogni file -->
+    <mdb-accordion>
+        <mdb-accordion-item>
+            <ng-template mdbAccordionItemHeader>Dettagli</ng-template>
+            <ng-template mdbAccordionItemBody>
+                <div class="row file-row" *ngFor="let file of currentFiles">
+                    <!-- Separata su due colonne si trova a sinistra il nome del file -->
+                    <div class="col-6 file-name">
+                        {{ file.file.name }}
+                    </div>
+                    <!-- Una barra grigia animata quando il file è in attesa di essere caricato -->
+                    <div class="col-6" *ngIf="file.status == 'waiting'">
+                        <div class="progress my-progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated progress-purple"
+                                 role="progressbar"
+                                 style="width: 100%"
+                                 aria-valuenow="100"
+                                 aria-valuemax="100"
+                                 aria-valuemin="0">
+                                Attesa...
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Una barra verde quando si effettua l'upload del file -->
+                    <div class="col-6" *ngIf="file.status == 'uploading'">
+                        <div class="progress my-progress">
+                            <div class="progress-bar progress-bar-striped bg-success"
+                                 role="progressbar"
+                                 [ngStyle]="{width: file.progress + '%'}">
+                            </div>
+                            <p>{{ file.progress }}%</p>
+                            <!-- Stesso meccanismo descritto sopra per far cambiare colore al testo -->
+                            <div class="masker" [ngStyle]="file.style">
+                                <p class="masked">{{ file.progress }}%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Un alert rosso se c'è stato un errore grave nel caricamento 
+                        (ad esempio il backend non raggiungibile oppure un file con contenuto corrotto) -->
+                    <div class="col-6" *ngIf="file.status == 'failed'">
+                        <div class="alert alert-danger" role="alert">
+                            {{ file.error }}
+                        </div>
+                    </div>
+                    <!-- Un alert giallo se c'è stato un soft-error (non grave, 
+                        normalmente l'utente non dovrà fare nulla per risolvere il problema, 
+                        ad esempio un conflitto per file già presente nel db) -->
+                    <div class="col-6" *ngIf="file.status == 'warning'">
+                        <div class="alert alert-warning" role="alert">
+                            {{ file.error }}
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </mdb-accordion-item>
+    </mdb-accordion>
+
+</div>

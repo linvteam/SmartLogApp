@@ -22,7 +22,7 @@ namespace Core {
 
             var matches = regex.Match(riga);
             if(matches.Captures.Count == 0) {
-                throw new ParsingException("Impossibile leggere la riga PC DateTime", ParsingException.Code.FormatoErrato);
+                throw new ParsingException("Impossibile fare l'analisi della riga PC DateTime", ParsingException.ErrorCode.FormatoErrato);
             }
 
             var groups = matches.Groups;
@@ -36,7 +36,7 @@ namespace Core {
                     int.Parse(groups[5].Value),  // Minuti
                     int.Parse(groups[6].Value)); // Secondi
             } catch(Exception) {
-                throw new ParsingException("PCDateTime non valida", ParsingException.Code.DatoErrato);
+                throw new ParsingException("PCDateTime non valida", ParsingException.ErrorCode.DatoErrato);
             }
         }
 
@@ -52,7 +52,7 @@ namespace Core {
 
             var matches = regex.Match(riga);
             if(matches.Captures.Count == 0) {
-                throw new ParsingException("Impossibile parsare la riga UPS DateTime", ParsingException.Code.FormatoErrato);
+                throw new ParsingException("Impossibile fare l'analisi della riga UPS DateTime", ParsingException.ErrorCode.FormatoErrato);
             }
 
             var groups = matches.Groups;
@@ -66,7 +66,7 @@ namespace Core {
                     int.Parse(groups[5].Value),  // Minuti
                     int.Parse(groups[6].Value)); // Secondi
             } catch(Exception) {
-                throw new ParsingException("UPSDateTime non valida", ParsingException.Code.DatoErrato);
+                throw new ParsingException("UPSDateTime non valida", ParsingException.ErrorCode.DatoErrato);
             }
 
         }
@@ -76,20 +76,17 @@ namespace Core {
         /// </summary>
         /// <param name="riga">La riga da leggere</param>
         /// <returns>Tupla con IniFileName, Unit e SubUnit</returns>
-        private Tuple<string, int, int> INIFileParse(string riga) {
-            string pattern = @"INI File name :  ([\w_]+_v\d+_\d+_\d+.ini); Unit=(\d+) - SubUnit=(\d+)";
+        private INIFile INIFileParse(string riga) {
+            string pattern = @"INI File name :  ([\w_]+_v\d+_\d+_\d+.(?:ini|INI)); Unit=(\d+) - SubUnit=(\d+)";
             Regex regex = new(pattern);
 
             var matches = regex.Match(riga);
-            if(matches.Captures.Count == 0) { throw new ParsingException("Impossibile parsare una riga di INI File", ParsingException.Code.FormatoErrato); }
+            if(matches.Captures.Count == 0) { throw new ParsingException("Impossibile fare l'analisi di una riga di INI File", ParsingException.ErrorCode.FormatoErrato); }
 
             var groups = matches.Groups;
 
             // Questi int.Parse non possono lanciare una eccezione per nessun motivo in quanto è la regex che decide il formato.
-            return new Tuple<string, int, int>(
-                groups[1].Value,
-                int.Parse(groups[2].Value),
-                int.Parse(groups[3].Value));
+            return new INIFile(groups[1].Value, int.Parse(groups[2].Value), int.Parse(groups[3].Value));
 
         }
 
@@ -102,19 +99,19 @@ namespace Core {
 
             string? riga = reader.ReadLine();
             if(riga == null)
-                throw new ParsingException("Il file non contiene un header valido. Manca PC DateTime", ParsingException.Code.FormatoErrato);
+                throw new ParsingException("Il file non contiene un header valido. Manca PC DateTime", ParsingException.ErrorCode.FormatoErrato);
             DateTime pc = PCDateParse(riga);
 
             riga = reader.ReadLine();
             if(riga == null)
-                throw new ParsingException("Il file non contiene un header valido. Manca UPS DateTime", ParsingException.Code.FormatoErrato);
+                throw new ParsingException("Il file non contiene un header valido. Manca UPS DateTime", ParsingException.ErrorCode.FormatoErrato);
             DateTime ups = UPSDateParse(riga);
 
-            List<Tuple<string, int, int>> inifiles = new();
+            List<INIFile> inifiles = new();
             // Leggo la prima riga
             riga = reader.ReadLine();
             if(riga == null)
-                throw new ParsingException("Il file non contiene un header valido. Mancano gli INI files", ParsingException.Code.FormatoErrato);
+                throw new ParsingException("Il file non contiene un header valido. Mancano gli INI files", ParsingException.ErrorCode.FormatoErrato);
             inifiles.Add(INIFileParse(riga));
 
             while(reader.Peek() == 'I') {

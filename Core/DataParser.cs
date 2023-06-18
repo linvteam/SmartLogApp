@@ -31,17 +31,17 @@ namespace Core {
                     csv.Read();
                     csv.ReadHeader();
                 } catch {
-                    throw new ParsingException("Impossibile parsare il file CSV, header non presente", ParsingException.Code.FormatoErrato);
+                    throw new ParsingException("Impossibile analizzare il file CSV, header non presente", ParsingException.ErrorCode.FormatoErrato);
                 }
                 while(csv.Read()) {
                     RawLogRow? row;
                     try {
                         row = csv.GetRecord<RawLogRow>();
                     } catch {
-                        throw new ParsingException("Impossibile parsare il contenuto del file CSV", ParsingException.Code.FormatoErrato);
+                        throw new ParsingException("Impossibile analizzare il contenuto del file CSV", ParsingException.ErrorCode.FormatoErrato);
                     }
                     if(row == null)
-                        throw new ParsingException("Impossibile leggere il CSV", ParsingException.Code.FormatoErrato);
+                        throw new ParsingException("Impossibile leggere il file CSV", ParsingException.ErrorCode.FormatoErrato);
 
                     LogRow? converted_row = Filter(row);
                     if(converted_row != null) {
@@ -65,13 +65,19 @@ namespace Core {
                 return null;
 
             // Converto il valore di value
-            bool value = row.Value == "ON";
+            bool value;
+            if(row.Value == "ON")
+                value = true;
+            else if(row.Value == "OFF")
+                value = false;
+            else
+                throw new ParsingException("Impossibile convertire i dati", ParsingException.ErrorCode.DatoErrato);
 
             // Converto la data
             Regex dateRegex = new Regex(@"(\d\d)/(\d\d)/(\d\d\d\d)");
             Match match = dateRegex.Match(row.Date);
             if(!match.Success) {
-                throw new ParsingException("Impossibile converire i dati", ParsingException.Code.DatoErrato);
+                throw new ParsingException("Impossibile convertire i dati", ParsingException.ErrorCode.DatoErrato);
             }
             DateOnly data = new DateOnly(
                 int.Parse(match.Groups[3].Value),
@@ -82,7 +88,7 @@ namespace Core {
             Regex timeRegex = new Regex(@"(\d\d):(\d\d):(\d\d)\.(\d\d\d)");
             match = timeRegex.Match(row.Time);
             if(!match.Success) {
-                throw new ParsingException("Impossibile parsare i dati", ParsingException.Code.DatoErrato);
+                throw new ParsingException("Impossibile eseguire l'analisi dei dati", ParsingException.ErrorCode.DatoErrato);
             }
 
             TimeOnly time = new TimeOnly(

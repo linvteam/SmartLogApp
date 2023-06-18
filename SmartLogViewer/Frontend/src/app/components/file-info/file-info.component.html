@@ -1,0 +1,24 @@
+
+<div id="header">
+    <table class="ag-theme-alpine textCenter" id="datetime-header">
+        <tr>
+            <th id="pcDateHeader">PCDate</th>
+            <td id="pcDate">{{pcDate}}</td>
+        </tr>
+        <tr>
+            <th>UPSDate</th>
+            <td id="upsDate" >{{upsDate}}</td>
+        </tr>
+    </table>
+    <ag-grid-angular
+            class="ag-theme-alpine"
+            id="inifile-header"
+            [rowData]="iniFiles"
+            [columnDefs]="columnDefs"
+            [defaultColDef]="defaultColDef"
+            [rowSelection]="'multiple'"
+            [animateRows]="true"
+            (gridReady)="onGridReady($event)"
+    >
+    </ag-grid-angular>
+</div>

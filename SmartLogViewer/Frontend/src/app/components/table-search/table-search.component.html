@@ -1,0 +1,17 @@
+<div class="accordion-wrapper">
+    <mdb-accordion>
+        <mdb-accordion-item [collapsed]="false">
+            <ng-template mdbAccordionItemHeader>Ricerca sequenze eventi</ng-template>
+            <ng-template mdbAccordionItemBody>
+                <app-sequence-search></app-sequence-search>
+            </ng-template>
+        </mdb-accordion-item>
+
+        <mdb-accordion-item>
+            <ng-template mdbAccordionItemHeader>Raggruppamento eventi</ng-template>
+            <ng-template mdbAccordionItemBody>
+                <app-event-grouping></app-event-grouping>
+            </ng-template>
+        </mdb-accordion-item>
+    </mdb-accordion>
+</div>

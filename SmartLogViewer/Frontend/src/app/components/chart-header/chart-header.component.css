@@ -1,0 +1,25 @@
+#file-info-and-search {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex: 1 1 auto;
+}
+
+#file-info, #search {
+    padding: 1.5em;
+}
+
+.accordion-button {
+    width: 100%;
+    border: 1px solid #dde2eb;
+}
+
+mdb-accordion {
+    margin-bottom: 1em;
+}
+
+app-table-header {
+    margin-bottom: 1em;
+}

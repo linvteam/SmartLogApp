@@ -1,0 +1,30 @@
+
+<div id="upload-container" class="row">
+    <div class="col-12">
+        <label class="btn btn-default p-0" for="file" appFileDropped (fileDropped)="fileDrop($event)">
+            {{ labelText }}
+            <input id="file" #fileSelector type="file" (change)="selectFile($event)" accept="text/csv" />
+        </label>
+        
+    </div>
+
+    <div class="col-12">
+        <button class="btn btn-success btn-sm" [disabled]="!currentFile" (click)="upload()">
+            Carica file
+        </button>
+    </div>
+</div>
+
+<div *ngIf="progress != undefined" class="progress my-3">
+    <div class="progress-bar progress-bar-info progress-bar-striped"
+         role="progressbar"
+         attr.aria-valuenow="{{ progress }}"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         [ngStyle]="{ width: progress + '%' }">
+        {{ progress }}%
+    </div>
+</div>
+
+<div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
+

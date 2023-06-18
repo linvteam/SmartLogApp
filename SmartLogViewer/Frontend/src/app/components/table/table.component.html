@@ -1,0 +1,36 @@
+
+<app-table-header></app-table-header>
+
+<div class="table-container">
+    <div class="form-group row tableSelection" *ngIf="numberOfGroups > 1">
+        Tabella numero
+        <div class="col">
+            <label class="visually-hidden" for="autoSizingInputGroup">Raggruppamento</label>
+            <input type="number" (change)="changeGroupIndex($event)" name="valore" class="form-control" id="autoSizingInputGroup" min='1' max="{{ numberOfGroups }}" [value]="groupNumber" />
+        </div>
+        di {{ numberOfGroups }}
+    </div>
+
+    <table class="ag-theme-alpine textCenter datetime-header" *ngIf="this.rowData.length > 0">
+        <tr>
+            <th>Dal:</th>
+            <td>{{ startDateTime }}</td>
+        </tr>
+        <tr>
+            <th>Al:</th>
+            <td>{{ endDateTime }}</td>
+        </tr>
+        <tr>
+            <th>Eventi visualizzati:</th>
+            <td>{{ rowData.length }}</td>
+        </tr>
+    </table>
+    <ag-grid-angular class="ag-theme-alpine"
+                     [rowData]="rowData"
+                     [columnDefs]="columnDefs"
+                     [defaultColDef]="defaultColDef"
+                     [rowSelection]="'multiple'"
+                     [animateRows]="true"
+                     (gridReady)="onGridReady($event)">
+    </ag-grid-angular>
+</div>

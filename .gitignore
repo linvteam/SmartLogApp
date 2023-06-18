@@ -69,6 +69,14 @@ ScaffoldingReadMe.txt
 # StyleCop
 StyleCopReport.xml
 
+# Visual Studio Code
+*/.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
 # Files built by Visual Studio
 *_i.c
 *_p.c
@@ -363,3 +371,13 @@ MigrationBackup/
 FodyWeavers.xsd
 /TestReport
 /.idea/.idea.SmartLog/.idea
+
+# Angular cache
+
+.angular
+/SmartLogViewer/Frontend/dist
+/SmartLogViewer/Frontend/documentation
+/SmartLogViewer/Frontend/coverage
+/SmartLogStatistics/Frontend/dist
+/SmartLogStatistics/Frontend/documentation
+/SmartLogStatistics/Frontend/coverage

@@ -1,0 +1,44 @@
+ag-grid-angular {
+    width: 100%;
+    height: 100%;
+    padding-bottom: 2em;
+}
+
+div {
+    width: 100%;
+    height: 100%;
+}
+
+.tableSelection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    padding: 1em;
+}
+
+.textCenter {
+    text-align: center;
+}
+
+.datetime-header {
+    border: 1px solid #babfc7;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+}
+
+.datetime-header td, .datetime-header th {
+    border: 1px solid #babfc7;
+    border-collapse: collapse;
+    padding: 1em;
+}
+
+.datetime-header th {
+    background-color: #f8f8f8;
+}
+
+.table-container {
+    margin-top: 1em;
+}

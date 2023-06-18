@@ -1,0 +1,33 @@
+
+<app-time-header (submitEmitter)='onSubmit($event)'></app-time-header>
+<div id="statistics">
+    <table class="ag-theme-alpine textCenter" id="statistics-table">
+        <tr>
+            <th colspan="2">Statistiche generali sui file di log</th>
+        </tr>
+        <tr>
+            <th id="fileNumber-header"> Numero di file 
+                <span class="CellComment">Indica qual è il numero di file i cui eventi sono considerati (eventi compresi nell'intervallo inserito)</span>    
+            </th>
+            <td id="fileNumber"> {{fileNumber}}</td>
+        </tr>
+        <tr>
+            <th id="maxEvents-header"> Massimo numero di eventi per file
+                <span class="CellComment">Indica qual è il numero di eventi nel file che ne ha di più (eventi compresi nell'intervallo inserito)</span>    
+            </th>
+            <td id="maxEvents"> {{maxEventsNumber}}</td>
+        </tr>
+        <tr>
+            <th id="averageEvents-header"> Numero medio di eventi per file
+                <span class="CellComment">Indica qual è il numero di eventi in media tra i file presi in considerazione (eventi compresi nell'intervallo inserito)</span>        
+            </th>
+            <td id="averageEvents"> {{averageEventsNumber}}</td>
+        </tr>
+        <tr>
+            <th id="standardDeviation-header"> Deviazione standard del numero di eventi per file
+                <span class="CellComment">Indica qual è la deviazione standard sul numero di eventi dei file considerati (eventi compresi nell'intervallo inserito)</span>    
+            </th>
+            <td id="standardDeviation"> {{standardDeviationEvents}}</td>
+        </tr>
+    </table>
+</div>

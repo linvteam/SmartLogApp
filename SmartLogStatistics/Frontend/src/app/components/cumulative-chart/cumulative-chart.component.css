@@ -1,0 +1,13 @@
+#no-events{
+    text-align: center;
+}
+
+#cumulative-chart {
+    position: relative;
+    overflow: hidden;
+}
+
+.tooltip p {
+    display: block;
+    margin: 0;
+}
