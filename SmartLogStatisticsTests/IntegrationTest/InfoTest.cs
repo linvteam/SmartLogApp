@@ -8,27 +8,24 @@ using SmartLogStatistics.Controller;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Data.Entity;
 
 namespace SmartLogStatisticsTests.IntegrationTest {
 
     [TestClass]
     public class InfoTest {
 
-        private static Mock<DbSet<T>> CreateDbSetMock<T>(IEnumerable<T> elements) where T : class {
-            var elementsAsQueryable = elements.AsQueryable();
-            var dbSetMock = new Mock<DbSet<T>>();
+        private SmartLogContext _context;
+        private InfoController _controller;
 
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.Provider).Returns(elementsAsQueryable.Provider);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.Expression).Returns(elementsAsQueryable.Expression);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(elementsAsQueryable.ElementType);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
+        public InfoTest() {
+            string databaseName = Guid.NewGuid().ToString();
 
-            return dbSetMock;
-        }
-
-        [TestMethod()]
-        public void GetCodeWithDescriptionTest() {
-            var mockContext = new Mock<SmartLogContext>();
+            var options = new DbContextOptionsBuilder<SmartLogContext>().UseNpgsql($"Host=localhost;Database={databaseName};Username=Utente;Password=Password")
+                                                                        .Options;
+            _context = new SmartLogContext(options);
+            _context.Database.EnsureDeleted();
+            _context.Database.EnsureCreated();
 
             List<LogFile> files = new()
             {
@@ -36,14 +33,14 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                 {
                     id = 1,
                     filename = "Test.csv",
-                    PC_datetime = new(2022, 08, 05, 08, 47, 18),
-                    UPS_datetime = new(2022, 08, 05, 08, 47, 17),
+                    PC_datetime = new DateTime(2022, 08, 05, 08, 47, 18).ToUniversalTime(),
+                    UPS_datetime = new DateTime(2022, 08, 05, 08, 47, 17).ToUniversalTime(),
                 },
                 new LogFile{
                     id = 2,
                     filename = "file.csv",
-                    PC_datetime = new(2023, 08, 05, 08, 47, 18),
-                    UPS_datetime = new(2023, 08, 05, 08, 47, 17)
+                    PC_datetime = new DateTime(2023, 08, 05, 08, 47, 18).ToUniversalTime(),
+                    UPS_datetime = new DateTime(2023, 08, 05, 08, 47, 17).ToUniversalTime()
                 }
             };
 
@@ -51,79 +48,31 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             {
                 new Firmware
                 {
+                    file_id = 1,
                     INI_file_name = "MAPK_Module_RD_IV_v2_04_00.ini",
                     unit = 1,
                     subunit = 1,
                 },
                 new Firmware
                 {
+                    file_id = 1,
                     INI_file_name = "MAPK_ByPass_v2_04_00.ini",
                     unit = 1,
                     subunit = 14,
-                }
-            };
-
-            List<Log> logLines = new()
-            {
-                new Log
-                {
-                    file_id = 1,
-                    code = "A001",
-                    date = new DateOnly(2022,03,05),
-                    time = new TimeOnly(08,36,29,618),
-                    unit = 1,
-                    subunit =1,
-                    value = true,
                 },
-                new Log
+                new Firmware
                 {
-                    file_id=1,
-                    code = "C001",
-                    date = new DateOnly(2022,03,05),
-                    time = new TimeOnly(08,36,29,618),
-                    unit = 1,
-                    subunit =1,
-                    value = true,
-                },
-                new Log
-                {
-                    file_id=2,
-                    code = "C001",
-                    date = new DateOnly(2022,03,07),
-                    time = new TimeOnly(08,36,29,618),
-                    unit = 1,
-                    subunit =14,
-                    value = true,
-                },
-                new Log
-                {
-                    file_id=1,
-                    code = "C001",
-                    date = new DateOnly(2022,04,05),
-                    time = new TimeOnly(08,36,29,618),
+                    file_id = 2,
+                    INI_file_name = "MAPK_Module_RD_IV_v2_04_00.ini",
                     unit = 1,
                     subunit = 1,
-                    value = false,
                 },
-                new Log
+                new Firmware
                 {
-                    file_id=1,
-                    code = "C001",
-                    date = new DateOnly(2022,05,07),
-                    time = new TimeOnly(08,36,29,618),
-                    unit = 1,
-                    subunit = 1,
-                    value = false,
-                },
-                new Log
-                {
-                    file_id=2,
-                    code = "C001",
-                    date = new DateOnly(2022,07,05),
-                    time = new TimeOnly(08,36,29,618),
+                    file_id = 2,
+                    INI_file_name = "MAPK_ByPass_v2_04_00.ini",
                     unit = 1,
                     subunit = 14,
-                    value = false,
                 }
             };
 
@@ -142,21 +91,89 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                 }
             };
 
-            var logLineMock = CreateDbSetMock(logLines);
-            var firmwareMock = CreateDbSetMock(firmwares);
-            var fileMock = CreateDbSetMock(files);
-            var eventsMock = CreateDbSetMock(events);
+            List<Log> logLines = new()
+            {
+                new Log
+                {
+                    file_id = 1,
+                    log_line = 1,
+                    code = "A001",
+                    date = new DateOnly(2022,03,05),
+                    time = new TimeOnly(08,36,29,618),
+                    unit = 1,
+                    subunit =1,
+                    value = true,
+                },
+                new Log
+                {
+                    file_id=1,
+                    log_line = 2,
+                    code = "C001",
+                    date = new DateOnly(2022,03,05),
+                    time = new TimeOnly(08,36,29,618),
+                    unit = 1,
+                    subunit =1,
+                    value = true,
+                },
+                new Log
+                {
+                    file_id=2,
+                    log_line= 1,
+                    code = "C001",
+                    date = new DateOnly(2022,03,07),
+                    time = new TimeOnly(08,36,29,618),
+                    unit = 1,
+                    subunit =14,
+                    value = true,
+                },
+                new Log
+                {
+                    file_id=1,
+                    log_line= 3,
+                    code = "C001",
+                    date = new DateOnly(2022,04,05),
+                    time = new TimeOnly(08,36,29,618),
+                    unit = 1,
+                    subunit = 1,
+                    value = false,
+                },
+                new Log
+                {
+                    file_id=1,
+                    log_line= 4,
+                    code = "C001",
+                    date = new DateOnly(2022,05,07),
+                    time = new TimeOnly(08,36,29,618),
+                    unit = 1,
+                    subunit = 1,
+                    value = false,
+                },
+                new Log
+                {
+                    file_id=2,
+                    log_line= 2,
+                    code = "C001",
+                    date = new DateOnly(2022,07,05),
+                    time = new TimeOnly(08,36,29,618),
+                    unit = 1,
+                    subunit = 14,
+                    value = false,
+                }
+            };
 
-            mockContext.Setup(m => m.File).Returns(fileMock.Object);
-            mockContext.Setup(m => m.Log).Returns(logLineMock.Object);
-            mockContext.Setup(m => m.Firmware).Returns(firmwareMock.Object);
-            mockContext.Setup(m => m.Event).Returns(eventsMock.Object);
+            _context.File.AddRange(files);
+            _context.Event.AddRange(events);
+            _context.Log.AddRange(logLines);
+            _context.Firmware.AddRange(firmwares);
+            _context.SaveChanges();
 
-            InfoRepositoryPgSql repo = new InfoRepositoryPgSql(mockContext.Object);
+            _controller = new InfoController(new InfoRepositoryPgSql(_context));
+        }
 
-            InfoController controller = new InfoController(repo);
-
-            ObjectResult result = (ObjectResult)controller.GetCodeWithDescription();
+        [TestMethod()]
+        public void GetCodeWithDescriptionTest() {
+            
+            ObjectResult result = (ObjectResult)_controller.GetCodeWithDescription();
 
             Assert.AreEqual(200, result.StatusCode);
 
@@ -174,6 +191,19 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             Assert.IsNotNull(C001);
             Assert.AreEqual("descrizione C001", C001.Description);
         
+        }
+
+        private void ClearContext() {
+
+            _context.File.RemoveRange(_context.File.Select(f => f).ToArray());
+            _context.Firmware.RemoveRange(_context.Firmware.Select(f => f).ToArray());
+            _context.Log.RemoveRange(_context.Log.Select(f => f).ToArray());
+            _context.SaveChanges();
+        }
+
+        [TestCleanup()]
+        public void TeardownDatabase() {
+            _context.Database.EnsureDeleted();
         }
     }
 }

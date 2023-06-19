@@ -1,41 +1,29 @@
 ﻿using Moq;
 using SmartLogStatistics.Model;
 using SmartLogStatistics.Repository;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using SmartLogStatistics.Controller;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Net.WebSockets;
 using Newtonsoft.Json;
+using Core;
+using Microsoft.EntityFrameworkCore;
+using Log = SmartLogStatistics.Model.Log;
 
 namespace SmartLogStatisticsTests.IntegrationTest {
 
     [TestClass]
     public class DataTest {
 
-#pragma warning disable CS8618
-        private DataController dataController;
-        private Mock<SmartLogContext> mockContext;
-#pragma warning restore CS8618
+        private SmartLogContext _context;
+        private DataController _controller;
+        public DataTest() {
+            string databaseName = Guid.NewGuid().ToString();
 
-        private static Mock<DbSet<T>> CreateDbSetMock<T>(IEnumerable<T> elements) where T : class {
-            var elementsAsQueryable = elements.AsQueryable();
-            var dbSetMock = new Mock<DbSet<T>>();
-
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.Provider).Returns(elementsAsQueryable.Provider);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.Expression).Returns(elementsAsQueryable.Expression);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(elementsAsQueryable.ElementType);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
-
-            return dbSetMock;
-        }
-
-        [TestInitialize()]
-        public void Init() {
-            mockContext = new Mock<SmartLogContext>();
+            var options = new DbContextOptionsBuilder<SmartLogContext>().UseNpgsql($"Host=localhost;Database={databaseName};Username=Utente;Password=Password")
+                                                                        .Options;
+            _context = new SmartLogContext(options);
+            _context.Database.EnsureDeleted();
+            _context.Database.EnsureCreated();
 
             List<LogFile> files = new()
             {
@@ -43,14 +31,14 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                 {
                     id = 1,
                     filename = "Test.csv",
-                    PC_datetime = new(2022, 08, 05, 08, 47, 18),
-                    UPS_datetime = new(2022, 08, 05, 08, 47, 17),
+                    PC_datetime = new DateTime(2022, 08, 05, 08, 47, 18).ToUniversalTime(),
+                    UPS_datetime = new DateTime(2022, 08, 05, 08, 47, 17).ToUniversalTime(),
                 },
                 new LogFile{
                     id = 2,
                     filename = "file.csv",
-                    PC_datetime = new(2023, 08, 05, 08, 47, 18),
-                    UPS_datetime = new(2023, 08, 05, 08, 47, 17)
+                    PC_datetime = new DateTime(2023, 08, 05, 08, 47, 18).ToUniversalTime(),
+                    UPS_datetime = new DateTime(2023, 08, 05, 08, 47, 17).ToUniversalTime()
                 }
             };
 
@@ -72,11 +60,34 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                 }
             };
 
+            List<Event> events = new()
+            {
+                new Event
+                {
+                    code = "A001",
+                    description = "Descrizione A001",
+                    color = "0x00FF00"
+                },
+                new Event
+                {
+                    code = "B001",
+                    description = "Descrizione B001",
+                    color = "0xFF0000"
+                },
+                new Event
+                {
+                    code = "C001",
+                    description = "Descrizione C001",
+                    color = "0x0000FF"
+                }
+            };
+
             List<Log> logLines = new()
             {
                 new Log
                 {
                     file_id = 1,
+                    log_line = 1,
                     code = "A001",
                     date = new DateOnly(2022,01,05),
                     time = new TimeOnly(08,36,29,618),
@@ -87,6 +98,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                 new Log
                 {
                     file_id = 1,
+                    log_line = 2,
                     code = "A001",
                     date = new DateOnly(2022,01,10),
                     time = new TimeOnly(08,36,29,618),
@@ -97,6 +109,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                 new Log
                 {
                     file_id = 1,
+                    log_line = 3,
                     code = "A001",
                     date = new DateOnly(2022,02,05),
                     time = new TimeOnly(08,36,29,618),
@@ -107,6 +120,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                 new Log
                 {
                     file_id = 1,
+                    log_line = 4,
                     code = "B001",
                     date = new DateOnly(2022,03,05),
                     time = new TimeOnly(08,36,29,618),
@@ -117,6 +131,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                 new Log
                 {
                     file_id=1,
+                    log_line = 5,
                     code = "C001",
                     date = new DateOnly(2022,04,05),
                     time = new TimeOnly(08,36,29,618),
@@ -127,6 +142,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                 new Log
                 {
                     file_id=1,
+                    log_line = 6,
                     code = "C001",
                     date = new DateOnly(2022,04,07),
                     time = new TimeOnly(08,36,29,618),
@@ -137,6 +153,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                 new Log
                 {
                     file_id=1,
+                    log_line = 7,
                     code = "C001",
                     date = new DateOnly(2022,04,15),
                     time = new TimeOnly(08,36,29,618),
@@ -147,6 +164,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                 new Log
                 {
                     file_id=1,
+                    log_line = 8,
                     code = "C001",
                     date = new DateOnly(2022,05,07),
                     time = new TimeOnly(08,36,29,618),
@@ -157,6 +175,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                 new Log
                 {
                     file_id=1,
+                    log_line = 9,
                     code = "C001",
                     date = new DateOnly(2022,07,05),
                     time = new TimeOnly(08,36,29,618),
@@ -165,23 +184,21 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                     value = false,
                 }
             };
-            var logLineMock = CreateDbSetMock(logLines);
-            var firmwareMock = CreateDbSetMock(firmwares);
-            var fileMock = CreateDbSetMock(files);
 
-            mockContext.Setup(m => m.File).Returns(fileMock.Object);
-            mockContext.Setup(m => m.Log).Returns(logLineMock.Object);
-            mockContext.Setup(m => m.Firmware).Returns(firmwareMock.Object);
+            _context.File.AddRange(files);
+            _context.Event.AddRange(events);
+            _context.Log.AddRange(logLines);
+            _context.Firmware.AddRange(firmwares);
+            _context.SaveChanges();
 
-            DataRepositoryPgSql repo = new(mockContext.Object);
-
-            dataController = new(repo);
+            _controller = new DataController(new DataRepositoryPgSql(_context));
         }
+
 
         [TestMethod()]
         public void FrequencyTest() {
 
-            ObjectResult result = (ObjectResult)dataController.Frequency(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), true, true, true, true);
+            ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), true, true, true, true);
 
             Assert.AreEqual(200, result.StatusCode);
 
@@ -214,7 +231,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
         [TestMethod]
         public void NoGroupByFrequencyTest() {
 
-            ObjectResult result = (ObjectResult)dataController.Frequency(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), false, false, false, false);
+            ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), false, false, false, false);
 
             Assert.AreEqual(200, result.StatusCode);
 
@@ -244,7 +261,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
         [TestMethod()]
         public void FirmwareGroupByFrequencyTest() {
 
-            ObjectResult result = (ObjectResult)dataController.Frequency(new DateTime(2021, 02, 01), new DateTime(2022, 12, 12), false, true, false, false);
+            ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2021, 02, 01), new DateTime(2022, 12, 12), false, true, false, false);
 
             Assert.AreEqual(200, result.StatusCode);
 
@@ -276,7 +293,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
         [TestMethod()]
         public void EmptySearchFrequencyTest() {
 
-            ObjectResult result = (ObjectResult)dataController.Frequency(new DateTime(2024, 02, 01), new DateTime(2025, 12, 12), false, true, false, false);
+            ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2024, 02, 01), new DateTime(2025, 12, 12), false, true, false, false);
 
             Assert.AreEqual(404, result.StatusCode);
 
@@ -295,27 +312,9 @@ namespace SmartLogStatisticsTests.IntegrationTest {
         [TestMethod()]
         public void EmptyDatabaseFrequencyTest() {
 
-            var mockContext = new Mock<SmartLogContext>();
+            ClearContext();
 
-            List<LogFile> files = new();
-
-            List<Firmware> firmwares = new();
-
-            List<Log> logLines = new();
-
-            var logLineMock = CreateDbSetMock(logLines);
-            var firmwareMock = CreateDbSetMock(firmwares);
-            var fileMock = CreateDbSetMock(files);
-
-            mockContext.Setup(m => m.File).Returns(fileMock.Object);
-            mockContext.Setup(m => m.Log).Returns(logLineMock.Object);
-            mockContext.Setup(m => m.Firmware).Returns(firmwareMock.Object);
-
-            DataRepositoryPgSql repo = new(mockContext.Object);
-
-            DataController controller = new(repo);
-
-            ObjectResult result = (ObjectResult)controller.Frequency(new DateTime(2021, 02, 01), new DateTime(2022, 12, 12), false, true, false, false);
+            ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2021, 02, 01), new DateTime(2022, 12, 12), false, true, false, false);
 
             Assert.AreEqual(404, result.StatusCode);
 
@@ -334,7 +333,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
         [TestMethod]
         public void CumulativeTest() {
 
-            ObjectResult result = (ObjectResult)dataController.Cumulative(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "C001");
+            ObjectResult result = (ObjectResult)_controller.Cumulative(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "C001");
 
             Assert.AreEqual(200, result.StatusCode);
 
@@ -362,7 +361,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void EmptyDateSearchCumulativeTest() {
-            ObjectResult result = (ObjectResult)dataController.Cumulative(new DateTime(2024, 01, 01), new DateTime(2026, 12, 12), "C001");
+            ObjectResult result = (ObjectResult)_controller.Cumulative(new DateTime(2024, 01, 01), new DateTime(2026, 12, 12), "C001");
 
             Assert.AreEqual(404, result.StatusCode);
 
@@ -381,7 +380,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void EmptyCodeSearchCumulativeTest() {
-            ObjectResult result = (ObjectResult)dataController.Cumulative(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "X");
+            ObjectResult result = (ObjectResult)_controller.Cumulative(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "X");
 
             Assert.AreEqual(404, result.StatusCode);
 
@@ -401,27 +400,9 @@ namespace SmartLogStatisticsTests.IntegrationTest {
         [TestMethod()]
         public void EmptyDatabaseCumulativeTest() {
 
-            var mockContext = new Mock<SmartLogContext>();
+            ClearContext();
 
-            List<LogFile> files = new();
-
-            List<Firmware> firmwares = new();
-
-            List<Log> logLines = new();
-
-            var logLineMock = CreateDbSetMock(logLines);
-            var firmwareMock = CreateDbSetMock(firmwares);
-            var fileMock = CreateDbSetMock(files);
-
-            mockContext.Setup(m => m.File).Returns(fileMock.Object);
-            mockContext.Setup(m => m.Log).Returns(logLineMock.Object);
-            mockContext.Setup(m => m.Firmware).Returns(firmwareMock.Object);
-
-            DataRepositoryPgSql repo = new(mockContext.Object);
-
-            DataController controller = new(repo);
-
-            ObjectResult result = (ObjectResult)controller.Cumulative(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "C001");
+            ObjectResult result = (ObjectResult)_controller.Cumulative(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "C001");
 
             Assert.AreEqual(404, result.StatusCode);
 
@@ -439,7 +420,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void TotalByCodeTest() {
-            ObjectResult result = (ObjectResult)dataController.TotalByCode(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12));
+            ObjectResult result = (ObjectResult)_controller.TotalByCode(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12));
 
             Assert.AreEqual(200, result.StatusCode);
 
@@ -463,7 +444,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void EmptySearchTotalByCodeTest() {
-            ObjectResult result = (ObjectResult)dataController.TotalByCode(new DateTime(2024, 01, 01), new DateTime(2026, 12, 12));
+            ObjectResult result = (ObjectResult)_controller.TotalByCode(new DateTime(2024, 01, 01), new DateTime(2026, 12, 12));
 
             Assert.AreEqual(404, result.StatusCode);
 
@@ -481,27 +462,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void EmptyDatabaseTotalByCodeTest() {
-            var mockContext = new Mock<SmartLogContext>();
 
-            List<LogFile> files = new();
+            ClearContext();
 
-            List<Firmware> firmwares = new();
-
-            List<Log> logLines = new();
-
-            var logLineMock = CreateDbSetMock(logLines);
-            var firmwareMock = CreateDbSetMock(firmwares);
-            var fileMock = CreateDbSetMock(files);
-
-            mockContext.Setup(m => m.File).Returns(fileMock.Object);
-            mockContext.Setup(m => m.Log).Returns(logLineMock.Object);
-            mockContext.Setup(m => m.Firmware).Returns(firmwareMock.Object);
-
-            DataRepositoryPgSql repo = new(mockContext.Object);
-
-            DataController controller = new(repo);
-
-            ObjectResult result = (ObjectResult)controller.TotalByCode(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12));
+            ObjectResult result = (ObjectResult)_controller.TotalByCode(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12));
 
             Assert.AreEqual(404, result.StatusCode);
 
@@ -519,7 +483,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void TotalByFirmwareTest() {
-            ObjectResult result = (ObjectResult)dataController.TotalByFirmware(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "C001");
+            ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "C001");
 
             Assert.AreEqual(200, result.StatusCode);
 
@@ -547,7 +511,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void SingleTotalByFirmwareTest() {
-            ObjectResult result = (ObjectResult)dataController.TotalByFirmware(new DateTime(2022, 01, 09), new DateTime(2022, 03, 01), "A001");
+            ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2022, 01, 09), new DateTime(2022, 03, 01), "A001");
 
             Assert.AreEqual(200, result.StatusCode);
 
@@ -572,7 +536,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void EmptyCodeSearchTotalByFirmwareTest() {
-            ObjectResult result = (ObjectResult)dataController.TotalByFirmware(new DateTime(2022, 01, 09), new DateTime(2022, 03, 01), "X");
+            ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2022, 01, 09), new DateTime(2022, 03, 01), "X");
 
             Assert.AreEqual(404, result.StatusCode);
 
@@ -590,7 +554,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void EmptyDateSearchTotalByFirmwareTest() {
-            ObjectResult result = (ObjectResult)dataController.TotalByFirmware(new DateTime(2024, 01, 09), new DateTime(2024, 03, 01), "A001");
+            ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2024, 01, 09), new DateTime(2024, 03, 01), "A001");
 
             Assert.AreEqual(404, result.StatusCode);
 
@@ -608,27 +572,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void EmptyDatabaseTotalByFirmwareTest() {
-            var mockContext = new Mock<SmartLogContext>();
+            
+            ClearContext();
 
-            List<LogFile> files = new();
-
-            List<Firmware> firmwares = new();
-
-            List<Log> logLines = new();
-
-            var logLineMock = CreateDbSetMock(logLines);
-            var firmwareMock = CreateDbSetMock(firmwares);
-            var fileMock = CreateDbSetMock(files);
-
-            mockContext.Setup(m => m.File).Returns(fileMock.Object);
-            mockContext.Setup(m => m.Log).Returns(logLineMock.Object);
-            mockContext.Setup(m => m.Firmware).Returns(firmwareMock.Object);
-
-            DataRepositoryPgSql repo = new(mockContext.Object);
-
-            DataController controller = new(repo);
-
-            ObjectResult result = (ObjectResult)controller.TotalByFirmware(new DateTime(2021, 01, 09), new DateTime(2022, 03, 01), "A001");
+            ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2021, 01, 09), new DateTime(2022, 03, 01), "A001");
 
             Assert.AreEqual(404, result.StatusCode);
 
@@ -642,6 +589,20 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             Assert.IsNotNull(actual);
             Assert.AreEqual(excepted, actual);
+        }
+
+        private void ClearContext() {
+
+            _context.File.RemoveRange(_context.File.Select(f => f).ToArray());
+            _context.Firmware.RemoveRange(_context.Firmware.Select(f => f).ToArray());
+            _context.Log.RemoveRange(_context.Log.Select(f => f).ToArray());
+            _context.SaveChanges();
+
+        }
+
+        [TestCleanup()]
+        public void TeardownDatabase() {
+            _context.Database.EnsureDeleted();
         }
     }
 }

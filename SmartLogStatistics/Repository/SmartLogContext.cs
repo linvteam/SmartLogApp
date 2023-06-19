@@ -10,36 +10,17 @@ namespace SmartLogStatistics.Repository
     /// </summary>
     public class SmartLogContext : DbContext
     {
-        /// <summary>
-        /// Oggetto contenente la configurazione dell'applicazione
-        /// </summary>
-        protected readonly IConfiguration Configuration;
 
         /// <summary>
         /// Crea una nuova istanza del context
         /// </summary>
-        /// <param name="configuration">La configurazione dell'applicazione</param>
         /// <param name="options">Opzioni usate dal context</param>
-        public SmartLogContext(IConfiguration configuration, DbContextOptions<SmartLogContext> options)
-            : base(options)
-        {
-            Configuration = configuration;
-        }
+        public SmartLogContext(DbContextOptions<SmartLogContext> options) : base(options) {}
 
         /// <summary>
         /// Crea una nuova istanza del context (costruttore usato per i test)
         /// </summary>
         public SmartLogContext(): base() { }
-
-        /// <summary>
-        /// Configura la stringa di connessione al DB
-        /// </summary>
-        /// <param name="optionsBuilder">Oggetto per configurare le opzioni del context</param>
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql(Configuration.GetConnectionString("SmartLogContext"));
-            //optionsBuilder.UseNpgsql("Host=localhost;Database=Statistics;Username=Utente;Password=Password");
-        }
         
         /// <summary>
         /// Oggetto di tipo DbSet che rappresenta la tabella Log nel DB, dotato di getter e setter
