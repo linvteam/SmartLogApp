@@ -17,6 +17,8 @@ jobs:
         env:
           POSTGRES_USER: Utente
           POSTGRES_PASSWORD: Password
+          APP_USER: Utente
+          APP_PASSWORD: Password
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
