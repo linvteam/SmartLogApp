@@ -48,10 +48,12 @@ describe('EventSearchComponent', () => {
     fixture.detectChanges();
   });
 
+   // TUV-28: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
+  // TUV-29: Verifica che un oggetto di tipo EventSearch venga impostato come manipolatore
   it('should set EventSearch as LogManipulator', (done: DoneFn) => {
     component.uploadForm.setValue({
       q: '',

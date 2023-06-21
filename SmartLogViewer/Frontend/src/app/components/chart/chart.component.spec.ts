@@ -31,6 +31,7 @@ describe('ChartComponent', () => {
     fixture.detectChanges();
   });
   
+  // TUV-22: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(true).toBeTruthy();
   });

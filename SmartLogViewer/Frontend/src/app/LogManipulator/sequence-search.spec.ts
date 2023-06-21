@@ -30,12 +30,14 @@ class mockLogServiceNonGroupableLog extends LogService{
 describe('SequenceSearch', () => {
   let sequenceSearch: SequenceSearch = new SequenceSearch(mockSequence);
 
+  // TUV-54: Verifica che la classe venga istanziata correttamente
   it('should create an instance', () => {
     let mockLogServiceNonGroupable= new mockLogServiceNonGroupableLog();
     sequenceSearch.setLogService(mockLogServiceNonGroupable);
     expect(sequenceSearch).toBeTruthy();
   });
 
+  // TUV-55: Verifica che la classe ritorni un solo gruppo di eventi
   it('should return length one', () => {
     let mockLogServiceNonGroupable= new mockLogServiceNonGroupableLog();
     sequenceSearch.setLogService(mockLogServiceNonGroupable);
@@ -43,6 +45,7 @@ describe('SequenceSearch', () => {
     expect(numberOfGroups).toEqual(1);
   });
 
+  // TUV-56: Verifica che la classe ritorni un solo gruppo di eventi eventi
   it('should return empty group', () => {
     let mockLogServiceNonGroupable= new mockLogServiceNonGroupableLog();
     sequenceSearch.setLogService(mockLogServiceNonGroupable);
@@ -50,6 +53,7 @@ describe('SequenceSearch', () => {
     expect(rows).toHaveSize(0);
   });
 
+  // TUV-57: Verifica che la classe ritorni due gruppi di eventi
   it('should have two groups', () => {
     let mockLogServiceGroupable = new mockLogServiceGroupableLog()
     sequenceSearch.setLogService(mockLogServiceGroupable);

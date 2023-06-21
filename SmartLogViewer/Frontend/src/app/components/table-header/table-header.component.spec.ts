@@ -18,6 +18,7 @@ describe('HeaderComponent', () => {
     fixture.detectChanges();
   });
 
+  // TUV-42: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(component).toBeTruthy();
   });

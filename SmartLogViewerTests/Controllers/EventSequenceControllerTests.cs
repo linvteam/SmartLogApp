@@ -6,8 +6,15 @@ using SmartLogViewer.Model;
 using System.Collections.Generic;
 
 namespace SmartLogViewer.Controllers.Tests {
+    /// <summary>
+    /// In questa classe sono testate le possibili risposte che il back-end può dare ad una chiamata POST sull'endpoint api/sequences
+    /// </summary>
     [TestClass()]
     public class EventSequenceControllerTests {
+
+        /// <summary>
+        /// TUV-4: Verifica che venga ritornato un errore con lista di sequenze vuote
+        /// </summary>
         [TestMethod()]
         public void EventSequenceControllerTest() {
             Mock<SequencesManager> manager = new();
@@ -21,6 +28,9 @@ namespace SmartLogViewer.Controllers.Tests {
         }
 
         [TestMethod()]
+        /// <summary>
+        /// TUV-5: Verifica che vengano ritornati correttamente i nomi di tutte le sequenze
+        /// </summary>
         public void GetSequenceNamesTest() {
             Mock<SequencesManager> manager = new();
             manager.Setup(x => x.ParsingError).Returns(false);
@@ -37,6 +47,9 @@ namespace SmartLogViewer.Controllers.Tests {
         }
 
         [TestMethod()]
+        /// <summary>
+        /// TUV-6: Verifica che vengano ritornati correttamente i dati della sequenza scelta
+        /// </summary>
         public void GetSequenceParametersTest() {
             Mock<SequencesManager> manager = new();
             manager.Setup(x => x.ParsingError).Returns(false);

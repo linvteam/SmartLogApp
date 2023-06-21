@@ -20,6 +20,7 @@ describe('NavBarComponent', () => {
     fixture.detectChanges();
   });
 
+  // TUV-36: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(component).toBeTruthy();
   });

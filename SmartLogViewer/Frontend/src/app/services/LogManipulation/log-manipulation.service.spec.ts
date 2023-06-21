@@ -10,6 +10,7 @@ describe('LogManipulationService', () => {
     service = TestBed.inject(LogManipulationService);
   });
 
+  // TUV-65: Verifica che la classe venga istanziata correttamente
   it('should be created', () => {
     expect(service).toBeTruthy();
   });

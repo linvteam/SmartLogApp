@@ -23,10 +23,12 @@ describe('FileUploadService', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
+  // TUV-66: Verifica che la classe venga istanziata correttamente
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
+  // TUV-67: Verifica che venga costruita correttamente una richiesta http
   it('should construct a valid http request', () => {
     const file = new File([""], "filename");
     const response = { message: 'File uploaded successfully' };
