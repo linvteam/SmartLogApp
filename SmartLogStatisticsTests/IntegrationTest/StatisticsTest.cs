@@ -196,6 +196,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             _context.SaveChanges();
         }
 
+        /**
+         * TIS-27
+         * Verificare che l'ottenimento delle statistiche avvenga correttamente
+         */
         [TestMethod()]
         public void GoodStatisticsTest() {
 
@@ -228,6 +232,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         }
 
+        /**
+         * TIS-28
+         * Verificare che viene visualizzato un messagio di query vuota nel caso in cui l'ottenimento delle statistiche ritorni risultato vuoto
+         */
         [TestMethod()]
         public void NoStatisticsTest() {
 
@@ -246,7 +254,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         }
 
-
+        /**
+         * TIS-29
+         * Verificare che venga ritornato un messaggio d'errore nel caso in cui si cerchi di ottenere le statistiche con un database privo di dati
+         */
         [TestMethod()]
         public void EmptyDatabaseTest() {
 

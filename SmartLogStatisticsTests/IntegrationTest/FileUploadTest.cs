@@ -27,7 +27,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             _controller = new UploadController(new Parser(),new UploadRepositoryPgSql(_context));
         }
 
-
+        /**
+         * TIS-18
+         * Verificare che l'upload dei file avenga correttamente
+         */
         [TestMethod()]
         public void GoodUploadTest() {
 
@@ -59,7 +62,11 @@ Date ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot 
             Assert.AreEqual(201, result.StatusCode);
         
         }
-
+        
+        /**
+         * TIS-19
+         * Verificare che viene segnalato un errore in caso che un file non viene parsato correttamente
+         */
         [TestMethod()]
         public void BadParsingUploadTest() {
 
@@ -92,6 +99,10 @@ Date ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot 
         
         }
 
+        /**
+         * TIS-20
+         * Verificare che viene segnalato un errore in caso che un file che si cerca di caricare sia già presente nel database
+         */
         [TestMethod()]
         public void AlreayExistingUploadTest() {
 

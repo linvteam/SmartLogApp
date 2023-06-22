@@ -196,6 +196,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             _context.SaveChanges();
         }
 
+        /**
+         * TIS-1
+         * Verificare che l'ottenimento delle frequenze di occorrenza avvenga correttamente con tutti i raggruppamenti attivi
+         */
         [TestMethod()]
         public void FrequencyTest() {
 
@@ -231,7 +235,11 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         }
 
-        [TestMethod]
+        /**
+         * TIS-2
+         * Verificare che l'ottenimento delle frequenze di occorrenza avvenga correttamente senza raggruppamenti attivi
+         */
+        [TestMethod()]
         public void NoGroupByFrequencyTest() {
 
             PopulateContext();
@@ -263,6 +271,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             Assert.AreEqual("B001", e2.Code);
         }
 
+        /**
+         * TIS-3
+         * Verificare che l'ottenimento delle frequenze di occorrenza avvenga correttamente degli eventi raggruppati per firmware
+         */
         [TestMethod()]
         public void FirmwareGroupByFrequencyTest() {
 
@@ -297,6 +309,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             Assert.AreEqual("MAPK_Module_RD_IV_v2_04_00.ini", e2.Firmware);
         }
 
+        /**
+         * TIS-4
+         * Verificare che venga ritornato un messagio di query vouta nel caso che l'ottenimento delle frequenze di occorrenza ritorni risultato vuoto
+         */
         [TestMethod()]
         public void EmptySearchFrequencyTest() {
 
@@ -318,6 +334,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             Assert.AreEqual(excepted, actual);
         }
 
+        /**
+         * TIS-5
+         * Verificare che viene ritornato un messaggio di errore nel caso in cui si effetui una richiesta per l'ottenimento delle frequenze di occorrenze con un database privo di dati
+         */
         [TestMethod()]
         public void EmptyDatabaseFrequencyTest() {
 
@@ -337,7 +357,11 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             Assert.AreEqual(excepted, actual);
         }
 
-        [TestMethod]
+        /**
+         * TIS-6
+         * Verificare che l'ottenimento dei dati per il grafico cumulativo avenga correttamente
+         */
+        [TestMethod()]
         public void CumulativeTest() {
 
             PopulateContext();
@@ -368,6 +392,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             Assert.AreEqual(5, occ2.EventOccurencies);
         }
 
+        /**
+         * TIS-7
+         * Verificare che viene ritornato un messaggio di query vuota nel caso in cui l'ottenimento dei dati per il grafico cumulativo non abbia prodotto risultati
+         */
         [TestMethod()]
         public void EmptyDateSearchCumulativeTest() {
 
@@ -390,6 +418,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         }
 
+        /**
+         * TIS-8
+         * Verificare che viene ritornato un messaggio di query vuota nel caso in cui il code di cui si vuole ottenere i dati del grafico cumulativo non sia presente nel database
+         */
         [TestMethod()]
         public void EmptyCodeSearchCumulativeTest() {
 
@@ -412,6 +444,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         }
 
+        /**
+         * TIS-9
+         * Verificare che viene ritornato un messaggio di errore nel caso in cui si effetui una richiesta per l'ottenimento dei dati del grafico cumulativo con un database privo di dati
+         */
         [TestMethod()]
         public void EmptyDatabaseCumulativeTest() {
 
@@ -431,6 +467,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             Assert.AreEqual(excepted, actual);
         }
 
+        /**
+         * TIS-10
+         * Verificare che l'ottenimento della lista con i code con le rispettive occorrenze avvenga correttamente
+         */
         [TestMethod()]
         public void TotalByCodeTest() {
 
@@ -458,6 +498,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         }
 
+        /**
+         TIS-11
+         Verificare che viene ritornato un messaggio di query vuota nel caso in cui l'ottenimento della lista con i code con le rispettive occorrenze resituisca una lista vuota
+         */
         [TestMethod()]
         public void EmptySearchTotalByCodeTest() {
 
@@ -479,6 +523,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             Assert.AreEqual(excepted, actual);
         }
 
+        /**
+         TIS-12
+         Verificare che viene ritornato un messaggio di errore nel caso in cui si effettui una richiesta per l'ottenimento della lista con i code con le rispettive occorrenze con un database privo di dati
+         */
         [TestMethod()]
         public void EmptyDatabaseTotalByCodeTest() {
 
@@ -498,6 +546,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             Assert.AreEqual(excepted, actual);
         }
 
+        /**
+         * TIS-13
+         * Verificare che l'ottenimento dei dati di un code raggrupati per versione firmare sia avvenuta correttamente
+         */
         [TestMethod()]
         public void TotalByFirmwareTest() {
 
@@ -529,6 +581,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             Assert.AreEqual(2,fw2.EventOccurrences);
         }
 
+        /**
+         * TIS-14
+         * Verificare che l'ottenimento dei dati di un code raggrupati per versione firmare sia avvenuta correttamente nel caso in cui la versione firmware sia unica
+         */
         [TestMethod()]
         public void SingleTotalByFirmwareTest() {
 
@@ -557,6 +613,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         }
 
+        /**
+         * TIS-15
+         * Verificare che venga ritornato un messaggio di query vuota nel caso in cui il code con cui si vuole ottenere i dati di un code raggruppati per versione firmware non è presente nel database
+         */
         [TestMethod()]
         public void EmptyCodeSearchTotalByFirmwareTest() {
 
@@ -578,6 +638,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             Assert.AreEqual(excepted, actual);
         }
 
+        /**
+         * TIS-16
+         * Verificare che venga ritornato un messaggio di query vuota nel caso in cui nell'intervallo temporale specificato non siano presenti occorrenze del code di cui si vogliono ottenere i dati del raggruppamento
+         */
         [TestMethod()]
         public void EmptyDateSearchTotalByFirmwareTest() {
 
@@ -599,6 +663,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             Assert.AreEqual(excepted, actual);
         }
 
+        /**
+         * TIS-17
+         * Verificare che viene ritornato un messaggio di errore nel caso in cui si effetui una richiesta di ottenimento dei dati di un code raggrupati per versione firmare con un database privo di dati
+         */
         [TestMethod()]
         public void EmptyDatabaseTotalByFirmwareTest() {
 

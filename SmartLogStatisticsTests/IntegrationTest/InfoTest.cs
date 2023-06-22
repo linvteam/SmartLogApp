@@ -198,6 +198,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             _context.SaveChanges();
         }
 
+        /**
+         * TIS-21
+         * Verificare che l'ottenimento della lista dei code con le relative descrizioni avvenga correttamente
+         */
         [TestMethod()]
         public void GetCodeWithDescriptionTest() {
 
@@ -223,6 +227,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
         
         }
 
+        /**
+         * TIS-22
+         * Verificare che venga ritornato un messaggio d'errore nel caso in cui si cerca di ottenere la lista dei code con le relative descrizioni con un database privo di dati
+         */
         [TestMethod()]
         public void EmptyDatabaseGetCodeWithDescriptionTest() {
 
@@ -238,6 +246,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             Assert.AreEqual("La query non ha prodotto risultati", error.Message);
         }
 
+        /**
+        * TIS-23
+        * Verificare che l'ottenimento della data-ora del primo e dell'ultimo evento presenti nel database avvenga correttamente
+        */
         [TestMethod()]
         public void GetTimeIntervalTest() {
 
@@ -259,6 +271,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         }
 
+        /**
+        * TIS-24
+        * Verificare che venga ritornato un messaggio d'errore nel caso in cui si cerca di ottenere la data-ora del primo e dell'ultimo evento presenti nel database con un database privo di dati
+        */
         [TestMethod()]
         public void EmptyDatabaseGetTimeIntervalTest() {
 
@@ -275,6 +291,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         }
 
+        /**
+         * TIS-25
+         * Verificare che l'ottenimento della lista delle versioni firmare dal database avvenga correttamente
+         */
         [TestMethod()]
         public void GetFirmwareListTest() {
 
@@ -297,6 +317,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         }
 
+        /**
+        * TIS-26
+        * Verificare che venga ritornato un messaggio d'errore nel caso in cui si cerca di ottenere la lista delle versioni firmare con un database privo di dati
+        */
         [TestMethod()]
         public void EmptyDatabaseGetFirmwareTest() {
 
