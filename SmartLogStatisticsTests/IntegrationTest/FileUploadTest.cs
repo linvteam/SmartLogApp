@@ -29,7 +29,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         /**
          * TIS-18
-         * Verificare che l'upload dei file avenga correttamente
+         * Verificare che l'upload dei file avvenga correttamente
          */
         [TestMethod()]
         public void GoodUploadTest() {
@@ -65,7 +65,7 @@ Date ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot 
         
         /**
          * TIS-19
-         * Verificare che viene segnalato un errore in caso che un file non viene parsato correttamente
+         * Verificare che venga segnalato un errore in caso che un file non venga letto correttamente
          */
         [TestMethod()]
         public void BadParsingUploadTest() {
@@ -86,22 +86,20 @@ Date ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot 
 
             ObjectResult result = (ObjectResult)_controller.Upload(formFile);
 
-            Assert.AreEqual(400, result.StatusCode);
-
             string resultBody = JsonConvert.SerializeObject(result.Value);
             var definition = new { Code = 0, Message = "" };
             var actual = JsonConvert.DeserializeAnonymousType(resultBody, definition);
-
-            var excepted = new { Code = 1, Message = "Impossibile fare l'analisi della riga PC DateTime" };
-
+            var expected = new { Code = 1, Message = "Impossibile fare l'analisi della riga PC DateTime" };
+            
+            Assert.AreEqual(400, result.StatusCode);
             Assert.IsNotNull(actual);
-            Assert.AreEqual(excepted, actual);
+            Assert.AreEqual(expected, actual);
         
         }
 
         /**
          * TIS-20
-         * Verificare che viene segnalato un errore in caso che un file che si cerca di caricare sia già presente nel database
+         * Verificare che venga segnalato un errore nel caso in cui un file che si cerca di caricare sia già presente nel database
          */
         [TestMethod()]
         public void AlreayExistingUploadTest() {
@@ -133,16 +131,14 @@ Date ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot 
 
             ObjectResult result = (ObjectResult)_controller.Upload(formFile);
 
-            Assert.AreEqual(409, result.StatusCode);
-
             string resultBody = JsonConvert.SerializeObject(result.Value);
             var definition = new { Code = 0, Message = "" };
             var actual = JsonConvert.DeserializeAnonymousType(resultBody, definition);
-
-            var excepted = new { Code = 6, Message = "Il file è già stato salvato nel database" };
-
+            var expected = new { Code = 6, Message = "Il file è già stato salvato nel database" };
+            
+            Assert.AreEqual(409, result.StatusCode);
             Assert.IsNotNull(actual);
-            Assert.AreEqual(excepted, actual);
+            Assert.AreEqual(expected, actual);
 
         }
 

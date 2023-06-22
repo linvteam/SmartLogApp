@@ -207,22 +207,17 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), true, true, true, true);
 
-            Assert.AreEqual(200, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-            
             var frequencyDto = (FrequencyDto)result.Value;
-
-            Assert.AreEqual(new DateTime(2021, 01, 01), frequencyDto.Start);
-            Assert.AreEqual(new DateTime(2022, 12, 12), frequencyDto.End);
-
             var events = frequencyDto.Events;
-            
-            Assert.AreEqual(9, events.Count);
-
             var groupBy = frequencyDto.GroupBy;
             var e1 = events[0];
             var e2 = events[3];
+
+            Assert.AreEqual(200, result.StatusCode);
+            Assert.IsNotNull(result.Value);
+            Assert.AreEqual(new DateTime(2021, 01, 01), frequencyDto.Start);
+            Assert.AreEqual(new DateTime(2022, 12, 12), frequencyDto.End);
+            Assert.AreEqual(9, events.Count);
 
             Assert.AreEqual(5, groupBy.Count);
 
@@ -246,22 +241,17 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), false, false, false, false);
 
-            Assert.AreEqual(200, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             var frequencyDto = (FrequencyDto)result.Value;
-
-            Assert.AreEqual(new DateTime(2021, 01, 01), frequencyDto.Start);
-            Assert.AreEqual(new DateTime(2022, 12, 12), frequencyDto.End);
-
             var events = frequencyDto.Events;
-
-            Assert.AreEqual(3, events.Count);
-
             var groupBy = frequencyDto.GroupBy;
             var e1 = events[0];
-            var e2 = events[1];
+            var e2 = events[1];            
+              
+            Assert.AreEqual(200, result.StatusCode);
+            Assert.IsNotNull(result.Value);
+            Assert.AreEqual(new DateTime(2021, 01, 01), frequencyDto.Start);
+            Assert.AreEqual(new DateTime(2022, 12, 12), frequencyDto.End);
+            Assert.AreEqual(3, events.Count);
 
             Assert.AreEqual(1, groupBy.Count);
 
@@ -282,22 +272,17 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2021, 02, 01), new DateTime(2022, 12, 12), false, true, false, false);
 
-            Assert.AreEqual(200, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             var frequencyDto = (FrequencyDto)result.Value;
-
-            Assert.AreEqual(new DateTime(2021, 02, 01), frequencyDto.Start);
-            Assert.AreEqual(new DateTime(2022, 12, 12), frequencyDto.End);
-
             var events = frequencyDto.Events;
-
-            Assert.AreEqual(5, events.Count);
-
             var groupBy = frequencyDto.GroupBy;
             var e1 = events[1];
             var e2 = events[2];
+            
+            Assert.AreEqual(200, result.StatusCode);
+            Assert.IsNotNull(result.Value);
+            Assert.AreEqual(new DateTime(2021, 02, 01), frequencyDto.Start);
+            Assert.AreEqual(new DateTime(2022, 12, 12), frequencyDto.End);
+            Assert.AreEqual(5, events.Count);
 
             Assert.AreEqual(2, groupBy.Count);
 
@@ -311,7 +296,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         /**
          * TIS-4
-         * Verificare che venga ritornato un messagio di query vouta nel caso che l'ottenimento delle frequenze di occorrenza ritorni risultato vuoto
+         * Verificare che venga ritornato un messaggio di query vuota nel caso che l'ottenimento delle frequenze di occorrenza ritorni risultato vuoto
          */
         [TestMethod()]
         public void EmptySearchFrequencyTest() {
@@ -320,46 +305,40 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2024, 02, 01), new DateTime(2025, 12, 12), false, true, false, false);
 
-            Assert.AreEqual(404, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             string resultBody = JsonConvert.SerializeObject(result.Value);
             var definition = new { Code = 0, Message = "" };
             var actual = JsonConvert.DeserializeAnonymousType(resultBody, definition);
-
-            var excepted = new { Code = 5, Message = "La query non ha prodotto risultati" };
-
+            var expected = new { Code = 5, Message = "La query non ha prodotto risultati" };
+            
+            Assert.AreEqual(404, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.IsNotNull(actual);
-            Assert.AreEqual(excepted, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         /**
          * TIS-5
-         * Verificare che viene ritornato un messaggio di errore nel caso in cui si effetui una richiesta per l'ottenimento delle frequenze di occorrenze con un database privo di dati
+         * Verificare che venga ritornato un messaggio di errore nel caso in cui si effettui una richiesta per l'ottenimento delle frequenze di occorrenze con un database privo di dati
          */
         [TestMethod()]
         public void EmptyDatabaseFrequencyTest() {
 
             ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2021, 02, 01), new DateTime(2022, 12, 12), false, true, false, false);
 
-            Assert.AreEqual(404, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             string resultBody = JsonConvert.SerializeObject(result.Value);
             var definition = new { Code = 0, Message = "" };
             var actual = JsonConvert.DeserializeAnonymousType(resultBody, definition);
+            var expected = new { Code = 5, Message = "La query non ha prodotto risultati" };
 
-            var excepted = new { Code = 5, Message = "La query non ha prodotto risultati" };
-
+            Assert.AreEqual(404, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.IsNotNull(actual);
-            Assert.AreEqual(excepted, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         /**
          * TIS-6
-         * Verificare che l'ottenimento dei dati per il grafico cumulativo avenga correttamente
+         * Verificare che l'ottenimento dei dati per il grafico cumulativo avvenga correttamente
          */
         [TestMethod()]
         public void CumulativeTest() {
@@ -368,22 +347,17 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.Cumulative(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "C001");
 
-            Assert.AreEqual(200, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             CumulativeDto cumulativeDto = (CumulativeDto)result.Value;
+            var records = cumulativeDto.Records;
+            var occ1 = records[2];
+            var occ2 = records[^1];
 
+            Assert.AreEqual(200, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.AreEqual("C001", cumulativeDto.Code);
             Assert.AreEqual(new DateTime(2021, 01, 01), cumulativeDto.Start);
             Assert.AreEqual(new DateTime(2022, 12, 12), cumulativeDto.End);
-
-            var records = cumulativeDto.Records;
-
             Assert.AreEqual(5, records.Count);
-
-            var occ1 = records[2];
-            var occ2 = records[^1];
 
             Assert.AreEqual(new DateTime(2022, 04, 15, 08, 36, 29, 618), occ1.Instant);
             Assert.AreEqual(3, occ1.EventOccurencies);
@@ -394,7 +368,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         /**
          * TIS-7
-         * Verificare che viene ritornato un messaggio di query vuota nel caso in cui l'ottenimento dei dati per il grafico cumulativo non abbia prodotto risultati
+         * Verificare che venga ritornato un messaggio di query vuota nel caso in cui l'ottenimento dei dati per il grafico cumulativo non abbia prodotto risultati
          */
         [TestMethod()]
         public void EmptyDateSearchCumulativeTest() {
@@ -403,24 +377,22 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.Cumulative(new DateTime(2024, 01, 01), new DateTime(2026, 12, 12), "C001");
 
-            Assert.AreEqual(404, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             string resultBody = JsonConvert.SerializeObject(result.Value);
             var definition = new { Code = 0, Message = "" };
             var actual = JsonConvert.DeserializeAnonymousType(resultBody, definition);
+            var expected = new { Code = 5, Message = "La query non ha prodotto risultati" };
 
-            var excepted = new { Code = 5, Message = "La query non ha prodotto risultati" };
+            Assert.AreEqual(404, result.StatusCode);
+            Assert.IsNotNull(result.Value);
 
             Assert.IsNotNull(actual);
-            Assert.AreEqual(excepted, actual);
+            Assert.AreEqual(expected, actual);
 
         }
 
         /**
          * TIS-8
-         * Verificare che viene ritornato un messaggio di query vuota nel caso in cui il code di cui si vuole ottenere i dati del grafico cumulativo non sia presente nel database
+         * Verificare che venga ritornato un messaggio di query vuota nel caso in cui il code di cui si vuole ottenere i dati del grafico cumulativo non sia presente nel database
          */
         [TestMethod()]
         public void EmptyCodeSearchCumulativeTest() {
@@ -429,42 +401,36 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.Cumulative(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "X");
 
-            Assert.AreEqual(404, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
 
             string resultBody = JsonConvert.SerializeObject(result.Value);
             var definition = new { Code = 0, Message = "" };
             var actual = JsonConvert.DeserializeAnonymousType(resultBody, definition);
-
-            var excepted = new { Code = 5, Message = "La query non ha prodotto risultati" };
-
+            var expected = new { Code = 5, Message = "La query non ha prodotto risultati" };
+            Assert.AreEqual(404, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.IsNotNull(actual);
-            Assert.AreEqual(excepted, actual);
+            Assert.AreEqual(expected, actual);
 
         }
 
         /**
          * TIS-9
-         * Verificare che viene ritornato un messaggio di errore nel caso in cui si effetui una richiesta per l'ottenimento dei dati del grafico cumulativo con un database privo di dati
+         * Verificare che venga ritornato un messaggio di errore nel caso in cui si effettui una richiesta per l'ottenimento dei dati del grafico cumulativo con un database privo di dati
          */
         [TestMethod()]
         public void EmptyDatabaseCumulativeTest() {
 
             ObjectResult result = (ObjectResult)_controller.Cumulative(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "C001");
 
-            Assert.AreEqual(404, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             string resultBody = JsonConvert.SerializeObject(result.Value);
             var definition = new { Code = 0, Message = "" };
             var actual = JsonConvert.DeserializeAnonymousType(resultBody, definition);
+            var expected = new { Code = 5, Message = "La query non ha prodotto risultati" };
 
-            var excepted = new { Code = 5, Message = "La query non ha prodotto risultati" };
-
+            Assert.AreEqual(404, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.IsNotNull(actual);
-            Assert.AreEqual(excepted, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         /**
@@ -478,18 +444,15 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.TotalByCode(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12));
 
-            Assert.AreEqual(200, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             TotalByCodeDto totalByCodeDto = (TotalByCodeDto)result.Value;
-
-            Assert.AreEqual(new DateTime(2021, 01, 01), totalByCodeDto.Start);
-            Assert.AreEqual(new DateTime(2022, 12, 12), totalByCodeDto.End);
-
             var codeOccs = totalByCodeDto.CodeOccurences;
             var A001 = codeOccs.Find(c => c.Code == "A001");
             var C001 = codeOccs.Find(c => c.Code == "C001");
+
+            Assert.AreEqual(new DateTime(2021, 01, 01), totalByCodeDto.Start);
+            Assert.AreEqual(new DateTime(2022, 12, 12), totalByCodeDto.End);            
+            Assert.AreEqual(200, result.StatusCode);
+            Assert.IsNotNull(result.Value);
 
             Assert.IsNotNull(A001);
             Assert.IsNotNull(C001);
@@ -500,7 +463,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         /**
          TIS-11
-         Verificare che viene ritornato un messaggio di query vuota nel caso in cui l'ottenimento della lista con i code con le rispettive occorrenze resituisca una lista vuota
+         Verificare che venga ritornato un messaggio di query vuota nel caso in cui l'ottenimento della lista con i code con le rispettive occorrenze restituisca una lista vuota
          */
         [TestMethod()]
         public void EmptySearchTotalByCodeTest() {
@@ -509,46 +472,40 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.TotalByCode(new DateTime(2024, 01, 01), new DateTime(2026, 12, 12));
 
-            Assert.AreEqual(404, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             string resultBody = JsonConvert.SerializeObject(result.Value);
             var definition = new { Code = 0, Message = "" };
             var actual = JsonConvert.DeserializeAnonymousType(resultBody, definition);
+            var expected = new { Code = 5, Message = "La query non ha prodotto risultati" };
 
-            var excepted = new { Code = 5, Message = "La query non ha prodotto risultati" };
-
+            Assert.AreEqual(404, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.IsNotNull(actual);
-            Assert.AreEqual(excepted, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         /**
          TIS-12
-         Verificare che viene ritornato un messaggio di errore nel caso in cui si effettui una richiesta per l'ottenimento della lista con i code con le rispettive occorrenze con un database privo di dati
+         Verificare che venga ritornato un messaggio di errore nel caso in cui si effettui una richiesta per l'ottenimento della lista con i code con le rispettive occorrenze con un database privo di dati
          */
         [TestMethod()]
         public void EmptyDatabaseTotalByCodeTest() {
 
             ObjectResult result = (ObjectResult)_controller.TotalByCode(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12));
 
-            Assert.AreEqual(404, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             string resultBody = JsonConvert.SerializeObject(result.Value);
             var definition = new { Code = 0, Message = "" };
             var actual = JsonConvert.DeserializeAnonymousType(resultBody, definition);
+            var expected = new { Code = 5, Message = "La query non ha prodotto risultati" };
 
-            var excepted = new { Code = 5, Message = "La query non ha prodotto risultati" };
-
+            Assert.AreEqual(404, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.IsNotNull(actual);
-            Assert.AreEqual(excepted, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         /**
          * TIS-13
-         * Verificare che l'ottenimento dei dati di un code raggrupati per versione firmare sia avvenuta correttamente
+         * Verificare che l'ottenimento dei dati di un code raggruppati per versione firmare sia avvenuta correttamente
          */
         [TestMethod()]
         public void TotalByFirmwareTest() {
@@ -557,20 +514,16 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "C001");
 
-            Assert.AreEqual(200, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             TotalByFirmwareDto firmwareDto = (TotalByFirmwareDto)result.Value;
-
+            var firmwareOccs = firmwareDto.FirmwareOccurrences;
+            var fw1 = firmwareOccs[0];
+            var fw2 = firmwareOccs[1];
+            
+            Assert.AreEqual(200, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.AreEqual(new DateTime(2021, 01, 01), firmwareDto.Start);
             Assert.AreEqual(new DateTime(2022, 12, 12), firmwareDto.End);
             Assert.AreEqual("C001",firmwareDto.Code);
-
-            var firmwareOccs = firmwareDto.FirmwareOccurrences;
-            
-            var fw1 = firmwareOccs[0];
-            var fw2 = firmwareOccs[1];
 
             Assert.AreEqual(2, firmwareOccs.Count);
 
@@ -583,7 +536,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         /**
          * TIS-14
-         * Verificare che l'ottenimento dei dati di un code raggrupati per versione firmare sia avvenuta correttamente nel caso in cui la versione firmware sia unica
+         * Verificare che l'ottenimento dei dati di un code raggruppati per versione firmare sia avvenuta correttamente nel caso in cui la versione firmware sia unica
          */
         [TestMethod()]
         public void SingleTotalByFirmwareTest() {
@@ -592,19 +545,15 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2022, 01, 09), new DateTime(2022, 03, 01), "A001");
 
-            Assert.AreEqual(200, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             TotalByFirmwareDto firmwareDto = (TotalByFirmwareDto)result.Value;
-
+            var firmwareOccs = firmwareDto.FirmwareOccurrences;
+            var fw1 = firmwareOccs[0];
+            
+            Assert.AreEqual(200, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.AreEqual(new DateTime(2022, 01, 09), firmwareDto.Start);
             Assert.AreEqual(new DateTime(2022, 03, 01), firmwareDto.End);
             Assert.AreEqual("A001", firmwareDto.Code);
-
-            var firmwareOccs = firmwareDto.FirmwareOccurrences;
-
-            var fw1 = firmwareOccs[0];
 
             Assert.AreEqual(1, firmwareOccs.Count);
 
@@ -615,7 +564,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         /**
          * TIS-15
-         * Verificare che venga ritornato un messaggio di query vuota nel caso in cui il code con cui si vuole ottenere i dati di un code raggruppati per versione firmware non è presente nel database
+         * Verificare che venga ritornato un messaggio di query vuota nel caso in cui il code con cui si vuole ottenere i dati raggruppati per versione firmware non sia presente nel database
          */
         [TestMethod()]
         public void EmptyCodeSearchTotalByFirmwareTest() {
@@ -624,18 +573,15 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2022, 01, 09), new DateTime(2022, 03, 01), "X");
 
-            Assert.AreEqual(404, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             string resultBody = JsonConvert.SerializeObject(result.Value);
             var definition = new { Code = 0, Message = "" };
             var actual = JsonConvert.DeserializeAnonymousType(resultBody, definition);
-
-            var excepted = new { Code = 5, Message = "La query non ha prodotto risultati" };
-
+            var expected = new { Code = 5, Message = "La query non ha prodotto risultati" };
+            
+            Assert.AreEqual(404, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.IsNotNull(actual);
-            Assert.AreEqual(excepted, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         /**
@@ -649,41 +595,35 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2024, 01, 09), new DateTime(2024, 03, 01), "A001");
 
-            Assert.AreEqual(404, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             string resultBody = JsonConvert.SerializeObject(result.Value);
             var definition = new { Code = 0, Message = "" };
             var actual = JsonConvert.DeserializeAnonymousType(resultBody, definition);
-
-            var excepted = new { Code = 5, Message = "La query non ha prodotto risultati" };
-
+            var expected = new { Code = 5, Message = "La query non ha prodotto risultati" };
+            
+            Assert.AreEqual(404, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.IsNotNull(actual);
-            Assert.AreEqual(excepted, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         /**
          * TIS-17
-         * Verificare che viene ritornato un messaggio di errore nel caso in cui si effetui una richiesta di ottenimento dei dati di un code raggrupati per versione firmare con un database privo di dati
+         * Verificare che venga ritornato un messaggio di errore nel caso in cui si effettui una richiesta di ottenimento dei dati di un code raggruppati per versione firmare con un database privo di dati
          */
         [TestMethod()]
         public void EmptyDatabaseTotalByFirmwareTest() {
 
             ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2021, 01, 09), new DateTime(2022, 03, 01), "A001");
 
-            Assert.AreEqual(404, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             string resultBody = JsonConvert.SerializeObject(result.Value);
             var definition = new { Code = 0, Message = "" };
             var actual = JsonConvert.DeserializeAnonymousType(resultBody, definition);
-
-            var excepted = new { Code = 5, Message = "La query non ha prodotto risultati" };
-
+            var expected = new { Code = 5, Message = "La query non ha prodotto risultati" };
+            
+            Assert.AreEqual(404, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.IsNotNull(actual);
-            Assert.AreEqual(excepted, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCleanup()]

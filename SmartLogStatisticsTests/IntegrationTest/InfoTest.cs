@@ -209,39 +209,31 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             
             ObjectResult result = (ObjectResult)_controller.GetCodeWithDescription();
 
-            Assert.AreEqual(200, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
-            var codeDescriptions = (List<CodeWithDescriptionDto>)result.Value;
-
-            Assert.AreEqual(2, codeDescriptions.Count);
-
             var A001 = codeDescriptions.Find(c => c.Code == "A001");
+            var C001 = codeDescriptions.Find(c => c.Code == "C001");
+            var codeDescriptions = (List<CodeWithDescriptionDto>)result.Value;
+            
+            Assert.AreEqual(200, result.StatusCode);
+            Assert.IsNotNull(result.Value);
+            Assert.AreEqual(2, codeDescriptions.Count);
             Assert.IsNotNull(A001);
             Assert.AreEqual("descrizione A001", A001.Description);
-
-            var C001 = codeDescriptions.Find(c => c.Code == "C001");
             Assert.IsNotNull(C001);
             Assert.AreEqual("descrizione C001", C001.Description);
-        
         }
 
         /**
          * TIS-22
-         * Verificare che venga ritornato un messaggio d'errore nel caso in cui si cerca di ottenere la lista dei code con le relative descrizioni con un database privo di dati
+         * Verificare che venga ritornato un messaggio d'errore nel caso in cui si cercasse di ottenere la lista dei code con le relative descrizioni con un database privo di dati
          */
         [TestMethod()]
         public void EmptyDatabaseGetCodeWithDescriptionTest() {
 
             ObjectResult result = (ObjectResult)_controller.GetCodeWithDescription();
-
-            Assert.AreEqual(404, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             ErrorObject error = (ErrorObject)result.Value;
 
+            Assert.AreEqual(404, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.AreEqual(5, error.Code);
             Assert.AreEqual("La query non ha prodotto risultati", error.Message);
         }
@@ -257,35 +249,28 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.GetTimeInterval();
 
-            Assert.AreEqual(200, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             var intervalDto = (DateTimeIntervalDto)result.Value;
-
+            
+            Assert.AreEqual(200, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.IsNotNull(intervalDto);
-
             Assert.AreEqual(new DateTime(2022, 03, 04, 08, 36, 29, 618), intervalDto.start);
-
             Assert.AreEqual(new DateTime(2022, 07, 05, 08, 36, 29, 618), intervalDto.end);
 
         }
 
         /**
         * TIS-24
-        * Verificare che venga ritornato un messaggio d'errore nel caso in cui si cerca di ottenere la data-ora del primo e dell'ultimo evento presenti nel database con un database privo di dati
+        * Verificare che venga ritornato un messaggio d'errore nel caso in cui si cercasse di ottenere la data-ora del primo e dell'ultimo evento presenti nel database con un database privo di dati
         */
         [TestMethod()]
         public void EmptyDatabaseGetTimeIntervalTest() {
 
             ObjectResult result = (ObjectResult)_controller.GetTimeInterval();
-
-            Assert.AreEqual(404, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             ErrorObject error = (ErrorObject)result.Value;
 
+            Assert.AreEqual(404, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.AreEqual(5, error.Code);
             Assert.AreEqual("La query non ha prodotto risultati", error.Message);
 
@@ -293,7 +278,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         /**
          * TIS-25
-         * Verificare che l'ottenimento della lista delle versioni firmare dal database avvenga correttamente
+         * Verificare che l'ottenimento della lista delle versioni firmware dal database avvenga correttamente
          */
         [TestMethod()]
         public void GetFirmwareListTest() {
@@ -302,36 +287,29 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.GetFirmwareList();
 
-            Assert.AreEqual(200, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             var intervalDto = (List<string>)result.Value;
-
+            
+            Assert.AreEqual(200, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.IsNotNull(intervalDto);
-
             Assert.AreEqual(3, intervalDto.Count);
             Assert.AreEqual("MAPK_ByPass_v2_04_00.ini", intervalDto[0]);
             Assert.AreEqual("MAPK_Module_RD_IV_v2_04_00.ini", intervalDto[1]);
             Assert.AreEqual("MAPK_Unit_v2_07_00.ini", intervalDto[2]);
-
         }
 
         /**
         * TIS-26
-        * Verificare che venga ritornato un messaggio d'errore nel caso in cui si cerca di ottenere la lista delle versioni firmare con un database privo di dati
+        * Verificare che venga ritornato un messaggio d'errore nel caso in cui si cercasse di ottenere la lista delle versioni firmware con un database privo di dati
         */
         [TestMethod()]
         public void EmptyDatabaseGetFirmwareTest() {
 
             ObjectResult result = (ObjectResult)_controller.GetFirmwareList();
-
-            Assert.AreEqual(404, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             ErrorObject error = (ErrorObject)result.Value;
 
+            Assert.AreEqual(404, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.AreEqual(5, error.Code);
             Assert.AreEqual("La query non ha prodotto risultati", error.Message);
         }

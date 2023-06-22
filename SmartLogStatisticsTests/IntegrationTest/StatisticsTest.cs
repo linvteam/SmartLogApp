@@ -207,18 +207,16 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             OkObjectResult result = (OkObjectResult)_controller.Statistics(new DateTime(2022, 03, 04), new DateTime(2022, 07, 06));
 
-            Assert.IsNotNull(result.Value);
-
             StatisticsDto val = (StatisticsDto)result.Value;
-
-            Assert.AreEqual(new DateTime(2022, 03, 04), val.StartDate);
-            Assert.AreEqual(new DateTime(2022, 07, 06), val.EndDate);
-
             var stats = val.Statistics;
             var fileNumb = stats.Find(stat => stat.Name == "Numero di file");
             var maxEventNumb = stats.Find(stat => stat.Name == "Massimo numero di eventi");
             var eventMean = stats.Find(stat => stat.Name == "Media di eventi");
             var stdDeviation = stats.Find(stat => stat.Name == "Deviazione standard");
+            
+            Assert.IsNotNull(result.Value);
+            Assert.AreEqual(new DateTime(2022, 03, 04), val.StartDate);
+            Assert.AreEqual(new DateTime(2022, 07, 06), val.EndDate);
 
             Assert.IsNotNull(fileNumb);
             Assert.IsNotNull(maxEventNumb);
@@ -234,7 +232,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         /**
          * TIS-28
-         * Verificare che viene visualizzato un messagio di query vuota nel caso in cui l'ottenimento delle statistiche ritorni risultato vuoto
+         * Verificare che viene visualizzato un messaggio di query vuota nel caso in cui l'ottenimento delle statistiche ritorni risultato vuoto
          */
         [TestMethod()]
         public void NoStatisticsTest() {
@@ -243,35 +241,29 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             ObjectResult result = (ObjectResult)_controller.Statistics(new DateTime(2020, 03, 04), new DateTime(2020, 07, 06));
 
-            Assert.AreEqual(400, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             ErrorObject error = (ErrorObject)result.Value;
-
+            
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.AreEqual(5, error.Code);
             Assert.AreEqual("La query non ha prodotto risultati",error.Message);
-
         }
 
         /**
          * TIS-29
-         * Verificare che venga ritornato un messaggio d'errore nel caso in cui si cerchi di ottenere le statistiche con un database privo di dati
+         * Verificare che venga ritornato un messaggio d'errore nel caso in cui si cercasse di ottenere le statistiche con un database privo di dati
          */
         [TestMethod()]
         public void EmptyDatabaseTest() {
 
             ObjectResult result = (ObjectResult)_controller.Statistics(new DateTime(2020, 03, 04), new DateTime(2020, 07, 06));
 
-            Assert.AreEqual(400, result.StatusCode);
-
-            Assert.IsNotNull(result.Value);
-
             ErrorObject error = (ErrorObject)result.Value;
-
+            
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.IsNotNull(result.Value);
             Assert.AreEqual(5, error.Code);
             Assert.AreEqual("La query non ha prodotto risultati", error.Message);
-
         }
 
         [TestCleanup()]
