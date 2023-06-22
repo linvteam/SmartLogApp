@@ -14,8 +14,8 @@ namespace SmartLogStatisticsTests.IntegrationTest {
     [TestClass]
     public class DataTest {
 
-        private SmartLogContext _context;
-        private DataController _controller;
+        private readonly SmartLogContext _context;
+        private readonly DataController _controller;
         public DataTest() {
             string databaseName = Guid.NewGuid().ToString();
 
@@ -25,6 +25,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
 
+            _controller = new DataController(new DataRepositoryPgSql(_context));
+        }
+
+        private void PopulateContext() {
             List<LogFile> files = new()
             {
                 new LogFile
@@ -190,13 +194,12 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             _context.Log.AddRange(logLines);
             _context.Firmware.AddRange(firmwares);
             _context.SaveChanges();
-
-            _controller = new DataController(new DataRepositoryPgSql(_context));
         }
-
 
         [TestMethod()]
         public void FrequencyTest() {
+
+            PopulateContext();
 
             ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), true, true, true, true);
 
@@ -231,6 +234,8 @@ namespace SmartLogStatisticsTests.IntegrationTest {
         [TestMethod]
         public void NoGroupByFrequencyTest() {
 
+            PopulateContext();
+
             ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), false, false, false, false);
 
             Assert.AreEqual(200, result.StatusCode);
@@ -260,6 +265,8 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void FirmwareGroupByFrequencyTest() {
+
+            PopulateContext();
 
             ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2021, 02, 01), new DateTime(2022, 12, 12), false, true, false, false);
 
@@ -293,6 +300,8 @@ namespace SmartLogStatisticsTests.IntegrationTest {
         [TestMethod()]
         public void EmptySearchFrequencyTest() {
 
+            PopulateContext();
+
             ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2024, 02, 01), new DateTime(2025, 12, 12), false, true, false, false);
 
             Assert.AreEqual(404, result.StatusCode);
@@ -312,8 +321,6 @@ namespace SmartLogStatisticsTests.IntegrationTest {
         [TestMethod()]
         public void EmptyDatabaseFrequencyTest() {
 
-            ClearContext();
-
             ObjectResult result = (ObjectResult)_controller.Frequency(new DateTime(2021, 02, 01), new DateTime(2022, 12, 12), false, true, false, false);
 
             Assert.AreEqual(404, result.StatusCode);
@@ -332,6 +339,8 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod]
         public void CumulativeTest() {
+
+            PopulateContext();
 
             ObjectResult result = (ObjectResult)_controller.Cumulative(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "C001");
 
@@ -361,6 +370,9 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void EmptyDateSearchCumulativeTest() {
+
+            PopulateContext();
+
             ObjectResult result = (ObjectResult)_controller.Cumulative(new DateTime(2024, 01, 01), new DateTime(2026, 12, 12), "C001");
 
             Assert.AreEqual(404, result.StatusCode);
@@ -380,6 +392,9 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void EmptyCodeSearchCumulativeTest() {
+
+            PopulateContext();
+
             ObjectResult result = (ObjectResult)_controller.Cumulative(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "X");
 
             Assert.AreEqual(404, result.StatusCode);
@@ -400,8 +415,6 @@ namespace SmartLogStatisticsTests.IntegrationTest {
         [TestMethod()]
         public void EmptyDatabaseCumulativeTest() {
 
-            ClearContext();
-
             ObjectResult result = (ObjectResult)_controller.Cumulative(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "C001");
 
             Assert.AreEqual(404, result.StatusCode);
@@ -420,6 +433,9 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void TotalByCodeTest() {
+
+            PopulateContext();
+
             ObjectResult result = (ObjectResult)_controller.TotalByCode(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12));
 
             Assert.AreEqual(200, result.StatusCode);
@@ -444,6 +460,9 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void EmptySearchTotalByCodeTest() {
+
+            PopulateContext();
+
             ObjectResult result = (ObjectResult)_controller.TotalByCode(new DateTime(2024, 01, 01), new DateTime(2026, 12, 12));
 
             Assert.AreEqual(404, result.StatusCode);
@@ -463,8 +482,6 @@ namespace SmartLogStatisticsTests.IntegrationTest {
         [TestMethod()]
         public void EmptyDatabaseTotalByCodeTest() {
 
-            ClearContext();
-
             ObjectResult result = (ObjectResult)_controller.TotalByCode(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12));
 
             Assert.AreEqual(404, result.StatusCode);
@@ -483,6 +500,9 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void TotalByFirmwareTest() {
+
+            PopulateContext();
+
             ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2021, 01, 01), new DateTime(2022, 12, 12), "C001");
 
             Assert.AreEqual(200, result.StatusCode);
@@ -511,6 +531,9 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void SingleTotalByFirmwareTest() {
+
+            PopulateContext();
+
             ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2022, 01, 09), new DateTime(2022, 03, 01), "A001");
 
             Assert.AreEqual(200, result.StatusCode);
@@ -536,6 +559,9 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void EmptyCodeSearchTotalByFirmwareTest() {
+
+            PopulateContext();
+
             ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2022, 01, 09), new DateTime(2022, 03, 01), "X");
 
             Assert.AreEqual(404, result.StatusCode);
@@ -554,6 +580,9 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void EmptyDateSearchTotalByFirmwareTest() {
+
+            PopulateContext();
+
             ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2024, 01, 09), new DateTime(2024, 03, 01), "A001");
 
             Assert.AreEqual(404, result.StatusCode);
@@ -572,8 +601,6 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void EmptyDatabaseTotalByFirmwareTest() {
-            
-            ClearContext();
 
             ObjectResult result = (ObjectResult)_controller.TotalByFirmware(new DateTime(2021, 01, 09), new DateTime(2022, 03, 01), "A001");
 
@@ -589,15 +616,6 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
             Assert.IsNotNull(actual);
             Assert.AreEqual(excepted, actual);
-        }
-
-        private void ClearContext() {
-
-            _context.File.RemoveRange(_context.File.Select(f => f).ToArray());
-            _context.Firmware.RemoveRange(_context.Firmware.Select(f => f).ToArray());
-            _context.Log.RemoveRange(_context.Log.Select(f => f).ToArray());
-            _context.SaveChanges();
-
         }
 
         [TestCleanup()]

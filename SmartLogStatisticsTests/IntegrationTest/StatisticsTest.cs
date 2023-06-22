@@ -11,8 +11,8 @@ namespace SmartLogStatisticsTests.IntegrationTest {
     [TestClass]
     public class StatisticsTest {
 
-        private SmartLogContext _context;
-        private StatisticsController _controller;
+        private readonly SmartLogContext _context;
+        private readonly StatisticsController _controller;
         public StatisticsTest() {
             string databaseName = Guid.NewGuid().ToString();
 
@@ -22,6 +22,10 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
 
+            _controller = new StatisticsController(new StatisticsRepositoryPgSql(_context));
+        }
+
+        private void PopulateContext() {
             List<LogFile> files = new()
             {
                 new LogFile
@@ -190,12 +194,12 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             _context.Log.AddRange(logLines);
             _context.Firmware.AddRange(firmwares);
             _context.SaveChanges();
-
-            _controller = new StatisticsController(new StatisticsRepositoryPgSql(_context));
         }
 
         [TestMethod()]
         public void GoodStatisticsTest() {
+
+            PopulateContext();
 
             OkObjectResult result = (OkObjectResult)_controller.Statistics(new DateTime(2022, 03, 04), new DateTime(2022, 07, 06));
 
@@ -226,7 +230,9 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void NoStatisticsTest() {
-            
+
+            PopulateContext();
+
             ObjectResult result = (ObjectResult)_controller.Statistics(new DateTime(2020, 03, 04), new DateTime(2020, 07, 06));
 
             Assert.AreEqual(400, result.StatusCode);
@@ -243,8 +249,6 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         [TestMethod()]
         public void EmptyDatabaseTest() {
-            
-            ClearContext();
 
             ObjectResult result = (ObjectResult)_controller.Statistics(new DateTime(2020, 03, 04), new DateTime(2020, 07, 06));
 
@@ -257,14 +261,6 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             Assert.AreEqual(5, error.Code);
             Assert.AreEqual("La query non ha prodotto risultati", error.Message);
 
-        }
-
-        private void ClearContext() {
-
-            _context.File.RemoveRange(_context.File.Select(f => f).ToArray());
-            _context.Firmware.RemoveRange(_context.Firmware.Select(f => f).ToArray());
-            _context.Log.RemoveRange(_context.Log.Select(f => f).ToArray());
-            _context.SaveChanges();
         }
 
         [TestCleanup()]

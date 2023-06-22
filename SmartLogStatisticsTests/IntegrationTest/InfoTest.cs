@@ -15,8 +15,8 @@ namespace SmartLogStatisticsTests.IntegrationTest {
     [TestClass]
     public class InfoTest {
 
-        private SmartLogContext _context;
-        private InfoController _controller;
+        private readonly SmartLogContext _context;
+        private readonly InfoController _controller;
 
         public InfoTest() {
             string databaseName = Guid.NewGuid().ToString();
@@ -26,6 +26,11 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             _context = new SmartLogContext(options);
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
+
+            _controller = new InfoController(new InfoRepositoryPgSql(_context));
+        }
+
+        private void PopulateContext() {
 
             List<LogFile> files = new()
             {
@@ -73,6 +78,20 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                     INI_file_name = "MAPK_ByPass_v2_04_00.ini",
                     unit = 1,
                     subunit = 14,
+                },
+                new Firmware
+                {
+                    file_id = 1,
+                    INI_file_name = "MAPK_Unit_v2_07_00.ini",
+                    unit = 1,
+                    subunit = 0,
+                },
+                new Firmware
+                {
+                    file_id = 2,
+                    INI_file_name = "MAPK_Unit_v2_07_00.ini",
+                    unit = 1,
+                    subunit = 0,
                 }
             };
 
@@ -98,7 +117,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                     file_id = 1,
                     log_line = 1,
                     code = "A001",
-                    date = new DateOnly(2022,03,05),
+                    date = new DateOnly(2022,03,04),
                     time = new TimeOnly(08,36,29,618),
                     unit = 1,
                     subunit =1,
@@ -117,30 +136,41 @@ namespace SmartLogStatisticsTests.IntegrationTest {
                 },
                 new Log
                 {
+                    file_id=1,
+                    log_line = 3,
+                    code = "C001",
+                    date = new DateOnly(2022,03,12),
+                    time = new TimeOnly(08,36,29,618),
+                    unit = 1,
+                    subunit =0,
+                    value = true,
+                },
+                new Log
+                {
                     file_id=2,
                     log_line= 1,
                     code = "C001",
                     date = new DateOnly(2022,03,07),
                     time = new TimeOnly(08,36,29,618),
                     unit = 1,
-                    subunit =14,
+                    subunit = 0,
                     value = true,
                 },
                 new Log
                 {
                     file_id=1,
-                    log_line= 3,
+                    log_line= 4,
                     code = "C001",
                     date = new DateOnly(2022,04,05),
                     time = new TimeOnly(08,36,29,618),
                     unit = 1,
-                    subunit = 1,
+                    subunit = 14,
                     value = false,
                 },
                 new Log
                 {
                     file_id=1,
-                    log_line= 4,
+                    log_line= 5,
                     code = "C001",
                     date = new DateOnly(2022,05,07),
                     time = new TimeOnly(08,36,29,618),
@@ -166,12 +196,12 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             _context.Log.AddRange(logLines);
             _context.Firmware.AddRange(firmwares);
             _context.SaveChanges();
-
-            _controller = new InfoController(new InfoRepositoryPgSql(_context));
         }
 
         [TestMethod()]
         public void GetCodeWithDescriptionTest() {
+
+            PopulateContext();
             
             ObjectResult result = (ObjectResult)_controller.GetCodeWithDescription();
 
@@ -193,12 +223,93 @@ namespace SmartLogStatisticsTests.IntegrationTest {
         
         }
 
-        private void ClearContext() {
+        [TestMethod()]
+        public void EmptyDatabaseGetCodeWithDescriptionTest() {
 
-            _context.File.RemoveRange(_context.File.Select(f => f).ToArray());
-            _context.Firmware.RemoveRange(_context.Firmware.Select(f => f).ToArray());
-            _context.Log.RemoveRange(_context.Log.Select(f => f).ToArray());
-            _context.SaveChanges();
+            ObjectResult result = (ObjectResult)_controller.GetCodeWithDescription();
+
+            Assert.AreEqual(404, result.StatusCode);
+
+            Assert.IsNotNull(result.Value);
+
+            ErrorObject error = (ErrorObject)result.Value;
+
+            Assert.AreEqual(5, error.Code);
+            Assert.AreEqual("La query non ha prodotto risultati", error.Message);
+        }
+
+        [TestMethod()]
+        public void GetTimeIntervalTest() {
+
+            PopulateContext();
+
+            ObjectResult result = (ObjectResult)_controller.GetTimeInterval();
+
+            Assert.AreEqual(200, result.StatusCode);
+
+            Assert.IsNotNull(result.Value);
+
+            var intervalDto = (DateTimeIntervalDto)result.Value;
+
+            Assert.IsNotNull(intervalDto);
+
+            Assert.AreEqual(new DateTime(2022, 03, 04, 08, 36, 29, 618), intervalDto.start);
+
+            Assert.AreEqual(new DateTime(2022, 07, 05, 08, 36, 29, 618), intervalDto.end);
+
+        }
+
+        [TestMethod()]
+        public void EmptyDatabaseGetTimeIntervalTest() {
+
+            ObjectResult result = (ObjectResult)_controller.GetTimeInterval();
+
+            Assert.AreEqual(404, result.StatusCode);
+
+            Assert.IsNotNull(result.Value);
+
+            ErrorObject error = (ErrorObject)result.Value;
+
+            Assert.AreEqual(5, error.Code);
+            Assert.AreEqual("La query non ha prodotto risultati", error.Message);
+
+        }
+
+        [TestMethod()]
+        public void GetFirmwareListTest() {
+
+            PopulateContext();
+
+            ObjectResult result = (ObjectResult)_controller.GetFirmwareList();
+
+            Assert.AreEqual(200, result.StatusCode);
+
+            Assert.IsNotNull(result.Value);
+
+            var intervalDto = (List<string>)result.Value;
+
+            Assert.IsNotNull(intervalDto);
+
+            Assert.AreEqual(3, intervalDto.Count);
+            Assert.AreEqual("MAPK_ByPass_v2_04_00.ini", intervalDto[0]);
+            Assert.AreEqual("MAPK_Module_RD_IV_v2_04_00.ini", intervalDto[1]);
+            Assert.AreEqual("MAPK_Unit_v2_07_00.ini", intervalDto[2]);
+
+        }
+
+        [TestMethod()]
+        public void EmptyDatabaseGetFirmwareTest() {
+
+            ObjectResult result = (ObjectResult)_controller.GetFirmwareList();
+
+            Assert.AreEqual(404, result.StatusCode);
+
+            Assert.IsNotNull(result.Value);
+
+            ErrorObject error = (ErrorObject)result.Value;
+
+            Assert.AreEqual(5, error.Code);
+            Assert.AreEqual("La query non ha prodotto risultati", error.Message);
         }
 
         [TestCleanup()]
