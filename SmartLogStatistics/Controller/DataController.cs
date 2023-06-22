@@ -97,7 +97,7 @@ namespace SmartLogStatistics.Controller
         [ProducesResponseType(typeof(ErrorObject), StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
         public IActionResult Cumulative([FromRoute]DateTime startDateTime, [FromRoute] DateTime endDateTime, [FromRoute]string code)
-        {Total
+        {
             if (startDateTime > endDateTime)
             {
                 return StatusCode((int)HttpStatusCode.BadRequest, new ErrorObject(3, "I parametri non sono corretti"));
