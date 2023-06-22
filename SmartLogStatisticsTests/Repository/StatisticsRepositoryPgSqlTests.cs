@@ -6,6 +6,9 @@ namespace SmartLogStatistics.Repository.Tests {
     [TestClass()]
     public class StatisticsRepositoryPgSqlTests {
 
+        /// <summary>
+        /// TUS-16: Verifica che l'ottenimento delle statistiche avvenga correttamente
+        /// </summary>
         [TestMethod()]
         public void StatisticsTest() {
             // Arrange
@@ -71,6 +74,9 @@ namespace SmartLogStatistics.Repository.Tests {
             Assert.IsTrue(Math.Abs(SD.Value - DevStandard) < 0.01);
         }
 
+        /// <summary>
+        /// TUS-17: Verifica che la classe ritorni un errore quando si effettua una richiesta per l'ottenimento delle statistiche in assenza di dati
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(Exceptions.EmptyOrFailedQueryException))]
         public void TestQueryWithEmptyDatabase() {
@@ -93,6 +99,9 @@ namespace SmartLogStatistics.Repository.Tests {
             repository.Statistics(new DateTime(2022, 1, 1, 10, 10, 0), new DateTime(2022, 1, 10, 10, 10, 29));
         }
 
+        /// <summary>
+        /// TUS-18: Verifica che l'ottenimento delle statistiche in presenza di un solo file di log avvenga correttamente
+        /// </summary>
         [TestMethod()]
         public void TestQueryWithSingleLogReturn() {
             double NumberOfLogFile = 1;
@@ -147,6 +156,9 @@ namespace SmartLogStatistics.Repository.Tests {
             Assert.IsTrue(Math.Abs(SD.Value - DevStandard) < 0.01);
         }
 
+        /// <summary>
+        /// TUS-19: Verifica che la classe ritorni un errore quando si effettua una richiesta per l'ottenimento delle statistiche in un intervallo che non presenta dati
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(Exceptions.EmptyOrFailedQueryException))]
         public void StatisticsWithLogButEmptyDateFilter() {

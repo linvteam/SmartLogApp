@@ -37,10 +37,12 @@ describe('EventTableComponent', () => {
     fixture.detectChanges();
   });
 
+  // TUS-63: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
+  // TUS-64: Verifica che la richiesta dei dati raggruppati avvenga correttamente
   it('should call subscribe',fakeAsync(() => {
 
     const service = TestBed.inject(FrequencyService);

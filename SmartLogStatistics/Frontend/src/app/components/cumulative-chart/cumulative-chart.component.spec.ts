@@ -36,23 +36,28 @@ describe('CumulativeChartComponent', () => {
     fixture.detectChanges();
   });
 
+  // TUS-57: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
+  // TUS-58: Verifica che il tooltip non collida con l'asse X
   it('should get if tooltip collide with X axis', () => {
     expect(component['tooltipCollideX'](100)).toBeFalsy();
   });
 
+  // TUS-59: Verifica che il tooltip non collida con l'asse Y
   it('should get if tooltip collide with Y axis', () => {
     expect(component['tooltipCollideY'](100)).toBeFalsy();
   });
 
+  // TUS-60: Verifica che una data venga formattata correttamente
   it('should format correctly', () => {
     let date = new Date("2020-02-01T00:00:00.000");
     expect(component['getFormattedDate'](date)).toEqual("01/02/2020 - 00:00:00.000");
   });
 
+  // TUS-61: Verifica che la richiesta dei dati cumulativi avvenga correttamente
   it('should call subscribe',fakeAsync(() => {
 
     const service = TestBed.inject(CumulativeService);

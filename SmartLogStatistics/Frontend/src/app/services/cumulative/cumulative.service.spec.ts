@@ -27,10 +27,12 @@ describe('CumulativeService', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
+  // TUS-101: Verifica che la classe venga istanziata correttamente
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
+  // TUS-102: Verifica che venga ritornata una risposta valida dal back-end per i dati del grafico cumulativo
   it('should return a valid response', () => {
     let code: string = "S009";
 
@@ -54,6 +56,7 @@ describe('CumulativeService', () => {
     req.flush(response);
   });
 
+  // TUS-103: Verifica che venga ritornato un errore dal back-end per i dati del grafico cumulativo
   it('should return an error response', () => {
     let code: string = "S009";
 

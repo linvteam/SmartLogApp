@@ -31,10 +31,12 @@ describe('TotalByFirmwareService', () => {
     httpTestingController.verify();
   });
 
+  // TUS-118: Verifica che la classe venga istanziata correttamente
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
+  // TUS-119: Verifica che venga ritornata una risposta valida dal back-end con il numero di occorrenze di un evento raggruppate per firmware
   it('should return a valid response', () => {
     let code: string = "S009";
 
@@ -58,6 +60,7 @@ describe('TotalByFirmwareService', () => {
     req.flush(response);
   });
 
+  // TUS-120: Verifica che venga ritornato un errore dal back-end alla richiesta del numero di occorrenze di un evento raggruppate per firmware
   it('should return an error response', () => {
     let code: string = "S009";
 

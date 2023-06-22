@@ -8,6 +8,9 @@ namespace SmartLogStatistics.Controller.Tests {
     [TestClass()]
     public class InfoControllerTests
     {
+        /// <summary>
+        /// TUS-38: Verifica che la richiesta della lista dei codici degli eventi salvati (con relative descrizioni) dia esito positivo
+        /// </summary>
         [TestMethod()]
         public void GetCodeWithDescriptionTest()
         {
@@ -20,6 +23,9 @@ namespace SmartLogStatistics.Controller.Tests {
             Assert.AreEqual(200, result.StatusCode);
         }
 
+        /// <summary>
+        /// TUS-39: Verifica che la richiesta della lista dei codici degli eventi salvati (con relative descrizioni) dia esito "NotFound"
+        /// </summary>
         [TestMethod()]
         public void GetCodeWithDescriptionEmptyEventTest()
         {
@@ -33,6 +39,9 @@ namespace SmartLogStatistics.Controller.Tests {
             Assert.AreEqual(404, result.StatusCode);
         }
         
+        /// <summary>
+        /// TUS-40: Verifica che la richiesta della lista dei codici degli eventi salvati (con relative descrizioni) dia esito "InternalServerError"
+        /// </summary>
         [TestMethod()]
         public void GetCodeWithDescriptionInternalServerErrorTest()
         {
@@ -46,7 +55,9 @@ namespace SmartLogStatistics.Controller.Tests {
             Assert.AreEqual(500, result.StatusCode);
         }
         
-        
+        /// <summary>
+        /// TUS-41: Verifica che la richiesta dell'intervallo degli eventi salvati dia esito positivo
+        /// </summary>
         [TestMethod()]
         public void GetTimeIntervalTest()
         {
@@ -59,6 +70,9 @@ namespace SmartLogStatistics.Controller.Tests {
             Assert.AreEqual(200, result.StatusCode);
         }
 
+        /// <summary>
+        /// TUS-42: Verifica che la richiesta della lista dell'intervallo degli eventi salvati (con relative descrizioni) dia esito "NotFound"
+        /// </summary>
         [TestMethod()]
         public void GetTimeIntervalEmptyLogTest()
         {
@@ -72,6 +86,9 @@ namespace SmartLogStatistics.Controller.Tests {
             Assert.AreEqual(404, result.StatusCode);
         }
 
+        /// <summary>
+        /// TUS-43: Verifica che la richiesta della lista dell'intervallo degli eventi salvati (con relative descrizioni) dia esito "InternalServerError"
+        /// </summary>
         [TestMethod()]
         public void GetTimeIntervalInternalServerErrorTest()
         {
@@ -85,7 +102,9 @@ namespace SmartLogStatistics.Controller.Tests {
             Assert.AreEqual(500, result.StatusCode);
         }
         
-        
+        /// <summary>
+        /// TUS-44: Verifica che la richiesta della lista dei firmware degli eventi salvati dia esito positivo
+        /// </summary>        
         [TestMethod()]
         public void GetFirmwareListTest()
         {
@@ -98,6 +117,9 @@ namespace SmartLogStatistics.Controller.Tests {
             Assert.AreEqual(200, result.StatusCode);
         }
 
+        /// <summary>
+        /// TUS-45: Verifica che la richiesta della lista dei firmware degli eventi salvati dia esito "NotFound"
+        /// </summary> 
         [TestMethod()]
         public void GetFirmwareListEmptyFirmwareTest()
         {
@@ -111,6 +133,9 @@ namespace SmartLogStatistics.Controller.Tests {
             Assert.AreEqual(404, result.StatusCode);
         }
 
+        /// <summary>
+        /// TUS-46: Verifica che la richiesta della lista dei firmware degli eventi salvati dia esito "InternalServerError"
+        /// </summary> 
         [TestMethod()]
         public void GetFirmwareListInternalServerErrorTest()
         {

@@ -39,10 +39,12 @@ describe('InfoService', () => {
     httpTestingController.verify();
   });
 
+  // TUS-109: Verifica che la classe venga istanziata correttamente
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
+  // TUS-110: Verifica che venga ritornata una risposta valida dal back-end con la lista dei firmware
   it('should return a valid response', () => {
 
     service.GetFirmwares().subscribe(result => {
@@ -57,6 +59,7 @@ describe('InfoService', () => {
     req.flush(firmwareList);
   });
 
+  // TUS-111: Verifica che venga ritornato un errore dal back-end alla richiesta della lista dei firmware
   it('should return an error response', () => {
 
     service.GetFirmwares().subscribe(result => {

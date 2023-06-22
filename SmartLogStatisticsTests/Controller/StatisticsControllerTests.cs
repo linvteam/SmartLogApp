@@ -12,6 +12,9 @@ namespace SmartLogStatistics.Controller.Tests
     [TestClass()]
     public class StatisticsControllerTests
     {
+        /// <summary>
+        /// TUS-47: Verifica che la richiesta delle statistiche dia esito positivo
+        /// </summary> 
         [TestMethod()]
         public void StatisticsSuccessfulTest()
         {
@@ -33,6 +36,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(200, result.StatusCode);
         }
         
+        /// <summary>
+        /// TUS-48: Verifica che la richiesta delle statistiche dia esito "BadRequest" in caso di date incompatibili
+        /// </summary> 
         [TestMethod()]
         public void StatisticsIncompatibleDatesTest()
         {
@@ -53,6 +59,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(400, result.StatusCode);
         }
         
+        /// <summary>
+        /// TUS-49: Verifica che la richiesta delle statistiche dia esito "InternalServerError"
+        /// </summary> 
         [TestMethod()]
         public void StatisticsInternalServerErrorTest()
         {
@@ -67,6 +76,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(500, result.StatusCode);
         }
         
+        /// <summary>
+        /// TUS-50: Verifica che la richiesta delle statistiche dia esito "BadRequest" in caso di assenza di dati nell'intervallo selezionato
+        /// </summary> 
         [TestMethod()]
         public void StatisticsEmptyOrFailedQueryTest()
         {

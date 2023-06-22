@@ -20,6 +20,7 @@ describe('NavBarComponent', () => {
     fixture.detectChanges();
   });
 
+  // TUS-76: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(component).toBeTruthy();
   });
