@@ -263,7 +263,7 @@ namespace SmartLogStatisticsTests.IntegrationTest {
 
         /**
          * TIS-3
-         * Verificare che l'ottenimento delle frequenze di occorrenza avvenga correttamente degli eventi raggruppati per firmware
+         * Verificare che l'ottenimento delle frequenze di occorrenza degli eventi raggruppati per firmware avvenga correttamente 
          */
         [TestMethod()]
         public void FirmwareGroupByFrequencyTest() {
