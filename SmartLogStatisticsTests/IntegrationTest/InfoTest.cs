@@ -209,9 +209,9 @@ namespace SmartLogStatisticsTests.IntegrationTest {
             
             ObjectResult result = (ObjectResult)_controller.GetCodeWithDescription();
 
+            var codeDescriptions = (List<CodeWithDescriptionDto>)result.Value;
             var A001 = codeDescriptions.Find(c => c.Code == "A001");
             var C001 = codeDescriptions.Find(c => c.Code == "C001");
-            var codeDescriptions = (List<CodeWithDescriptionDto>)result.Value;
             
             Assert.AreEqual(200, result.StatusCode);
             Assert.IsNotNull(result.Value);
