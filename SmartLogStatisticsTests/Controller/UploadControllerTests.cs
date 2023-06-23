@@ -16,6 +16,9 @@ namespace SmartLogStatistics.Controller.Tests
     [TestClass()]
     public class UploadControllerTests
     {
+        /// <summary>
+        /// TUS-51: Verifica che il caricamento dei file dia esito positivo
+        /// </summary> 
         [TestMethod()]
         public void UploadTest()
         {
@@ -34,6 +37,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(201, result.StatusCode);
         }
 
+        /// <summary>
+        /// TUS-52: Verifica che la richiesta di caricamento dei file dia esito "BadRequest"
+        /// </summary> 
         [TestMethod()]
         public void UploadTestBadRequest()
         {

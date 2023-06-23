@@ -73,14 +73,17 @@ describe('SequenceSearchComponent', () => {
     fixture.detectChanges();
   });
 
+  // TUV-37: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
+  // TUV-38: Verifica che le sequenze siano impostate correttamente
   it('should have mocked sequences', () => {
     expect(component.sequences).toEqual(['Prima', 'Seconda', 'Terza']); 
   });
 
+  // TUV-39: Verifica che il manipolatore sia un oggetto di tipo Identity
   it('should have identity manipulator', (done: DoneFn) => {
     component['logManipulationService']['manipulator'].subscribe(value => {
       expect(value).toBeInstanceOf(Identity);
@@ -89,6 +92,7 @@ describe('SequenceSearchComponent', () => {
     component.onSubmit();
   });
 
+  // TUV-40: Verifica che il manipolatore sia un oggetto di tipo SequenceSearch
   it('should have sequence search manipulator', (done: DoneFn) => {
     component.sequenceForm.setValue({sequence : "InputMainNotOk"});
 

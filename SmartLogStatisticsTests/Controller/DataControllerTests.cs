@@ -18,6 +18,9 @@ namespace SmartLogStatistics.Controller.Tests
     [TestClass()]
     public class DataControllerTests
     {
+        /// <summary>
+        /// TUS-22: Verifica che la richiesta di calcolo della frequenza di occorrenza dia esito positivo
+        /// </summary>
         [TestMethod()]
         public void FrequencyTest()
         {
@@ -30,6 +33,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(200, result.StatusCode);
         }
 
+        /// <summary>
+        /// TUS-23: Verifica che la richiesta di calcolo della frequenza di occorrenza restituisca "BadRequest" 
+        /// </summary>
         [TestMethod()]
         public void FrequencyTestBadRequest()
         {
@@ -44,6 +50,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(400, result.StatusCode);
         }
         
+        /// <summary>
+        /// TUS-24: Verifica che la richiesta di calcolo della frequenza di occorrenza restituisca "NotFound" 
+        /// </summary>
         [TestMethod()]
         public void FrequencyTestNotFound()
         {
@@ -56,6 +65,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(404, result.StatusCode);
         }
 
+        /// <summary>
+        /// TUS-25: Verifica che la richiesta di calcolo della frequenza di occorrenza restituisca "InternalServerError" 
+        /// </summary>
         [TestMethod()]
         public void FrequencyTestInternalServerError()
         {
@@ -71,7 +83,9 @@ namespace SmartLogStatistics.Controller.Tests
 
 
 
-
+        /// <summary>
+        /// TUS-26: Verifica che la richiesta di calcolo del numero di occorrenze distribuito nel tempo dia esito positivo
+        /// </summary>
         [TestMethod()]
         public void CumulativeTest()
         {
@@ -84,6 +98,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(200, result.StatusCode);
         }
 
+        /// <summary>
+        /// TUS-27: Verifica che la richiesta di calcolo del numero di occorrenze distribuito nel tempo restituisca "BadRequest" 
+        /// </summary>
         [TestMethod()]
         public void CumulativeTestBadRequest()
         {
@@ -98,6 +115,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(400, result.StatusCode);
         }
         
+        /// <summary>
+        /// TUS-28: Verifica che la richiesta di calcolo del numero di occorrenze distribuito nel tempo restituisca "NotFound" 
+        /// </summary>
         [TestMethod()]
         public void CumulativeTestNotFound()
         {
@@ -110,6 +130,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(404, result.StatusCode);
         }
 
+        /// <summary>
+        /// TUS-29: Verifica che la richiesta di calcolo del numero di occorrenze distribuito nel tempo restituisca "InternalServerError" 
+        /// </summary>
         [TestMethod()]
         public void CumulativeTestInternalServerError()
         {
@@ -125,7 +148,9 @@ namespace SmartLogStatistics.Controller.Tests
 
 
 
-
+        /// <summary>
+        /// TUS-30: Verifica che la richiesta di calcolo del numero di occorrenze di un evento dia esito positivo
+        /// </summary>
         [TestMethod()]
         public void TotalByCodeTest()
         {
@@ -138,6 +163,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(200, result.StatusCode);
         }
 
+        /// <summary>
+        /// TUS-31: Verifica che la richiesta di calcolo del numero di occorrenze di un evento restituisca "BadRequest" 
+        /// </summary>
         [TestMethod()]
         public void TotalByCodeTestBadRequest()
         {
@@ -152,6 +180,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(400, result.StatusCode);
         }
         
+        /// <summary>
+        /// TUS-32: Verifica che la richiesta di calcolo del numero di occorrenze di un evento restituisca "NotFound" 
+        /// </summary>
         [TestMethod()]
         public void TotalByCodeTestNotFound()
         {
@@ -164,6 +195,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(404, result.StatusCode);
         }
 
+        /// <summary>
+        /// TUS-33: Verifica che la richiesta di calcolo del numero di occorrenze di un evento restituisca "InternalServerError" 
+        /// </summary>
         [TestMethod()]
         public void TotalByCodeTestInternalServerError()
         {
@@ -180,7 +214,9 @@ namespace SmartLogStatistics.Controller.Tests
 
 
 
-
+        /// <summary>
+        /// TUS-34: Verifica che la richiesta di calcolo del numero di occorrenze degli eventi raggruppate per firmware dia esito positivo
+        /// </summary>
         [TestMethod()]
         public void TotalByFirmwareTest()
         {
@@ -193,6 +229,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(200, result.StatusCode);
         }
 
+        /// <summary>
+        /// TUS-35: Verifica che la richiesta di calcolo del numero di occorrenze degli eventi raggruppate per firmware restituisca "BadRequest" 
+        /// </summary>
         [TestMethod()]
         public void TotalByFirmwareTestBadRequest()
         {
@@ -207,6 +246,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(400, result.StatusCode);
         }
         
+        /// <summary>
+        /// TUS-36: Verifica che la richiesta di calcolo del numero di occorrenze degli eventi raggruppate per firmware restituisca "NotFound" 
+        /// </summary>
         [TestMethod()]
         public void TotalByFirmwareTestNotFound()
         {
@@ -219,6 +261,9 @@ namespace SmartLogStatistics.Controller.Tests
             Assert.AreEqual(404, result.StatusCode);
         }
 
+        /// <summary>
+        /// TUS-37: Verifica che la richiesta di calcolo del numero di occorrenze degli eventi raggruppate per firmware restituisca "InternalServerError" 
+        /// </summary>
         [TestMethod()]
         public void TotalByFirmwareTestInternalServerError()
         {

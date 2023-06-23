@@ -76,11 +76,11 @@ npm test
 SmartLogViewer:
 
 ```bash
-dotnet publish SmartLogViewer -c Release --self-contained=true -p:PublishSingleFile=true -p:PublishTrimmed=true
+dotnet publish SmartLogViewer -c Release --self-contained=true --use-current-runtime -p:PublishSingleFile=true -p:PublishTrimmed=true
 ```
 
 SmartLogStatistics:
 
 ```bash
-dotnet publish SmartLogStatistics -c Release --self-contained=true -p:PublishSingleFile=true -p:PublishTrimmed=true
+dotnet publish SmartLogStatistics -c Release --self-contained=true --use-current-runtime -p:PublishSingleFile=true -p:PublishTrimmed=true
 ```

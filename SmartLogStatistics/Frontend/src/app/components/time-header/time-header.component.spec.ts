@@ -40,10 +40,12 @@ describe('TimeHeaderComponent', () => {
 
   });
 
+  // TUS-95: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
+  // TUS-96: Verifica che l'aggiornamento della data/ora di inizio e di fine avvenga correttamente 
   it('should update dates', () => {
     const req = httpTestingController.expectOne(`${environment.BaseURL}/info/timeinterval`);
     expect(req.request.method).toBe("GET");
@@ -53,6 +55,7 @@ describe('TimeHeaderComponent', () => {
     expect(component.endDatetimeValue).toEqual("2025-10-22T06:30:03.762");
   });
 
+  // TUS-97: Verifica che si apra un dialog di errore in presenza di errori all'ottenimento della data/ora di inizio e di fine
   it('should handle error', () => {
     const req = httpTestingController.expectOne(`${environment.BaseURL}/info/timeinterval`);
     expect(req.request.method).toBe("GET");
@@ -63,6 +66,7 @@ describe('TimeHeaderComponent', () => {
     expect(component['modalService'].hasOpenModals()).toBeTruthy();
   });
 
+  // TUS-98: Verifica che si apra un dialog di errore quando si inseriscono valori nulli per la data/ora di inizio e di fine
   it('should submit null dates', () => {
     component.formGroup.setValue({
       startDatetime: null,
@@ -74,6 +78,7 @@ describe('TimeHeaderComponent', () => {
     expect(component['modalService'].hasOpenModals()).toBeTruthy();    
   });
 
+  // TUS-99: Verifica che si apra un dialog di errore quando si inserisce valore nullo per la data/ora di inizio
   it('should submit only start date null', () => {
     component.formGroup.setValue({
       startDatetime: null,
@@ -85,6 +90,7 @@ describe('TimeHeaderComponent', () => {
     expect(component['modalService'].hasOpenModals()).toBeTruthy();    
   });
 
+  // TUS-100: Verifica che si apra un dialog di errore quando si inserisce valore nullo per la data/ora di fine
   it('should submit only end date null', () => {
     component.formGroup.setValue({
       startDatetime: "2020-07-21T17:00:28.047",

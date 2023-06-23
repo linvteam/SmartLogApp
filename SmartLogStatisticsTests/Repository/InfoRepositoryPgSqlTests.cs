@@ -20,6 +20,9 @@ namespace SmartLogStatisticsTests.Repository
     [TestClass()]
     public class InfoRepositoryPgSqlTests
     {
+        /// <summary>
+        /// TUS-10: Verifica che l'ottenimento della lista di tutti i code avvenga correttamente
+        /// </summary>
         [TestMethod()]
         public void GetCodesWithDescriptionTest()
         {
@@ -60,6 +63,9 @@ namespace SmartLogStatisticsTests.Repository
 
         }
 
+        /// <summary>
+        /// TUS-11: Verifica che la classe ritorni un errore alla richiesta dei codici degli eventi in assenza di dati
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(EmptyOrFailedQueryException))]
         public void GetCodeWithDescriptionEmptyEventTest()
@@ -82,7 +88,9 @@ namespace SmartLogStatisticsTests.Repository
             List<CodeWithDescriptionDto> result = infoRepository.GetCodesWithDescription();
         }
 
-
+        /// <summary>
+        /// TUS-12: Verifica che il calcolo della data/ora e del primo e dell'ultimo evento avvenga correttamente
+        /// </summary>
         [TestMethod()]
         public void GetTimeIntervalTest()
         {
@@ -121,6 +129,9 @@ namespace SmartLogStatisticsTests.Repository
             Assert.AreEqual(new DateTime(2022, 1, 10, 10, 9, 0), result.end);
         }
 
+        /// <summary>
+        /// TUS-13: Verifica che la classe ritorni un errore alla richiesta della data/ora del primo e dell'ultimo evento in assenza di dati
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(EmptyOrFailedQueryException))]
         public void GetTimeIntervalEmptyLogTest()
@@ -143,7 +154,9 @@ namespace SmartLogStatisticsTests.Repository
             DateTimeIntervalDto result = infoRepository.GetTimeInterval();
         }
 
-
+        /// <summary>
+        /// TUS-14: Verifica che l'ottenimento della lista di tutti i firmware avvenga correttamente
+        /// </summary>
         [TestMethod()]
         public void GetFirmwareListTest()
         {
@@ -183,6 +196,9 @@ namespace SmartLogStatisticsTests.Repository
             Assert.AreEqual("INI_4", result[4]);
         }
 
+        /// <summary>
+        /// TUS-15: Verifica che la classe ritorni un errore alla richiesta dei firmware in assenza di dati
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(EmptyOrFailedQueryException))]
         public void GetFirmwareListEmptyFirmwareTest()

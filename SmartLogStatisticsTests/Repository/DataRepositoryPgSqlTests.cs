@@ -144,6 +144,9 @@ namespace SmartLogStatistics.Repository.Tests {
             repo = new(mockContext.Object);
         }
 
+        /// <summary>
+        /// TUS-1: Verifica che il calcolo della frequenza di occorrenza avvenga correttamente
+        /// </summary>
         [TestMethod()]
         public void FrequencyTest() {
             var result = repo.Frequency(new DateTime(2022, 01, 01), new DateTime(2024, 01, 01), true, true, true, true);
@@ -181,13 +184,18 @@ namespace SmartLogStatistics.Repository.Tests {
 
         }
 
+        /// <summary>
+        /// TUS-2: Verifica che venga ritornato un errore quando viene selezionato un intervallo vuoto per il calcolo della frequenza
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(EmptyOrFailedQueryException))]
         public void BlankSearchFrequencyTest() {
            repo.Frequency(new DateTime(2010, 01, 01), new DateTime(2011, 01, 01), true, true, true, true);
         }
 
-
+        /// <summary>
+        /// TUS-3: Verifica che il calcolo del numero di occorrenze distribuito nel tempo avvenga correttamente
+        /// </summary>
         [TestMethod()]
         public void CumulativeTest() {
 
@@ -210,6 +218,9 @@ namespace SmartLogStatistics.Repository.Tests {
             Assert.AreEqual(5,record3.EventOccurencies);
         }
 
+        /// <summary>
+        /// TUS-4: Verifica che il calcolo del numero di occorrenze distribuito nel tempo avvenga correttamente in un intervallo ridotto
+        /// </summary>
         [TestMethod()]
         public void ShorterTimeIntervalCumulativeTest() {
 
@@ -229,6 +240,9 @@ namespace SmartLogStatistics.Repository.Tests {
             Assert.AreEqual(2, record2.EventOccurencies);
         }
 
+        /// <summary>
+        /// TUS-5: Verifica che venga ritornato un errore quando viene selezionato un intervallo vuoto per il calcolo delle occorrenze di un evento nel tempo
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(EmptyOrFailedQueryException))]
         public void BlankSearchCumulativeTest() {
@@ -236,6 +250,9 @@ namespace SmartLogStatistics.Repository.Tests {
             repo.Cumulative(new DateTime(2022, 05, 01), new DateTime(2022, 05, 29), "A");
         }
 
+        /// <summary>
+        /// TUS-6: Verifica che il calcolo del numero di occorrenze avvenga correttamente
+        /// </summary>
         [TestMethod()]
         public void TotalByCodeTest() {
 
@@ -257,6 +274,9 @@ namespace SmartLogStatistics.Repository.Tests {
             Assert.AreEqual(5, code3.EventOccurrences);
         }
 
+        /// <summary>
+        /// TUS-7: Verifica che venga ritornato un errore quando viene selezionato un intervallo vuoto per il calcolo delle occorrenze di un evento
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(EmptyOrFailedQueryException))]
         public void BlankSearchTotalByCodeTest() {
@@ -264,6 +284,9 @@ namespace SmartLogStatistics.Repository.Tests {
 
         }
 
+        /// <summary>
+        /// TUS-8: Verifica che il calcolo del numero di occorrenze degli eventi raggruppati per firmware avvenga correttamente
+        /// </summary>
         [TestMethod()]
         public void TotalByFirmwareTest() {
 
@@ -283,6 +306,9 @@ namespace SmartLogStatistics.Repository.Tests {
            
         }
 
+        /// <summary>
+        /// TUS-9: Verifica che venga ritornato un errore quando viene selezionato un intervallo vuoto per il calcolo delle occorrenze degli eventi raggruppati per firmware
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(EmptyOrFailedQueryException))]
         public void BlankSearchTotalByFirmwareTest() {

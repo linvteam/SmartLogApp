@@ -27,16 +27,19 @@ describe('FileUploadComponent', () => {
     httpTestingController.verify();
   });
 
+  // TUS-65: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
+  // TUS-66: Verifica che il caricamento privo di file non vada a cambiare i file precedentemente caricati
   it('should upload nothing', () => {
     component.upload();
     component.beginUpload();
     expect(component.currentFiles).toHaveSize(0);
   });
 
+  // TUS-67: Verifica che il caricamento di un file avvenga correttamente
   it('should upload one file', waitForAsync(() => {
     let files: Array<File> = new Array<File>();
     let file = new File(["foo"], "foo.csv", {
@@ -57,6 +60,7 @@ describe('FileUploadComponent', () => {
     });
   }));
 
+  // TUS-68: Verifica che il caricamento di un file che avviene con errori venga gestito correttamente
   it('should handle error', waitForAsync(() => {
     let files: Array<File> = new Array<File>();
     let file = new File(["foo"], "foo.csv", {

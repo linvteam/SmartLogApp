@@ -31,10 +31,12 @@ describe('TotalByCodeService', () => {
     httpTestingController.verify();
   });
 
+  // TUS-115: Verifica che la classe venga istanziata correttamente
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
+  // TUS-116: Verifica che venga ritornata una risposta valida dal back-end con la lista dei code con le relative frequenze
   it('should return a valid response', () => {
     let start: Date = new Date(2020,7,21,17,0,28,47);
     let end: Date = new Date(2021,10,22,6,30,3,762);
@@ -56,6 +58,7 @@ describe('TotalByCodeService', () => {
     req.flush(response);
   });
 
+  // TUS-117: Verifica che venga ritornato un errore dal back-end alla richiesta della lista dei code con le relative frequenze
   it('should return an error response', () => {
     let end: Date = new Date(2020,7,21,17,0,28,47);
     let start: Date = new Date(2021,10,22,6,30,3,762);

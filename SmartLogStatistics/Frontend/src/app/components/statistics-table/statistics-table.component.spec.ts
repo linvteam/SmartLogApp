@@ -32,10 +32,12 @@ describe('StatisticsTableComponent', () => {
     fixture.detectChanges();
   });
 
+  // TUS-85: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
+  // TUS-86: Verifica che la richiesta delle statistiche avvenga correttamente
   it('should call subscribe',fakeAsync(() => {
 
     const service = TestBed.inject(StatisticsService);

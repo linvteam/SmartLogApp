@@ -24,6 +24,9 @@ namespace SmartLogStatistics.Repository.Tests {
             return dbSetMock;
         }
 
+        /// <summary>
+        /// TUS-20: Verifica che il caricamento di un file avvenga correttamente
+        /// </summary>
         [TestMethod()]
         public void UploadTest()
         {
@@ -85,6 +88,9 @@ namespace SmartLogStatistics.Repository.Tests {
 
         }
 
+        /// <summary>
+        /// TUS-21: Verifica che il caricamento di un file già salvato nel database generi un errore
+        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(FileConflictException))]
         public void ExistingFileUploadTest()

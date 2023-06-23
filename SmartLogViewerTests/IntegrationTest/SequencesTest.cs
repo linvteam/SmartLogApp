@@ -15,6 +15,9 @@ namespace SmartLogViewerTests.IntegrationTest {
     [TestClass]
     public class SequencesTest {
 
+        /// <summary>
+        /// TIV-5: Verifica che la classe ritorni un errore provando a caricare un file di sequenze vuoto
+        /// </summary>
         [TestMethod()]
         public void TestEmptySequencesFile() {
 
@@ -37,6 +40,9 @@ namespace SmartLogViewerTests.IntegrationTest {
             Assert.AreEqual(500, res.StatusCode);
         }
 
+        /// <summary>
+        /// TIV-6: Verifica che la classe ritorni un errore provando a richiedere una sequenza che non c'è
+        /// </summary>
         [TestMethod()]
         public void TestGoodSequences() {
             Mock<SequenceFileReader> reader = new();
@@ -78,6 +84,9 @@ namespace SmartLogViewerTests.IntegrationTest {
 
         }
 
+        /// <summary>
+        /// TIV-7: Verifica che la classe ritorni correttamente le informazioni corrette sulle sequenze richieste
+        /// </summary>
         [TestMethod()]
         public void MultipleSequences() {
             Mock<SequenceFileReader> reader = new();

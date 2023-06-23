@@ -37,10 +37,12 @@ describe('PieChartComponent', () => {
     fixture.detectChanges();
   });
 
+  // TUS-77: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
+  // TUS-78: Verifica che la richiesta del numero di occorrenze di un evento raggruppate per firmware avvenga correttamente
   it('should call subscribe',fakeAsync(() => {
 
     let code: string = "S009";

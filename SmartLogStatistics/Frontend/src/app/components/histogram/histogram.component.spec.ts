@@ -31,10 +31,12 @@ describe('HistogramComponent', () => {
     fixture.detectChanges();
   });
 
+  // TUS-69: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
+  // TUS-70: Verifica che la richiesta del numero di occorrenze di un evento avvenga correttamente
   it('should call subscribe',fakeAsync(() => {
 
     const service = TestBed.inject(TotalByCodeService);
@@ -53,6 +55,7 @@ describe('HistogramComponent', () => {
     
   }));
 
+  // TUS-71: Verifica che gli assi e l'altezza del grafico vengano impostati correttamente
   it('should set correctly domain, height, range', () => {
     component['x'] = [0.2,0.2,0.1,0.3];
     component['y'] = ["S009","S010","S011"];
@@ -64,12 +67,14 @@ describe('HistogramComponent', () => {
     expect(component['xDomain']).toEqual([0,0.3]);
   });
 
+  // TUS-72: Verifica che i valori delle ascisse e delle ordinate non vengano modificati in caso di ordinamento in assenza di dati
   it('should not modify x and y', () => {
     component['sortValues']();
     expect(component['x']).toHaveSize(0);
     expect(component['y']).toHaveSize(0);
   });
 
+  // TUS-73: Verifica che i valori delle ascisse e delle ordinate non vengano modificati in caso di ordinamento
   it('should not modify x and y with values', () => {
     component['x'] = [0.2,0.2,0.1,0.3];
     component['y'] = ["S009","S010","S011", "S012"];
@@ -79,6 +84,7 @@ describe('HistogramComponent', () => {
     expect(component['y']).toEqual([ 'S009', 'S010', 'S011', 'S012' ]);
   });
 
+  // TUS-74: Verifica che i valori delle ascisse e delle ordinate vengano modificati in caso di ordinamento per code
   it('should order x and y with values - code', () => {
     component['x'] = [0.2,0.2,0.1,0.3];
     component['y'] = ["S010","S011", "S012", "S009"];
@@ -88,6 +94,7 @@ describe('HistogramComponent', () => {
     expect(component['y']).toEqual([ 'S009', 'S010', 'S011', 'S012' ]);
   });
 
+  // TUS-75: Verifica che i valori delle ascisse e delle ordinate vengano modificati in caso di ordinamento per frequenza
   it('should order x and y with values - frequency', () => {
     component['x'] = [0.2,0.2,0.1,0.3];
     component['y'] = ["S010","S011", "S012", "S009"];

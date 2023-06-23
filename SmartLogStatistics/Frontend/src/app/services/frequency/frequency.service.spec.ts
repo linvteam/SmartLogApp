@@ -32,10 +32,12 @@ describe('FrequencyService', () => {
     httpTestingController.verify();
   });
 
+  // TUS-106: Verifica che la classe venga istanziata correttamente
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
+  // TUS-107: Verifica che venga ritornata una risposta valida dal back-end coi dati degli eventi raggruppati
   it('should return a valid response', () => {
     let start: Date = new Date(2020,7,21,17,0,28,47);
     let end: Date = new Date(2025,10,22,6,30,3,762);
@@ -62,6 +64,7 @@ describe('FrequencyService', () => {
     req.flush(response);
   });
 
+  // TUS-108: Verifica che venga ritornato un errore dal back-end alla richiesta dei dati degli eventi raggruppati
   it('should return an error response', () => {
     let end: Date = new Date(2020,7,21,17,0,28,47);
     let start: Date = new Date(2025,10,22,6,30,3,762);

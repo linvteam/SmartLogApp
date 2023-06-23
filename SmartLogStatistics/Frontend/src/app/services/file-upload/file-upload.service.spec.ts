@@ -21,10 +21,12 @@ describe('FileUploadService', () => {
     service = TestBed.inject(FileUploadService);
   });
 
+  // TUS-104: Verifica che la classe venga istanziata correttamente
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
+  // TUS-105: Verifica che la richiesta di caricamento dei file al back-end avvenga correttamente
   it('should construct a valid http request', () => {
     const file = new File([""], "filename");
     const response = { message: 'File uploaded successfully' };

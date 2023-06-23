@@ -35,16 +35,19 @@ describe('FileUploadComponent', () => {
     fixture.detectChanges();
   });
 
+  // TUV-31: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
+  // TUV-32: Verifica che la classe non modifichi il valore del file di log attuale provando un caricamento privo di file 
   it('should upload nothing', () => {
     component.upload();
     expect(component.progress).toEqual(0); 
     expect(component['logService'].getLog()).toBeUndefined();
   });
 
+  // TUV-33: Verifica che la classe non modifichi il valore del file di log attuale provando il caricamento dello stesso file
   it('should remain the same file', () => {
     let fileName : string = component.labelText;
     let actualFile: File | undefined = component.currentFile;
@@ -57,6 +60,7 @@ describe('FileUploadComponent', () => {
     expect(component.currentFile).toEqual(actualFile);
   });
 
+  // TUV-34: Verifica che la classe non modifichi il valore del file di log attuale provando il caricamento dello stesso file (tramite drag-and-drop)
   it('should remain the same file - fileDrop', () => {
     let fileName : string = component.labelText;
     let actualFile: File | undefined = component.currentFile;
@@ -69,6 +73,7 @@ describe('FileUploadComponent', () => {
     expect(component.currentFile).toEqual(actualFile);
   });
 
+  // TUV-35: Verifica che la classe carichi correttamente un file di log
   it('should upload current file', () => {
     component['logService'] = new mockLogServiceGroupableLog();
       component.currentFile = new File([mockLog.toString()], "prova.csv");

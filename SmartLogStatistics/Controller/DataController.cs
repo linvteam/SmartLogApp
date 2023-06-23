@@ -122,7 +122,7 @@ namespace SmartLogStatistics.Controller
         }
 
         /// <summary>
-        /// Ritorna un JSON che rappresenta gli eventi eventi e il numero di occorrenze, compresi nell’intervallo temporale dato
+        /// Ritorna un JSON che rappresenta gli eventi e il numero di occorrenze, compresi nell’intervallo temporale dato
         /// </summary>
         /// <param name="startDateTime">Indica la data di inizio degli eventi da prelevare</param>
         /// <param name="endDateTime">Indica la data di fine degli eventi da prelevare</param>
@@ -165,7 +165,7 @@ namespace SmartLogStatistics.Controller
 
 
         /// <summary>
-        /// Ritorna un JSON che rappresenta il numero di occorrenze, raggruppati per versione firmware, compresi nell’intervallo temporale dato in cui si è verificato l’evento specificato tramite il code
+        /// Ritorna un JSON che rappresenta il numero di occorrenze, raggruppate per versione firmware, comprese nell’intervallo temporale dato in cui si è verificato l’evento specificato tramite il code
         /// </summary>
         /// <param name="startDateTime">Indica la data di inizio degli eventi da prelevare</param>
         /// <param name="endDateTime">Indica la data di fine degli eventi da prelevare</param>

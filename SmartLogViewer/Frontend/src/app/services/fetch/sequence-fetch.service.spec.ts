@@ -16,6 +16,7 @@ describe('SequenceFetchService', () => {
     service = TestBed.inject(SequenceFetchService);
   });
 
+  // TUV-58: Verifica che la classe venga istanziata correttamente
   it('should be created', () => {
     expect(service).toBeTruthy();
   });

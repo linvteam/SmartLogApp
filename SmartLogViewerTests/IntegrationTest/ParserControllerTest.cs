@@ -12,6 +12,9 @@ namespace SmartLogViewerTests.IntegrationTest {
     [TestClass]
     public class ParserControllerTest {
 
+        /// <summary>
+        /// TIV-1: Verifica che la classe esegua correttamente il parsing di un file di log
+        /// </summary>
         [TestMethod()]
         public void ParsingGoodFile() {
             Parser parser = new();
@@ -77,6 +80,9 @@ Date ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot 
 
         }
 
+        /// <summary>
+        /// TIV-2: Verifica che la classe esegua correttamente il parsing di un file di log senza dati
+        /// </summary>
         [TestMethod()]
         public void TestParseHeaderNoData() {
             Parser parser = new();
@@ -106,6 +112,9 @@ Date ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot 
             Assert.AreEqual(0, parsedLog.Events.Count);
         }
 
+        /// <summary>
+        /// TIV-3: Verifica che la classe ritorni un errore provando ad eseguire il parsing di un file di log senza header
+        /// </summary>
         [TestMethod()]
         public void NoHeader() {
             Parser parser = new();
@@ -122,6 +131,9 @@ Date ; Time ; Unit  ; SubUnit ; Code ; Description ; Value ; Type/UM ; Snapshot 
 
         }
 
+        /// <summary>
+        /// TIV-4: Verifica che la classe ritorni un errore provando ad eseguire il parsing di un file di log vuoto
+        /// </summary>
         [TestMethod()]
         public void EmptyFile() {
             Parser parser = new();

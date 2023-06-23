@@ -16,6 +16,7 @@ describe('AppComponent', () => {
     }).compileComponents();
   });
 
+  // TUV-20: Verifica che la classe venga istanziata correttamente
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;

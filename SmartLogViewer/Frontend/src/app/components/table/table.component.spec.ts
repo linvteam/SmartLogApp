@@ -30,6 +30,7 @@ describe('TableComponent', () => {
     fixture.detectChanges();
   });
 
+  // TUV-41: Verifica che la classe venga istanziata correttamente
   it('should create', () => {
     expect(component).toBeTruthy();
   });
