@@ -42,13 +42,13 @@ dotnet build
 Core library:
 
 ```bash
-dotnet test CoreTests --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude=[]Core.Injectables -p:ExcludeByFile="**/Program.cs"
+dotnet test CoreTests --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude="[]Core.Injectables" -p:ExcludeByFile="**/Program.cs"
 ```
 
 SmartLogViewer:
 
 ```bash
-dotnet test SmartLogViewerTests --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude=[*]Core* -p:ExcludeByFile="**/Program.cs"
+dotnet test SmartLogViewerTests --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover -p:Exclude="[*]Core*" -p:ExcludeByFile="**/Program.cs"
 ```
 
 SmartLogViewer Frontend:
