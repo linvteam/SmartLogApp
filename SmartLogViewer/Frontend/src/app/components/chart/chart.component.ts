@@ -183,7 +183,6 @@ export class ChartComponent {
      * @private
      */
     private zoomMultiplier: number;
-
     
     /**
      * Costruttore. Inizializza le variabili e si iscrive all'observer che controlla quando viene fatta una modifica
@@ -198,6 +197,8 @@ export class ChartComponent {
         this.logManipulationService.manipulatedLog.subscribe(value => {
             this.logManipulator = value;
             this.events = this.logManipulator.getGroup(1);
+            d3.select("figure#horizon-chart svg").remove();
+            if (this.events.length == 0) return;
             this.update();
             this.draw();
         });
